@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import BlockNode from "./BlockNode";
 import FavoriteNode from "./FavoriteNode";
