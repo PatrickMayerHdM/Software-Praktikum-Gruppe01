@@ -22,5 +22,5 @@ class Account(BusinessObject):
         return self.google_id
 
     def get_account_id(self):
-        """Auslesen account_id"""
+        """Auslesen account_id (TESTWEISE)"""
         return self.account_id
