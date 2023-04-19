@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import OnBoarding from "./pages/OnBoarding";
 import {Route, Routes} from "react-router-dom";
-import LogIn from "./pages/LogIn";
+import LogIn from "./pages/ogIn";
 
 function App() {
   return (
