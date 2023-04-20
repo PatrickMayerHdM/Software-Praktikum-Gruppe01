@@ -1,5 +1,5 @@
 import './App.css';
-import BlockNode from "./BlockNode";
+import ProfilePreview from ".components/ProfilePreview.js";
 import FavoriteNode from "./FavoriteNode";
 import {Route, Link, Routes} from "react-router-dom";
 
@@ -7,7 +7,7 @@ import {Route, Link, Routes} from "react-router-dom";
 function App() {
   return (
     <div className="App">
-        Home
+        <ProfilePreview/>
 
       <Routes>
           <Route path="/BlockNode" element={<BlockNode/>}/>
