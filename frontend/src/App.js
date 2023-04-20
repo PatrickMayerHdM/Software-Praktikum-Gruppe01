@@ -1,14 +1,14 @@
-import ProfilePreview from "./components/ProfilePreview.js";
+import ProfileWindow from "./components/ProfileWindow";
 import {Route, Link, Routes} from "react-router-dom";
 
 
 function App() {
   return (
     <div className="App">
-        <ProfilePreview/>
+        <ProfileWindow/>
 
       <Routes>
-          <Route path="./components/ProfilePreview.js" element={<ProfilePreview/>}/>
+          <Route path="./components/ProfileWindow.js" element={<ProfileWindow/>}/>
       </Routes>
 
     </div>
