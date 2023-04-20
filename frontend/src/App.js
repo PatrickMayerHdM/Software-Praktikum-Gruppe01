@@ -1,6 +1,4 @@
-import './App.css';
-import ProfilePreview from ".components/ProfilePreview.js";
-import FavoriteNode from "./FavoriteNode";
+import ProfilePreview from "./components/ProfilePreview.js";
 import {Route, Link, Routes} from "react-router-dom";
 
 
@@ -10,8 +8,7 @@ function App() {
         <ProfilePreview/>
 
       <Routes>
-          <Route path="/BlockNode" element={<BlockNode/>}/>
-          <Route path="/FavoriteNode" element={<FavoriteNode/>}/>
+          <Route path="./components/ProfilePreview.js" element={<ProfilePreview/>}/>
       </Routes>
 
     </div>
