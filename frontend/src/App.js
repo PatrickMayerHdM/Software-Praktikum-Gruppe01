@@ -1,13 +1,9 @@
-import ProfileView from "./components/ProfileView";
 
 
 function App() {
   return (
     <div className="App">
-      {/*Zum testweise darstellen der ProfileView während des erstellens*/}
-      <ProfileView/>
-
-      <ProfileView/>
+      App
     </div>
   );
 }
