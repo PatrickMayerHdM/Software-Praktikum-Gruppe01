@@ -1,16 +1,13 @@
-import ProfileWindow from "./components/ProfileWindow";
-import {Route, Link, Routes} from "react-router-dom";
+import ProfileView from "./components/ProfileView";
 
 
 function App() {
   return (
     <div className="App">
-        <ProfileWindow/>
+      {/*Zum testweise darstellen der ProfileView während des erstellens*/}
+      <ProfileView/>
 
-      <Routes>
-          <Route path="./components/ProfileWindow.js" element={<ProfileWindow/>}/>
-      </Routes>
-
+      <ProfileView/>
     </div>
   );
 }
