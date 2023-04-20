@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class relationship(ABC):
-    """relationship ist die Superklasse von favoriteNote und BlockNote"""
 
     @abstractmethod
     def create_relation(self):
