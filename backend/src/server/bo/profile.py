@@ -2,6 +2,7 @@ from BusinessObject import BusinessObject as bo
 
 
 class profile(bo):
+    """Erbt von der Klasse BusinessObject"""
     def __init__(self):
         super().__init__()
         self.charsList = []
