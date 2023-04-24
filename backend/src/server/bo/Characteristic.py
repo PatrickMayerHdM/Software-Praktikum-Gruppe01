@@ -20,10 +20,6 @@ class Characteristic(bo):
         """Setzen des Vornamens."""
         self._firstName = firstname
 
-    def change_firstname(self, firstname):
-        """Ändern des Vornamens."""
-        self._firstName = firstname
-
     def delete_firstname(self):
         """Löschen des Vornamens."""
         self._firstName = None
@@ -36,10 +32,6 @@ class Characteristic(bo):
         """Setzen des Nachnamens."""
         self._surName = surname
 
-    def change_surname(self, surname):
-        """Ändern des Nachnamens."""
-        self._surName = surname
-
     def delete_surname(self):
         """Löschen des Nachnamens."""
         self._surName = None
@@ -49,10 +41,6 @@ class Characteristic(bo):
         return self._surName
     def set_age(self, age):
         """Setzen des Alters."""
-        self._age = age
-
-    def change_age(self, age):
-        """Ändern des Alters."""
         self._age = age
 
     def delete_age(self):
@@ -67,10 +55,6 @@ class Characteristic(bo):
         """Setzen des Geschlechts."""
         self._sex = sex
 
-    def change_sex(self, sex):
-        """Ändern des Geschlechts."""
-        self._sex = sex
-
     def delete_sex(self):
         """Löschen der Geschlechtsangabe."""
         self._sex = None
@@ -81,10 +65,6 @@ class Characteristic(bo):
 
     def set_bodyheight(self, bodyheight):
         """Setzen der Koerpergroesse."""
-        self._bodyheight = bodyheight
-
-    def change_bodyheight(self, bodyheight):
-        """Ändern der Koerpergroesse."""
         self._bodyheight = bodyheight
 
     def delete_bodyheight(self):
@@ -99,10 +79,6 @@ class Characteristic(bo):
         """Setzen der Haarfarbe."""
         self._haircolor = haircolor
 
-    def change_haircolor(self, haircolor):
-        """Ändern der Haarfarbe."""
-        self._haircolor = haircolor
-
     def delete_haircolor(self):
         """Löschen der Haarfarbe."""
         self._haircolor = None
@@ -113,10 +89,6 @@ class Characteristic(bo):
 
     def set_description(self, description):
         """Setzen der Freitextbeschreibung."""
-        self._description = description
-
-    def change_description(self, description):
-        """Ändern der Freitextbeschreibung."""
         self._description = description
 
     def delete_description(self):
@@ -131,10 +103,6 @@ class Characteristic(bo):
         """Setzen der Eigenschaft: Raucher."""
         self._smoking = smoking
 
-    def change_smoking(self, smoking):
-        """Ändern der Eigenschaft: Raucher."""
-        self._smoking = smoking
-
     def delete_smoking(self):
         """Löschen der Eigenschaft: Raucher."""
         self._smoking = None
@@ -147,10 +115,6 @@ class Characteristic(bo):
         """Setzen der Religionszügehörigkeit."""
         self._religion = religion
 
-    def change_religion(self, religion):
-        """Ändern der Religionszugehörigkeit."""
-        self._religion = religion
-
     def delete_religion(self):
         """Löschen der Religionszugehörigkeit."""
         self._religion = None
@@ -161,10 +125,6 @@ class Characteristic(bo):
 
     def set_searchingfor(self, pref):
         """Setzen der Beziehungspräferenz."""
-        self._searchingFor = pref
-
-    def change_searchingfor(self, pref):
-        """Ändern der Beziehungspräferenz."""
         self._searchingFor = pref
 
     def delete_searchingfor(self):
