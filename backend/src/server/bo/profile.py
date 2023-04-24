@@ -29,6 +29,8 @@ class profile(bo):
 
 
 """
+Test des Codes
+
 A = profile()
 
 A.add_char("Raucher")
