@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+
+// Konfiguration für die Firebase-App
 const firebaseConfig = {
   apiKey: "AIzaSyBDCw5NLPJx0Xsi9CmUfrgDVtgAfZ7Ak3A",
   authDomain: "partnerboerse-soprass23-g01.firebaseapp.com",
@@ -10,8 +12,14 @@ const firebaseConfig = {
   measurementId: "G-BQGGB5ZPX8"
 };
 
-// Initialize Firebase
+// Firebase-App initialisieren
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app)
+
+// Firebase-Auth-Objekt aus der initialisierten Firebase-App holen
+const auth = getAuth(app);
+
+// Firebase-Auth-Provider für Google-Authentifizierung erstellen
 const provider = new GoogleAuthProvider();
-export {auth, provider};
+
+// Exportiere das Firebase-Auth-Objekt und den Provider
+export { auth, provider };
