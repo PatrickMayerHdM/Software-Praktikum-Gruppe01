@@ -1,6 +1,7 @@
 from server.bo.BusinessObject import BusinessObject as bo
 from server.bo.Characteristic import Characteristic as char
-class InfoObject(bo, char):
+
+class InfoObject(char):
     def __init__(self):
         super().__init__()
 
