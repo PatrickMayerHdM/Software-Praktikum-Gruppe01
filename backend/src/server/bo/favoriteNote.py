@@ -23,8 +23,8 @@ class favoriteNote(relationship):
         return self.Merkzettel_list
 
 
-"""Test des Codes
 
+"""
 Merkzettel1 = favoriteNote()
 
 Merkzettel1.add_user(4590)
