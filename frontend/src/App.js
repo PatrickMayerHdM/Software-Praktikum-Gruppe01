@@ -1,6 +1,5 @@
-import LogIn from "./pages/LogIn";
 import OnBoarding from "./pages/OnBoarding";
-
+import LogIn from "./pages/LogIn";
 function App() {
   return (
         // Darstellung der Test-Funktionen (LogIn-Page und OnBoarding-Page)
