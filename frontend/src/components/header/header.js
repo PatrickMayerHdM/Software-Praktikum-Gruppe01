@@ -37,8 +37,7 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-
-export default function BasicTabs() {
+function BasicTabs() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -66,5 +65,6 @@ export default function BasicTabs() {
     </Box>
   );
 }
+
 
 //Alles oben ist von MUI und noch im test-stage!!
