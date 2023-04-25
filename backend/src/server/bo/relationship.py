@@ -2,10 +2,8 @@ from abc import ABC, abstractmethod
 
 
 class relationship(ABC):
-
-    @abstractmethod
-    def create_relation(self):
-        pass
+    def __init__(self):
+        self.rel_id = 0
 
     """Mit @abstractmethod können die Methoden später überschrieben werden"""
 
@@ -18,5 +16,5 @@ class relationship(ABC):
         pass
 
     @abstractmethod
-    def show_user(self):
+    def show_all_users(self):
         pass

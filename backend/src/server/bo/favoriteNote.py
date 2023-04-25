@@ -3,14 +3,11 @@ from relationship import relationship
 
 class favoriteNote(relationship):
     def __init__(self):
-        self.Merkzettel_list = []
-
-    def create_relation(self):
-        """Merkzettel Liste wird im Konstruktur bereits initialisiert... falsch?"""
+        super().__init__()
         self.Merkzettel_list = []
 
     def add_user(self, profile_id):
-        """if abfrage um doppelte Nutzer in Liste zu vermeiden"""
+        """if abfrage, um doppelte Nutzer in Liste zu vermeiden"""
         if profile_id not in self.Merkzettel_list:
             self.Merkzettel_list.append(profile_id)
 
@@ -19,17 +16,14 @@ class favoriteNote(relationship):
         if profile_id in self.Merkzettel_list:
             self.Merkzettel_list.remove(profile_id)
 
-    def show_user(self):
+    def show_all_users(self):
         return self.Merkzettel_list
 
 
-
-"""
 Merkzettel1 = favoriteNote()
 
 Merkzettel1.add_user(4590)
 Merkzettel1.add_user(9987)
 Merkzettel1.add_user(9987)
 
-print(Merkzettel1.show_user())
-"""
+print(Merkzettel1.show_all_users())
