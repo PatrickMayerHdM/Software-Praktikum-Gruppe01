@@ -247,7 +247,7 @@ function OnBoarding() {
                     value={""}
                     onChange={handleChange}
                 />
-                </div>
+                    </div>
 
             </section>
 
