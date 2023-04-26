@@ -2,6 +2,7 @@ from BusinessObject import BusinessObject as bo
 
 
 class profileNeu(bo):
+    # Hier wird die Mindestanforderung an Eigenschaften direkt ins profil implementiert
     def __init__(self):
         super().__init__()
         self.firstname = ""
@@ -55,6 +56,7 @@ class profileNeu(bo):
         self.religion = value
 
     def __str__(self):
+        # str Methode gibt das erstellte profil in Form eines String zurück
         return "profile: {}, {}, {}, {}, {}, {}, {}, ".format(self.get_id(), self.firstname,
                                                               self.surname, self.birthdate,
                                                               self.hair_color, self.height,
