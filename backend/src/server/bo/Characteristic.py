@@ -1,4 +1,5 @@
-from server.bo.BusinessObject import BusinessObject as bo
+from BusinessObject import BusinessObject as bo
+
 
 class Characteristic(bo):
     def __init__(self, firstname=None, surname=None, age=None, sex=None, bodyheight=None, haircolor=None,
@@ -14,7 +15,6 @@ class Characteristic(bo):
         self._smoking = smoking
         self._religion = religion
         self._searchingFor = searchingfor
-
 
     def set_firstname(self, firstname):
         """Setzen des Vornamens."""
@@ -47,6 +47,7 @@ class Characteristic(bo):
     def get_surname(self):
         """Auslesen des Nachnamens."""
         return self._surName
+
     def set_age(self, age):
         """Setzen des Alters."""
         self._age = age
@@ -174,5 +175,4 @@ class Characteristic(bo):
     def get_searchingfor(self):
         """Auslesen der Beziehungspräferenz."""
         return self._searchingFor
-
 
