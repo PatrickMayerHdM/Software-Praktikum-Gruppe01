@@ -28,6 +28,5 @@ function TestProfileList(){
           </Grid >
         </Box >
         )
-
 }
 export default TestProfileList
