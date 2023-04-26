@@ -1,19 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
-import BlockNode from "./BlockNode";
-import FavoriteNode from "./FavoriteNode";
-import {Route, Link, Routes} from "react-router-dom";
-
-
+import OnBoarding from "./pages/OnBoarding";
+import LogIn from "./pages/LogIn";
+import TestProfileList from "./components/TestProfileList";
+import Navbar from "./components/header/Navbar";
 function App() {
   return (
+        // Darstellung der Test-Funktionen (LogIn-Page und OnBoarding-Page)
     <div className="App">
-        Home
-
-      <Routes>
-          <Route path="/BlockNode" element={<BlockNode/>}/>
-          <Route path="/FavoriteNode" element={<FavoriteNode/>}/>
-      </Routes>
+        <Navbar/>
+     <LogIn/>
+        <OnBoarding/>
+        <TestProfileList/>
 
     </div>
   );
