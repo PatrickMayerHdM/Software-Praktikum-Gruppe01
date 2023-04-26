@@ -9,13 +9,13 @@ class Account(BusinessObject):
         self.google_id = google_id
         self.account_id = account_id
 
-    def set_accountID(self, account_id):
-        """Anlegen accountID"""
-        self.account_id = account_id
-
     def set_profile_id(self, profile_id):
         """Anlegen profile_id"""
         self.profile_id = profile_id
+
+    def set_account_id(self, account_id):
+        """Anlegen accountID"""
+        self.account_id = account_id
 
     def get_google_id(self):
         """Auslesen google_id"""
