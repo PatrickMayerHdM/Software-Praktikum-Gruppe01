@@ -63,6 +63,7 @@ class profileNeu(bo):
                                                               self.smoker, self.religion)
 
 
+"""
 obj = profileNeu()
 obj.set_firstname("Michael")
 obj.set_surname("Fezer")
@@ -73,3 +74,4 @@ obj.set_smoker(False)
 obj.set_religion("Atheismus")
 
 print(obj)
+"""
