@@ -1,5 +1,6 @@
-from server.bo.BusinessObject import BusinessObject as bo
+from BusinessObject import BusinessObject as bo
 from datetime import datetime
+
 
 class Message(bo):
     def __init__(self, sender, recipient, content):
