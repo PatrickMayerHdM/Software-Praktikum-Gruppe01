@@ -83,8 +83,7 @@ class profileNeu(bo):
                                                               self.__hair_color, self.__height,
                                                               self.__smoker, self.__religion)
 
-
-"""
+""""
 obj = profileNeu()
 obj.set_firstname("Michael")
 obj.set_surname("Fezer")
@@ -94,5 +93,15 @@ obj.set_height("180 cm")
 obj.set_smoker(False)
 obj.set_religion("Atheismus")
 
+obj2 = profileNeu()
+obj2.set_firstname("Michael")
+obj2.set_surname("Fezer")
+obj2.set_birthdate("21.10.2001")
+obj2.set_hair_color("braun")
+obj2.set_height("180 cm")
+obj2.set_smoker(False)
+obj2.set_religion("Atheismus")
+
 print(obj)
+print(obj2)
 """
