@@ -5,6 +5,7 @@ import OnBoarding from "./pages/OnBoarding";
 import LogIn from "./pages/LogIn";
 import TestProfileList from "./components/TestProfileList";
 import Navbar from "./components/header/Navbar";
+import Chat from "./components/Chat";
 function App() {
   return (
         /** Darstellung der Test-Funktionen (LogIn-Page und OnBoarding-Page) */
@@ -12,6 +13,7 @@ function App() {
         <Navbar/>
      <LogIn/>
         <OnBoarding/>
+        <Chat/>
         <TestProfileList/>
 
     </div>
