@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class BusinessObject(ABC):
     def __init__(self):
         self._id = 0
@@ -11,4 +12,3 @@ class BusinessObject(ABC):
     def set_id(self, new_id):
         """Setzen der ID."""
         self._id = new_id
-
