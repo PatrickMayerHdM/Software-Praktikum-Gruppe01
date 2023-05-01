@@ -1,4 +1,5 @@
-from server.bo.BusinessObject import BusinessObject as bo
+from BusinessObject import BusinessObject as bo
+
 
 class Characteristic(bo):
     def __init__(self, firstname=None, surname=None, age=None, sex=None, bodyheight=None, haircolor=None,
@@ -15,30 +16,6 @@ class Characteristic(bo):
         self._religion = religion
         self._searchingFor = searchingfor
 
-
-    def set_firstname(self, firstname):
-        """Setzen des Vornamens."""
-        self._firstName = firstname
-
-    def delete_firstname(self):
-        """Löschen des Vornamens."""
-        self._firstName = None
-
-    def get_firstname(self):
-        """Auslesen des Vornamens."""
-        return self._firstName
-
-    def set_surname(self, surname):
-        """Setzen des Nachnamens."""
-        self._surName = surname
-
-    def delete_surname(self):
-        """Löschen des Nachnamens."""
-        self._surName = None
-
-    def get_surname(self):
-        """Auslesen des Nachnamens."""
-        return self._surName
     def set_age(self, age):
         """Setzen des Alters."""
         self._age = age
@@ -63,30 +40,6 @@ class Characteristic(bo):
         """Auslesen des Geschlechts."""
         return self._sex
 
-    def set_bodyheight(self, bodyheight):
-        """Setzen der Koerpergroesse."""
-        self._bodyheight = bodyheight
-
-    def delete_bodyheight(self):
-        """Löschen der Koerpergroessenangabe."""
-        self._bodyheight = None
-
-    def get_bodyheight(self):
-        """Auslesen der Koerpergroesse."""
-        return self._bodyheight
-
-    def set_haircolor(self, haircolor):
-        """Setzen der Haarfarbe."""
-        self._haircolor = haircolor
-
-    def delete_haircolor(self):
-        """Löschen der Haarfarbe."""
-        self._haircolor = None
-
-    def get_haircolor(self):
-        """Auslesen der Haarfarbe."""
-        return self._haircolor
-
     def set_description(self, description):
         """Setzen der Freitextbeschreibung."""
         self._description = description
@@ -99,30 +52,6 @@ class Characteristic(bo):
         """Auslesen der Freitextbeschreibung."""
         return self._description
 
-    def set_smoking(self, smoking):
-        """Setzen der Eigenschaft: Raucher."""
-        self._smoking = smoking
-
-    def delete_smoking(self):
-        """Löschen der Eigenschaft: Raucher."""
-        self._smoking = None
-
-    def get_smoking(self):
-        """Auslesen der Eigenschaft: Raucher."""
-        return self._smoking
-
-    def set_religion(self, religion):
-        """Setzen der Religionszügehörigkeit."""
-        self._religion = religion
-
-    def delete_religion(self):
-        """Löschen der Religionszugehörigkeit."""
-        self._religion = None
-
-    def get_religion(self):
-        """Auslesen der Religionszugehörigkeit."""
-        return self._religion
-
     def set_searchingfor(self, pref):
         """Setzen der Beziehungspräferenz."""
         self._searchingFor = pref
@@ -134,5 +63,4 @@ class Characteristic(bo):
     def get_searchingfor(self):
         """Auslesen der Beziehungspräferenz."""
         return self._searchingFor
-
 
