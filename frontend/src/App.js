@@ -11,8 +11,6 @@ function App() {
         // Darstellung der Test-Funktionen (LogIn-Page und OnBoarding-Page)
     <div className="App">
         <Navbar/>
-        <OnBoarding/>
-        <SearchProfile/>
 
     </div>
   );
