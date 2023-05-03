@@ -13,6 +13,8 @@ class BusinessObject(ABC):
         """Auslesen der ID."""
         return self._id
 
+    """Die zwei Methoden get_id und set_id sind möglicherweise überflüssig"""
+
     def set_id(self, new_id):
         """Setzen der ID."""
         self._id = new_id
