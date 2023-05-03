@@ -1,4 +1,5 @@
 from BusinessObject import BusinessObject as bo
+from Account import Account
 
 
 class profileNeu(bo):
@@ -83,7 +84,7 @@ class profileNeu(bo):
                                                               self.__hair_color, self.__height,
                                                               self.__smoker, self.__religion)
 
-""""
+
 obj = profileNeu()
 obj.set_firstname("Michael")
 obj.set_surname("Fezer")
@@ -102,6 +103,11 @@ obj2.set_height("180 cm")
 obj2.set_smoker(False)
 obj2.set_religion("Atheismus")
 
+obj3 = profileNeu()
+print(obj3)
+
 print(obj)
 print(obj2)
-"""
+
+Acc1 = Account(56, 90)
+print(Acc1)
