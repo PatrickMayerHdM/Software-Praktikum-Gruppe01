@@ -20,6 +20,7 @@ class blockNote(relationship):
         return self.block_list
 
 
+
 Blockierter = blockNote()
 
 Blockierter.add_user(898)
@@ -27,4 +28,5 @@ Blockierter.add_user(999)
 Blockierter.add_user(981)
 Blockierter.del_user(981)
 
-print(Blockierter.show_all_users())
+
+print(Blockierter)
