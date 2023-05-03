@@ -2,7 +2,7 @@ from profileNEU import profileNeu
 from mapper import mapper
 
 
-class profileMapper(mapper):
+class ProfileMapper(mapper):
     def __init__(self):
         super().__init__()
 
