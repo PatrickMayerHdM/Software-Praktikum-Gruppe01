@@ -1,8 +1,10 @@
 from profileNEU import profileNeu
 from mapper import mapper
 
+"""Überall wo die Klasse "profile" verwendet wird, müsste eigentlich profileNeu stehen"""
 
-class ProfileMapper(mapper):
+
+class ProfileNeuMapper (mapper):
     def __init__(self):
         super().__init__()
 
@@ -58,8 +60,8 @@ class ProfileMapper(mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "firstname, surname, birthdate, hair_color, height, smoker, religion " \
-                  "FROM users WHERE id={}".format(key)
+        command = "SELECT id, firstname, surname, birthdate, hair_color, height, smoker, religion FROM profile WHERE " \
+                  "id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -85,13 +87,57 @@ class ProfileMapper(mapper):
 
         return result
 
+    def insert(self, profileNeu):
+        # Verbindugn zur DB + cursor-objekt erstellt
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM profileNeu")
+        tuples = cursor.fetchall()
 
-    def insert(self, profile):
-        pass
+        for (maxid) in tuples:
+            if maxid[0] is not None:
+                """Wenn eine ID vorhanden ist, zählen wir diese um 1 hoch"""
+                profileNeu.set_id(maxid[0] + 1)
 
+            else:
+                """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
+                profileNeu.set_id(1)
 
-    def update(self, profile):
-        pass
+        command = "INSERT INTO profileNeu (id, firstname, surname, birthdate) VALUES (%s, %s, %s, %s)"
+        data = (profileNeu.get_id(), profileNeu.get_firstname(), profileNeu.get_surname(), profileNeu.get_birthdate())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return profileNeu
+
+    def update(self, profileNeu):
+        # Verbindugn zur DB + cursor-objekt erstellt
+        cursor = self._connection.cursor()
+
+        # SQL-Befehl um Datensatz in DB zu aktualisieren (Datensatz mit ID, welche in profileNeu gespeichert ist)
+        command = "UPDATE profileNeu" + "SET firstname=%s, surname=%s, birthdate=%s WHERE id=%s "
+
+        # Speichern der gegebenen parameter als Tupel und Ausführung mit aktualisiertet Daten durch execute
+        data = (profileNeu.get_firstname(), profileNeu.get_surname(), profileNeu.get_birthdate(), profileNeu.get_id())
+        cursor.execute(command, data)
+
+        # Speicherung der veränderten DB und Schließung des cursor
+        self._connection.commit()
+        cursor.close()
 
     def delete(self, profile):
-        pass
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM profileNeu WHERE id={}".format(profileNeu.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+
+if (__name__ == "__main__"):
+    with ProfileNeuMapper() as mapper:
+        result = mapper.find_all()
+        for profileNeu in result:
+            print(profileNeu)

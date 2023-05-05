@@ -5,10 +5,7 @@ from blockNote import blockNote
 from Message import Message
 from Account import Account
 
-"""FRage: Man kann nicht von der Klasse profile aus auf andere Klassen zugreifen?
-Zum Biespiel kann ich in der Klasse profile nicht die MEthode show_all_users aufrufen"""
-
-"""Sollen immer neue Objekte erzeugt werden?"""
+"""Diese Klasse kann später gelöscht werden."""
 
 
 class profile(bo):

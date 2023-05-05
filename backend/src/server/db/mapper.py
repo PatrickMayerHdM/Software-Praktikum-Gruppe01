@@ -16,6 +16,7 @@ class mapper(AbstractContextManager, ABC):
         """Hier wird geprüft ob die Verbindung zur Datenbank in der Cloud oder lokal ausgeführt wird. """
 
         if os.getenv('GAE_ENV', '').startswith('standard'):
+            """Falls Code in der Cloud läuft, sind wir im "if" Zweig"""
 
             self._connection = connector.connect(user='demo', password='demo', unix_socket='', database='DatingApp_V2')
 

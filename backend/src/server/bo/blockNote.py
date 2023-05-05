@@ -4,6 +4,7 @@ from relationship import relationship
 class blockNote(relationship):
     def __init__(self):
         super().__init__()
+        """Erstellen einer Liste um dort Profile zu speichern"""
         self.block_list = []
 
     def add_user(self, blocked_user):
