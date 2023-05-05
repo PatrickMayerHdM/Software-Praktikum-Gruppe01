@@ -3,15 +3,19 @@ from BusinessObject import BusinessObject as bo
 
 class Account(bo):
 
-    def __init__(self, google_id, account_id):
+    def __init__(self):
         super().__init__()
         self.profile_id = None
-        self.google_id = google_id
-        self.account_id = account_id
+        self.google_id = "" # Die Google ID des Nutzers
+        self.account_id = None # Die Account ID des Nutzers
 
     def set_profile_id(self, profile_id):
         """Anlegen profile_id"""
         self.profile_id = profile_id
+
+    def get_profile_id(self):
+        """Auslesen der Profil ID"""
+        return self.profile_id
 
     def get_google_id(self):
         """Auslesen google_id"""
