@@ -48,7 +48,7 @@ class App extends Component {
 
   /** Handler-Funktion, die beim Klicken auf den "Anmelden"-Button aufgerufen wird */
 
-  handleSignIn = () => {
+  handleLogIn = () => {
 
     /** Firebase-App initialisieren und Authentifizierungs-Objekt erstellen */
 
@@ -70,7 +70,7 @@ class App extends Component {
 
   /** Handler-Funktion, die beim Klicken auf den "Abmelden"-Button aufgerufen wird */
 
-  handleSignOut = () => {
+  handleLogOut = () => {
 
     /** Firebase-App initialisieren und Authentifizierungs-Objekt erstellen */
 
@@ -123,14 +123,14 @@ class App extends Component {
                 open={open} /** gibt an ob das Menü geöffnet ist */
                 onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
               >
-                <MenuItem onClick={this.handleSignOut}> Abmelden </MenuItem>
+                <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
             <Navbar/>
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
-          <LogIn onLogIn={this.handleSignIn} />
+          <LogIn onLogIn={this.handleLogIn} />
         }
       </div>
     );
