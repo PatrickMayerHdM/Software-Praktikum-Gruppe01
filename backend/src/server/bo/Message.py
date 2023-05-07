@@ -10,21 +10,37 @@ class Message(bo):
         self.content = content
         self._timestamp = datetime.now()
 
-    def get_author(self):
+    def get_sender(self):
         """Auslesen des Senders."""
         return self._sender
+
+    def set_sender(self, sender):
+        """ Setzen des Absenders. """
+        self._sender = sender
 
     def get_recipient(self):
         """Auslesen des Empfängers."""
         return self._recipient
 
+    def set_recipient(self, recipient):
+        """ Setzen des Empfängers. """
+        self._recipient = recipient
+
     def get_content(self):
         """Auslesen der Nachricht."""
         return self.content
 
+    def set_content(self, content):
+        """ Setzen des Nachrichteninhalts. """
+        self.content = content
+
     def get_timestamp(self):
         """Auslesen des Zeitstempels."""
         return self._timestamp
+
+    def set_timestamp(self, timestamp):
+        """ Setzen des Zeitstempels."""
+        self._timestamp = timestamp
 
     def __str__(self):
         """Auslesen der Nachricht."""
