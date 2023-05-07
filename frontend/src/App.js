@@ -12,7 +12,6 @@ import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./components/header/Navbar";
-import LogIn from "./pages/LogIn";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
 
