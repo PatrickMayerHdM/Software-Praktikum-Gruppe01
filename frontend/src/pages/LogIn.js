@@ -1,46 +1,36 @@
-import { useEffect, useState } from "react";
-import { auth, provider } from "./config";
-import { signInWithPopup } from "firebase/auth";
-import OnBoarding from "./OnBoarding";
-/** Definition der Login-Komponente */
-function LogIn() {
+import React, { Component } from 'react';
+import { Button, Grid, Typography } from '@mui/material';
 
-  /** Verwendung der useState-Hook, um den anfänglichen Zustand
-   des "value"-Staates auf eine leere Zeichenfolge zu setzen */
-  const [value, setValue] = useState("");
+/** Definition der LogIn-Komponente als eine Unterklasse von Component */
+class LogIn extends Component {
 
-  /** Definition der handleClick-Funktion, die aufgerufen wird,
-   wenn der "Registrieren mit Google"-Button geklickt wird */
-  const handleClick = () => {
-    /** Aufrufen der signInWithPopup-Funktion mit dem "auth" und "provider" Objekten als Parameter,
-     um eine Popup-Authentifizierung mit Google durchzuführen */
-    signInWithPopup(auth, provider).then((data) => {
-      /** Setzen des "value"-Staates auf die E-Mail-Adresse des angemeldeten Benutzers */
-      setValue(data.user.email);
-      /** Speichern der E-Mail-Adresse in localStorage,
-       um den Benutzer bei zukünftigen Anmeldungen automatisch zu authentifizieren */
-      localStorage.setItem("email", data.user.email);
-    });
-  };
+	/** Funktion, die aufgerufen wird, wenn der "Anmelden"-Button geklickt wird */
+	handleLogInButtonClicked = () => {
+		/** Aufrufen der onLogIn-Funktion, die als Prop an die Komponente übergeben wurde */
+		this.props.onLogIn();
+	}
 
-  /** Verwendung der useEffect-Hook, um den "value"-Staates mit der E-Mail-Adresse
-   des angemeldeten Benutzers aus localStorage zu initialisieren */
-  useEffect(() => {
-    setValue(localStorage.getItem("email"));
-  }, []);
-
-  /** Rückgabe des LogIn-Komponenten-Renderings */
-  return (
-    <div>
-      {/** Überprüfung, ob der "value"-Staat gesetzt ist, um zu entscheiden,
-      ob die OnBoarding-Komponente oder der "Registrieren mit Google"-Button gerendert wird */}
-      {value ? (
-        <OnBoarding />
-      ) : (
-        <button onClick={handleClick}> Registrieren mit Google </button>
-      )}
-    </div>
-  );
+	/** Funktion zum Rendern der JSX-Elemente der Komponente */
+	render() {
+		return (
+			<div>
+				<Typography sx={{margin: 5}} align='center' variant='h4'>Willkommen zur HdM React/Python
+					Projektvorstellung</Typography>
+				<Typography sx={{margin: 4}} align='center'>Bitte melden Sie sich an, um die Dienste der HdM Dating
+					Seite nutzen zu können.</Typography>
+				<Grid container justifyContent='center'>
+					<Grid item>
+						<Button variant='outlinedPrimary' color='secondary' sx={{backgroundColor: '#FF4D4F'}}
+								onClick={this.handleLogInButtonClicked}>
+							Mit Google anmelden
+						</Button>
+					</Grid>
+				</Grid>
+			</div>
+			);
+	}
 }
-/** Exportieren der LogIn-Komponente als Standard */
+
+/** Exportieren der LogIn-Komponente, um sie in anderen Teilen der Anwendung verwenden zu können */
+
 export default LogIn;
