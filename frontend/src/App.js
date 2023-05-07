@@ -3,8 +3,18 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
 import { Avatar, Menu, MenuItem } from '@mui/material';
+import Item from "./theme";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import OnBoarding from "./pages/OnBoarding";
+import LogIn from "./pages/LogIn";
+import TestProfileList from "./components/TestProfileList";
+import BlockProfileBox from "./components/BlockProfileBox";
+import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./components/header/Navbar";
 import LogIn from "./pages/LogIn";
+import SearchProfile from "./components/SearchProfile";
+import Chat from "./components/Chat";
 
 /** Definition der App-Komponente */
 

@@ -9,7 +9,7 @@ function Profilebox(){
     return(
         <Box sx={{ flexGrow: 1 }} >
             {/** Dies ist die Box, in welcher schlussendlich sich das Grid befindet */}
-          <Grid container spacing={2} >
+          <Grid container spacing={1}>
               {/** Das Grid an sich */}
             <Grid item xs={5} >
                 {/** Ein Item für das Grid, hier der Vorname, bei einer Item größe 5 */}
