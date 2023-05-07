@@ -9,7 +9,8 @@ import Profilebox from "./Profilebox";
 function TestProfileList(){
     return(
         <Box sx={{ flexGrow: 1 }} >
-          <Grid container spacing={2} >
+          <Grid container spacing={2}
+            direction="row" justifyContent="center" alignItems="center">
             <Grid item xs={7} >
               <Item>
                   <Profilebox/>

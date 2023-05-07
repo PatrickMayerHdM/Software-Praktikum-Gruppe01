@@ -4,6 +4,7 @@ from relationship import relationship
 class favoriteNote(relationship):
     def __init__(self):
         super().__init__()
+        """Erstellen einer Liste Merkzettel um Profile dort zu speichern"""
         self.Merkzettel_list = []
 
     def add_user(self, profile_id):
