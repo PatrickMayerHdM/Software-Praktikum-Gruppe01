@@ -73,11 +73,45 @@ class AccountMapper(mapper):
         return account
 
 
-    def update(self, object):
-        pass
+    def update(self, account):
+        """ Aktualisierung einer Account-Instanz
+          :param account = ist das Objekt (Datensatz), der in DB aktualisiert werden soll."""
+        cursor = self._connection.cursor()
 
-    def delete(self, object):
-        pass
+        command = 'UPDATE Account SET google_id=%s, profile_id=%s WHERE account_id=%s'
+        data = (account.get_google_id(), account.get_profile_id(), account.get_id())
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete(self, account):
+        """ Löschen eines Datensatzes
+        :param account = Objekt, das gelöscht werden soll."""
+        cursor = self._connection.cursor()
+
+        command = f'DELETE FROM Account WHERE account_id={account.get_id()}'
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
 
     def find_by_google_id(self, google_id):
-        pass
+        """ Auslesen eines Accounts, der eine bestimmte GoogleID hat.
+        :param google_id = Die GoogleID des Accounts, der gesucht wird."""
+
+        cursor = self._connection.cursor()
+        command = 'SELECT * FROM Account WHERE google_id=%s'
+        cursor.execute(command, (google_id,))
+        tuple = cursor.fetchone()
+
+        if tuple is not None:
+            account = Account()
+            account.set_id(tuple[0])
+            account.set_google_id(tuple[1])
+            account.set_profile_id(tuple[2])
+            return account
+
+        cursor.close()
+        return None
