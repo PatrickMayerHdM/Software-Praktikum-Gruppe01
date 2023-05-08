@@ -93,8 +93,24 @@ class MessageMapper(mapper):
 
         return message
 
-    def update(self, object):
-        pass
+    def update(self, message):
+        cursor = self._connection.cursor()
 
-    def delete(self, object):
-        pass
+        command = 'UPDATE Message SET sender_id=%s, recipient_id=%s, timestamp=%s, content=%s WHERE message_id=%s'
+        data = (message.get_sender(),
+                message.get_recipient(),
+                message.get_timestamp(),
+                message.get_content())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete(self, message):
+        cursor = self._connection.cursor()
+
+        command = f'DELETE FROM Message WHERE id={message.get_id()}'
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
