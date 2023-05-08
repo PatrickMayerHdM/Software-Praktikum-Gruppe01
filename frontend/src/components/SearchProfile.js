@@ -8,9 +8,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
 import {Button} from "@mui/material";
 import { useState} from "react";
 
@@ -20,8 +17,6 @@ import { useState} from "react";
 
 
 function SearchProfile(){
-
-    /** const für möglichen Werte  */
 
     /** const für die Auswahlmöglichkeiten beim Geschlecht  */
     const [gender, setGender] = useState({

@@ -14,6 +14,7 @@ import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./components/header/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
+import OtherProfile from "./components/OtherProfile";
 
 /** Definition der App-Komponente */
 
@@ -132,8 +133,15 @@ class App extends Component {
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
           <LogIn onLogIn={this.handleLogIn} />
         }
+        .
+        <BlockProfileBox/>
       </div>
     );
   }
 }
+
 export default App;
+
+/** Die Firebase Authentifizierung ist bei Kunz in App.js */
+
+/** Die Inhaltsstruktur findet sich auch in App.js (Siehe Bankprojekt)*/
