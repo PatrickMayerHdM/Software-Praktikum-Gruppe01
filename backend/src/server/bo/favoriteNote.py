@@ -1,7 +1,8 @@
 from relationship import relationship
+from BusinessObject import BusinessObject as bo
 
 
-class favoriteNote(relationship):
+class favoriteNote(bo, relationship):
     def __init__(self):
         super().__init__()
         """Erstellen einer Liste Merkzettel um Profile dort zu speichern"""
