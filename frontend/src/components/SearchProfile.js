@@ -135,17 +135,6 @@ function SearchProfile(){
                         </Box>
                     </Item>
 
-                    <Item>
-                        {/** Hier kann festgelegt werden, ob das Alter der Person ein Killerkriterium ist: Überlegen ob wir es behalten wollen */}
-                        <FormControl>
-                            <FormLabel>Sollte das Alter ein Killerkriterium sein?</FormLabel>
-                            <RadioGroup row style={{ justifyContent: 'center' }}>
-                                <FormControlLabel value="Ja" control={<Radio />} label="Ja" />
-                                <FormControlLabel value="Nein" control={<Radio />} label="Nein" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Item>
-
                     <Item >
                         {/** Hier kann die gewünschte Religion der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                         <FormLabel> Welche Religion sollte die gesuchte Person haben?</FormLabel>
