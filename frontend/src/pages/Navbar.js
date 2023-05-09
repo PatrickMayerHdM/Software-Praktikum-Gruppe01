@@ -16,8 +16,8 @@ function Navbar() {
             <h3>LOGO</h3>
             <nav ref={navRef}>
                 <a href="/">Home</a>
-                <a href="/Merkliste">Merkzettel</a>
-                <a href="/Sperrliste">Sperrliste</a>
+                <a href="/Users/oresttkach/PycharmProjects/Software-Praktikum-Gruppe01/frontend/src/pages/Merkliste">Merkzettel</a>
+                <a href="/Users/oresttkach/PycharmProjects/Software-Praktikum-Gruppe01/frontend/src/pages/Sperrliste">Sperrliste</a>
                 <a href="/#">Profil</a>
                 <button className="nav-btn nav-close-btn" onClick={showNavbar}>
                     <FaTimes/>
