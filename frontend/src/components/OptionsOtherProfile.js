@@ -1,4 +1,3 @@
-import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";

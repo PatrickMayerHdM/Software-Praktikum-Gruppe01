@@ -15,7 +15,9 @@ import Navbar from "./components/header/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
 import {Route, Router, Routes} from "react-router-dom";
-import OtherProfile from "./components/OtherProfile";
+import Profile from "./components/Profile";
+import OptionsOtherProfile from "./components/OptionsOtherProfile";
+import OptionsOwnProfile from "./components/OptionsOwnProfile";
 
 /** Definition der App-Komponente */
 
@@ -136,8 +138,7 @@ class App extends Component {
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
           <LogIn onLogIn={this.handleLogIn} />
         }
-        .
-        <BlockProfileBox/>
+
       </div>
     );
 
