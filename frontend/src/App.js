@@ -14,6 +14,7 @@ import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./components/header/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
+import {Route, Router, Routes} from "react-router-dom";
 
 /** Definition der App-Komponente */
 
@@ -106,22 +107,24 @@ class App extends Component {
     const { currentUser, menuAnchor } = this.state;
     const open = Boolean(menuAnchor);
 
+
+
     return (
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {currentUser.photoURL ? ( /** Wenn der Benutzer ein Profilbild hat */
-                <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
+               <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
               ) : ( /** Wenn der Benutzer kein Profilbild hat */
-                <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
+               <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
                   {currentUser.displayName[0]}
                 </Avatar>
               )}
               <Menu
                 anchorEl={menuAnchor} /** Das Element, an dem das Menü angezeigt werden soll */
                 open={open} /** gibt an ob das Menü geöffnet ist */
-                onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
+             onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
               >
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
@@ -134,6 +137,8 @@ class App extends Component {
         }
       </div>
     );
+
   }
 }
+
 export default App;

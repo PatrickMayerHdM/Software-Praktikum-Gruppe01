@@ -10,13 +10,14 @@ function Navbar() {
     const showNavbar = () => {
         navRef.current.classList.toggle("responsive_nav");
     }
+    /** Eigentliche Struktur der Navigationsleiste*/
     return (
         <header>
             <h3>LOGO</h3>
             <nav ref={navRef}>
-                <a href="/#">Home</a>
-                <a href="/#">Merkzettel</a>
-                <a href="/#">Sperrliste</a>
+                <a href="/">Home</a>
+                <a href="/Merkliste">Merkzettel</a>
+                <a href="/Sperrliste">Sperrliste</a>
                 <a href="/#">Profil</a>
                 <button className="nav-btn nav-close-btn" onClick={showNavbar}>
                     <FaTimes/>
