@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+"""In relationship die get_id und set_id Methode eingeführt. Somit ist blockNote und favoriteNot eunabhängig von bo"""
+
 
 class relationship(ABC):
     def __init__(self):
@@ -16,5 +18,5 @@ class relationship(ABC):
         pass
 
     @abstractmethod
-    def show_all_users(self):
+    def get_all_users(self):
         pass

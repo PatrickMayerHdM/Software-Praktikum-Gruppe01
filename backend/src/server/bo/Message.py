@@ -3,11 +3,11 @@ from datetime import datetime
 
 
 class Message(bo):
-    def __init__(self, sender, recipient, content):
+    def __init__(self):
         super().__init__()
-        self._sender = sender
-        self._recipient = recipient
-        self.content = content
+        self._sender = None
+        self._recipient = None
+        self.content = None
         self._timestamp = datetime.now()
 
     def get_sender(self):

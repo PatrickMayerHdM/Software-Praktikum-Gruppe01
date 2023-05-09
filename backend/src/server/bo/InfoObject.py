@@ -3,8 +3,11 @@ from server.bo.Characteristic import Characteristic as char
 
 
 class InfoObject(char, bo):
-    def __init__(self):
+    def __init__(self, name, characteristic):
         super().__init__()
+        self.name = name
+        self.characteristic = characteristic
+
 
     def get_choices(self):
         """ Auslesen der Auswahlmöglichkeiten """
@@ -21,3 +24,5 @@ class InfoObject(char, bo):
             'Religion': ['Christentum', 'Islam', 'Judentum', 'Hinduismus', 'Atheist'],
             'SearchingFor': ['Offene Beziehung', 'Feste Beziehung', 'Nur Spaß']
         }
+
+
