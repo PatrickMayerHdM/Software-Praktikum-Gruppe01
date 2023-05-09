@@ -2,12 +2,11 @@ from BusinessObject import BusinessObject as bo
 
 
 class Characteristic(bo):
-    def __init__(self, firstname=None, surname=None, age=None, sex=None, bodyheight=None, haircolor=None,
+    def __init__(self, age=None, sex=None, bodyheight=None, haircolor=None,
                  description=None, smoking=None, religion=None, searchingfor=None):
         super().__init__()
-        self._firstName = firstname
-        self._surName = surname
         self._age = age
+        self._ageId = 1
         self._sex = sex
         self._bodyheight = bodyheight
         self._haircolor = haircolor
@@ -63,4 +62,5 @@ class Characteristic(bo):
     def get_searchingfor(self):
         """Auslesen der Beziehungspräferenz."""
         return self._searchingFor
+
 

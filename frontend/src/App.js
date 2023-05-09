@@ -14,6 +14,7 @@ import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./components/header/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
+import {Route, Router, Routes} from "react-router-dom";
 import OtherProfile from "./components/OtherProfile";
 
 /** Definition der App-Komponente */
@@ -107,6 +108,8 @@ class App extends Component {
     const { currentUser, menuAnchor } = this.state;
     const open = Boolean(menuAnchor);
 
+
+
     return (
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
@@ -137,11 +140,8 @@ class App extends Component {
         <BlockProfileBox/>
       </div>
     );
+
   }
 }
 
 export default App;
-
-/** Die Firebase Authentifizierung ist bei Kunz in App.js */
-
-/** Die Inhaltsstruktur findet sich auch in App.js (Siehe Bankprojekt)*/

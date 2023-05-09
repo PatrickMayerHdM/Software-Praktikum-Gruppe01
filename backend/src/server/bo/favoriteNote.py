@@ -18,14 +18,24 @@ class favoriteNote(bo, relationship):
         if profile_id in self.Merkzettel_list:
             self.Merkzettel_list.remove(profile_id)
 
-    def show_all_users(self):
+    def get_all_users(self):
         return self.Merkzettel_list
+
+    def __str__(self):
+        # str Methode gibt die favoriteNote in Form eines String zurück
+        return "Merkliste: {}, {}".format(self.get_id(), self.get_all_users())
 
 
 Merkzettel1 = favoriteNote()
+Merkzettel2 = favoriteNote()
 
 Merkzettel1.add_user(4590)
 Merkzettel1.add_user(9987)
 Merkzettel1.add_user(9987)
 
-print(Merkzettel1.show_all_users())
+Merkzettel2.add_user(34)
+Merkzettel2.add_user(314)
+Merkzettel2.add_user(343)
+
+print(Merkzettel1)
+print((Merkzettel2))
