@@ -46,3 +46,15 @@ class Message(bo):
         """Auslesen der Nachricht."""
         return (f'Von: {self._sender} \n An: {self._recipient}\n '
                 f'Content: {self.get_content()} \n Uhrzeit: {self._timestamp}')
+
+
+"""
+message = Message()
+
+message.set_sender("Peter")
+message.set_recipient("Dominik")
+message.set_content("Hallo Dominik, wie geht es dir?")
+message.set_timestamp("10.05.2023")
+
+print(message)
+"""
