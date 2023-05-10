@@ -95,6 +95,18 @@ function Profile() {
                             </Grid>
                         </Grid >
                     </Item>
+                    <Item>
+                        <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                            <Grid md={4} xs={7} spacing={2}>
+                                Freitext:
+                            </Grid>
+                            <Grid md={8} xs={12} spacing={2}>
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+                                accusam et justo duo dolores
+                            </Grid>
+                        </Grid >
+                    </Item>
                 </Stack>
             </Box>
     )

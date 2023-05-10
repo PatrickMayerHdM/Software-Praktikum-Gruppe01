@@ -133,6 +133,7 @@ class App extends Component {
               </Menu>
             </div>
             <Navbar/>
+            <Profile/>
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
