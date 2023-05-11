@@ -4,6 +4,7 @@ import { Button, Grid, Typography } from '@mui/material';
 /** Definition der LogIn-Komponente als eine Unterklasse von Component */
 class LogIn extends Component {
 
+
 	/** Funktion, die aufgerufen wird, wenn der "Anmelden"-Button geklickt wird */
 	handleLogInButtonClicked = () => {
 		/** Aufrufen der onLogIn-Funktion, die als Prop an die Komponente übergeben wurde */
@@ -14,16 +15,11 @@ class LogIn extends Component {
 	render() {
 		return (
 			<div>
-				<Typography sx={{margin: 5}} align='center' variant='h4'>Willkommen zur HdM React/Python
-					Projektvorstellung</Typography>
-				<Typography sx={{margin: 4}} align='center'>Bitte melden Sie sich an, um die Dienste der HdM Dating
-					Seite nutzen zu können.</Typography>
+				<Typography sx={{margin: 5}} align='center' variant='h4'>Willkommen zur HdM React/Python Projektvorstellung</Typography>
+				<Typography sx={{margin: 4}} align='center'>Bitte melden Sie sich an, um die Dienste der HdM Dating Seite nutzen zu können.</Typography>
 				<Grid container justifyContent='center'>
 					<Grid item>
-						<Button variant='outlinedPrimary' color='secondary' sx={{backgroundColor: '#FF4D4F'}}
-								onClick={this.handleLogInButtonClicked}>
-							Mit Google anmelden
-						</Button>
+						<Button variant='outlinedPrimary' color='secondary' sx={{backgroundColor: '#FF4D4F'}} onClick={this.handleLogInButtonClicked}> Mit Google anmelden </Button>
 					</Grid>
 				</Grid>
 			</div>
