@@ -3,11 +3,11 @@ from datetime import datetime
 
 
 class Message(bo):
-    def __init__(self, sender, recipient, content):
+    def __init__(self):
         super().__init__()
-        self._sender = sender
-        self._recipient = recipient
-        self.content = content
+        self._sender = None
+        self._recipient = None
+        self.content = None
         self._timestamp = datetime.now()
 
     def get_sender(self):
@@ -46,3 +46,15 @@ class Message(bo):
         """Auslesen der Nachricht."""
         return (f'Von: {self._sender} \n An: {self._recipient}\n '
                 f'Content: {self.get_content()} \n Uhrzeit: {self._timestamp}')
+
+
+"""
+message = Message()
+
+message.set_sender("Peter")
+message.set_recipient("Dominik")
+message.set_content("Hallo Dominik, wie geht es dir?")
+message.set_timestamp("10.05.2023")
+
+print(message)
+"""

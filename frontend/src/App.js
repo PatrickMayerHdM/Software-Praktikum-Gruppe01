@@ -6,6 +6,7 @@ import { Avatar, Menu, MenuItem } from '@mui/material';
 import Item from "./theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import OnBoarding from "./pages/OnBoarding";
 import LogIn from "./pages/LogIn";
 import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
@@ -13,8 +14,10 @@ import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./components/header/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
-import CreateProfil from "./pages/createProfil";
-
+import {Route, Router, Routes} from "react-router-dom";
+import Profile from "./components/Profile";
+import OptionsOtherProfile from "./components/OptionsOtherProfile";
+import OptionsOwnProfile from "./components/OptionsOwnProfile";
 
 /** Definition der App-Komponente */
 

@@ -16,9 +16,9 @@ class ProfileNeuMapper(mapper):
         cursor.execute("Select * from profiles")
         tuples = cursor.fetchall()
 
-        for (id, firstname, surname, birthdate, hair_color, height, smoker, religion) in tuples:
+        for (profile_id, firstname, surname, birthdate, hair_color, height, smoker, religion) in tuples:
             profile = profileNeu()
-            profile.set_id(id)
+            profile.set_id(profile_id)
             profile.set_firstname(firstname)
             profile.set_surname(surname)
             profile.set_birthdate(birthdate)
@@ -35,14 +35,13 @@ class ProfileNeuMapper(mapper):
     def find_by_surname(self, surname):
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT firstname, surname, birthdate FROM profiles WHERE firstname LIKE '{}' ORDER BY name" \
-            .format(surname)
+        command = f'SELECT profile_id, firstname, surname, birthdate FROM profiles WHERE firstname LIKE {surname} ORDER BY name'
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, firstname, surname, birthdate) in tuples:
+        for (profile_id, firstname, surname, birthdate) in tuples:
             profile = profileNeu()
-            profile.set_id(id)
+            profile.set_id(profile_id)
             profile.set_firstname(firstname)
             profile.set_surname(surname)
             profile.set_birthdate(birthdate)
@@ -57,15 +56,14 @@ class ProfileNeuMapper(mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = "SELECT id, firstname, surname, birthdate FROM profiles WHERE " \
-                  "id={}".format(key)
+        command = f'SELECT profile_id, firstname, surname, birthdate FROM profiles WHERE profile_id={key}'
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, firstname, surname, birthdate) = tuples[0]
+            (profile_id, firstname, surname, birthdate) = tuples[0]
             profile = profileNeu()
-            profile.set_id(id)
+            profile.set_id(profile_id)
             profile.set_firstname(firstname)
             profile.set_surname(surname)
             profile.set_birthdate(birthdate)
@@ -96,7 +94,7 @@ class ProfileNeuMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO profiles (id, firstname, surname, birthdate) VALUES (%s, %s, %s, %s)"
+        command = "INSERT INTO profiles (profile_id, firstname, surname, birthdate) VALUES (%s, %s, %s, %s)"
         data = (profile.get_id(), profile.get_firstname(), profile.get_surname(), profile.get_birthdate())
         cursor.execute(command, data)
 
