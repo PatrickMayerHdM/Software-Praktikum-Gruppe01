@@ -16,6 +16,7 @@ import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
 import Profilebox from "./components/Profilebox";
+import TestFavoriteProfileList from "./components/TestFavoriteProfileList";
 
 /** Definition der App-Komponente */
 

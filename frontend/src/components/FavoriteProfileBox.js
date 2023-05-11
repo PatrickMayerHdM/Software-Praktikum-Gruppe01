@@ -28,20 +28,19 @@ function FavoriteProfileBox(){
         <Box sx={{ flexGrow: 1 }}>
           <Grid container
             direction="row" justifyContent="center" alignItems="strech" >
-            <Grid item xs={5} spacing={2}>
+            <Grid item xs={8} spacing={2}>
               <Item>
                   <Profilebox/>
               </Item >
             </Grid >
-            <Grid item xs={1} spacing={2} >
+            <Grid item xs={2} spacing={2} >
                 <button onClick={FavoriteAskClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#8158fa", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     Kontaktanfrage
                 </button>
             </Grid>
-            <Grid xs={1} spacing={2}>
+            <Grid xs={2} spacing={2}>
                 <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
-                    Von Merkzettel
-                    Entfernen
+                    X
                 </button>
 
             </Grid>
