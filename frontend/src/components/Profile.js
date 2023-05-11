@@ -12,9 +12,9 @@ import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 
 
-//** Dies soll ein  Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
+//** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
 // sich ein User anschaut. Hierbei werden nur die Profildaten dargestellt und keine weiteren Daten, welche ein User
-// zum bearbeiten oder zur Interaktion mit anderen Usern eventuell bennötigt. Diese Funktionen sind bereits in
+// zum Bearbeiten oder zur Interaktion mit anderen Usern eventuell benötigt. Diese Funktionen sind bereits in
 // anderen Komponenten integriert (OptionsOtherProfile.js bzw. OptionsOwnProfile.js).
 // , dies sollte einem User später angezeigt werden, wenn er ein anderes */
 
