@@ -11,10 +11,13 @@ import LogIn from "./pages/LogIn";
 import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
-import Navbar from "./components/header/Navbar";
+import Navbar from "./pages/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
 import {Route, Router, Routes} from "react-router-dom";
+import Navigationsleiste from "./pages/Navigationsleiste";
+import Merkliste from "./pages/Merkliste";
+import Sperrliste from "./pages/Sperrliste";
 import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
@@ -111,8 +114,9 @@ class App extends Component {
     const open = Boolean(menuAnchor);
 
 
-
+/** Im Routes werden alle möglichen Routen festgelegt*/
     return (
+
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
@@ -132,13 +136,21 @@ class App extends Component {
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <Navbar/>
+
+            <Navigationsleiste>
+            <div className="container">
+              <Routes>
+                  <Route path="/Merkliste" element={<Merkliste />} />
+                  <Route path="/Sperrlieste" element={<Sperrliste />} />
+                  <Route path="/OnBoarding" element={<OnBoarding />} />
+              </Routes>
+            </div>
+          </Navigationsleiste>
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
           <LogIn onLogIn={this.handleLogIn} />
         }
-
       </div>
     );
 
