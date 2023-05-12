@@ -1,5 +1,5 @@
-from bo.Message import Message
-from db.MessageMapper import MessageMapper
+from server.bo.Message import Message
+from server.db.MessageMapper import MessageMapper
 
 
 class Administration(object):
@@ -8,7 +8,7 @@ class Administration(object):
 
     """Spezifische Methoden für Nachrichten"""
 
-    def addMessage(self, sender, recipient, content):
+    def addMessage(self, sender, recipient, timestamp,content):
         """Objekt der Klasse Massage wird erstellt"""
         m = Message()
 
@@ -19,6 +19,7 @@ class Administration(object):
          zugewiesen. Zugriff auf Message"""
         m.set_sender(sender)
         m.set_recipient(recipient)
+        m.set_timestamp(timestamp)
         m.set_content(content)
 
         """Objekt wird mit insert-methode in DB eingebunden"""

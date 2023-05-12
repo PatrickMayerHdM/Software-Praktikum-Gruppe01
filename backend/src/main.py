@@ -11,6 +11,7 @@ from server.bo.blockNote import blockNote
 from server.bo.Message import Message
 from server.bo.Characteristic import Characteristic
 from server.bo.InfoObject import InfoObject
+from server.bo.BusinessObject import BusinessObject
 
 #SecurityDecorator übernimmt die Authentifikation
 #from SecurityDecorator import secured
@@ -19,19 +20,17 @@ from server.bo.InfoObject import InfoObject
 app = Flask(__name__)
 
 # Aufrufe mit /system/* werden ermöglicht.
-CORS(app, resources=r'/system/*')
+# CORS(app, resources=r'/system/*')
 
 #falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
-"""
-CORS(app, support_credentials=True, 
+CORS(app, support_credentials=True,
      resources={r'/system/*': {'origins':'*'}})
-"""
 
 #API um Daten zwischen Clients und Server zu tauschen.
 api = Api(app, version='1.0', title='DatingApp System API',
           description='System-API der DatingApp')
 
-#Namespace wird angelegt. Dieser fasst alle Operationen unter dem Präfix /dating zusammen
+#Namespace wird angelegt. Dieser fasst alle Operationen unter dem Präfix /datingapp zusammen
 datingapp = api.namespace('dating', description='Funktionen der Datingapp')
 
 #Hier werden für einige Klassen die JSON Strukturen definiert.
@@ -80,10 +79,13 @@ class ChatWindowOperations(Resource):
         if proposal is not None:
             sender = proposal.get_sender_id()
             recipient = proposal.get_recipient_id()
+            timestamp = proposal.get_timestamp()
             content = proposal.get_content()
-            result = adm.create_message(sender, recipient, content)
+            result = adm.addMessage(sender, recipient, timestamp, content)
             return result, 200
         else:
             return '', 500
 
 
+if __name__ == '__main__':
+    app.run()
