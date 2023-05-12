@@ -15,9 +15,9 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/system/`;
-    #addMessageURL = () => ` ${this.#datingServerBaseURL}/system/`;
-    #getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/system/${id}`;
+    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/Message`;
+    #addMessageURL = () => `${this.#datingServerBaseURL}/Message`;
+    //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
     static getAPI() {
@@ -62,12 +62,12 @@ export default class DatingSiteAPI {
         })
     }
 
-    getMessageByID(messageID) {
+    /*getMessageByID(messageID) {
         return this.#fetchAdvanced(this.#getMessageByIdURL(messageID)).then((responseJSON) => {
             let responseMessageBO = MessageBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseMessageBO);
             })
         })
-    }
+    }*/
 }

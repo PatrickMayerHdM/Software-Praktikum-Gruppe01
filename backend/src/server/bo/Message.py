@@ -47,6 +47,17 @@ class Message(bo):
         return (f'Von: {self._sender} \n An: {self._recipient}\n '
                 f'Content: {self.get_content()} \n Uhrzeit: {self._timestamp}')
 
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in eine Message()."""
+        obj = Message()
+        obj.set_id(dictionary['id'])
+        obj.set_sender(dictionary['sender'])
+        obj.set_recipient(dictionary['recipient'])
+        obj.set_timestamp(dictionary['timestamp'])
+        obj.set_content(dictionary['content'])
+        return obj
+
 
 """
 message = Message()

@@ -8,7 +8,7 @@ class Administration(object):
 
     """Spezifische Methoden für Nachrichten"""
 
-    def create_message(self, sender, recipient, content):
+    def addMessage(self, sender, recipient, content):
         """Objekt der Klasse Massage wird erstellt"""
         m = Message()
 
