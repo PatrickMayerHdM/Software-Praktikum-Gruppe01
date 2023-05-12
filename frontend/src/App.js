@@ -21,6 +21,7 @@ import Sperrliste from "./pages/Sperrliste";
 import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
+import ChatWindow from "./components/ChatWindow";
 
 /** Definition der App-Komponente */
 
@@ -136,10 +137,9 @@ class App extends Component {
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <Navbar/>
-            <CreateProfil/>
+            <ChatWindow/>
 
-            <Navigationsleiste>
+           {/* <Navigationsleiste>
             <div className="container">
               <Routes>
                   <Route path="/Merkliste" element={<Merkliste />} />
@@ -147,13 +147,12 @@ class App extends Component {
                   <Route path="/OnBoarding" element={<OnBoarding />} />
               </Routes>
             </div>
-          </Navigationsleiste>
+          </Navigationsleiste>*/}
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
           <LogIn onLogIn={this.handleLogIn} />
         }
-
       </div>
     );
 

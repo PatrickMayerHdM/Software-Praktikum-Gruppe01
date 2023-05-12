@@ -1,15 +1,14 @@
 from BusinessObject import BusinessObject as bo
-from Characteristic import Characteristic
-from InfoObject import InfoObject
+
 
 class profileNeu(bo):
-    # Grundgerüst profiel
+    # Grundgerüst profile
     def __init__(self):
         super().__init__()
         self._firstname = ""
         self._surname = ""
         self.__birthdate = ""
-        self.infoObjectsList = []
+        """self.infoObjectsList = []"""
         self.__blockNote = None
         self.__favoriteNote = None
 
