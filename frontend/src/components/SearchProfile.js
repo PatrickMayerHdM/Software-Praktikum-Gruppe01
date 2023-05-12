@@ -103,7 +103,7 @@ function SearchProfile(){
         <div>
             <h1>Lege hier dein Suchprofil an:</h1>
 
-            <Box sx={{ width: '33%', margin: '0 auto'}}>
+            <Box sx={{ width: {lg: '40%', md: '60%', sm: '80%'}, margin: '0 auto', border: 1}}>
                 <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                     <Item >
                         {/** Hier kann das Geschlecht der in diesem Suchprofil gesuchten Person ausgewählt werden */}
@@ -134,12 +134,12 @@ function SearchProfile(){
                         {/** Hier kann die gewünschte Religion der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                         <FormLabel> Welche Religion sollte die gesuchte Person haben?</FormLabel>
                         <FormGroup row style={{ justifyContent: 'center' }} >
-                            <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="atheist" checked={religions.atheist} onChange={handleChangeRel}/>} label="Atheist" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="christianity" checked={religions.christianity} onChange={handleChangeRel}/>} label="Christlich" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="islam" checked={religions.islam} onChange={handleChangeRel}/>} label="Muslimisch" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="judaism" checked={religions.judaism} onChange={handleChangeRel}/>} label="Jüdisch" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="buddhism" checked={religions.buddhism} onChange={handleChangeRel}/>} label="Budistisch" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="indifferent" checked={religions.indifferent} onChange={handleChangeRel} defaultChecked />} label="indifferent" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '12%'}} control={<Checkbox name="atheist" checked={religions.atheist} onChange={handleChangeRel}/>} label="Atheist" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '12%'}} control={<Checkbox name="christianity" checked={religions.christianity} onChange={handleChangeRel}/>} label="Christlich" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '12%'}} control={<Checkbox name="islam" checked={religions.islam} onChange={handleChangeRel}/>} label="Muslimisch" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '12%'}} control={<Checkbox name="judaism" checked={religions.judaism} onChange={handleChangeRel}/>} label="Jüdisch" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '12%'}} control={<Checkbox name="buddhism" checked={religions.buddhism} onChange={handleChangeRel}/>} label="Budistisch" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '12%'}} control={<Checkbox name="indifferent" checked={religions.indifferent} onChange={handleChangeRel} defaultChecked />} label="indifferent" labelPlacement="bottom" />
                         </FormGroup>
                     </Item>
 
@@ -148,7 +148,7 @@ function SearchProfile(){
                         <FormLabel>Sollte die Person rauchen?</FormLabel>
                         <FormGroup row style={{ justifyContent: 'center' }} >
                             <FormControlLabel sx={{ width: '16%'}} control={<Checkbox name="nonSmoker" checked={smoking.nonSmoker} onChange={handleChangeSmo} />} label="Nichraucher" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '16%'}} control={<Checkbox name="occasional" checked={smoking.occasional} onChange={handleChangeSmo} />} label="Gelegenheitsraucher" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '16%'}} control={<Checkbox name="occasional" checked={smoking.occasional} onChange={handleChangeSmo} />} label="Manchmal" labelPlacement="bottom" />
                             <FormControlLabel sx={{ width: '16%'}} control={<Checkbox name="smoker" checked={smoking.smoker} onChange={handleChangeSmo} />} label="Raucher" labelPlacement="bottom" />
                             <FormControlLabel sx={{ width: '16%'}} control={<Checkbox name="indifferent" checked={smoking.indifferent} onChange={handleChangeSmo} />} label="indifferent" labelPlacement="bottom" />
 

@@ -12,9 +12,9 @@ import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 
 
-//** Dies soll ein  Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
+//** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
 // sich ein User anschaut. Hierbei werden nur die Profildaten dargestellt und keine weiteren Daten, welche ein User
-// zum bearbeiten oder zur Interaktion mit anderen Usern eventuell bennötigt. Diese Funktionen sind bereits in
+// zum Bearbeiten oder zur Interaktion mit anderen Usern eventuell benötigt. Diese Funktionen sind bereits in
 // anderen Komponenten integriert (OptionsOtherProfile.js bzw. OptionsOwnProfile.js).
 // , dies sollte einem User später angezeigt werden, wenn er ein anderes */
 
@@ -92,6 +92,18 @@ function Profile() {
                             </Grid>
                             <Grid md={4} xs={7} spacing={2}>
                                 Nein
+                            </Grid>
+                        </Grid >
+                    </Item>
+                    <Item>
+                        <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                            <Grid md={4} xs={7} spacing={2}>
+                                Freitext:
+                            </Grid>
+                            <Grid md={8} xs={12} spacing={2}>
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+                                accusam et justo duo dolores
                             </Grid>
                         </Grid >
                     </Item>
