@@ -19,6 +19,7 @@ function Navbar() {
                 <a href="/Merkliste">Merkzettel</a>
                 <a href="/Sperrliste">Sperrliste</a>
                 <a href="/#">Profil</a>
+                <a href="/Chat">Chat</a>
                 <button className="nav-btn nav-close-btn" onClick={showNavbar}>
                     <FaTimes/>
                 </button>
