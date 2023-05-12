@@ -3,15 +3,21 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
 import { Avatar, Menu, MenuItem } from '@mui/material';
+import Item from "./theme";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import OnBoarding from "./pages/OnBoarding";
 import LogIn from "./pages/LogIn";
 import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
-import Navbar from "./components/header/Navbar";
+import Navbar from "./pages/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
 import {Route, Router, Routes} from "react-router-dom";
+import Navigationsleiste from "./pages/Navigationsleiste";
+import Merkliste from "./pages/Merkliste";
+import Sperrliste from "./pages/Sperrliste";
 import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
@@ -132,7 +138,6 @@ class App extends Component {
               </Menu>
             </div>
             <Navbar/>
-
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
