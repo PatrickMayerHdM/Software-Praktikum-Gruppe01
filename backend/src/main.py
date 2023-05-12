@@ -45,6 +45,9 @@ Account = api.inherit('Account', bo, {
 })
 
 profileNeu = api.inherit('profileNeu', bo, {
+    'firstname': fields.Integer(attribute='_firstname', description='Vorname im Profils'),
+    'surname': fields.Integer(attribute='surname', description='Nachname im Profils'),
+    'birthdate': fields.Integer(attribute='_birthdate', description='Geburtsdatum im Profil'),
     'favoriteNote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
     'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
     'blockNote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
@@ -57,3 +60,10 @@ Message = api.inherit('Message', bo, {
     'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
 })
 # Hier müssen noch weitere Klassen hinzugefügt werden. DW 09.05.23
+
+
+"get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
+"post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
+"schreibt es in die DB"
+
+
