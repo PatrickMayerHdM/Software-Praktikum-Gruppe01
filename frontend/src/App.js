@@ -18,6 +18,10 @@ import {Route, Router, Routes} from "react-router-dom";
 import Navigationsleiste from "./pages/Navigationsleiste";
 import Merkliste from "./pages/Merkliste";
 import Sperrliste from "./pages/Sperrliste";
+import Profile from "./components/Profile";
+import OptionsOtherProfile from "./components/OptionsOtherProfile";
+import OptionsOwnProfile from "./components/OptionsOwnProfile";
+
 /** Definition der App-Komponente */
 
 class App extends Component {
@@ -118,16 +122,16 @@ class App extends Component {
           <div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {currentUser.photoURL ? ( /** Wenn der Benutzer ein Profilbild hat */
-               <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
+                <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
               ) : ( /** Wenn der Benutzer kein Profilbild hat */
-               <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
+                <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
                   {currentUser.displayName[0]}
                 </Avatar>
               )}
               <Menu
                 anchorEl={menuAnchor} /** Das Element, an dem das Menü angezeigt werden soll */
                 open={open} /** gibt an ob das Menü geöffnet ist */
-             onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
+                onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
               >
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
@@ -149,8 +153,6 @@ class App extends Component {
         }
       </div>
     );
-
-
 
   }
 }

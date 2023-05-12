@@ -19,6 +19,7 @@ function Navbar() {
                 <a href="/Users/oresttkach/PycharmProjects/Software-Praktikum-Gruppe01/frontend/src/pages/Merkliste">Merkzettel</a>
                 <a href="/Users/oresttkach/PycharmProjects/Software-Praktikum-Gruppe01/frontend/src/pages/Sperrliste">Sperrliste</a>
                 <a href="/#">Profil</a>
+                <a href="/Chat">Chat</a>
                 <button className="nav-btn nav-close-btn" onClick={showNavbar}>
                     <FaTimes/>
                 </button>

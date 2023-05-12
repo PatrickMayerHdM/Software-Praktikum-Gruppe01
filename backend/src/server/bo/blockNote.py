@@ -1,7 +1,8 @@
 from relationship import relationship
+from BusinessObject import BusinessObject as bo
 
 
-class blockNote(relationship):
+class blockNote(bo, relationship):
     def __init__(self):
         super().__init__()
         """Erstellen einer Liste um dort Profile zu speichern"""
@@ -17,9 +18,8 @@ class blockNote(relationship):
         if profile_id in self.block_list:
             self.block_list.remove(profile_id)
 
-    def show_all_users(self):
+    def get_all_users(self):
         return self.block_list
-
 
 
 Blockierter = blockNote()
@@ -28,6 +28,5 @@ Blockierter.add_user(898)
 Blockierter.add_user(999)
 Blockierter.add_user(981)
 Blockierter.del_user(981)
-
 
 print(Blockierter)
