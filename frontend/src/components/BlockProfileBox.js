@@ -29,10 +29,12 @@ function BlockProfileBox(){
               </Item >
             </Grid >
             <Grid item xs={1} >
-                <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid"}} >
-                    Von Kontaktsperre
-                    Entfernen
-                </button>
+                <Item style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#BDC2BF", color:"#fff", border: "solid", borderColor: '#BDC2BF'}}>
+                    <button onClick={BlockDelClicked}  style={{height: "100%", width: "100%" ,cursor: "pointer", backgroundColor: "#e63946", border: "none", color:"#fff"}}>
+                        Von Sperrliste
+                        Entfernen
+                    </button>
+                </Item>
             </Grid>
 
           </Grid >

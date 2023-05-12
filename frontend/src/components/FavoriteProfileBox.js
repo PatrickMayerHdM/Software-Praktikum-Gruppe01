@@ -34,12 +34,12 @@ function FavoriteProfileBox(){
               </Item >
             </Grid >
             <Grid item xs={1} spacing={2} >
-                <button onClick={FavoriteAskClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#8158fa", color:"#fff", cursor: "pointer", border: "solid" }}>
+                <button onClick={FavoriteAskClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#8158fa", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     Kontaktanfrage
                 </button>
             </Grid>
             <Grid xs={1} spacing={2}>
-                <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid"}}>
+                <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     Von Merkzettel
                     Entfernen
                 </button>

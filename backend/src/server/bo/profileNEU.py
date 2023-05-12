@@ -53,9 +53,6 @@ class profileNeu(bo):
 
 
 """
-eigenschaften = Characteristic(age=12)
-profil = profileNeu.set_firstname("Peter")
-
 profil_eigenschaft = profil.get_characteristic()
 print(profil_eigenschaft.get_age())
 

@@ -7,6 +7,8 @@ import Profilebox from "./Profilebox";
  * Damit dies dann nicht mehr innerhalb der App.js geschehen muss und die App.js dadurch übersichtlicher bleibt.*/
 
 function TestProfileList(){
+
+
     return(
         <Box sx={{ flexGrow: 1 }} >
           <Grid container spacing={2}

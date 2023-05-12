@@ -8,9 +8,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
 import {Button} from "@mui/material";
 import { useState} from "react";
 
@@ -20,8 +17,6 @@ import { useState} from "react";
 
 
 function SearchProfile(){
-
-    /** const für möglichen Werte  */
 
     /** const für die Auswahlmöglichkeiten beim Geschlecht  */
     const [gender, setGender] = useState({
@@ -133,17 +128,6 @@ function SearchProfile(){
 
                             />
                         </Box>
-                    </Item>
-
-                    <Item>
-                        {/** Hier kann festgelegt werden, ob das Alter der Person ein Killerkriterium ist: Überlegen ob wir es behalten wollen */}
-                        <FormControl>
-                            <FormLabel>Sollte das Alter ein Killerkriterium sein?</FormLabel>
-                            <RadioGroup row style={{ justifyContent: 'center' }}>
-                                <FormControlLabel value="Ja" control={<Radio />} label="Ja" />
-                                <FormControlLabel value="Nein" control={<Radio />} label="Nein" />
-                            </RadioGroup>
-                        </FormControl>
                     </Item>
 
                     <Item >

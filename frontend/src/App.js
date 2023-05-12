@@ -11,10 +11,16 @@ import LogIn from "./pages/LogIn";
 import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
-import Navbar from "./components/header/Navbar";
+import Navbar from "./pages/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
 import {Route, Router, Routes} from "react-router-dom";
+import Navigationsleiste from "./pages/Navigationsleiste";
+import Merkliste from "./pages/Merkliste";
+import Sperrliste from "./pages/Sperrliste";
+import Profile from "./components/Profile";
+import OptionsOtherProfile from "./components/OptionsOtherProfile";
+import OptionsOwnProfile from "./components/OptionsOwnProfile";
 
 /** Definition der App-Komponente */
 
@@ -108,28 +114,38 @@ class App extends Component {
     const open = Boolean(menuAnchor);
 
 
-
+/** Im Routes werden alle möglichen Routen festgelegt*/
     return (
+
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {currentUser.photoURL ? ( /** Wenn der Benutzer ein Profilbild hat */
-               <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
+                <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
               ) : ( /** Wenn der Benutzer kein Profilbild hat */
-               <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
+                <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
                   {currentUser.displayName[0]}
                 </Avatar>
               )}
               <Menu
                 anchorEl={menuAnchor} /** Das Element, an dem das Menü angezeigt werden soll */
                 open={open} /** gibt an ob das Menü geöffnet ist */
-             onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
+                onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
               >
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <Navbar/>
+
+            <Navigationsleiste>
+            <div className="container">
+              <Routes>
+                  <Route path="/Merkliste" element={<Merkliste />} />
+                  <Route path="/Sperrlieste" element={<Sperrliste />} />
+                  <Route path="/OnBoarding" element={<OnBoarding />} />
+              </Routes>
+            </div>
+          </Navigationsleiste>
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
