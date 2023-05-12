@@ -7,7 +7,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-    #datingServerBaseURL = '/system';
+    #datingServerBaseURL = '/system/';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/hierbennen/system';
@@ -15,9 +15,9 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/system/`;
-    #addMessageURL = () => ` ${this.#datingServerBaseURL}/system/`;
-    #getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/system/${id}`;
+    #getAllMessagesURL = () => `${this.#datingServerBaseURL}`;
+    #addMessageURL = () => ` ${this.#datingServerBaseURL}`;
+    #getMessageByIdURL = (id) => `${this.#datingServerBaseURL}${id}`;
 
     // Singelton API
     static getAPI() {

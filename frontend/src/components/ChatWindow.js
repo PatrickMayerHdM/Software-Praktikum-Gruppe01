@@ -90,7 +90,7 @@ class ChatWindow extends Component {
             id: this.props.messageId,
             sender_id: [], /*Hier muss "this.props.profile hin"*/
             recipient_id: [], /*Hier muss "this.props.profile hin"*/
-            messages: [],
+            content: [],
             timestamp: this.props.timestamp,
             error: '',
             input: '',
@@ -109,10 +109,10 @@ class ChatWindow extends Component {
     getAllMessages() {
             DatingSiteAPI.getAPI().getAllMessages(this.state.id).then(messageBOs =>
             this.setState( {
-                messages:messageBOs
+                content:messageBOs
             })).catch(e =>
                 this.setState({
-                    messages:[],
+                    content:[],
                     error:e
             }));
             console.log('Error:', this.state.error)
@@ -134,7 +134,7 @@ class ChatWindow extends Component {
             .then(() => {
                 this.setState({
                     input:'',
-                    messages: [...this.state.messages, newMessage],
+                    content: [...this.state.content, newMessage],
                 });
             })
             .catch((e) =>

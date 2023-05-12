@@ -20,13 +20,13 @@ app = Flask(__name__)
 
 # Aufrufe mit /system/* werden ermöglicht.
 CORS(app, resources=r'/system/*')
-"""
-#falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
 
+#falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
+"""
 CORS(app, support_credentials=True, 
      resources={r'/system/*': {'origins':'*'}})
-"""
 
+"""
 #API um Daten zwischen Clients und Server zu tauschen.
 api = Api(app, version='1.0', title='DatingApp System API',
           description='System-API der DatingApp')
@@ -65,5 +65,3 @@ Message = api.inherit('Message', bo, {
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
-
-
