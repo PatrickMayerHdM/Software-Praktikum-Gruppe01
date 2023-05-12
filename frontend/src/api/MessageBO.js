@@ -100,3 +100,5 @@ export default class messageBO extends BusinessObject {
         return result;
     }
 }
+
+

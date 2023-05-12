@@ -10,7 +10,6 @@ class BusinessObject(ABC):
         """Auslesen der ID."""
         return self._id
 
-
     def set_id(self, new_id):
         """Setzen der ID."""
         self._id = new_id

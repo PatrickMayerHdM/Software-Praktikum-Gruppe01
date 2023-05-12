@@ -21,6 +21,7 @@ import Sperrliste from "./pages/Sperrliste";
 import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
+import ChatWindow from "./components/ChatWindow";
 import Profilebox from "./components/Profilebox";
 import TestFavoriteProfileList from "./components/TestFavoriteProfileList";
 
@@ -116,8 +117,9 @@ class App extends Component {
     const open = Boolean(menuAnchor);
 
 
-
+/** Im Routes werden alle möglichen Routen festgelegt*/
     return (
+
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
@@ -137,13 +139,21 @@ class App extends Component {
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <Navbar/>
+
+            <Navigationsleiste>
+            <div className="container">
+              <Routes>
+                  <Route path="/Merkliste" element={<Merkliste />} />
+                  <Route path="/Sperrlieste" element={<Sperrliste />} />
+                  <Route path="/OnBoarding" element={<OnBoarding />} />
+              </Routes>
+            </div>
+          </Navigationsleiste>
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
           <LogIn onLogIn={this.handleLogIn} />
         }
-
       </div>
     );
 

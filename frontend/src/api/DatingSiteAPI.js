@@ -15,8 +15,8 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/system`;
-    #addMessageURL = () => ` ${this.#datingServerBaseURL}/system`;
+    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/system/`;
+    #addMessageURL = () => ` ${this.#datingServerBaseURL}/system/`;
     #getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/system/${id}`;
 
     // Singelton API
