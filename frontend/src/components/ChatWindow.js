@@ -88,8 +88,8 @@ class ChatWindow extends Component {
         super(props);
         this.state = {
             id: this.props.messageId,
-            sender_id: [], /*Hier muss "this.props.profile hin"*/
-            recipient_id: [], /*Hier muss "this.props.profile hin"*/
+            sender_id: 1, /*Hier muss "this.props.profile hin"*/
+            recipient_id: 2, /*Hier muss "this.props.profile hin"*/
             content: [],
             timestamp: this.props.timestamp,
             error: '',
@@ -145,18 +145,18 @@ class ChatWindow extends Component {
     }
 
     render() {
-        const{messages, input} = this.state
+        const{content, input} = this.state
 
         return (
             <div className="chat_window">
                 <p className="chatWindow_timestamp">Du hast mit Dominik am 10/05/2023 gematcht!</p>
-                {messages.map((message, index) => (
+                {content.map((message, index) => (
                 // Darstellung des Chat-Verlaufs
                 // Die map-Funktion iteriert über das message-Array und erstellt für jede Nachricht
                 // ein neues div mit der entsprechenden id.
                 // HIER FÜGEN WIR EINE LOGIK EIN, DIE ERKENNT OB ES EINE EIGENE NACHRICHT IST
                     <div className="chatWindow_message" key={index}>
-                        {message.name ? (
+                        {content.name ? (
                             <div className="chatWindow_message">
                                 <p className="chatWindow_content">{message.content}</p>
                             </div>

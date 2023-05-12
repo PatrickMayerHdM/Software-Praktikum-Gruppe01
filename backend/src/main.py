@@ -20,9 +20,9 @@ app = Flask(__name__)
 
 # Aufrufe mit /system/* werden ermöglicht.
 CORS(app, resources=r'/system/*')
-"""
-#falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
 
+#falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
+"""
 CORS(app, support_credentials=True, 
      resources={r'/system/*': {'origins':'*'}})
 """
