@@ -17,11 +17,12 @@ export default class messageBO extends BusinessObject {
      * Kommentar zgl. asenderid und arecipientid: id beibehalten? Ja, da in der Nachricht
      * Bezug zur Senderid und nicht zum Namen genommen wird.
      */
-    constructor(acontent, asenderid, arecipientid) {
+    constructor(acontent, asenderid, arecipientid, atimestamp) {
         super();
         this.content = acontent;
-        this.senderid = asenderid;
-        this.recipientid = arecipientid;
+        this.sender_id = asenderid;
+        this.recipient_id = arecipientid;
+        // this.timestamp = atimestamp;
     }
 
     /**
@@ -31,7 +32,7 @@ export default class messageBO extends BusinessObject {
      */
 
     setSenderId(asenderid) {
-        this.senderid = asenderid;
+        this.sender_id = asenderid;
     }
 
     /**
@@ -39,7 +40,7 @@ export default class messageBO extends BusinessObject {
      */
 
     getSenderId() {
-        return this.senderid
+        return this.sender_id
     }
 
     /**
@@ -49,7 +50,7 @@ export default class messageBO extends BusinessObject {
      */
 
     setRecipientId(arecipientid) {
-        this.recipientid = arecipientid;
+        this.recipient_id = arecipientid;
     }
 
     /**
@@ -57,7 +58,7 @@ export default class messageBO extends BusinessObject {
      */
 
     getRecipientId() {
-        return this.recipientid
+        return this.recipient_id
     }
 
      /**
@@ -77,6 +78,20 @@ export default class messageBO extends BusinessObject {
     getContent() {
         return this.content
     }
+
+
+    setTimestamp(atimestamp) {
+        this.timestamp = atimestamp;
+    }
+
+    /**
+     * Holt sich die Id des Senders
+     */
+
+    getTimestamp() {
+        return this.timestamp
+    }
+
 
     /**
      * Gibt ein Array der MessageBO als JSON struktur zurück

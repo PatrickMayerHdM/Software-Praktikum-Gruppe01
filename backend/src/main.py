@@ -20,18 +20,18 @@ from server.bo.BusinessObject import BusinessObject
 app = Flask(__name__)
 
 # Aufrufe mit /system/* werden ermöglicht.
-# CORS(app, resources=r'/system/*')
+CORS(app, resources=r'/system/*')
 
 #falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
-CORS(app, support_credentials=True,
-     resources={r'/system/*': {'origins':'*'}})
+# CORS(app, support_credentials=True,
+#      resources={r'/system/*': {'origins':'*'}})
 
 #API um Daten zwischen Clients und Server zu tauschen.
 api = Api(app, version='1.0', title='DatingApp System API',
           description='System-API der DatingApp')
 
 #Namespace wird angelegt. Dieser fasst alle Operationen unter dem Präfix /datingapp zusammen
-datingapp = api.namespace('dating', description='Funktionen der Datingapp')
+datingapp = api.namespace('system', description='Funktionen der Datingapp')
 
 #Hier werden für einige Klassen die JSON Strukturen definiert.
 bo = api.model('BusinessObject', {
@@ -52,10 +52,10 @@ profileNeu = api.inherit('profileNeu', bo, {
     'blockNote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
 })
 
-Message = api.inherit('Message', bo, {
+message = api.inherit('Message', bo, {
     'sender_id': fields.Integer(attribute='_sender_id', description='Absender einer Nachricht'),
     'recipient_id': fields.Integer(attribute='_recipient_id', description='Empfänger einer Nachricht'),
-    'timestamp': fields.DateTime(attribute='_timestamp', description='Zeitstempel einer Nachricht'),
+    # 'timestamp': fields.DateTime(attribute='_timestamp', description='Zeitstempel einer Nachricht'),
     'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
 })
 # Hier müssen noch weitere Klassen hinzugefügt werden. DW 09.05.23
@@ -65,27 +65,27 @@ Message = api.inherit('Message', bo, {
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
 
-@datingapp.route('/Message')
+@datingapp.route('/messages')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 class ChatWindowOperations(Resource):
     @datingapp.doc("Create new message")
-    @datingapp.marshal_with(Message, code=201)
-    @datingapp.expect(Message)
+    @datingapp.marshal_with(message, code=201)
+    @datingapp.expect(message)
 
     def post(self):
         adm = Administration()
         proposal = Message.from_dict(api.payload)
 
         if proposal is not None:
-            sender = proposal.get_sender_id()
-            recipient = proposal.get_recipient_id()
-            timestamp = proposal.get_timestamp()
+            sender = proposal.get_sender()
+            recipient = proposal.get_recipient()
+            # timestamp = proposal.get_timestamp()
             content = proposal.get_content()
-            result = adm.addMessage(sender, recipient, timestamp, content)
+            result = adm.addMessage(sender, recipient, content)
             return result, 200
         else:
             return '', 500
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port=5000)

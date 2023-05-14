@@ -30,11 +30,11 @@
 import React from "react";
 import "./Chat.css";
 
-function Chat({name, content, timestamp}) {
+function Chat({content, timestamp}) {
     return (
         <div className="chat">
             <div className="chat_details">
-                <h2>{name}</h2>
+                <h2>{}</h2>
                 <p>{content}</p>
             </div>
             <p className="chat_timestamp">{timestamp}</p>

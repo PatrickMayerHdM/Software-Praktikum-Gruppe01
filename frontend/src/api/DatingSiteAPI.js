@@ -1,4 +1,4 @@
-import MessageBO from './MessageBO';
+import messageBO from './MessageBO';
 
 
 export default class DatingSiteAPI {
@@ -7,7 +7,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-    #datingServerBaseURL = 'http://127.0.0.1:5000/system';
+    #datingServerBaseURL = '/system';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/hierbennen/system';
@@ -15,8 +15,8 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/Message`;
-    #addMessageURL = () => `${this.#datingServerBaseURL}/Message`;
+    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/message`;
+    #addMessageURL = () => `${this.#datingServerBaseURL}/message`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
@@ -37,7 +37,7 @@ export default class DatingSiteAPI {
 
     getAllMessages() {
         return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
-            let messageBOs = MessageBO.fromJSON(responseJSON);
+            let messageBOs = messageBO.fromJSON(responseJSON);
 
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -45,19 +45,24 @@ export default class DatingSiteAPI {
         })
     }
 
-    addMessage(messageBO) {
+    /**
+     * @param {messageBO} message object
+     * @public
+     */
+
+    addMessage(message) {
         return this.#fetchAdvanced(this.#addMessageURL(), {
             method: "POST",
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': "application/json",
             },
-            body: JSON.stringify(messageBO)
+            body: JSON.stringify(message)
         }).then((responseJSON) => {
-            let responseMessageBO = MessageBO.fromJSON(responseJSON)[0];
-
+            console.log("Dreh das Rad!");
+            let mssageBO = messageBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseMessageBO);
+                resolve(mssageBO);
             })
         })
     }
