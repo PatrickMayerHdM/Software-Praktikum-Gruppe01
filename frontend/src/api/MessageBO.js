@@ -84,9 +84,6 @@ export default class messageBO extends BusinessObject {
         this.timestamp = atimestamp;
     }
 
-    /**
-     * Holt sich die Id des Senders
-     */
 
     getTimestamp() {
         return this.timestamp
@@ -106,7 +103,7 @@ export default class messageBO extends BusinessObject {
                 result.push(m);
             })
         } else {
-            //Es handelt sich um ein singuläres Objekt?????
+            //Es handelt sich um ein singuläres Objekt?
             let m = messages
             Object.setPrototypeOf(m, messageBO.prototype);
             result.push(m);
