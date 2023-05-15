@@ -64,3 +64,4 @@ class Characteristic(bo):
         return self._searchingFor
 
 
+
