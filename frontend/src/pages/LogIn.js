@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
+
 
 /** Definition der LogIn-Komponente als eine Unterklasse von Component */
 class LogIn extends Component {
@@ -7,11 +9,10 @@ class LogIn extends Component {
 
 	/** Funktion, die aufgerufen wird, wenn der "Anmelden"-Button geklickt wird */
 	handleLogInButtonClicked = () => {
-		/** Aufrufen der onLogIn-Funktion, die als Prop an die Komponente übergeben wurde */
 		this.props.onLogIn();
 	}
 
-	/** Funktion zum Rendern der JSX-Elemente der Komponente */
+	/** Funktion zum Rendern der Elemente der Komponente */
 	render() {
 		return (
 			<div>
@@ -27,6 +28,10 @@ class LogIn extends Component {
 	}
 }
 
-/** Exportieren der LogIn-Komponente, um sie in anderen Teilen der Anwendung verwenden zu können */
+/** onLogIn ist ein Prop, die erwartet wird und eine Funktion sein muss */
+LogIn.propTypes = {
+	onLogIn: PropTypes.func.isRequired,
+};
 
+/** Exportieren der LogIn-Komponente, um sie in anderen Teilen der Anwendung verwenden zu können */
 export default LogIn;

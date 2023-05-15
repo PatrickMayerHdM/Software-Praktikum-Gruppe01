@@ -116,16 +116,14 @@ class App extends Component {
     const open = Boolean(menuAnchor);
 
 
-/** Im Routes werden alle möglichen Routen festgelegt*/
     return (
-
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              {currentUser.photoURL ? ( /** Wenn der Benutzer ein Profilbild hat */
+              {currentUser.photoURL ? ( /** Abfrage ob der Benutzer ein Profilbild hat */
                 <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
-              ) : ( /** Wenn der Benutzer kein Profilbild hat */
+              ) : ( /** Hat der Benutzer kein Profilbild wird  */
                 <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
                   {currentUser.displayName[0]}
                 </Avatar>
