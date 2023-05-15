@@ -60,9 +60,9 @@ export default class favoriteNoteBO extends BusinessObject {
             let result = [];
 
             if (Array.isArray(afavoriteNote_list)) {
-                afavoriteNote_list.forEach((m) => {
-                    Object.setPrototypeOf(m, afavoriteNote_list.prototype);
-                    result.push(m);
+                afavoriteNote_list.forEach((f) => {
+                    Object.setPrototypeOf(f, afavoriteNote_list.prototype);
+                    result.push(f);
                 })
             } else {
                 let f = afavoriteNote_list
