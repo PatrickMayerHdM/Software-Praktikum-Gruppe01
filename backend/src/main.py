@@ -23,8 +23,8 @@ app = Flask(__name__)
 CORS(app, resources=r'/system/*')
 
 #falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
-# CORS(app, support_credentials=True,
-#      resources={r'/system/*': {'origins':'*'}})
+#CORS(app, support_credentials=True,
+#     resources={r'/system/*': {'origins':'*'}})
 
 #API um Daten zwischen Clients und Server zu tauschen.
 api = Api(app, version='1.0', title='DatingApp System API',
@@ -44,8 +44,8 @@ Account = api.inherit('Account', bo, {
 })
 
 profileNeu = api.inherit('profileNeu', bo, {
-    'firstname': fields.Integer(attribute='_firstname', description='Vorname im Profils'),
-    'surname': fields.Integer(attribute='surname', description='Nachname im Profils'),
+    'firstname': fields.Integer(attribute='_firstname', description='Vorname im Profil'),
+    'surname': fields.Integer(attribute='surname', description='Nachname im Profil'),
     'birthdate': fields.Integer(attribute='_birthdate', description='Geburtsdatum im Profil'),
     'favoriteNote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
     'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
@@ -55,7 +55,6 @@ profileNeu = api.inherit('profileNeu', bo, {
 message = api.inherit('Message', bo, {
     'sender_id': fields.Integer(attribute='_sender_id', description='Absender einer Nachricht'),
     'recipient_id': fields.Integer(attribute='_recipient_id', description='Empfänger einer Nachricht'),
-    # 'timestamp': fields.DateTime(attribute='_timestamp', description='Zeitstempel einer Nachricht'),
     'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
 })
 # Hier müssen noch weitere Klassen hinzugefügt werden. DW 09.05.23
@@ -88,4 +87,4 @@ class ChatWindowOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)
