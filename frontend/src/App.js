@@ -6,7 +6,6 @@ import { Avatar, Menu, MenuItem } from '@mui/material';
 import Item from "./theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import OnBoarding from "./pages/OnBoarding";
 import LogIn from "./pages/LogIn";
 import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
