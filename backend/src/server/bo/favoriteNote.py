@@ -25,17 +25,17 @@ class favoriteNote(bo, relationship):
         # str Methode gibt die favoriteNote in Form eines String zurück
         return "Merkliste: {}, {}".format(self.get_id(), self.get_all_users())
 
-
-Merkzettel1 = favoriteNote()
-Merkzettel2 = favoriteNote()
-
-Merkzettel1.add_user(4590)
-Merkzettel1.add_user(9987)
-Merkzettel1.add_user(9987)
-
-Merkzettel2.add_user(34)
-Merkzettel2.add_user(314)
-Merkzettel2.add_user(343)
-
-print(Merkzettel1)
-print((Merkzettel2))
+#
+# Merkzettel1 = favoriteNote()
+# Merkzettel2 = favoriteNote()
+#
+# Merkzettel1.add_user(4590)
+# Merkzettel1.add_user(9987)
+# Merkzettel1.add_user(9987)
+#
+# Merkzettel2.add_user(34)
+# Merkzettel2.add_user(314)
+# Merkzettel2.add_user(343)
+#
+# print(Merkzettel1)
+# print((Merkzettel2))

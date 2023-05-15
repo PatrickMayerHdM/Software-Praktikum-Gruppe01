@@ -1,5 +1,5 @@
-from bo.Message import Message
-from db.MessageMapper import MessageMapper
+from server.bo.Message import Message
+from server.db.MessageMapper import MessageMapper
 
 
 class Administration(object):

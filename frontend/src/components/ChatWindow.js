@@ -3,6 +3,7 @@ import React, {Component} from "react";
     Diese Hooks werden benötigt, um den Zustand und das Verhalten (der Nachrichten) zu speichern. */
 import "./Chat.css";
 import DatingSiteAPI from "../api/DatingSiteAPI";
+import messageBO from "../api/MessageBO";
 
 /*
 function ChatWindow() {
@@ -123,25 +124,21 @@ class ChatWindow extends Component {
     }
 
     handleSend(event) {
-        event.preventDefault();
-        const newMessage = {
-            sender_id: this.state.sender_id,
-            recipient_id: this.state.recipient_id,
-            content: this.state.input,
-        };
-        DatingSiteAPI.getAPI()
-            .addMessage(newMessage)
-            .then(() => {
-                this.setState({
-                    input:'',
-                    content: [...this.state.content, newMessage],
-                });
+    event.preventDefault();
+    const newMessage = new messageBO(this.state.input, this.state.sender_id, this.state.recipient_id);
+    DatingSiteAPI.getAPI()
+        .addMessage(newMessage)
+        .then(() => {
+            this.setState({
+                input:'',
+                content: [...this.state.content, newMessage],
+            });
+        })
+        .catch((e) =>
+            this.setState({
+                error: e,
             })
-            .catch((e) =>
-                this.setState({
-                    error: e,
-                })
-            );
+        );
     }
 
     render() {
@@ -156,7 +153,7 @@ class ChatWindow extends Component {
                 // ein neues div mit der entsprechenden id.
                 // HIER FÜGEN WIR EINE LOGIK EIN, DIE ERKENNT OB ES EINE EIGENE NACHRICHT IST
                     <div className="chatWindow_message" key={index}>
-                        {content.name ? (
+                        {message.sender_id === 1 ? (
                             <div className="chatWindow_message">
                                 <p className="chatWindow_content">{message.content}</p>
                             </div>
