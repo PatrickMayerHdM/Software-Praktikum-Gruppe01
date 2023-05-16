@@ -1,4 +1,5 @@
 import messageBO from './MessageBO';
+import MessageBO from "./AccountBO";
 
 
 export default class DatingSiteAPI {
@@ -35,9 +36,15 @@ export default class DatingSiteAPI {
             return res.json();
          })
 
+
+    /**
+     * @param {messageBO} message object
+     * @public
+     */
+
     getAllMessages() {
         return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
-            let messageBOs = messageBO.fromJSON(responseJSON);
+            let messageBOs = MessageBO.fromJSON(responseJSON);
 
             return new Promise(function (resolve) {
                 resolve(messageBOs);

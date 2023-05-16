@@ -23,6 +23,7 @@ import OptionsOwnProfile from "./components/OptionsOwnProfile";
 import ChatWindow from "./components/ChatWindow";
 import Profilebox from "./components/Profilebox";
 import TestFavoriteProfileList from "./components/TestFavoriteProfileList";
+import CreateProfil from "./pages/createProfil";
 
 /** Definition der App-Komponente */
 
@@ -136,7 +137,7 @@ class App extends Component {
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <ChatWindow/>
+            <CreateProfil/>
 
             {/*<Navigationsleiste>
             <div className="container">

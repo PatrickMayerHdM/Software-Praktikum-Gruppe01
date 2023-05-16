@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {Component, useState} from "react";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import FormLabel from "@mui/material/FormLabel";
@@ -11,94 +11,118 @@ import {Button, TextField} from "@mui/material";
 import * as React from "react";
 
 
-function CreateProfil() {
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-
-    const [age, setValue] = React.useState();
-
-    const [gender, setGender] = useState({
-        male: false,
-        female: false,
-        nonBinary: false,
-        various: false,
-    });
-
-    const [height, setSize] = React.useState();
-
-    const [religions, setReligion] = useState({
-        atheist: false,
-        christianity: false,
-        islam: false,
-        judaism: false,
-        buddhism: false,
-        individually: true,
-    });
-
-    const [hair, setHair] = useState({
-        black: false,
-        brown: false,
-        blond: false,
-        red: false,
-        different: false,
-        individually: true,
-    });
-
-    const [smoking, setSmoking] = useState({
-        nonSmoker: false,
-        smoker: false,
-    });
-
-    const [description, setDesc] = useState('');
-
-    const handleChangeFirstName = (event) => {
-        setFirstName(event.target.value);
+class CreateProfil extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: '',
+            lastName: '',
+            age: null,
+            gender: {
+                male: false,
+                female: false,
+                nonBinary: false,
+                various: false,
+            },
+            height: null,
+            religions: {
+                atheist: false,
+                christianity: false,
+                islam: false,
+                judaism: false,
+                buddhism: false,
+                individually: true,
+            },
+            hair: {
+                black: false,
+                brown: false,
+                blond: false,
+                red: false,
+                different: false,
+                individually: true,
+            },
+            smoking: {
+                nonSmoker: false,
+                smoker: false,
+            },
+            description: '',
+        };
+    }
+    handleChangeFirstName = (event) => {
+        this.setState({firstName: event.target.value});
     };
 
-    const handleChangeLastName = (event) => {
-        setLastName(event.target.value);
+    handleChangeLastName = (event) => {
+        this.setState({lastName: event.target.value})
     };
 
-    const handleChangeGender = (val) => {
-        const {name, checked} = val.target;
-        setGender((prev) => ({...prev, [name]: checked}));
+    handleChangeGender = (event) => {
+        const { name, checked } = event.target;
+        this.setState((prevState) => ({
+            gender: {...prevState.gender, [name]: checked},
+        }));
     };
 
-    const handleChangeHeight = (event) => {
-        setSize({body_height: event.target.value});
+    handleChangeHeight = (event) => {
+        this.setState({height: event.target.value});
     };
 
-    const handleChangeReligion = (val) => {
-        const {name, checked} = val.target;
-        setReligion((prev) => ({...prev, [name]: checked}));
+    handleChangeReligion = (event) => {
+      const { name, checked } = event.target;
+      this.setState((prevState) => ({
+          religions: {...prevState.religions, [name]: checked},
+      }));
     };
 
-    const handleChangeHair = (val) => {
-        const {name, checked} = val.target;
-        setHair((prev) => ({...prev, [name]: checked}));
+    handleChangeSmoking = (event) => {
+        const { name, checked } = event.target;
+        this.setState((prevState) => ({
+            smoking: {...prevState.smoking, [name]: checked},
+        }));
     };
 
-    const handleChangeSmoking = (val) => {
-        const {name, checked} = val.target;
-        setSmoking((prev) => ({...prev, [name]: checked}));
+    handleChangeHair = (event) => {
+        const { name, checked } = event.target;
+        this.setState((prevState) => ({
+            hair: {...prevState.hair, [name]: checked},
+        }));
     };
 
-    const handleChangeDescription = (event) => {
-        setDesc(event.target.value);
+    handleChangeAge = (event) => {
+        this.setState({age: newValue});
     };
 
-    const handleChangeAge = (event, newValue) => {
-        setValue(newValue);
+    handleChangeDescripition = (event) => {
+        this.setState({descripition: event.target.value});
     };
 
-    function submit() {
-        console.log(firstName, lastName, age, gender, height, religions, hair, smoking, description)
+    handleSubmit = () => {
+        const {
+            firstName,
+            lastName,
+            age,
+            gender,
+            height,
+            religions,
+            hair,
+            smoking,
+            description,
+        } = this.state;
+
+        console.log(
+            firstName,
+            lastName,
+            age,
+            gender,
+            height,
+            religions,
+            hair,
+            smoking,
+            description,
+        );
     };
 
-
-
-    return (
+    render() {
         <div>
             <h2> Lege hier dein Profil an: </h2>
             <Box sx={{width: '33%', margin: '0 auto'}}>
@@ -112,7 +136,7 @@ function CreateProfil() {
                                     type={"text"}
                                     label={"Vorname"}
                                     value={firstName}
-                                    onChange={handleChangeFirstName}
+                                    onChange={this.handleChangeFirstName}
                                     inputProps={{
                                         maxLenght: 25
                                     }}
@@ -121,7 +145,7 @@ function CreateProfil() {
                                     type="text"
                                     label="Nachname"
                                     value={lastName}
-                                    onChange={handleChangeLastName}
+                                    onChange={this.handleChangeLastName}
                                     inputProps={{
                                         maxLength: 25
                                     }}
@@ -136,7 +160,7 @@ function CreateProfil() {
                             <TextField
                                 type={"number"}
                                 value={age}
-                                onChange={handleChangeAge}
+                                onChange={this.handleChangeAge}
                             />
                         </Box>
                         </FormGroup>
@@ -144,7 +168,7 @@ function CreateProfil() {
                     <Item>
                         <Box sx={{width: 400, margin: '0 auto'}}>
                             <FormLabel> Was für ein Geschlecht hast du ? </FormLabel>
-                            <RadioGroup value={gender} onChange={handleChangeGender}>
+                            <RadioGroup value={gender} onChange={this.handleChangeGender}>
                                 <FormControlLabel value="male" control={<Radio/>} label="Mann"/>
                                 <FormControlLabel value="female" control={<Radio/>} label="Frau"/>
                                 <FormControlLabel value="nonBinary" control={<Radio/>} label="Nicht-binär"/>
@@ -159,7 +183,7 @@ function CreateProfil() {
                             <TextField
                                 type={"number"}
                                 value={height}
-                                onChange={handleChangeHeight}
+                                onChange={this.handleChangeHeight()}
                             />
                         </Box>
                         </FormGroup>
@@ -167,7 +191,7 @@ function CreateProfil() {
                     <Item>
                         <Box sx={{width: 400, margin: '0 auto'}}>
                             <FormLabel> Welcher Religion gehörst du an? </FormLabel>
-                            <RadioGroup row value={religions} onChange={handleChangeReligion}>
+                            <RadioGroup row value={religions} onChange={this.handleChangeReligion}>
                                 <FormControlLabel sx={{ width: '10%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="islam" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
@@ -177,7 +201,7 @@ function CreateProfil() {
                             <TextField
                                 label="Persönliche Auswahl"
                                 value={religions}
-                                onChange={handleChangeReligion}
+                                onChange={this.handleChangeReligion}
                                 fullWidth
                                 />
                         </Box>
@@ -185,7 +209,7 @@ function CreateProfil() {
                     <Item>
                         <Box sx={{width: 400, margin: '0 auto'}}>
                             <FormLabel> Welche Haarfarbe du? </FormLabel>
-                            <RadioGroup row value={hair} onChange={handleChangeHair}>
+                            <RadioGroup row value={hair} onChange={this.handleChangeHair}>
                                 <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
@@ -194,7 +218,7 @@ function CreateProfil() {
                             <TextField
                                 label="Persönliche Auswahl"
                                 value={hair}
-                                onChange={handleChangeHair}
+                                onChange={this.handleChangeHair}
                                 fullWidth
                                 />
                         </Box>
@@ -202,7 +226,7 @@ function CreateProfil() {
                     <Item>
                         <Box sx={{width: 400, margin: '0 auto'}}>
                             <FormLabel> Rauchst du ? </FormLabel>
-                            <RadioGroup row value={smoking} onChange={handleChangeSmoking}>
+                            <RadioGroup row value={smoking} onChange={this.handleChangeSmoking}>
                                 <FormControlLabel sx={{ width: '10%' }} value="nonSmoker" control={<Radio />} label="Nichraucher" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="smoker" control={<Radio />} label="Raucher" labelPlacement="bottom" />
                             </RadioGroup>
@@ -226,6 +250,6 @@ function CreateProfil() {
                 </Stack>
             </Box>
         </div>
-    )
+    }
 }
-export default CreateProfil
+export default CreateProfil;
