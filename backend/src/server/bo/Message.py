@@ -47,15 +47,3 @@ class Message(bo):
         obj.set_recipient(dictionary['recipient_id'])
         obj.set_content(dictionary['content'])
         return obj
-
-
-"""
-message = Message()
-
-message.set_sender("Peter")
-message.set_recipient("Dominik")
-message.set_content("Hallo Dominik, wie geht es dir?")
-message.set_timestamp("10.05.2023")
-
-print(message)
-"""

@@ -25,6 +25,10 @@ class Administration(object):
         with MessageMapper() as mapper:
             return mapper.insert(m)
 
+    def get_messages(self, message_id):
+        with MessageMapper() as mapper:
+            return mapper.find_by_key(message_id)
+
     def save_message(self, msg):
         with MessageMapper() as mapper:
             mapper.update(msg)
