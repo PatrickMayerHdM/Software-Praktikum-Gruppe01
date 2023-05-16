@@ -24,6 +24,7 @@ import ChatWindow from "./components/ChatWindow";
 import Profilebox from "./components/Profilebox";
 import TestFavoriteProfileList from "./components/TestFavoriteProfileList";
 import CreateProfil from "./pages/createProfil";
+import './pages/avatarContainer.css';
 
 /** Definition der App-Komponente */
 
@@ -121,7 +122,7 @@ class App extends Component {
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }} className="avatarNavbarContainer">
               {currentUser.photoURL ? ( /** Abfrage ob der Benutzer ein Profilbild hat */
                 <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
               ) : ( /** Hat der Benutzer kein Profilbild wird  */
@@ -136,18 +137,13 @@ class App extends Component {
               >
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
+
+              <Navbar/>
+
             </div>
+
             <CreateProfil/>
 
-            {/*<Navigationsleiste>
-            <div className="container">
-              <Routes>
-                  <Route path="/Merkliste" element={<Merkliste />} />
-                  <Route path="/Sperrlieste" element={<Sperrliste />} />
-                  <Route path="/OnBoarding" element={<OnBoarding />} />
-              </Routes>
-            </div>
-          </Navigationsleiste>*/}
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
@@ -155,7 +151,6 @@ class App extends Component {
         }
       </div>
     );
-
   }
 }
 
