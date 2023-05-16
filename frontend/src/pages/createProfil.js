@@ -237,7 +237,7 @@ class CreateProfil extends Component {
                             <FormLabel> Was hast du noch zu sagen? </FormLabel>
                             <TextField
                                 value={description}
-                                onChange={handleChangeDescription}
+                                onChange={this.handleChangeDescripition}
                                 inputProps={{
                                     maxLength: 250
                                     }}
