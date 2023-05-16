@@ -7,7 +7,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-    #datingServerBaseURL = '/system';
+    #datingServerBaseURL = 'http://localhost:8000/system';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/hierbennen/system';
@@ -59,7 +59,6 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(message)
         }).then((responseJSON) => {
-            console.log("Dreh das Rad!");
             let mssageBO = messageBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(mssageBO);
