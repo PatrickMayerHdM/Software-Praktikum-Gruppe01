@@ -84,6 +84,21 @@ class ChatWindowOperations(Resource):
         else:
             return '', 500
 
+@datingapp.route('/messages/<int:id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+@datingapp.param('id','Die ID des Message-Objekts.')
+class MessageOperations(Resource):
+    @datingapp.marshal_with(message)
+    def get(self, id):
+        """ Auslesen eines bestimmten Chat-Objekts."""
+        adm = Administration()
+        msg = adm.get_messages(id)
+
+        if msg is not None:
+            return msg
+        else:
+            return '', 500 # Wenn es keine Message unter ID gibt.
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
