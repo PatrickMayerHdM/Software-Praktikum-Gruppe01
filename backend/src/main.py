@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 from server.Administration import Administration
 from server.bo.Account import Account
@@ -24,7 +24,7 @@ CORS(app, resources=r'/system/*')
 
 #falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
 #CORS(app, support_credentials=True,
-#     resources={r'/system/*': {'origins':'*'}})
+ #    resources={r'/system/*': {'origins':'*'}})
 
 #API um Daten zwischen Clients und Server zu tauschen.
 api = Api(app, version='1.0', title='DatingApp System API',
@@ -78,7 +78,6 @@ class ChatWindowOperations(Resource):
         if proposal is not None:
             sender = proposal.get_sender()
             recipient = proposal.get_recipient()
-            # timestamp = proposal.get_timestamp()
             content = proposal.get_content()
             result = adm.addMessage(sender, recipient, content)
             return result, 200
