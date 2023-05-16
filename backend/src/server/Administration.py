@@ -6,7 +6,7 @@ class Administration(object):
     def __init__(self):
         pass
 
-    """Spezifische Methoden für Nachrichten"""
+    """Spezifische Methoden für message"""
 
     def addMessage(self, sender, recipient, content):
         """Objekt der Klasse Massage wird erstellt"""
@@ -33,3 +33,23 @@ class Administration(object):
         """Hier wird "message" mit mapper aus DB gelöscht"""
         with MessageMapper() as mapper:
             mapper.delete(message)
+
+
+    def get_all_messages(self):
+        """Alle messages auslesen"""
+        with MessageMapper() as mapper:
+            return mapper.find_all()
+
+    def get_message_by_sender_id(self, senderid):
+        """messages anhand sender auslesen"""
+        with MessageMapper() as mapper:
+            return mapper.find_by_sender_id(senderid)
+
+    def get_message_by_recipient_id(self, recipientid):
+        """messages anhand recipient auslesen"""
+        with MessageMapper() as mapper:
+            return mapper.find_by_recipient(recipientid)
+
+    def get_message_by_id(self, key):
+        with MessageMapper() as mapper:
+            return mapper.find_by_key(key)
