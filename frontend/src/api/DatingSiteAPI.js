@@ -1,4 +1,5 @@
 import messageBO from './MessageBO';
+import MessageBO from "./AccountBO";
 
 
 export default class DatingSiteAPI {
@@ -7,7 +8,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-    #datingServerBaseURL = '/system';
+    #datingServerBaseURL = 'http://localhost:8000/system';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/hierbennen/system';
@@ -15,8 +16,8 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/message`;
-    #addMessageURL = () => `${this.#datingServerBaseURL}/message`;
+    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/messages`;
+    #addMessageURL = () => `${this.#datingServerBaseURL}/messages`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
@@ -35,9 +36,15 @@ export default class DatingSiteAPI {
             return res.json();
          })
 
+
+    /**
+     * @param {messageBO} message object
+     * @public
+     */
+
     getAllMessages() {
         return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
-            let messageBOs = messageBO.fromJSON(responseJSON);
+            let messageBOs = MessageBO.fromJSON(responseJSON);
 
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -59,7 +66,6 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(message)
         }).then((responseJSON) => {
-            console.log("Dreh das Rad!");
             let mssageBO = messageBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(mssageBO);

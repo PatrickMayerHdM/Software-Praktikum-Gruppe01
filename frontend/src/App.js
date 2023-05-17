@@ -3,11 +3,8 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
 import { Avatar, Menu, MenuItem } from '@mui/material';
-import Item from "./theme";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import LogIn from "./pages/LogIn";
-import TestProfileListFunction from "./components/TestProfileListFunction";
+import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./pages/Navbar";
@@ -21,10 +18,10 @@ import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
 import ChatWindow from "./components/ChatWindow";
-import ProfileboxFunction from "./components/ProfileboxFunction";
-import TestFavoriteProfileList from "./components/TestFavoriteProfileList";
 import ProfileBox from "./components/ProfileBox";
 import ProfileBoxList from "./components/ProfileBoxList";
+import CreateProfil from "./pages/createProfil";
+import './pages/avatarContainer.css';
 
 /** Definition der App-Komponente */
 
@@ -140,7 +137,7 @@ class App extends Component {
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <Navigationsleiste/>
+            <ChatWindow/>
 
             {/*<Navigationsleiste>
             <div className="container">
