@@ -4,7 +4,6 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from
 import { firebaseConfig } from './components/config';
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import LogIn from "./pages/LogIn";
-import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./pages/Navbar";
@@ -22,6 +21,8 @@ import ProfileBox from "./components/ProfileBox";
 import ProfileBoxList from "./components/ProfileBoxList";
 import CreateProfil from "./pages/createProfil";
 import './pages/avatarContainer.css';
+import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
+import BlockProfileBoxList from "./components/BlockProfileBoxList";
 
 /** Definition der App-Komponente */
 
@@ -117,14 +118,13 @@ class App extends Component {
 
 /** Im Routes werden alle möglichen Routen festgelegt*/
     return (
-
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
           <div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              {currentUser.photoURL ? ( /** Wenn der Benutzer ein Profilbild hat */
+            <div style={{ display: 'flex', alignItems: 'center' }} className="avatarNavbarContainer">
+              {currentUser.photoURL ? ( /** Abfrage ob der Benutzer ein Profilbild hat */
                 <Avatar alt={currentUser.displayName} src={currentUser.photoURL} onClick={this.handleClick} />
-              ) : ( /** Wenn der Benutzer kein Profilbild hat */
+              ) : ( /** Hat der Benutzer kein Profilbild wird  */
                 <Avatar alt={currentUser.displayName} onClick={this.handleClick}>
                   {currentUser.displayName[0]}
                 </Avatar>
@@ -136,18 +136,11 @@ class App extends Component {
               >
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
-            </div>
-            <ChatWindow/>
 
-            {/*<Navigationsleiste>
-            <div className="container">
-              <Routes>
-                  <Route path="/Merkliste" element={<Merkliste />} />
-                  <Route path="/Sperrlieste" element={<Sperrliste />} />
-                  <Route path="/OnBoarding" element={<OnBoarding />} />
-              </Routes>
+              <Navbar/>
+
             </div>
-          </Navigationsleiste>*/}
+
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */

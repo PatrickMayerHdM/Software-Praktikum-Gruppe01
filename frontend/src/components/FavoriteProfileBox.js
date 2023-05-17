@@ -1,16 +1,20 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import ProfileboxFunction from "./ProfileboxFunction";
+import Profilebox from "./Profilebox";
 import React from "react";
 
-/** Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
+/**
+ * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
  * Diese ist explizit für die Kontaktsperre ausgelegt und zeigt zusätzlich nochmal einen entfernen Knopf an.
- * Dies soll später ermöglichen andere Personen, wieder von der Kontaktsperre zu nehmen.*/
+ * Dies soll später ermöglichen andere Personen, wieder von der Kontaktsperre zu nehmen.
+ */
 
-function FavoriteProfileBox(){
+class FavoriteProfileBox extends React.Component{
 
-    /** Funktion welche ausgeführt wird, wenn  "Von Merkzettel Entfernen" gedrückt wird.
+    render() {
+
+        /** Funktion welche ausgeführt wird, wenn  "Von Merkzettel Entfernen" gedrückt wird.
      * Zu Testzwecken noch nicht weiter ausgeführt, sondern nur mit einem console.log */
     function FavoriteDelClicked(){
         console.log("Von Merkzettel entfernt")
@@ -22,7 +26,7 @@ function FavoriteProfileBox(){
         console.log("Kontaktanfrage geschickt")
     }
 
-    /** Die Profilbox an sich, speziell angepasst auf die gegebenheiten zur Darstellung auf dem Merkzettel */
+    /** Die Profilbox an sich speziell angepasst auf die gegebenheiten zur Darstellung auf dem Merkzettel */
 
     return(
         <Box sx={{ flexGrow: 1 }}>
@@ -30,7 +34,7 @@ function FavoriteProfileBox(){
             direction="row" justifyContent="center" alignItems="strech" >
             <Grid item xs={8} spacing={2}>
               <Item>
-                  <ProfileboxFunction/>
+                  <Profilebox/>
               </Item >
             </Grid >
             <Grid item xs={2} spacing={2} >
@@ -47,8 +51,8 @@ function FavoriteProfileBox(){
 
           </Grid >
         </Box >
-        )
-
+    )
+    }
 }
 
 export default FavoriteProfileBox
