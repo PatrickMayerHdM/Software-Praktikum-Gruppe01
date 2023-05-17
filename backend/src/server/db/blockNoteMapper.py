@@ -4,7 +4,7 @@ from server.db.mapper import mapper
 """Notiz: in DB wird der Name blockNote verwendet"""
 
 
-class FavoriteNoteMapper(mapper):
+class BlockNoteMapper(mapper):
     """ Mapper-Klasse, der die Blocklist auf eine relationale Datenbank abbildet."""
 
     def __init__(self):

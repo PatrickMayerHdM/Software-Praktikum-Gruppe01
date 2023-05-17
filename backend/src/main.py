@@ -79,7 +79,7 @@ class ChatWindowOperations(Resource):
             sender = proposal.get_sender()
             recipient = proposal.get_recipient()
             content = proposal.get_content()
-            result = adm.addMessage(sender, recipient, content)
+            result = adm.create_mssage(sender, recipient, content)
             return result, 200
         else:
             return '', 500
