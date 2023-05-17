@@ -1,9 +1,9 @@
-import React, {useRef} from "react";
+import React, {Component, useRef} from "react";
 import {FaBars, FaTimes} from "react-icons/fa";
 import "./header.css"
 /** Hier ist die Navbar, die auf jeder Seite zu sehen ist.
  * Mit ihr kann man auf die verschiedenen Unterseiten navigieren*/
-function Navbar() {
+function Navbar(){
     const navRef = useRef();
 
     // Mit showNavbar wird die responsive Navbar realisiert
