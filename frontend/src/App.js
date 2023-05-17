@@ -6,9 +6,8 @@ import { Avatar, Menu, MenuItem } from '@mui/material';
 import Item from "./theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import OnBoarding from "./pages/OnBoarding";
 import LogIn from "./pages/LogIn";
-import TestProfileList from "./components/TestProfileList";
+import TestProfileListFunction from "./components/TestProfileListFunction";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./pages/Navbar";
@@ -22,8 +21,10 @@ import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
 import ChatWindow from "./components/ChatWindow";
-import Profilebox from "./components/Profilebox";
+import ProfileboxFunction from "./components/ProfileboxFunction";
 import TestFavoriteProfileList from "./components/TestFavoriteProfileList";
+import ProfileBox from "./components/ProfileBox";
+import ProfileBoxList from "./components/ProfileBoxList";
 
 /** Definition der App-Komponente */
 
@@ -139,7 +140,7 @@ class App extends Component {
                 <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
               </Menu>
             </div>
-            <ChatWindow/>
+            <Navigationsleiste/>
 
             {/*<Navigationsleiste>
             <div className="container">

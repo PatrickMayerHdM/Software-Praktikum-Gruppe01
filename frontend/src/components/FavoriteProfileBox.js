@@ -1,7 +1,7 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Profilebox from "./Profilebox";
+import ProfileboxFunction from "./ProfileboxFunction";
 import React from "react";
 
 /** Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -30,7 +30,7 @@ function FavoriteProfileBox(){
             direction="row" justifyContent="center" alignItems="strech" >
             <Grid item xs={8} spacing={2}>
               <Item>
-                  <Profilebox/>
+                  <ProfileboxFunction/>
               </Item >
             </Grid >
             <Grid item xs={2} spacing={2} >

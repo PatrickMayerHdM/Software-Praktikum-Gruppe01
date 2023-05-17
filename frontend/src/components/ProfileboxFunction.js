@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 /** Dies erstellt einen React Komponenten zur Profilvorschau.
  * Damit dieser dann später in verschiedenen Ansichten der App angezeigt werden kann */
 
-function Profilebox(){
+function ProfileboxFunction(){
     return(
         <Box sx={{width: '100%'}} >
             {/** Dies ist die Box, in welcher schlussendlich sich das Grid befindet */}
@@ -53,4 +53,4 @@ function Profilebox(){
 
     )
 }
-export default Profilebox /** Der Export damit Profilebox auch an anderen Stellen verwendet werden kann */
+export default ProfileboxFunction /** Der Export damit ProfileboxFunction auch an anderen Stellen verwendet werden kann */

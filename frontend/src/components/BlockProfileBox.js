@@ -1,7 +1,7 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Profilebox from "./Profilebox";
+import ProfileboxFunction from "./ProfileboxFunction";
 import React from "react";
 
 /** Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -25,7 +25,7 @@ function BlockProfileBox(){
             direction="row" justifyContent="center" alignItems="stretch" container>
             <Grid item xs={6} >
               <Item>
-                  <Profilebox/>
+                  <ProfileboxFunction/>
               </Item >
             </Grid >
             <Grid item xs={1} >
