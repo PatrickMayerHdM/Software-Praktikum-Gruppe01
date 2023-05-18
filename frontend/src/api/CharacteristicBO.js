@@ -6,220 +6,220 @@ export default class Characteristic extends BusinessObject {
      * Baut eine CharacteristicBO mit age, sex, bodyheight, haircolor, description, smoking,
      * religion, searchingfor
      *
-     * @param {*} age
-     * @param {*} sex
-     * @param {*} bodyheight
-     * @param {*} haircolor
-     * @param {*} description
-     * @param {*} smoking
-     * @param {*} religion
-     * @param {*} searchingfor
+     * @param {*} aage
+     * @param {*} asex
+     * @param {*} abodyheight
+     * @param {*} ahaircolor
+     * @param {*} adescription
+     * @param {*} asmoking
+     * @param {*} areligion
+     * @param {*} asearchingfor
      */
 
     constructor(
-        age = null,
-        sex = null,
-        bodyheight = null,
-        haircolor = null,
-        description = null,
-        smoking = null,
-        religion = null,
-        searchingfor = null,
+        aage = null,
+        asex = null,
+        abodyheight = null,
+        ahaircolor = null,
+        adescription = null,
+        asmoking = null,
+        areligion = null,
+        asearchingfor = null,
     ) {
         super();
-        this._age = age;
-        this._sex = sex;
-        this._bodyheight = bodyheight;
-        this._haircolor = haircolor;
-        this._description = description;
-        this._smoking = smoking;
-        this._religion = religion;
-        this._searchingFor = searchingfor;
+        this._aage = aage;
+        this._asex = asex;
+        this._abodyheight = abodyheight;
+        this._ahaircolor = ahaircolor;
+        this._adescription = adescription;
+        this._asmoking = asmoking;
+        this._areligion = areligion;
+        this._asearchingFor = asearchingfor;
     }
 
     /**
      *  Setzen des Alters
      */
-    set_age(age) {
-        this._age = age;
+    set_aage(age) {
+        this._aage = age;
     }
 
     /**
      *  Löschen des Alters
      */
 
-    delete_age() {
-        this._age = null;
+    delete_aage() {
+        this._aage = null;
     }
 
     /**
      *  Gibt das Alter zurück
      */
 
-    get_age() {
-        return this._age
+    get_aage() {
+        return this._aage
     }
 
     /**
      *  Setzen des Geschlechts
      */
 
-    set_sex(sex) {
-        this._sex = sex;
+    set_asex(sex) {
+        this._asex = sex;
     }
 
     /**
      * Löschen des Geschlechts
      */
 
-    delete_sex() {
-        this._sex = null;
+    delete_asex() {
+        this._asex = null;
     }
 
     /**
      * Gibt das Geschlecht zurück
      */
 
-    get_sex() {
-        return this._sex;
+    get_asex() {
+        return this._asex;
     }
 
     /**
      * Setzen der Körpergröße
      */
 
-    set_bodyheight(bodyheight) {
-        this._bodyheight = bodyheight;
+    set_abodyheight(bodyheight) {
+        this._abodyheight = bodyheight;
     }
 
     /**
      * Löschen der Körpergröße
      */
 
-    delete_bodyheight() {
-        this._bodyheight = null;
+    delete_abodyheight() {
+        this._abodyheight = null;
     }
 
     /**
      * Gibt die Körpergröße zurück
      */
 
-    get_bodyheight() {
-        return this._bodyheight;
+    get_abodyheight() {
+        return this._abodyheight;
     }
     /**
      * Setzen der Haarfarbe
      */
 
-    set_haircolor(haircolor) {
-        this._haircolor = haircolor;
+    set_ahaircolor(haircolor) {
+        this._ahaircolor = haircolor;
     }
 
     /**
      * Löschen der Haarfarbe
      */
 
-    delete_haircolor() {
-        this._haircolor = null;
+    delete_ahaircolor() {
+        this._ahaircolor = null;
     }
     /**
      * Gibt die Haarfarbe zurück
      */
 
-    get_haircolor() {
-        return this._haircolor;
+    get_ahaircolor() {
+        return this._ahaircolor;
     }
 
     /**
      * Setzen der Beschreibung
      */
 
-    set_description(description) {
-        this._description = description;
+    set_adescription(description) {
+        this._adescription = description;
     }
 
     /**
      * Löschen der Beschreibung
      */
 
-    delete_description() {
-        this._description = null;
+    delete_adescription() {
+        this._adescription = null;
     }
     /**
      * Gibt die Beschreibung zurück
      */
 
-    get_description() {
-        return this._description;
+    get_adescription() {
+        return this._adescription;
     }
 
     /**
      * Setzen des Nicht-/Raucher
      */
 
-    set_smoking(smoking) {
-        this._smoking = smoking;
+    set_asmoking(smoking) {
+        this._asmoking = smoking;
     }
 
     /**
      * Löschen des Nicht-/Raucher
      */
 
-    delete_smoking() {
-        this._smoking = null;
+    delete_asmoking() {
+        this._asmoking = null;
     }
     /**
      * Gibt den Nicht-/Raucher zurück
      */
 
-    get_smoking() {
-        return this._smoking;
+    get_asmoking() {
+        return this._asmoking;
     }
 
     /**
      * Setzen der Religion
      */
 
-    set_religion(religion) {
-        this._religion = religion;
+    set_areligion(religion) {
+        this._areligion = religion;
     }
 
     /**
      * Löschen der Religion
      */
 
-    delete_religion() {
-        this._religion = null;
+    delete_areligion() {
+        this._areligion = null;
     }
     /**
      * Gibt die Religion zurück
      */
 
-    get_religion() {
-        return this._religion;
+    get_areligion() {
+        return this._areligion;
     }
 
     /**
      * Setzen des gesuchten Geschlechts
      */
 
-    set_searchingfor(pref) {
-        this._searchingFor = searchingfor;
+    set_asearchingfor(pref) {
+        this._asearchingFor = searchingfor;
     }
 
     /**
      * Löschen des gesuchten Geschechts
      */
 
-    delete_searchingfor() {
-        this._searchingFor = null;
+    delete_asearchingfor() {
+        this._asearchingFor = null;
     }
     /**
      * Gibt das gesuchte Geschlecht zurück
      */
 
-    get_searchingfor() {
-        return this._searchingFor;
+    get_asearchingfor() {
+        return this._asearchingFor;
     }
 
     static fromJSON(characteristic) {

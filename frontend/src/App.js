@@ -30,30 +30,70 @@ import BlockProfileBoxList from "./components/BlockProfileBoxList";
 /** Definition der App-Komponente */
 
 class App extends Component {
+
+  /** alle Zustandsvariablen: aktueller Nutzer, Ankerpunkt für das Dropdown-Menü, Fehler bei der "auth",
+   *  Fehler in der Anwendung, Ladezustand der "auth" */
+
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
       menuAnchor: null,
+      authError:null,
+      appError:null,
+      authLoading:false,
     };
   }
 
-  /** Lifecycle-Methode: Wird aufgerufen, sobald die Komponente in den DOM eingefügt wird */
-
   componentDidMount() {
 
-    /** Firebase-App initialisieren */
+    /** Hier wird die Firebase-App initialisieren und der Authentifizierungsstatus überwacht.
+     *  beim Ändern des Anmelde-Status wird der Zustand aktualisiert. */
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    /** Beim Ändern des Anmelde-Status den Zustand aktualisieren */
-
     onAuthStateChanged(auth, (user) => {
+
+      /** Änderung des Anmeldezustandes  */
+
       if (user) {
-        this.setState({ currentUser: user });
+
+        /** Wenn der User angemeldet ist = Ladezustand auf "true" gesetzt */
+
+          this.setState({
+              authLoading: true
+          });
+
+          /** Authentifizierungstoken des Useres wird abgerufen und in einem Cookie gespeichert. currentUser wird auf
+           * den aktuellen User gesetzt, vorherige Errors werden auf null gesetzt und der Ladezustand wird beendet */
+
+          user.getIdToken().then(token => {
+            document.cookie = `token=${token};path=/`;
+            this.setState({
+              currentUser: user,
+              authError: null,
+              authLoading: false
+            });
+
+            /** Fehlerbehanldung für das Abrufen des Authentifizierungstokens */
+
+          }).then(e => {
+            this.setState({
+              authError:e,
+              authLoading:false,
+            });
+          });
+
+          /** Wenn kein Benutzer angemeldet ist wird der Cookie gelöscht und der Zustand angepasst
+           * => kein aktueller User und Ladezustand beendet*/
       } else {
-        this.setState({ currentUser: null });
+        document.cookie = 'token=;path=/';
+
+        this.setState({
+          currentUser: null,
+          authLoading:false
+        });
       }
     });
   }
@@ -68,7 +108,9 @@ class App extends Component {
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    /** Mit Google-Konto anmelden und Zustand aktualisieren */
+    /** Ruft das "signInWithPopup" Fenster auf um sich anmelden zu können, bei erfolgriecher Anmeldung
+     *  wird der User "gespeichert" un der Zustand aktualisiert. Bei einem Fehler wird dieser
+     *  in der Konsole ausgegeben. */
 
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -89,7 +131,8 @@ class App extends Component {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    /** Abmelden und Zustand aktualisieren */
+    /** Hier wird der aktuelle User wieder auf "null" gesetzt und somit wird dieser abgemeldet. Bei einem Fehler
+     *  wird dieser dementsprechend in der Konsole ausgegeben. */
 
     auth.signOut()
       .then(() => {
@@ -112,7 +155,7 @@ class App extends Component {
     this.setState({ menuAnchor: null });
   };
 
-  /** Die render()-Methode gibt das HTML zurück, das gerendert werden soll */
+  /** render() gibt das HTML zurück, das gerendert werden soll */
 
   render() {
     const { currentUser, menuAnchor } = this.state;
@@ -142,6 +185,7 @@ class App extends Component {
               <Navbar/>
 
             </div>
+
 
 
           </div>
