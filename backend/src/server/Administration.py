@@ -9,10 +9,9 @@ class Administration(object):
         pass
 
     """ Account-spezifische Methoden """
-    def create_account(self, google_id, profile_id, name, email):
+    def create_account(self, google_id, name, email):
         account = Account()
         account.set_google_id(google_id)
-        account.set_profile_id(profile_id)
         account.set_user_name(name)
         account.set_email(email)
         account.set_id(1)

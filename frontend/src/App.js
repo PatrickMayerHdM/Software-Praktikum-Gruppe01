@@ -185,6 +185,7 @@ class App extends Component {
               <Navbar/>
 
             </div>
+            <ChatWindow/>
 
 
 
