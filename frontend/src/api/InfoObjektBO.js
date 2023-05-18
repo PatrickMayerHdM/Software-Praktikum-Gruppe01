@@ -10,8 +10,7 @@ export default class infoobjectBO extends BusinessObject {
      * Baut ein infoobjectBO mit infoobject_id,
      *
      * @param {*} ainfoobject_id
-     * @param {*}
-     * @param {*}
+     *
      * */
 
     constructor(ainfoobject_id) {

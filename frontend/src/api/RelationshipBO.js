@@ -10,8 +10,6 @@ export default class relationshipBO extends RelationshipBO {
      * Baut ein relationshipBO mit relationship_id
      *
      * @param {*} relationship_id
-     * @param {*}
-     * @param {*}
      *
      * */
 
