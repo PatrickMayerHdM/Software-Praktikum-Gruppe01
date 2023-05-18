@@ -115,9 +115,5 @@ class Profile extends React.Component{
 }
 
 
-function Profilep() {
-
-
-}
 
 export default Profile

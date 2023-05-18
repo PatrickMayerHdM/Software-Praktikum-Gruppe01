@@ -1,8 +1,8 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Profilebox from "./Profilebox";
 import React from "react";
+import ProfileBox from "./ProfileBox";
 
 /**
  * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -41,7 +41,7 @@ class FavoriteProfileBox extends React.Component{
                 direction="row" justifyContent="center" alignItems="strech" >
                 <Grid item xs={8} spacing={2}>
                   <Item>
-                      <Profilebox/>
+                      <ProfileBox/>
                   </Item >
                 </Grid >
                 <Grid item xs={2} spacing={2} >
