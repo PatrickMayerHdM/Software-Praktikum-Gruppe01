@@ -18,11 +18,12 @@ import {Button} from "@mui/material";
 // anderen Komponenten integriert (OptionsOtherProfile.js bzw. OptionsOwnProfile.js).
 // , dies sollte einem User später angezeigt werden, wenn er ein anderes */
 
+class Profile extends React.Component{
 
-function Profile() {
 
-    return(
-        <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
+    render() {
+        return(
+            <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
                 <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                     <Item >
                         <Grid container direction="row" justifyContent="center" alignItems="strech" >
@@ -109,7 +110,10 @@ function Profile() {
                     </Item>
                 </Stack>
             </Box>
-    )
+        )
+    }
 }
+
+
 
 export default Profile

@@ -10,14 +10,16 @@ class AccountMapper(mapper):
         """ Auslesen aller Accounts"""
         result = []
         cursor = self._connection.cursor()
-        cursor.execute('SELECT account_id, google_id, profile_id FROM Account')
+        cursor.execute('SELECT account_id, google_id, profile_id, name, email FROM main.Account')
         tuples = cursor.fetchall() # Alle Datensätze aus DB in tuples speichern.
 
-        for (account_id, google_id, profile_id) in tuples:
+        for (account_id, google_id, profile_id, name, email) in tuples:
             account = Account()
             account.set_id(account_id)
             account.set_google_id(google_id)
             account.set_profile_id(profile_id)
+            account.set_user_name(name)
+            account.set_email(email)
 
         self._connection.commit()
         cursor.close()
@@ -29,20 +31,27 @@ class AccountMapper(mapper):
         Suchen eines Accounts über die ID
 
         :param key Primärschlüsselattribut (account_id)
-        :return Account-Objekt das dem übergebenen Schlüssel entspricht. None bei nicht vorhandenen DB-Tupel
+        :return Account-Objekt das dem übergebenen Schlüssel entspricht. IndexError bei nicht vorhandenen DB-Tupel
         """
         result = None
 
         cursor = self._connection.cursor()
-        cursor.execute(f'SELECT account_id, google_id, profile_id FROM Account WHERE account_id={key}')
+        command = f'SELECT account_id, google_id, profile_id, name, email FROM main.Account WHERE account_id={key}'
+        cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (account_id, google_id, profile_id) in tuples:
+        try:
+            (account_id, google_id, profile_id, name, email) = tuples[0]
             account = Account()
             account.set_id(account_id)
             account.set_google_id(google_id)
             account.set_profile_id(profile_id)
+            account.set_user_name(name)
+            account.set_email(email)
             result = account
+        except IndexError:
+            """ Wenn der Cursor keine Tupel findet, wird ein IndexError auftreten."""
+            result = None
 
         self._connection.commit()
         cursor.close()
@@ -56,16 +65,17 @@ class AccountMapper(mapper):
         :return das in der DB gespeicherte Objekt
         """
         cursor = self._connection.cursor()
-        cursor.execute(f'SELECT MAX(account_id) AS maxid FROM Account')
+        cursor.execute(f'SELECT MAX(account_id) AS maxid FROM main.Account')
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             account.set_id([maxid]+1) # Höchste ID + 1
 
-        command = f'INSERT INTO Account (account_id, google_id, profile_id) VALUES (%s, %s, %s)'
+        command = f'INSERT INTO main.Account (account_id, google_id, profile_id, name, email) VALUES (%s, %s, %s, %s, %s)'
         """Datensatz wird in Tabelle "Account" hinzugefügt. Die Values "%s" sind Platzhalter und 
         werden in der Ausführung übergeben."""
-        data = (account.get_id(), account.get_google_id(), account.get_profile_id())
+        data = (account.get_id(), account.get_google_id(), account.get_profile_id(), account.get_user_name(),
+                account.get_email())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -78,8 +88,9 @@ class AccountMapper(mapper):
           :param account = ist das Objekt (Datensatz), der in DB aktualisiert werden soll."""
         cursor = self._connection.cursor()
 
-        command = 'UPDATE Account SET google_id=%s, profile_id=%s WHERE account_id=%s'
-        data = (account.get_google_id(), account.get_profile_id(), account.get_id())
+        command = 'UPDATE main.Account SET google_id=%s, profile_id=%s, name=%s, email=%s WHERE account_id=%s'
+        data = (account.get_google_id(), account.get_profile_id(), account.get_id(), account.get_user_name(),
+                account.get_email())
 
         cursor.execute(command, data)
 
@@ -91,7 +102,7 @@ class AccountMapper(mapper):
         :param account = Objekt, das gelöscht werden soll."""
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM Account WHERE account_id={account.get_id()}'
+        command = f'DELETE FROM main.Account WHERE account_id={account.get_id()}'
         cursor.execute(command)
 
         self._connection.commit()
@@ -102,7 +113,7 @@ class AccountMapper(mapper):
         :param google_id = Die GoogleID des Accounts, der gesucht wird."""
 
         cursor = self._connection.cursor()
-        command = 'SELECT * FROM Account WHERE google_id=%s'
+        command = 'SELECT * FROM main.Account WHERE google_id=%s'
         cursor.execute(command, (google_id,))
         tuple = cursor.fetchone()
 
@@ -111,7 +122,66 @@ class AccountMapper(mapper):
             account.set_id(tuple[0])
             account.set_google_id(tuple[1])
             account.set_profile_id(tuple[2])
+            account.set_user_name(tuple[3])
+            account.set_email(tuple[4])
             return account
 
         cursor.close()
         return None
+
+    def find_by_name(self, name):
+        result = []
+        cursor = self._connection.cursor()
+        command = f'SELECT account_id, name, email, google_id, profile_id FROM main.Account WHERE name LIKE {name} ORDER BY name'
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, name, email, google_id, profile_id) in tuples:
+            account = Account()
+            account.set_id(id)
+            account.set_user_name(name)
+            account.set_email(email)
+            account.set_google_id(google_id)
+            account.set_google_id(profile_id)
+            result.append(account)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_email(self, email_adress):
+        """
+        Suchen eines Accounts über die E-Mail-Adresse
+
+        :param email_adress Attribut (email)
+        :return Account-Objekt das dem übergebenen Schlüssel entspricht. IndexError bei nicht vorhandenen DB-Tupel
+        """
+        result = None
+
+        cursor = self._connection.cursor()
+        command = f'SELECT account_id, google_id, profile_id, name, email FROM main.Account WHERE email={email_adress}'
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            (account_id, google_id, profile_id, name, email) = tuples[0]
+            account = Account()
+            account.set_id(account_id)
+            account.set_google_id(google_id)
+            account.set_profile_id(profile_id)
+            account.set_user_name(name)
+            account.set_email(email)
+            result = account
+        except IndexError:
+            """ Wenn der Cursor keine Tupel findet, wird ein IndexError auftreten."""
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
+
+

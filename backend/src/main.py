@@ -14,7 +14,7 @@ from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
 
 #SecurityDecorator übernimmt die Authentifikation
-#from SecurityDecorator import secured
+from SecurityDecorator import secured
 
 #Flask wird instanziert
 app = Flask(__name__)
@@ -38,9 +38,11 @@ bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='ID des BO´s')
 })
 
-Account = api.inherit('Account', bo, {
+account = api.inherit('Account', bo, {
     'google_id': fields.String(attribute='_google_id', description='GoogleID eines Accounts'),
     'profile_id': fields.Integer(attribute='_profile_id', description='Profil eines Accounts'),
+    'name': fields.String(attribute='_name', description='Google-Name eines Accounts'),
+    'email': fields.String(attribute='_email', description='E-Mail eines Google Accounts')
 })
 
 profileNeu = api.inherit('profileNeu', bo, {
@@ -70,6 +72,7 @@ class ChatWindowOperations(Resource):
     @datingapp.doc("Create new message")
     @datingapp.marshal_with(message, code=201)
     @datingapp.expect(message)
+    @secured
 
     def post(self):
         adm = Administration()
@@ -89,6 +92,7 @@ class ChatWindowOperations(Resource):
 @datingapp.param('id','Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
+    @secured
     def get(self, id):
         """ Auslesen eines bestimmten Chat-Objekts."""
         adm = Administration()
@@ -98,6 +102,7 @@ class MessageOperations(Resource):
             return msg
         else:
             return '', 500 # Wenn es keine Message unter ID gibt.
+
 
 
 if __name__ == '__main__':
