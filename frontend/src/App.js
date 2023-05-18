@@ -142,7 +142,7 @@ class App extends Component {
 
             </div>
 
-            <CreateProfil/>
+            <ChatWindow/>
 
           </div>
         }
