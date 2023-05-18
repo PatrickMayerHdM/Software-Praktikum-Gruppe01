@@ -70,6 +70,7 @@ class ChatWindowOperations(Resource):
     @datingapp.doc("Create new message")
     @datingapp.marshal_with(message, code=201)
     @datingapp.expect(message)
+    @secured
 
     def post(self):
         adm = Administration()
