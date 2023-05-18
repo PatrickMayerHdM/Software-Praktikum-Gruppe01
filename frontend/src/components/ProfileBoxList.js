@@ -16,7 +16,7 @@ class ProfileBoxList extends React.Component {
     render() {
 
         // const für die Anzahl der anzuzeigenden Profile
-        const count = 3;
+        const count = 14;
 
         // Methode zum darstellen einer Profilbox
         const Listing = Array(count).fill(null).map((item, index) => (

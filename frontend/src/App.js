@@ -7,7 +7,6 @@ import Item from "./theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LogIn from "./pages/LogIn";
-import TestProfileList from "./components/TestProfileList";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./pages/Navbar";
@@ -144,7 +143,6 @@ class App extends Component {
 
             </div>
 
-            <ChatWindow/>
 
           </div>
         }

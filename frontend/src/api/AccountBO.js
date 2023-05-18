@@ -9,16 +9,20 @@ export default class accountBO extends BusinessObject {
     /**
      * Baut eine accoutnBO mit profile_id, google_id und account_id
      *
-     * @param {*} aprofile_id
-     * @param {*} agoogle_id
      * @param {*} aaccount_id
+     * @param {*} agoogle_id
+     * @param {*} aname
+     * @param {*} aprofile_id
+     * @param {*} aemail
      */
 
-    constructor(aprofile_id, agoogle_id, aaccount_id) {
+    constructor(aprofile_id, agoogle_id, aname, aaccount_id, aemail) {
         super();
-        this.profile_id = aprofile_id;
-        this.google_id = agoogle_id;
-        this.account_id = aaccount_id;
+            this.account_id = aaccount_id;
+            this.google_id = agoogle_id
+            this.name = aname;
+            this.profile_id = aprofile_id;
+            this.email = aemail;
     }
 
     /**
@@ -73,6 +77,42 @@ export default class accountBO extends BusinessObject {
 
     getAccountId() {
         return this.account_id
+    }
+
+    /**
+     * Setzt die E-Mail des Accounts
+     *
+     * @param {*} aemail - die neue id des Google Accounts
+     */
+
+    setMail(aemail) {
+        this.email = aemail;
+    }
+
+    /**
+     * Holt sich die E-Mail des Accounts
+     */
+
+    getMail() {
+        return this.email
+    }
+
+    /**
+     * Setzt den Namen des Accounts
+     *
+     * @param {*} aname - die neue id des Google Accounts
+     */
+
+    setName(aname) {
+        this.name = aname;
+    }
+
+    /**
+     * Holt sich den Namen des Accounts
+     */
+
+    getName() {
+        return this.name
     }
 
     /**
