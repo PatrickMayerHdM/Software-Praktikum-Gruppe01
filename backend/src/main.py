@@ -38,9 +38,11 @@ bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id', description='ID des BO´s')
 })
 
-Account = api.inherit('Account', bo, {
+account = api.inherit('Account', bo, {
     'google_id': fields.String(attribute='_google_id', description='GoogleID eines Accounts'),
     'profile_id': fields.Integer(attribute='_profile_id', description='Profil eines Accounts'),
+    'name': fields.String(attribute='_name', description='Google-Name eines Accounts'),
+    'email': fields.String(attribute='_email', description='E-Mail eines Google Accounts')
 })
 
 profileNeu = api.inherit('profileNeu', bo, {

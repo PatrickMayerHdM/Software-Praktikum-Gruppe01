@@ -8,6 +8,8 @@ class Account(bo):
         self.profile_id = None
         self.google_id = "" # Die Google ID des Nutzers
         self.account_id = None # Die Account ID des Nutzers
+        self.name = "" # Name eines Nutzers
+        self.email = "" # E-Mail eines Nutzers
 
     def set_profile_id(self, profile_id):
         """Anlegen profile_id"""
@@ -25,10 +27,37 @@ class Account(bo):
         """Speichern der Google ID"""
         self.google_id = google_id
 
+    def set_user_name(self, name):
+        """ Speichern des Google Klarnamens."""
+        self.name = name
+
+    def get_user_name(self):
+        """ Auslesen des Google Klarnamens. """
+        return self.name
+
+    def set_email(self, email):
+        """ Speichern der Google E-Mail. """
+        self.email = email
+
+    def get_email(self):
+        """ Auslesen der Google E-Mail."""
+        return self.email
+
     def __str__(self):
         # str Methode gibt das erstellte profil in Form eines String zurück
-        return "account: {}, {}, {}, {}, ".format(self.get_id(), self.profile_id,
-                                                  self.account_id, self.google_id)
+        return "account: {}, {}, {}, {}, {}, {}".format(self.get_id(), self.profile_id,
+                                                  self.account_id, self.google_id, self.name, self.email)
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        obj = Account()
+        obj.set_id(dictionary['id'])
+        obj.set_google_id(dictionary['google_id'])
+        obj.set_user_name(['name'])
+        obj.set_profile_id(['profile_id'])
+        obj.set_email(dictionary['email'])
+        return obj
+
 
 
 
