@@ -3,7 +3,13 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
 import { Avatar, Menu, MenuItem } from '@mui/material';
+import Item from "./theme";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import LogIn from "./pages/LogIn";
+import TestProfileList from "./components/TestProfileList";
+import BlockProfileBox from "./components/BlockProfileBox";
+import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import Navbar from "./pages/Navbar";
 import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
@@ -114,7 +120,6 @@ class App extends Component {
     const open = Boolean(menuAnchor);
 
 
-/** Im Routes werden alle möglichen Routen festgelegt*/
     return (
       <div>
         {currentUser && /** Wenn der Benutzer angemeldet ist */
@@ -139,6 +144,8 @@ class App extends Component {
 
             </div>
 
+            <ChatWindow/>
+
           </div>
         }
         {!currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
@@ -146,7 +153,6 @@ class App extends Component {
         }
       </div>
     );
-
   }
 }
 

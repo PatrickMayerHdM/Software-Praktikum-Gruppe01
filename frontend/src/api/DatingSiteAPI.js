@@ -8,7 +8,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-    #datingServerBaseURL = 'http://localhost:8000/system';
+    #datingServerBaseURL = '/system';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/hierbennen/system';
