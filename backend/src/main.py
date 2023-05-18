@@ -14,7 +14,7 @@ from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
 
 #SecurityDecorator übernimmt die Authentifikation
-#from SecurityDecorator import secured
+from SecurityDecorator import secured
 
 #Flask wird instanziert
 app = Flask(__name__)
@@ -89,6 +89,7 @@ class ChatWindowOperations(Resource):
 @datingapp.param('id','Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
+    @secured
     def get(self, id):
         """ Auslesen eines bestimmten Chat-Objekts."""
         adm = Administration()
@@ -98,6 +99,7 @@ class MessageOperations(Resource):
             return msg
         else:
             return '', 500 # Wenn es keine Message unter ID gibt.
+
 
 
 if __name__ == '__main__':
