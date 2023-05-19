@@ -21,5 +21,6 @@ class blockNote(bo, relationship):
     def get_all_users(self):
         return self.block_list
 
-
-
+    def __str__(self):
+        # str Methode gibt die favoriteNote in Form eines String zurück
+        return "Blockliste: {}, {}".format(self.get_id(), self.get_all_users())

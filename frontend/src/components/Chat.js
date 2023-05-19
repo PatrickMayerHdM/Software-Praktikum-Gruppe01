@@ -29,9 +29,12 @@
 
 import React from "react";
 import "./Chat.css";
+import {Link} from "react-router-dom";
+
 
 function Chat({content, timestamp}) {
     return (
+        // <Link to="/ChatWindow/${userid}">
         <div className="chat">
             <div className="chat_details">
                 <h2>{}</h2>
@@ -39,6 +42,7 @@ function Chat({content, timestamp}) {
             </div>
             <p className="chat_timestamp">{timestamp}</p>
         </div>
+        // </Link>
     );
 }
 

@@ -1,16 +1,17 @@
 from BusinessObject import BusinessObject as bo
+from Characteristic import Characteristics
+from InfoObject import InfoObject
 
 
-class profileNeu(bo):
+class Profile(bo):
     # Grundgerüst profile
     def __init__(self):
         super().__init__()
-        self._firstname = ""
-        self._surname = ""
-        self.__birthdate = ""
+        self.firstname = ""
+        self.surname = ""
         """self.infoObjectsList = []"""
-        self.__blockNote = None
-        self.__favoriteNote = None
+        self.blockNote = None
+        self.favoriteNote = None
 
     def get_firstname(self):
         return self._firstname
@@ -50,6 +51,12 @@ class profileNeu(bo):
         return "profile: {}, {}, {}, {}".format(self.get_id(), self._firstname,
                                                 self._surname, self.__birthdate)
 
+
+info = InfoObject(["Alter", "Sex", "Größe", "Haarfarbe", "Beschreibung", "Raucher", "Religion"])
+char = Characteristics("21", "männlich", "180", "braun", "Beispiel Beschreibung", False, "keine")
+print(info.werte)
+print(info.werte[2])
+print(char.sex, char.description)
 
 """
 profil_eigenschaft = profil.get_characteristic()
