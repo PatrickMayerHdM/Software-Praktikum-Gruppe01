@@ -1,3 +1,5 @@
+from server.bo.Account import Account
+from server.db.AccountMapper import AccountMapper
 from server.bo.Message import Message
 from server.db.MessageMapper import MessageMapper
 from blockNote import blockNote
@@ -11,6 +13,46 @@ from server.db.AccountMapper import AccountMapper
 class Administration(object):
     def __init__(self):
         pass
+
+    """ Account-spezifische Methoden """
+    def create_account(self, google_id, profile_id, name, email):
+        account = Account()
+        account.set_google_id(google_id)
+        account.set_profile_id(profile_id)
+        account.set_user_name(name)
+        account.set_email(email)
+        account.set_id(1)
+
+        with AccountMapper() as mapper:
+            return mapper.insert(account)
+
+    def get_account_by_name(self, name):
+        with AccountMapper() as mapper:
+            return mapper.find_by_name(name)
+
+    def get_account_by_id(self, number):
+        with AccountMapper() as mapper:
+            return mapper.find_by_key(number)
+
+    def get_account_by_email(self, email):
+        with AccountMapper() as mapper:
+            return mapper.find_by_email(email)
+
+    def get_account_by_google_id(self, id):
+        with AccountMapper() as mapper:
+            return mapper.find_by_google_id(id)
+
+    def get_all_accounts(self):
+        with AccountMapper() as mapper:
+            return mapper.find_all()
+
+    def save_account(self, account):
+        with AccountMapper() as mapper:
+            mapper.update(account)
+
+    def delete_account(self, account):
+        with AccountMapper() as mapper:
+            mapper.delete(account)
 
     """Spezifische Methoden für message"""
 
