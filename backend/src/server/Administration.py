@@ -1,5 +1,3 @@
-from server.bo.Account import Account
-from server.db.AccountMapper import AccountMapper
 from server.bo.Message import Message
 from server.db.MessageMapper import MessageMapper
 from blockNote import blockNote
@@ -15,6 +13,7 @@ class Administration(object):
         pass
 
     """ Account-spezifische Methoden """
+
     def create_account(self, google_id, profile_id, name, email):
         account = Account()
         account.set_google_id(google_id)
@@ -126,7 +125,6 @@ class Administration(object):
         with BlockNoteMapper() as mapper:
             return mapper.find_by_user(user_id)
 
-
     """Spezifische Methoden für blockNote"""
 
     def create_favoritenote(self, profile_id):
@@ -157,7 +155,6 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_user(user_id)
 
-
     """Spezifische Methoden für Account"""
 
     def create_account(self, account):
@@ -183,4 +180,3 @@ class Administration(object):
     def get_account_by_google_id(self, google_id):
         with AccountMapper() as mapper:
             return mapper.find_by_google_id(google_id)
-

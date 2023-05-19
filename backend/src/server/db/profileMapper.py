@@ -1,4 +1,4 @@
-from profileNEU import profileNeu
+from Profile import Profile
 from mapper import mapper
 
 """Überall wo die Klasse "profile" verwendet wird, müsste eigentlich profileNeu stehen"""
