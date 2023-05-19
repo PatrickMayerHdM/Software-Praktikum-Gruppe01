@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 
 from server.Administration import Administration
 from server.bo.Account import Account
-from server.bo.profileNEU import Profile
+from server.bo.Profile import Profile
 from server.bo.favoriteNote import favoriteNote
 from server.bo.blockNote import blockNote
 from server.bo.Message import Message
@@ -82,7 +82,7 @@ class ChatWindowOperations(Resource):
             sender = proposal.get_sender()
             recipient = proposal.get_recipient()
             content = proposal.get_content()
-            result = adm.create_mssage(sender, recipient, content)
+            result = adm.addMessage(sender, recipient, content)
             return result, 200
         else:
             return '', 500

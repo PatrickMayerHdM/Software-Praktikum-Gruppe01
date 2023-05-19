@@ -55,7 +55,7 @@ class Administration(object):
 
     """Spezifische Methoden für message"""
 
-    def create_mssage(self, sender, recipient, content):
+    def addMessage(self, sender, recipient, content):
         """Objekt der Klasse Massage wird erstellt"""
         m = Message()
         m.set_id(1)
