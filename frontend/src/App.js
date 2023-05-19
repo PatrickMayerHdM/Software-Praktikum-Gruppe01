@@ -192,12 +192,12 @@ class App extends Component {
             <Router>
               <Header />
                 <Routes>
-                  {/*Log In hier*/}
-                    <Route path="/" element={<Outlet />}>
+                      <Route path="/" element={<Outlet />}>
                       <Route path="/Profil" element={<Profile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBox/>}></Route>
                       <Route path="/Sperrliste" element={<BlockProfileBox/>}></Route>
                       <Route path="/Chats" element={<Chats />}></Route>
+                      <Route path="/ChatWindow/:user" element={<ChatWindow />}></Route>
                     </Route>
                 </Routes>
             </Router>
