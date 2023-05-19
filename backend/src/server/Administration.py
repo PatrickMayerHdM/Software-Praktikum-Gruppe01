@@ -107,11 +107,11 @@ class Administration(object):
             return mapper.insert(blocklist)
 
     def save_blocklist(self, blocklist):
-        with BlockNoteMapper as mapper:
+        with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
     def delete_blocklist(self, blocklist):
-        with BlockNoteMapper as mapper:
+        with BlockNoteMapper() as mapper:
             mapper.delete(blocklist)
 
     def get_all_blocklists(self):
@@ -134,7 +134,7 @@ class Administration(object):
         favoritenote.add_user(profile_id)
         favoritenote.set_id(1)
 
-        with FavoriteNoteMapper as mapper:
+        with FavoriteNoteMapper() as mapper:
             mapper.insert(favoritenote)
 
     def save_favoritenote(self, favoritenote):
