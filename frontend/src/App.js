@@ -189,6 +189,7 @@ class App extends Component {
             {!this.state.currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
                 <LogIn onLogIn={this.handleLogIn}/>
             }
+
             <Router>
               <Header />
                 <Routes>
@@ -201,6 +202,7 @@ class App extends Component {
                     </Route>
                 </Routes>
             </Router>
+          <CreateProfil/>
         </div>
     );
   }
