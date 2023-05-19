@@ -27,12 +27,18 @@ class BlockProfileBoxList extends React.Component{
 
 
         return (
-            <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'},  margin: '0 auto'}} >
-              <Grid container spacing={2}
-                justifyContent="center">
-                  {Listing}
-              </Grid >
-            </Box >
+            <div>
+                <h2>Liste der Kontaktsperre:</h2>
+
+                <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'},  margin: '0 auto'}} >
+                  <Grid container spacing={2}
+                    justifyContent="center">
+                      {Listing}
+                  </Grid >
+                </Box >
+
+            </div>
+
 
         )
     }

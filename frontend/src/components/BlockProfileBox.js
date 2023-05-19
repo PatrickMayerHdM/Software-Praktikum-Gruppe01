@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
 import ProfileBox from "./ProfileBox";
+import BlockIcon from '@mui/icons-material/Block';
+
 
 /**
  * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -26,18 +28,15 @@ class BlockProfileBox extends React.Component{
             <Box sx={{ flexGrow: 1 }}>
               <Grid container
                 direction="row" justifyContent="center" alignItems="stretch" container>
-                <Grid  item xs={9} spacing={2} >
+                <Grid  item xs={10} spacing={2} >
                   <Item>
                       <ProfileBox/>
                   </Item >
                 </Grid >
-                <Grid item xs={3} >
-                    <Item style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#BDC2BF", color:"#fff", border: "solid", borderColor: '#BDC2BF'}}>
-                        <button onClick={BlockDelClicked}  style={{height: "100%", width: "100%" ,cursor: "pointer", backgroundColor: "#e63946", border: "none", color:"#fff"}}>
-                            Von Sperrliste
-                            Entfernen
-                        </button>
-                    </Item>
+                <Grid item xs={2} >
+                    <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                        <BlockIcon/>
+                    </button>
                 </Grid>
 
               </Grid >
