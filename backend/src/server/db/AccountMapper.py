@@ -69,7 +69,7 @@ class AccountMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            account.set_id([maxid]+1) # Höchste ID + 1
+            account.set_id(maxid[0] +1) # Höchste ID + 1
 
         command = f'INSERT INTO main.Account (account_id, google_id, profile_id, name, email) VALUES (%s, %s, %s, %s, %s)'
         """Datensatz wird in Tabelle "Account" hinzugefügt. Die Values "%s" sind Platzhalter und 
@@ -89,7 +89,7 @@ class AccountMapper(mapper):
         cursor = self._connection.cursor()
 
         command = 'UPDATE main.Account SET google_id=%s, profile_id=%s, name=%s, email=%s WHERE account_id=%s'
-        data = (account.get_google_id(), account.get_profile_id(), account.get_id(), account.get_user_name(),
+        data = (account.get_id(), account.get_google_id(), account.get_profile_id(), account.get_user_name(),
                 account.get_email())
 
         cursor.execute(command, data)

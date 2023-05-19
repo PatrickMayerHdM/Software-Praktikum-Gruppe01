@@ -34,7 +34,8 @@ def secured(function):
                     email = claims.get("email")
                     name = claims.get("name")
 
-                    account = adm.get_user_by_google_user_id(google_user_id) # Wir müssen dies in Administration noch erstellen.
+
+                    account = adm.get_account_by_google_id(google_user_id) # Wir müssen dies in Administration noch erstellen.
 
                     if account is not None:
 
@@ -46,7 +47,7 @@ def secured(function):
                         """
 
                         account.set_email(email)
-                        account.set_email(name)
+                        account.set_user_name(name)
                         adm.save_account(account)
 
                     else:
@@ -57,7 +58,7 @@ def secured(function):
                         adresse und die google_user_id.
                         """
 
-                        account = adm.create_account(name, email, google_user_id)
+                        account = adm.create_account(google_user_id, name, email)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 
@@ -73,7 +74,7 @@ def secured(function):
 
         return " ", 401 # UNAUTHORIZED
 
-    return wrapper()
+    return wrapper
 
 
 
