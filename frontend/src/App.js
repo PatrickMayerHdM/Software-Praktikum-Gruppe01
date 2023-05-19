@@ -26,6 +26,7 @@ import * as React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Chats from "./components/Chats";
+import { useNavigate } from 'react-router-dom';
 import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./components/BlockProfileBoxList";
 
@@ -104,25 +105,24 @@ class App extends Component {
   /** Handler-Funktion, die beim Klicken auf den "Anmelden"-Button aufgerufen wird */
 
   handleLogIn = () => {
+  /** Firebase-App initialisieren und Authentifizierungs-Objekt erstellen */
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-    /** Firebase-App initialisieren und Authentifizierungs-Objekt erstellen */
+  /** Ruft das "signInWithPopup" Fenster auf um sich anmelden zu können, bei erfolgriecher Anmeldung
+   *  wird der User "gespeichert" un der Zustand aktualisiert. Bei einem Fehler wird dieser
+   *  in der Konsole ausgegeben. */
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    /** Ruft das "signInWithPopup" Fenster auf um sich anmelden zu können, bei erfolgriecher Anmeldung
-     *  wird der User "gespeichert" un der Zustand aktualisiert. Bei einem Fehler wird dieser
-     *  in der Konsole ausgegeben. */
 
     signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          this.setState({currentUser: user});
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .then((result) => {
+        const user = result.user;
+        this.setState({ currentUser: user });
+      })
+      .catch((error) => {
+        console.log(error);
+    });
   }
 
   /** Handler-Funktion, die beim Klicken auf den "Abmelden"-Button aufgerufen wird */
@@ -192,8 +192,9 @@ class App extends Component {
             <Router>
               <Header />
                 <Routes>
-                      <Route path="/" element={<Outlet />}>
-                      <Route path="/Profil" element={<Profile/>}></Route>
+                    <Route path="/" element={<Outlet />}>
+                      <Route path="/" element={<Profile />}></Route>
+                      <Route path="/Profil" element={<CreateProfil/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBox/>}></Route>
                       <Route path="/Sperrliste" element={<BlockProfileBox/>}></Route>
                       <Route path="/Chats" element={<Chats />}></Route>
