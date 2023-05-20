@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
 import ProfileBox from "./ProfileBox";
-import BlockIcon from '@mui/icons-material/Block';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 
 /**
@@ -35,7 +35,7 @@ class BlockProfileBox extends React.Component{
                 </Grid >
                 <Grid item xs={2} >
                     <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
-                        <BlockIcon/>
+                        <PersonRemoveIcon/>
                     </button>
                 </Grid>
 

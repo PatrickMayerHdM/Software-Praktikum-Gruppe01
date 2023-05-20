@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import React from "react";
 import ProfileBox from "./ProfileBox";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import BlockIcon from '@mui/icons-material/Block';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 /**
  * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -53,7 +53,7 @@ class FavoriteProfileBox extends React.Component{
                 </Grid>
                 <Grid xs={2} spacing={2}>
                     <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
-                        <BlockIcon/>
+                        <PersonRemoveIcon/>
                     </button>
 
                 </Grid>
