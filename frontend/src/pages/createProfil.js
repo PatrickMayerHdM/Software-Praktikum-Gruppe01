@@ -9,12 +9,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import {Button, TextField} from "@mui/material";
 import * as React from "react";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 class CreateProfil extends Component {
     constructor(props) {
@@ -22,7 +20,7 @@ class CreateProfil extends Component {
         this.state = {
             firstName: '',
             lastName: '',
-            age: '',
+            age: null,
             gender: {
                 male: false,
                 female: false,
@@ -106,10 +104,7 @@ class CreateProfil extends Component {
 
 
     handleChangeAge(date) {
-        const selectedDate = dayjs(date);
-        const today = dayjs();
-        const age = today.diff(selectedDate, 'year');
-        this.setState({ age: age });
+        this.setState({age: date})
     };
 
     handleChangeDescription = (event) => {
@@ -170,7 +165,7 @@ class CreateProfil extends Component {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker']}>
                                         <DatePicker
-                                            value={this.state.age}
+                                            value={age}
                                             onChange={this.handleChangeAge}
                                             label="Geburtsdatum"
                                         />
