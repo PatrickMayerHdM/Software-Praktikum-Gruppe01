@@ -20,6 +20,7 @@ class AccountMapper(mapper):
             account.set_profile_id(profile_id)
             account.set_user_name(name)
             account.set_email(email)
+            result.append(account)
 
         self._connection.commit()
         cursor.close()
@@ -71,7 +72,7 @@ class AccountMapper(mapper):
         for (maxid) in tuples:
             account.set_id(maxid[0] +1) # Höchste ID + 1
 
-        command = f'INSERT INTO main.Account (account_id, google_id, profile_id, name, email) VALUES (%s, %s, %s, %s, %s)'
+        command = 'INSERT INTO main.Account (account_id, google_id, profile_id, name, email) VALUES (%s, %s, %s, %s, %s)'
         """Datensatz wird in Tabelle "Account" hinzugefügt. Die Values "%s" sind Platzhalter und 
         werden in der Ausführung übergeben."""
         data = (account.get_id(), account.get_google_id(), account.get_profile_id(), account.get_user_name(),
@@ -88,7 +89,7 @@ class AccountMapper(mapper):
           :param account = ist das Objekt (Datensatz), der in DB aktualisiert werden soll."""
         cursor = self._connection.cursor()
 
-        command = 'UPDATE main.Account SET google_id=%s, profile_id=%s, name=%s, email=%s WHERE account_id=%s'
+        command = 'UPDATE main.Account SET google_id=%s, profile_id=%s, name=%s, email=%s WHERE google_id=%s'
         data = (account.get_id(), account.get_google_id(), account.get_profile_id(), account.get_user_name(),
                 account.get_email())
 
@@ -109,25 +110,33 @@ class AccountMapper(mapper):
         cursor.close()
 
     def find_by_google_id(self, google_id):
+        result = None
         """ Auslesen eines Accounts, der eine bestimmte GoogleID hat.
         :param google_id = Die GoogleID des Accounts, der gesucht wird."""
 
         cursor = self._connection.cursor()
-        command = 'SELECT * FROM main.Account WHERE google_id=%s'
-        cursor.execute(command, (google_id,))
-        tuple = cursor.fetchone()
+        command = 'SELECT account_id, google_id, profile_id, name, email FROM main.Account WHERE google_id=%s'
+        data = (google_id,)
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
 
-        if tuple is not None:
-            account = Account()
-            account.set_id(tuple[0])
-            account.set_google_id(tuple[1])
-            account.set_profile_id(tuple[2])
-            account.set_user_name(tuple[3])
-            account.set_email(tuple[4])
-            return account
+        try:
+            (account_id, google_id, profile_id, name, email) = tuples[0]
+            a = Account()
+            a.set_id(account_id)
+            a.set_google_id(google_id)
+            a.set_profile_id(profile_id)
+            a.set_user_name(name)
+            a.set_email(email)
+            result = a
 
+        except IndexError:
+            "Wenn Tupel leer sind, dann wird IndexError geworfen"
+            result = None
+
+        self._connection.commit()
         cursor.close()
-        return None
+        return result
 
     def find_by_name(self, name):
         result = []

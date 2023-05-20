@@ -52,11 +52,11 @@ class Profile(bo):
                                                 self._surname, self.__birthdate)
 
 
-info = InfoObject(["Alter", "Sex", "Größe", "Haarfarbe", "Beschreibung", "Raucher", "Religion"])
+"""info = InfoObject(["Alter", "Sex", "Größe", "Haarfarbe", "Beschreibung", "Raucher", "Religion"])
 char = Characteristics("21", "männlich", "180", "braun", "Beispiel Beschreibung", False, "keine")
 print(info.werte)
 print(info.werte[2])
-print(char.sex, char.description)
+print(char.sex, char.description)"""
 
 """
 profil_eigenschaft = profil.get_characteristic()

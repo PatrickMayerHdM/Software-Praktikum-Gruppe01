@@ -58,7 +58,7 @@ def secured(function):
                         adresse und die google_user_id.
                         """
 
-                        account = adm.create_account(google_user_id, name, email)
+                        account = adm.create_account(google_user_id, None, name, email)
 
                     print(request.method, request.path, "angefragt durch:", name, email)
 

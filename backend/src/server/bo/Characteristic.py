@@ -51,7 +51,7 @@ class Characteristics(bo):
         return self.description
 
 """
-"""
+
 class Characteristics(bo):
     def __init__(self):
         super().__init__()
@@ -85,4 +85,4 @@ class InfoObject(bo):
 
 
 infoobject = InfoObject('Dominik')
-print(infoobject.set_info_object(1, 'Dominik'))"""
+print(infoobject.set_info_object(1, 'Dominik'))
