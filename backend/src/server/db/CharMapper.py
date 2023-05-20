@@ -1,4 +1,4 @@
-from Characteristic import Characteristic
+from Characteristic import Characteristics
 from mapper import mapper
 
 """ Eigenschafts-Klasse die Merkmale eines Profils widerspiegeln. """
@@ -15,7 +15,7 @@ class CharMapper(mapper):
         tuples = cursor.fetchall()
 
         for (char_id, char_name) in tuples:
-            char = Characteristic()
+            char = Characteristics()
             char.set_id(char_id)
             char.set_birthdate()
 

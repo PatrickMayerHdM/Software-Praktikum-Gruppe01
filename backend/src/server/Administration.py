@@ -154,29 +154,3 @@ class Administration(object):
     def get_favoritenote_by_user(self, user_id):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_user(user_id)
-
-    """Spezifische Methoden für Account"""
-
-    def create_account(self, account):
-        with AccountMapper() as mapper:
-            return mapper.insert(account)
-
-    def save_account(self, account):
-        with AccountMapper() as mapper:
-            return mapper.update(account)
-
-    def delete_account(self, account):
-        with AccountMapper() as mapper:
-            return mapper.delete(account)
-
-    def get_all_accounts(self):
-        with AccountMapper() as mapper:
-            return mapper.find_all()
-
-    def get_account_by_id(self, key):
-        with AccountMapper() as mapper:
-            return mapper.find_by_key(key)
-
-    def get_account_by_google_id(self, google_id):
-        with AccountMapper() as mapper:
-            return mapper.find_by_google_id(google_id)
