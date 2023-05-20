@@ -5,9 +5,9 @@ class Account(bo):
 
     def __init__(self):
         super().__init__()
+        self.google_id = ""  # Die Google ID des Nutzers
         self.profile_id = None
-        self.google_id = "" # Die Google ID des Nutzers
-        self.account_id = None # Die Account ID des Nutzers
+        #self.account_id = None # Die Account ID des Nutzers
         self.name = "" # Name eines Nutzers
         self.email = "" # E-Mail eines Nutzers
 
@@ -36,7 +36,7 @@ class Account(bo):
         return self.name
 
     def set_email(self, email):
-        """ Speichern der Google E-Mail. """
+        """ Speichern der E-Mail. """
         self.email = email
 
     def get_email(self):
