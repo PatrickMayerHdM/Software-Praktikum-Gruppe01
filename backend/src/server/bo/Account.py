@@ -10,7 +10,7 @@ class Account(bo):
         #self.account_id = None # Die Account ID des Nutzers
         self.name = "" # Name eines Nutzers
         self.email = "" # E-Mail eines Nutzers
-
+q
     def set_profile_id(self, profile_id):
         """Anlegen profile_id"""
         self.profile_id = profile_id
@@ -53,8 +53,8 @@ class Account(bo):
         obj = Account()
         obj.set_id(dictionary['id'])
         obj.set_google_id(dictionary['google_id'])
-        obj.set_user_name(['name'])
-        obj.set_profile_id(['profile_id'])
+        obj.set_user_name(dictionary['name'])
+        obj.set_profile_id(dictionary['profile_id'])
         obj.set_email(dictionary['email'])
         return obj
 
