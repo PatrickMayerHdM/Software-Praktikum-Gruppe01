@@ -60,6 +60,16 @@ message = api.inherit('Message', bo, {
     'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
 })
 # Hier müssen noch weitere Klassen hinzugefügt werden. DW 09.05.23
+# Hier werden Coharacteristic und InfoObject definiert
+#infoobject = api.inherit('InfoObject', bo, {
+#    'wert': fields.String(attribute='_wert', description='der Wert/ Ausprägun eines InfoObjekts'),
+#})
+#
+#characteristic = api.inherit('Characteristics', bo, {
+#    'sender_id': fields.Integer(attribute='_sender_id', description='Absender einer Nachricht'),
+#    'recipient_id': fields.Integer(attribute='_recipient_id', description='Empfänger einer Nachricht'),
+#    'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
+#})
 
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"

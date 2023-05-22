@@ -7,45 +7,82 @@ import BusinessObject from "./BusinessObject";
 export default class infoobjectBO extends BusinessObject {
 
     /**
-     * Baut ein infoobjectBO mit infoobject_id,
+     * Baut ein infoobjectBO mit infoobject_id, und infoobject wert (value)
      *
      * @param {*} ainfoobject_id
-     *
+     * @param {*} ainfoobject_value
      * */
 
-    constructor(ainfoobject_id) {
+    constructor(
+        ainfoobject_id = null,
+        ainfoobject_value = null,
+    ) {
         super();
-        this.infoobject_id = ainfoobject_id
+        this._ainfoobject_id = ainfoobject_id;
+        this._ainfoobject_value = ainfoobject_value;
     }
 
     /**
-     * Setzt die Id eines Infoobjekts
-     *
-     * @param {*} ainfoobject_id - die neue id es Infoobjekts
-     * */
-
-    setInfoobjectId(ainfoobject_id) {
-        this.infoobject_id = ainfoobject_id;
+     *  Setzen der Id
+     */
+    set_ainfoobject_id(id) {
+        this._ainfoobject_id = id;
     }
 
     /**
-     * Holt sich die Id des Infoobjekts
-     * */
+     *  Löschen der Id
+     */
 
-    getInfoObjectId() {
-        return this.infoobject_id
+    delete_ainfoobject_id() {
+        this._ainfoobject_id = null;
     }
 
     /**
-     * Setzt etwas anderes
-     * */
+     *  Gibt die Id zurück
+     */
+
+    get_ainfoobject_id() {
+        return this._ainfoobject_id
+    }
+
 
     /**
-     * Holt etwas anderes
-     * */
-
+     *  Setzen des values
+     */
+    set_ainfoobject_value(value) {
+        this._ainfoobject_value = value;
+    }
 
     /**
-     * Gibt ein Array der InfoobjectBO als JSON Struktur zurück
-     * */
+     *  Löschen des values
+     */
+
+    delete_ainfoobject_value() {
+        this._ainfoobject_value = null;
+    }
+
+    /**
+     *  Gibt den value zurück
+     */
+
+    get_ainfoobject_value() {
+        return this._ainfoobject_value
+    }
+
+      static fromJSON(infoobject) {
+            let result = [];
+
+            if (Array.isArray(infoobject)) {
+                infoobject.forEach((i) => {
+                    Object.setPrototypeOf(i, infoobject.prototype);
+                    result.push(i);
+                })
+            } else {
+                let i = infoobject
+                Object.setPrototypeOf(i, infoobject.prototype);
+                result.push(i);
+            }
+
+            return result;
+    }
 }
