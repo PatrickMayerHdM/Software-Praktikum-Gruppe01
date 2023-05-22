@@ -78,7 +78,11 @@ class SearchProfile extends React.Component{
     handleChangeSmo = (val) => {
         const {name, checked} = val.target;
         this.setState((prevState) => ({
-            smoking: {...prevState.smoking, [name]: checked},
+            smoking: {
+              nonSmoker: name === "nonSmoker",
+              smoker: name === "smoker",
+              indifferent: name === "indifferent",
+            },
         }))
     }
 
@@ -183,26 +187,26 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Hier kann der Raucherstatus für die mit diesem Suchprofil gesuchten Personen ausgewählt werden */}
                             <FormLabel>Sollte die Person rauchen?</FormLabel>
-                            <FormGroup row style={{justifyContent: 'center'}}>
-                                <FormControlLabel sx={{width: '16%'}} control={<Radio name="nonSmoker" checked={smoking.nonSmoker}
-                                                                                         onChange={this.handleChangeSmo}/>} label="Nein" labelPlacement="bottom"
+                            <RadioGroup row style={{justifyContent: 'center'}} onChange={this.handleChangeSmo} name="radio-buttons-group">
+                                <FormControlLabel sx={{width: '16%'}} control={<Radio  name="nonSmoker" checked={smoking.nonSmoker}/>}
+                                                  label="Nein" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '16%'}} control={<Radio name="smoker" checked={smoking.smoker}
-                                                                                         onChange={this.handleChangeSmo}/>} label="Ja" labelPlacement="bottom"
+                                <FormControlLabel sx={{width: '16%'}} control={<Radio  name="smoker" checked={smoking.smoker}/>}
+                                                  label="Ja" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '16%'}} control={<Radio name="indifferent" checked={smoking.indifferent}
-                                                                                         onChange={this.handleChangeSmo}/>} label="indifferent" labelPlacement="bottom"
+                                <FormControlLabel sx={{width: '16%'}} control={<Radio  name="indifferent" checked={smoking.indifferent}/>}
+                                                  label="indifferent" labelPlacement="bottom"
                                 />
-                            </FormGroup>
+                            </RadioGroup>
                         </Item>
                         <Item>
                             {/** Hier kann die gewünschte Haarfarbe der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Haarfarbe sollte die gesuchte Person haben?</FormLabel>
                             <FormGroup row style={{justifyContent: 'center'}}>
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="black" checked={hair.black}
+                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox  name="black" checked={hair.black}
                                                                                          onChange={this.handleChangeHai}/>} label="Schwarz" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="brown" checked={hair.brown}
+                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox  name="brown" checked={hair.brown}
                                                                                          onChange={this.handleChangeHai}/>} label="Braun" labelPlacement="bottom"
                                 />
                                 <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="blond" checked={hair.blond}
@@ -212,7 +216,7 @@ class SearchProfile extends React.Component{
                                                                                          onChange={this.handleChangeHai}/>} label="Rot" labelPlacement="bottom"
                                 />
                                 <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="different" checked={hair.different}
-                                                                                         onChange={this.handleChangeHai}/>} label="Anders" labelPlacement="bottom"
+                                                                                         onChange={this.handleChangeHai}/>} label="Andere" labelPlacement="bottom"
                                 />
                                 <FormControlLabel sx={{width: '10%'}} control={<Checkbox defaultChecked name="indifferent" checked={hair.indifferent}
                                                                                          onChange={this.handleChangeHai}/>} label="indifferent" labelPlacement="bottom"
