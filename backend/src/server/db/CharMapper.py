@@ -17,18 +17,38 @@ class CharMapper(mapper):
         for (char_id, char_name) in tuples:
             char = Characteristics()
             char.set_id(char_id)
-            char.set_birthdate()
+            char.set_characteristic(char_name)
+            result.append(char)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
 
     def find_by_key(self, key):
-        pass
+        result = None
 
-    def insert(self, object):
-        pass
+        """ Auslesen der Characteristics nach Key """
 
-    def update(self, object):
-        pass
+        cursor = self._connection.cursor()
+        command = f'SELECT char_id, char_name FROM main.Characteristic WHERE char_id={key}'
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
-    def delete(self, object):
-        pass
+        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
+            (char_id, char_name) = tuples[0]
+            char = Characteristics()
+            char.set_id(char_id)
+            char.set_characteristic(char_name)
+
+            result = char
+        else:
+            result = None
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
 
