@@ -11,3 +11,11 @@ class Characteristics(bo):
 
     def set_characteristic(self, value):
         self.char_name = value
+
+    @staticmethod
+
+    def from_dict(dictionary=dict()):
+        obj = Characteristics()
+        obj.set_id(dictionary['id'])
+        obj.set_characteristic(dictionary['char_name'])
+        return obj

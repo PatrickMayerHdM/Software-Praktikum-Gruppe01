@@ -6,7 +6,6 @@ from server.Administration import Administration
 
 def secured(function):
 
-
     firebase_request_adapter = requests.Request()
 
     def wrapper(*args, **kwargs):
@@ -16,7 +15,6 @@ def secured(function):
         error_message = None
         claims = None
         objects = None
-
 
         if id_token:
             try:

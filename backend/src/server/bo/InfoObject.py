@@ -19,4 +19,12 @@ class InfoObject(bo):
     def get_value(self):
         return self.value
 
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        obj = InfoObject()
+        obj.set_id(dictionary['id'])
+        obj.set_char_reference(dictionary['char_id'])
+        obj.set_value(dictionary['value'])
+        return obj
+
 
