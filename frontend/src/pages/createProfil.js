@@ -13,6 +13,10 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { differenceInYears, parse } from 'date-fns';
+import DatingSiteAPI, { addProfile } from '../api/DatingSiteAPI';
+import profileBO from "../api/ProfileBO";
+
 
 class CreateProfil extends Component {
     constructor(props) {
@@ -20,33 +24,12 @@ class CreateProfil extends Component {
         this.state = {
             firstName: '',
             lastName: '',
-            age: null,
-            gender: {
-                male: false,
-                female: false,
-                nonBinary: false,
-                various: false,
-            },
-            height: null,
-            religions: {
-                atheist: false,
-                christianity: false,
-                islam: false,
-                judaism: false,
-                buddhism: false,
-                orthodox: false,
-            },
-            hair: {
-                black: false,
-                brown: false,
-                blond: false,
-                red: false,
-                gray: false,
-            },
-            smoking: {
-                nonSmoker: false,
-                smoker: false,
-            },
+            age: '',
+            gender: '',
+            height: '',
+            religion: '',
+            hair: '',
+            smoking: '',
             description: '',
         };
 
@@ -61,58 +44,66 @@ class CreateProfil extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChangeFirstName(event) {
-        const newName = event.target.value
-        this.setState({firstName: newName})
+        const newName = event.target.value;
+        this.setState({firstName: newName});
     };
 
     handleChangeLastName(event) {
-        const newName = event.target.value
-        this.setState({lastName: newName})
+        const newName = event.target.value;
+        this.setState({lastName: newName});
     };
 
     handleChangeGender = (event) => {
-        const { name, checked } = event.target;
-        this.setState((prevState) => ({
-            gender: {...prevState.gender, [name]: checked},
-        }));
+        const selectedGender = event.target.value;
+        this.setState({ gender: selectedGender});
     };
 
     handleChangeHeight = (event) => {
-        this.setState({height: event.target.value});
+        const newHeight = event.target.value;
+        this.setState({height: newHeight});
     };
 
     handleChangeReligion = (event) => {
-      const { name, checked } = event.target;
-      this.setState((prevState) => ({
-          religions: {...prevState.religions, [name]: checked},
-      }));
+      const selectedReligion = event.target.value;
+      this.setState({ religion: selectedReligion});
     };
 
     handleChangeSmoking = (event) => {
-        const { name, checked } = event.target;
-        this.setState((prevState) => ({
-            smoking: {...prevState.smoking, [name]: checked},
-        }));
+        const selectedSmoker = event.target.value;
+        this.setState({ smoking: selectedSmoker });
     };
 
     handleChangeHair = (event) => {
-        const { name, checked } = event.target;
-        this.setState((prevState) => ({
-            hair: {...prevState.hair, [name]: checked},
-        }));
+        const selectedHair = event.target.value;
+        this.setState({ hair: selectedHair });
     };
 
 
-    handleChangeAge(date) {
-        this.setState({age: date})
+    handleChangeAge = (date) => {
+        console.log(date)
+        const selectedDate = parse(date, 'yyyy/MM/dd', new Date());
+        const currentDate = new Date();
+
+        const newAge = differenceInYears(currentDate, selectedDate);
+
+        this.setState({ age: newAge });
     };
 
     handleChangeDescription = (event) => {
-        this.setState({descripition: event.target.value});
+        const newDescription = event.target.value;
+        this.setState({ description: newDescription });
     };
 
-    handleSubmit = () => {
-    console.log(this.state);
+    handleSubmit(event) {
+        event.preventDefault();
+        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        DatingSiteAPI.getAPI()
+            .addProfile(newProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
     };
 
     render() {
@@ -122,14 +113,14 @@ class CreateProfil extends Component {
                 age,
                 gender,
                 height,
-                religions,
+                religion,
                 hair,
                 smoking,
                 description,
             } = this.state;
             return (
             <div>
-                <h2> Lege hier dein Profil an: </h2>
+                <h1></h1>
                 <Box sx={{width: {lg: '40%', md: '60%', sm: '80%'}, margin: '0 auto'}}>
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1}
                            sx={{alignItems: 'stretch'}}>
@@ -142,18 +133,12 @@ class CreateProfil extends Component {
                                         label={"Vorname"}
                                         value={firstName}
                                         onChange={this.handleChangeFirstName}
-                                        inputProps={{
-                                            maxLenght: 25
-                                        }}
                                     />
                                     <TextField
                                         type="text"
                                         label="Nachname"
                                         value={lastName}
                                         onChange={this.handleChangeLastName}
-                                        inputProps={{
-                                            maxLength: 25
-                                        }}
                                     />
                                 </Box>
                             </FormGroup>
@@ -165,6 +150,7 @@ class CreateProfil extends Component {
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker']}>
                                         <DatePicker
+                                            dateFormat={'yyyy/MM/dd'}
                                             value={age}
                                             onChange={this.handleChangeAge}
                                             label="Geburtsdatum"
@@ -178,11 +164,10 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Was für ein Geschlecht hast du ? </FormLabel>
-                                <RadioGroup value={gender} onChange={this.handleChangeGender}>
-                                    <FormControlLabel value="male" control={<Radio/>} label="Mann"/>
-                                    <FormControlLabel value="female" control={<Radio/>} label="Frau"/>
-                                    <FormControlLabel value="nonBinary" control={<Radio/>} label="Nicht-binär"/>
-                                    <FormControlLabel value="various" control={<Radio/>} label="Divers"/>
+                                <RadioGroup row value={gender} onChange={this.handleChangeGender}>
+                                    <FormControlLabel sx={{ width: '25%' }} value="male" control={<Radio/>} label="Mann" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '25%' }} value="female" control={<Radio/>} label="Frau" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '25%' }} value="various" control={<Radio/>} label="Divers" labelPlacement="bottom"/>
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
@@ -204,7 +189,7 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Welcher Religion gehörst du an? </FormLabel>
-                                <RadioGroup row value={religions} onChange={this.handleChangeReligion}>
+                                <RadioGroup row value={religion} onChange={this.handleChangeReligion}>
                                     <FormControlLabel sx={{ width: '25%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '25%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '25%' }} value="islam" control={<Radio />} label="Budistisch" labelPlacement="bottom" />
@@ -260,6 +245,7 @@ class CreateProfil extends Component {
                         </Item>
                     </Stack>
                 </Box>
+                <span></span>
             </div>
             );
         }
