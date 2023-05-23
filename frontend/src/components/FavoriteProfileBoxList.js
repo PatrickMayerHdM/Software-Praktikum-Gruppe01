@@ -30,7 +30,7 @@ class FavoriteProfileBoxList extends React.Component{
             <diV>
                 <h2> Hier ist dein Merkzettel: </h2>
 
-                <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'},  margin: '0 auto'}} >
+                <Box sx={{ width: {lg: '50%', md: '70%', sm: '80%'},  margin: '0 auto'}} >
                   <Grid container spacing={2}
                     justifyContent="center">
                       {Listing}

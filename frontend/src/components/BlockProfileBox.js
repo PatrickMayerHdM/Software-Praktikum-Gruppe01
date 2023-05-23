@@ -34,7 +34,7 @@ class BlockProfileBox extends React.Component{
                   </Item >
                 </Grid >
                 <Grid item xs={2} >
-                    <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                    <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                         <PersonRemoveIcon/>
                     </button>
                 </Grid>

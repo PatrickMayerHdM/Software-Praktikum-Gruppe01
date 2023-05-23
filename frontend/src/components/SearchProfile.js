@@ -10,6 +10,7 @@ import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
+import "./Profile.css";
 
 
 /**
@@ -125,12 +126,12 @@ class SearchProfile extends React.Component{
             <div>
                 <h1>Lege hier dein Suchprofil an:</h1>
 
-                <Box sx={{ width: {lg: '40%', md: '60%', sm: '80%'}, margin: '0 auto'}}>
+                <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'}, margin: '0 auto'}}>
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                         <Item >
                             {/** Hier kann das Geschlecht der in diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welches Geschlecht soll die gesuchte Person haben?</FormLabel>
-                            <FormGroup row style={{ justifyContent: 'center' }} >
+                            <FormGroup row style={{ justifyContent: 'center'}} className={"checkbox_search"}>
                                 <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="male" checked={gender.male}
                                                                                           onChange={this.handleChangeGen} />} label="Mann" labelPlacement="bottom"
                                 />
@@ -155,6 +156,7 @@ class SearchProfile extends React.Component{
                                     valueLabelDisplay="auto"
                                     min={18}
                                     max={100}
+                                    className="slider_age"
                                 />
                             </Box>
                         </Item>
@@ -162,7 +164,7 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Hier kann die gewünschte Religion der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Religion sollte die gesuchte Person haben?</FormLabel>
-                            <FormGroup row style={{justifyContent: 'center'}}>
+                            <FormGroup row style={{justifyContent: 'center'}} className={"checkbox_search"}>
                                 <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="atheist" checked={religions.atheist}
                                                                                          onChange={this.handleChangeRel}/>} label="Atheist" labelPlacement="bottom"
                                 />
@@ -187,7 +189,7 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Hier kann der Raucherstatus für die mit diesem Suchprofil gesuchten Personen ausgewählt werden */}
                             <FormLabel>Sollte die Person rauchen?</FormLabel>
-                            <RadioGroup row style={{justifyContent: 'center'}} onChange={this.handleChangeSmo} name="radio-buttons-group">
+                            <RadioGroup row style={{justifyContent: 'center'}} onChange={this.handleChangeSmo} name="radio-buttons-group" className={"checkbox_search"}>
                                 <FormControlLabel sx={{width: '16%'}} control={<Radio  name="nonSmoker" checked={smoking.nonSmoker}/>}
                                                   label="Nein" labelPlacement="bottom"
                                 />
@@ -202,7 +204,7 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Hier kann die gewünschte Haarfarbe der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Haarfarbe sollte die gesuchte Person haben?</FormLabel>
-                            <FormGroup row style={{justifyContent: 'center'}}>
+                            <FormGroup row style={{justifyContent: 'center'}} className={"checkbox_search"}>
                                 <FormControlLabel sx={{width: '10%'}} control={<Checkbox  name="black" checked={hair.black}
                                                                                          onChange={this.handleChangeHai}/>} label="Schwarz" labelPlacement="bottom"
                                 />

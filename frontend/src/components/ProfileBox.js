@@ -16,41 +16,41 @@ class ProfileBox extends React.Component {
                 {/** Dies ist die Box, in welcher schlussendlich sich das Grid befindet */}
               <Grid container spacing={1}>
                   {/** Das Grid an sich */}
-                <Grid item md={5} xs={6} >
+                <Grid item lg={12} md={12} xs={12} >
                     {/** Ein Item für das Grid, hier der Vorname*/}
                   <Item>
-                      Vorname
+                      VVVVVVVVVVVVVVVV
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier der Nachname */}
-                <Grid item md={5} xs={6} >
+                <Grid item lg={12} md={12} xs={12} >
                   <Item>
-                      Nachname
+                      MMMMMMMMMMMMMMMMMM
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier das Alter*/}
-                <Grid item md={2} xs={4} >
+                <Grid item lg={2} md={2} xs={4} >
                   <Item>
-                      Alter
+                      20
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier das Geschlecht */}
-                <Grid item md={4} xs={8} >
+                <Grid item lg={5} md={5} xs={8} >
                   <Item>
-                      Geschlecht
+                      Nicht-binär
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier die Größe*/}
-                <Grid item md={4} xs={6} >
+                <Grid item lg={3} md={3} xs={6} >
                   <Item>
-                      Größe
+                      182cm
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier das Ähnlichkeitsmaß zwischen dem Suchprofil und dem
                    in der Profilbox dargestellten Profil*/}
-                <Grid item md={4} xs={6} >
+                <Grid item lg={2} md={2} xs={6} >
                   <Item >
-                      Ähnlichkeit
+                      72%
                   </Item >
                 </Grid >
               </Grid >
