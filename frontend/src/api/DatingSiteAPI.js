@@ -1,5 +1,6 @@
 import messageBO from './MessageBO';
 import MessageBO from "./AccountBO";
+import profileBO from "./ProfileBO";
 
 
 export default class DatingSiteAPI {
@@ -81,4 +82,26 @@ export default class DatingSiteAPI {
             })
         })
     }*/
+
+
+/**
+     * @param {profileBO} profile object
+     * @public
+     */
+
+    addProfile(profile) {
+        return this.#fetchAdvanced(this.#addMessageURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile)
+        }).then((responseJSON) => {
+            let profileBO = messageBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(profileBO);
+            })
+        })
+    }
 }

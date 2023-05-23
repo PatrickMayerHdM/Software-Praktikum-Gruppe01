@@ -9,7 +9,6 @@ import Grid from "@mui/material/Grid";
 import LogIn from "./pages/LogIn";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
-import SearchProfile from "./components/SearchProfile";
 import Chat from "./components/Chat";
 import Merkliste from "./pages/Merkliste";
 import Sperrliste from "./pages/Sperrliste";
@@ -29,6 +28,7 @@ import Chats from "./components/Chats";
 import { useNavigate } from 'react-router-dom';
 import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./components/BlockProfileBoxList";
+import SearchProfile from "./components/SearchProfile";
 
 /** Definition der App-Komponente */
 
@@ -196,8 +196,8 @@ class App extends Component {
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<Profile />}></Route>
                       <Route path="/Profil" element={<CreateProfil/>}></Route>
-                      <Route path="/Merkliste" element={<FavoriteProfileBox/>}></Route>
-                      <Route path="/Sperrliste" element={<BlockProfileBox/>}></Route>
+                      <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
+                      <Route path="/Sperrliste" element={<BlockProfileBoxList/>}></Route>
                       <Route path="/Chats" element={<Chats />}></Route>
                       <Route path="/ChatWindow/:user" element={<ChatWindow />}></Route>
                     </Route>
