@@ -98,9 +98,9 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(profile)
         }).then((responseJSON) => {
-            let profileBO = messageBO.fromJSON(responseJSON)[0];
+            let prfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(profileBO);
+                resolve(prfileBO);
             })
         })
     }

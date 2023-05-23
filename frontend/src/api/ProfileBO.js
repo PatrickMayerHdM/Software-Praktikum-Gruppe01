@@ -6,107 +6,67 @@ import BusinessObject from "./BusinessObject";
 export default class profileBO extends BusinessObject {
 
     /**
-     * Baut die profileBO mit firstname, surname, birthdate,
-     * favoriteNote_id, account_id und blockNote_id
+     * Baut die profileBO mit profile_id, favoriteNote_id, account_id,
+     * blockNote_id
      *
-     * @param {*} afirstname
-     * @param {*} asurname
-     * @param {*} abirthdate
+     * @param {*} aprofile_id
      * @param {*} afavoriteNote_id
      * @param {*} aaccount_id
      * @param {*} ablockNote_id
      */
 
 
-    constructor(afirstname, asurname, abirthdate, afavoriteNote_id, aaccount_id, ablockNote_id) {
+    constructor(aprofile_id, afavoriteNote_id, aaccount_id, ablockNote_id) {
         super();
-        this.firstname = afirstname;
-        this.surname = asurname;
-        this.birthdate = abirthdate;
+        this.profile_id = aprofile_id;
         this.favoriteNote_id = afavoriteNote_id;
         this.account_id = aaccount_id;
         this.blockNote_id = ablockNote_id;
     }
 
     /**
-     * Setzt den Vornamen
+     * Setzt die profile_id
      *
-     * @param {*} afirstname - Neuer Vorname
+     * @param {*} aprofile_id
      */
 
-    setFirstname(afirstname) {
-        this.firstname = afirstname;
+    set_profile_id(aprofile_id) {
+        this.profile_id = aprofile_id;
     }
 
     /**
-     * Holt sich den Vornamen
+     * Holt sich die profile_id
      */
 
-    getFirstname() {
-        return this.firstname
+    get_profile_id() {
+        return this.profile_id
     }
 
     /**
-     * Setzt den Nachnamen
+     * Setzt eine favoriteNote_id
      *
-     * @param {*} asurname - Neuer Nachname
+     * @param {*} afavoriteNote_id
      */
 
-    setSurname(asurname) {
-        this.surname = asurname;
-    }
-
-    /**
-     * Holt sich den Nachnamen
-     */
-
-    getSurname() {
-        return this.surname
-    }
-
-     /**
-     * Setzt den neun Geburtstag
-     *
-     * @param {*} abirthdate - der neue Geburtstag
-     */
-
-    setBirthdate(abirthdate) {
-        this.birthdate = abirthdate;
-    }
-
-    /**
-     * Holt sich den Geburtstag
-     */
-
-    getBirthdate() {
-        return this.birthdate
-    }
-
-    /**
-     * Setzt eine Merklisten_id
-     *
-     * @param {*} afavoriteNote_id - die neue Merklisten_id (favoriteNote_id)
-     */
-
-    setFavoriteNote_id(afavoriteNote_id) {
+    set_favoriteNote_id(afavoriteNote_id) {
         this.favoriteNote_id = afavoriteNote_id;
     }
 
     /**
-     * Holt sich eine Merklisten_id
+     * Holt sich eine favoriteNote_id
      */
 
-    getFavoriteNote_id() {
+    get_favoriteNote_id() {
         return this.favoriteNote_id
     }
 
     /**
      * Setzt einen Account
      *
-     * @param {*} aaccount_id - die neue Account_id (account_id)
+     * @param {*} aaccount_id
      */
 
-    setAccount_id(aaccount_id) {
+    set_account_id(aaccount_id) {
         this.account_id = aaccount_id;
     }
 
@@ -114,25 +74,25 @@ export default class profileBO extends BusinessObject {
      * Holt sich einen Account
      */
 
-    getAccount_id() {
+    get_account_id() {
         return this.account_id
     }
 
     /**
-     * Setzt einen Account
+     * Setzt eine blockNote_id
      *
-     * @param {*} ablockNote_id - die neue Kontaktsperren_id (blockNote_id)
+     * @param {*} ablockNote_id
      */
 
-    setBlockNote_id(ablockNote_id) {
+    set_blockNote_id(ablockNote_id) {
         this.blockNote_id = ablockNote_id;
     }
 
     /**
-     * Holt sich einen Account
+     * Holt sich einne blockNote_id
      */
 
-    getBlockNote_id() {
+    get_blockNote_id() {
         return this.blockNote_id
     }
 
@@ -145,14 +105,14 @@ export default class profileBO extends BusinessObject {
         let result = [];
 
         if (Array.isArray(profile)) {
-            profile.forEach((m) => {
-                Object.setPrototypeOf(m, profileBO.prototype);
-                result.push(m);
+            profile.forEach((p) => {
+                Object.setPrototypeOf(p, profileBO.prototype);
+                result.push(p);
             })
         } else {
-            let m = profile
-            Object.setPrototypeOf(m, profileBO.prototype);
-            result.push(m);
+            let p = profile
+            Object.setPrototypeOf(p, profileBO.prototype);
+            result.push(p);
         }
 
         return result;
