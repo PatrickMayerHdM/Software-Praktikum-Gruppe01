@@ -160,11 +160,15 @@ class Administration(object):
             return mapper.find_by_user(user_id)
 
    # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
-    def create_profile(self, profile_id, favoritenote_id, account_id, blocknote_id):
+    def create_profile(self, profile_id, favoritenote_id, account_id,blocknote_id):
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
-        prof.set_account_id(account_id)
+
+        """account = Account()
+        account_id = account.get_id()
+        prof.set_account_id(account_id)"""
+
         prof.set_id(profile_id)
         with ProfileMapper() as mapper:
             return mapper.insert(prof)
