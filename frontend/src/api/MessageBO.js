@@ -17,12 +17,11 @@ export default class messageBO extends BusinessObject {
      * Kommentar zgl. asenderid und arecipientid: id beibehalten? Ja, da in der Nachricht
      * Bezug zur Senderid und nicht zum Namen genommen wird.
      */
-    constructor(acontent, asenderid, arecipientid, atimestamp) {
+    constructor(acontent, asenderid, arecipientid) {
         super();
         this.content = acontent;
         this.sender_id = asenderid;
         this.recipient_id = arecipientid;
-        // this.timestamp = atimestamp;
     }
 
     /**
@@ -78,17 +77,6 @@ export default class messageBO extends BusinessObject {
     getContent() {
         return this.content
     }
-
-
-    setTimestamp(atimestamp) {
-        this.timestamp = atimestamp;
-    }
-
-
-    getTimestamp() {
-        return this.timestamp
-    }
-
 
     /**
      * Gibt ein Array der MessageBO als JSON struktur zurück
