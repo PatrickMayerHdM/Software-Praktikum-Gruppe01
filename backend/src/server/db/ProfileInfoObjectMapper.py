@@ -7,10 +7,41 @@ class ProfileInfoObjectMapper(mapper):
         super().__init__()
 
     def find_all(self):
-        pass
+        """ Auslesen aller Profil-Info-Objekte."""
+        result = []
+        cursor = self._connection.cursor()
+        cursor.execute('SELECT * FROM main.ProfileContainsInfoObjects')
+        tuples = cursor.fetchall()
 
-    def find_by_key(self, key):
-        pass
+        for (profile_id, infoobject_id) in tuples:
+            profile = ProfileContainsInfoObj()
+            profile.set_profile(profile_id)
+            profile.set_infoobj(infoobject_id)
+            result.append(profile)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_profile_id(self, profile_id):
+        """ Auslesen der Info-Objekte zu einem spezifischem Profil. """
+        result = []
+        cursor = self._connection.cursor()
+        command = f'SELECT * FROM main.ProfileContainsInfoObjects WHERE profile_id={profile_id} ORDER BY infoobject_id'
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (profile_id, infoobject_id) in tuples:
+            profile = ProfileContainsInfoObj()
+            profile.set_profile(profile_id)
+            profile.set_infoobj(infoobject_id)
+            result.append(profile)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def insert(self, object):
         cursor = self._connection.cursor()
@@ -28,8 +59,22 @@ class ProfileInfoObjectMapper(mapper):
 
         return object
 
-    def update(self, object):
-        pass
+    def update(self, profile):
+        cursor = self._connection.cursor()
 
-    def delete(self, object):
-        pass
+        command = 'UPDATE main.ProfileContainsInfoObjects SET profile_id=%s, infoobject_id=%s WHERE profile_id=%s'
+        data = (ProfileContainsInfoObj.get_profile(),
+                ProfileContainsInfoObj.get_infoobj())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete(self, profile):
+        cursor = self._connection.cursor()
+
+        command = f'DELETE FROM main.ProfileContainsInfoObjects WHERE profile_id={ProfileContainsInfoObj.get_profile()}'
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
