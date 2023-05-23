@@ -203,7 +203,6 @@ class App extends Component {
                     </Route>
                 </Routes>
             </Router>
-          <CreateProfil/>
         </div>
     );
   }
