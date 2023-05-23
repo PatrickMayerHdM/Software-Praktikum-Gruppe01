@@ -220,3 +220,5 @@ class Administration(object):
     def delete_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
+
+    # Logik für Profil, did die Info-Objekte in

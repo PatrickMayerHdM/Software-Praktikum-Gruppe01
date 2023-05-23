@@ -1,4 +1,5 @@
 import BusinessObject from "./BusinessObject";
+import * as profilecontainsinfoobj from "react-bootstrap/ElementChildren";
 
 /**
  * Verknüpft die Profile mit den InfoObjects
@@ -59,21 +60,20 @@ export default class profilecontainsobjectsBO extends BusinessObject {
      * Gibt ein Array der ProfileContainsObjectsBO als JSON Struktur zurück
      */
 
-     static fromJSON(profilecontainsinfoobj) {
+     static fromJSON(profilecontainsinfoobjects) {
         let result = [];
 
-        if (Array.isArray(profilecontainsinfoobj)) {
-            profilecontainsinfoobj.forEach((p) => {
-                Object.setPrototypeOf(p, profilecontainsinfoobjBO.prototype);
+        if (Array.isArray(profilecontainsinfoobjects)) {
+            profilecontainsinfoobjects.forEach((p) => {
+                Object.setPrototypeOf(p, profilecontainsinfoobjectsBO.prototype);
                 result.push(p);
             })
         } else {
             let p = profilecontainsinfoobj
-            Object.setPrototypeOf(p, profilecontainsinfoobjBO.prototype);
+            Object.setPrototypeOf(p, profilecontainsinfoobjectsBO.prototype);
             result.push(p);
         }
 
         return result;
     }
 }
-
