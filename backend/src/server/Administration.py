@@ -6,6 +6,10 @@ from favoriteNote import favoriteNote
 from server.db.FavoriteNoteMapper import FavoriteNoteMapper
 from Account import Account
 from server.db.AccountMapper import AccountMapper
+from server.db.profileMapper import ProfileMapper
+from server.db.CharMapper import CharMapper
+from server.db.InfoObjectMapper import InfoObjectMapper
+from Profile import Profile
 
 
 class Administration(object):
@@ -154,3 +158,67 @@ class Administration(object):
     def get_favoritenote_by_user(self, user_id):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_user(user_id)
+
+   # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
+    def create_profile(self,favourite_note_id, block_note_id, account_id, profile):
+        prof = Profile()
+        prof.set_favorite_note_id(favourite_note_id)
+        prof.set_block_note_id(block_note_id)
+        prof.set_account_id(account_id)
+        prof.set_id(1)
+        with ProfileMapper() as mapper:
+            return mapper.insert(profile)
+
+    def save_profile(self, profile):
+        with ProfileMapper() as mapper:
+            mapper.update(profile)
+
+    def delete_profile(self, profile):
+        with ProfileMapper() as mapper:
+            mapper.update(profile)
+
+    def get_all_profiles(self, profile):
+        with ProfileMapper() as mapper:
+            return mapper.find_all()
+
+    def get_profile_by_id(self, key):
+        with ProfileMapper() as mapper:
+            return mapper.find_by_key(key)
+
+    def get_profile_by_account_id(self, account_id):
+        with ProfileMapper() as mapper:
+            return mapper.find_by_account_id(account_id)
+
+    # Hier wird die Logik für das Characteristic auf Basis der Mapper realisiert
+
+    def get_all_char(self):
+        with CharMapper() as mapper:
+            return mapper.find_all()
+
+    def get_char_by_id(self, key):
+        with CharMapper() as mapper:
+            return mapper.find_by_key(key)
+
+    # Hier wird die Logik für das InfoObjekt auf Basis der Mapper realisiert
+
+    def get_all_info_objects(self):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_all()
+
+    def get_info_object_by_id(self, key):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_by_key(key)
+
+    def create_info_object(self, infoobject):
+        with InfoObjectMapper() as mapper:
+            return mapper.insert(infoobject)
+
+    def update_info_object(self, infoobject):
+        with InfoObjectMapper() as mapper:
+            return mapper.update(infoobject)
+
+    def delete_info_object(self, infoobject):
+        with InfoObjectMapper() as mapper:
+            return mapper.delete(infoobject)
+
+    # Logik für Profil, did die Info-Objekte in
