@@ -45,10 +45,7 @@ account = api.inherit('Account', bo, {
     'email': fields.String(attribute='_email', description='E-Mail eines Google Accounts')
 })
 
-profileNeu = api.inherit('profileNeu', bo, {
-    'firstname': fields.Integer(attribute='_firstname', description='Vorname im Profil'),
-    'surname': fields.Integer(attribute='surname', description='Nachname im Profil'),
-    'birthdate': fields.Integer(attribute='_birthdate', description='Geburtsdatum im Profil'),
+profile = api.inherit('Profile', bo, {
     'favoriteNote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
     'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
     'blockNote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
@@ -59,22 +56,70 @@ message = api.inherit('Message', bo, {
     'recipient_id': fields.Integer(attribute='_recipient_id', description='Empfänger einer Nachricht'),
     'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
 })
-# Hier müssen noch weitere Klassen hinzugefügt werden. DW 09.05.23
-# Hier werden Coharacteristic und InfoObject definiert
-#infoobject = api.inherit('InfoObject', bo, {
-#    'wert': fields.String(attribute='_wert', description='der Wert/ Ausprägun eines InfoObjekts'),
-#})
-#
-#characteristic = api.inherit('Characteristics', bo, {
-#    'sender_id': fields.Integer(attribute='_sender_id', description='Absender einer Nachricht'),
-#    'recipient_id': fields.Integer(attribute='_recipient_id', description='Empfänger einer Nachricht'),
-#    'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
-#})
+
+characteristic = api.inherit('Characteristics', bo, {
+    'char_id': fields.Integer(attribute='_char_id', description='ID einer Eigenschaft'),
+    'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname')
+})
+
+infoobject = api.inherit('InfoObject', bo, {
+    'charx_id': fields.Integer(attribute='_charx_id', description='Fremdschlüssel der Eigenschafts-ID'),
+    'value': fields.Integer(attribute='_value', description='Eingabewerte / Merkmalsausprägung zur Eigenschaft')
+})
 
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
+
+@datingapp.route('/profiles')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class ProfileListOperations(Resource):
+    @datingapp.doc('Create new Profile')
+    @datingapp.marshal_list_with(profile)
+    @secured
+    def get(self):
+        """ Auslesen aller Profil-Objekte. """
+        adm = Administration()
+        profiles = adm.get_all_profiles() #Admin.py noch nicht angelegt
+        return profiles
+
+    @datingapp.marshal_with(profile, code=200)
+    # Wir erwarten ein Profile-Objekt von Client-Seite.
+    @datingapp.expect(profile)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen Profil-Objekts. """
+        adm = Administration()
+
+        proposal = Profile.from_dict(api.payload)
+
+        if proposal is not None:
+            # Create-Profile noch nicht in Admin.py
+            p = adm.create_profile(
+                proposal.get_id(), proposal.get_favorite_note_id(),
+                proposal.get_account_id(), proposal.get_block_note_id())
+            return p, 200
+        else:
+            # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
+            return ' ProfileOperations "Post" fehlgeschlagen', 500
+
+@datingapp.route('/profiles/<int:id>')
+@datingapp.response(500, 'Serverseitiger-Fehler')
+@datingapp.param('id', 'Die ID des Profil-Objekts')
+class ProfileOperations(Resource):
+    @datingapp.marshal_with(profile)
+    @secured
+    def get(self, id):
+        """ Auslesen eines bestimmten Profil-Objekts. """
+        pass
+
+    @secured
+    def delete(self, id):
+        """ Löschen eines besimmten Profil-Objekts. """
+        pass
+
+    # hier muss noch die put methode hin.
 
 @datingapp.route('/messages')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
