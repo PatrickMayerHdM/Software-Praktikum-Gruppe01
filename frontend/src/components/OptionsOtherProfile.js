@@ -60,9 +60,4 @@ class OptionsOtherProfile extends React.Component{
     )}
 }
 
-function OptionsOtherdProfile(){
-
-
-
-}
 export default OptionsOtherProfile
