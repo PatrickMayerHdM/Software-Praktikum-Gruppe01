@@ -1,0 +1,14 @@
+{
+  "messages": [
+    {
+      "acontent": "Hallo",
+      "asenderid": 1,
+      "arecipientid": 2
+    },
+    {
+      "acontent": "Hey wie gehts ?!",
+      "asenderid": 2,
+      "arecipientid": 1
+    }
+  ]
+}

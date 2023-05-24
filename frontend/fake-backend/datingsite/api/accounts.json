@@ -1,0 +1,18 @@
+{
+  "accounts": [
+    {
+      "aprofile_id": 1,
+      "agoogle_id": "google123",
+      "aname": "Strato Test",
+      "aaccount_id": 1,
+      "aemail": "strato@example.com"
+    },
+    {
+      "aprofile_id": 2,
+      "agoogle_id": "google456",
+      "aname": "Strato Test2",
+      "aaccount_id": 2,
+      "aemail": "test@example.com"
+    }
+  ]
+}
