@@ -1,4 +1,4 @@
-from InfoObject import InfoObject
+from server.bo.InfoObject import InfoObject
 from mapper import mapper
 
 
