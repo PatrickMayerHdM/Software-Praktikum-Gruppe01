@@ -198,7 +198,7 @@ class App extends Component {
                       <Route path="/" element={<Profile />}></Route>
                       <Route path="/Profil" element={<CreateProfil/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
-                      <Route path="/Sperrliste" element={<SearchOptions/>}></Route>
+                      <Route path="/Sperrliste" element={<BlockProfileBoxList/>}></Route>
                       <Route path="/Chats" element={<Chats />}></Route>
                       <Route path="/ChatWindow/:user" element={<ChatWindow />}></Route>
                     </Route>
