@@ -1,0 +1,7 @@
+{
+  "/accounts": "/api/accounts",
+  "/blockNotes": "/api/blockNotes",
+  "/profiles": "/api/profiles",
+  "/favoriteNotes": "/api/favoriteNotes",
+  "/messages": "/api/messages"
+}
