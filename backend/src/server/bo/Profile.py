@@ -7,7 +7,6 @@ class Profile(bo):
         self.account_id = None
         self.blockNote_id = None
 
-
     def get_favorite_note_id(self):
         return self.favoriteNote_id
 

@@ -165,10 +165,10 @@ class Administration(object):
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_account_id(account_id)
         prof.set_block_note_id(blocknote_id)
-
         prof.set_id(1)
+
         with ProfileMapper() as mapper:
-            return mapper.insert(prof)
+            mapper.insert(prof)
 
     def save_profile(self, profile):
         with ProfileMapper() as mapper:

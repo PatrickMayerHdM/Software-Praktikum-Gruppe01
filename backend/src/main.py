@@ -3,6 +3,7 @@ from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
 
+
 from server.Administration import Administration
 from server.bo.Account import Account
 from server.bo.Profile import Profile
@@ -95,17 +96,12 @@ class ProfileListOperations(Resource):
         proposal = Profile.from_dict(api.payload)
 
         if proposal is not None:
-            # Create-Profile noch nicht in Admin.py
-            merkliste = proposal.get_favorite_note_id()
-            acc = proposal.get_account_id()
-            blockliste = proposal.get_block_note_id()
-            result = adm.create_profile(merkliste, acc, blockliste)
 
-            """p = adm.create_profile(
-                proposal.get_id(), proposal.get_favorite_note_id(),
-                proposal.get_account_id(), proposal.get_block_note_id())"""
+            p = adm.create_profile(
+                proposal.get_favorite_note_id(),
+                proposal.get_account_id(), proposal.get_block_note_id())
 
-            return result, 200
+            return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500

@@ -90,13 +90,17 @@ class ProfileMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO main.Profile (profile_id, favoritenote_id, account_id, blocknote_id) VALUES (%s, %s, %s, %s)"
-        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_account_id(), profile.get_block_note_id())
+        command = "INSERT INTO main.Profile (profile_id, favoritenote_id, blocknote_id) VALUES (%s, %s, %s)"
+        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
+        cursor.execute(command, data)
+
+        # Erzeugte Profil_ID als Fremdschlüssel in Account Tabelle hinzufügen
+        command = "UPDATE main.Account SET profile_id = %s WHERE account_id=%s"
+        data = (profile.get_id(), profile.get_account_id())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
-
         return profile
 
     def update(self, profile):
