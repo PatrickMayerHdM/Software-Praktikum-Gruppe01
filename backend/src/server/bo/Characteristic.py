@@ -5,6 +5,7 @@ class Characteristics(bo):
     def __init__(self):
         super().__init__()
         self.char_name = ""
+        self.char_typ = ""
 
     def get_char_id(self):
         return self._id
@@ -15,6 +16,12 @@ class Characteristics(bo):
     def set_characteristic(self, value):
         self.char_name = value
 
+    def set_characteristic_typ(self, typ):
+        self.char_typ = typ
+
+    def get_characteristic_typ(self):
+        return self.char_typ
+
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = Characteristics()
@@ -23,4 +30,7 @@ class Characteristics(bo):
         return obj
 
 
-
+"""
+obj = Characteristics()
+print(obj.char_id)
+"""

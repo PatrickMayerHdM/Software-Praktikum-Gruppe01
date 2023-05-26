@@ -10,8 +10,8 @@ from server.db.profileMapper import ProfileMapper
 from server.db.CharMapper import CharMapper
 from server.db.InfoObjectMapper import InfoObjectMapper
 from Profile import Profile
-
-
+from InfoObject import InfoObject
+from Characteristic import Characteristics
 class Administration(object):
     def __init__(self):
         pass
@@ -222,3 +222,4 @@ class Administration(object):
             return mapper.delete(infoobject)
 
     # Logik für Profil, did die Info-Objekte in
+
