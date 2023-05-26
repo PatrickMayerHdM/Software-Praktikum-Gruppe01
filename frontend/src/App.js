@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./components/BlockProfileBoxList";
 import SearchProfile from "./components/SearchProfile";
+import UpdateProfile from "./components/updateProfile";
 
 /** Definition der App-Komponente */
 
@@ -203,6 +204,9 @@ class App extends Component {
                     </Route>
                 </Routes>
             </Router>
+
+            <UpdateProfile/>
+
         </div>
     );
   }

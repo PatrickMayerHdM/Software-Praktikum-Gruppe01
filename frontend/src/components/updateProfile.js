@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Box from "@mui/material/Box";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
-import {Button, TextField} from "@mui/material";
+import {AppBar, Button, Tab, Tabs, TextField} from "@mui/material";
 import * as React from "react";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -15,10 +15,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DatingSiteAPI, { addProfile } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 
-
-class CreateProfil extends Component {
+class UpdateProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,6 +32,7 @@ class CreateProfil extends Component {
             religion: '',
             hair: '',
             smoking: '',
+            customProp: '',
         };
 
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this);
@@ -40,6 +43,12 @@ class CreateProfil extends Component {
         this.handleChangeSmoking = this.handleChangeSmoking.bind(this);
         this.handleChangeAge = this.handleChangeAge.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeCustomProperty = this.handleChangeCustomProperty.bind(this);
+    }
+
+    handleChangeCustomProperty(event) {
+        const value = event.target.value;
+        this.setState({customProp: value})
     }
     handleChangeFirstName(event) {
         const newName = event.target.value;
@@ -105,6 +114,7 @@ class CreateProfil extends Component {
                 religion,
                 hair,
                 smoking,
+                customProp,
             } = this.state;
             return (
             <div>
@@ -212,7 +222,27 @@ class CreateProfil extends Component {
                             </FormGroup>
                         </Item>
                         <Item>
-                            <Button onClick={this.handleSubmit}> Profil erstellen </Button>
+                        <FormGroup row style={{justifyContent: 'center'}}>
+                            <Box sx={{width: 400, margin: '0 auto'}}>
+                                <FormLabel> Eigenschaft erstellen! </FormLabel>
+                                <IconButton color="secondary" aria-label="edit">
+                                    <EditIcon/>
+                                </IconButton>
+                            </Box>
+                        </FormGroup>
+                        </Item>
+                        <Item>
+                        <FormGroup row style={{justifyContent: 'center'}}>
+                            <Box sx={{width: 400, margin: '0 auto'}}>
+                                <FormLabel> Profil löschen! </FormLabel>
+                                <IconButton aria-label="delete" size="large" style={{ color: 'red' }}>
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </Box>
+                        </FormGroup>
+                        </Item>
+                        <Item>
+                            <Button onClick={this.handleSubmit}> Profile Update </Button>
                         </Item>
                     </Stack>
                 </Box>
@@ -221,4 +251,4 @@ class CreateProfil extends Component {
             );
         }
 }
-export default CreateProfil;
+export default UpdateProfile;
