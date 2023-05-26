@@ -32,5 +32,6 @@ class Characteristics(bo):
 
 """
 obj = Characteristics()
-print(obj.char_id)
+obj.set_characteristic("Peter")
+print(obj.char_name)
 """

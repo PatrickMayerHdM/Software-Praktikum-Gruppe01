@@ -26,10 +26,10 @@ class InfoObject(bo):
     """Fremdschlüsselbeziehung zwischen InfoObject und Profil wird hier gesetzt"""
 
     def set_profile_fk(self, profile):
-        self.char_fk = profile.get_char_id()
+        self.profile_fk = profile.get_profile_bo_id()
 
     def get_profile_fk(self):
-        return self.char_fk
+        return self.profile_fk
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -39,10 +39,10 @@ class InfoObject(bo):
         return obj
 
 
-"""
+
 x = "Haarfarbe"
 
-diction = {"char_id": 6, "char_name": x}
+diction = {"id": 1, "char_name": x}
 char = Characteristics()
 Characteristics.from_dict(diction)
 
@@ -50,5 +50,6 @@ Characteristics.from_dict(diction)
 info = InfoObject()
 info.set_char_fk(char)
 print(info.get_char_fk())
-"""
 
+# In diesem Beispiel wird immer die Ausgabe 0 folgen, da wir die set_id() Methode erst in den
+# Mapper-Klassen automatisch hochzählen lassen
