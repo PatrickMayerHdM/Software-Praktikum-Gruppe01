@@ -96,10 +96,16 @@ class ProfileListOperations(Resource):
 
         if proposal is not None:
             # Create-Profile noch nicht in Admin.py
-            p = adm.create_profile(
+            merkliste = proposal.get_favorite_note_id()
+            acc = proposal.get_account_id()
+            blockliste = proposal.get_block_note_id()
+            result = adm.create_profile(merkliste, acc, blockliste)
+
+            """p = adm.create_profile(
                 proposal.get_id(), proposal.get_favorite_note_id(),
-                proposal.get_account_id(), proposal.get_block_note_id())
-            return p, 200
+                proposal.get_account_id(), proposal.get_block_note_id())"""
+
+            return result, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
