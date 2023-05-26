@@ -16,7 +16,7 @@ class ProfileBoxList extends React.Component {
     render() {
 
         // const für die Anzahl der anzuzeigenden Profile
-        const count = 14;
+        const count = 4;
 
         // Methode zum darstellen einer Profilbox
         const Listing = Array(count).fill(null).map((item, index) => (
@@ -28,7 +28,7 @@ class ProfileBoxList extends React.Component {
         ));
 
         return (
-            <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'},  margin: '0 auto'}} >
+            <Box sx={{ width: "100%",  margin: '0 auto'}} >
               <Grid container spacing={2}
                 justifyContent="center">
                   {Listing}

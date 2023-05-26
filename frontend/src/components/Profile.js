@@ -25,7 +25,7 @@ class Profile extends React.Component{
         return(
             <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
                 <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
-                    <Item >
+                    <Item>
                         <Grid container direction="row" justifyContent="center" alignItems="strech">
                             <Grid md={4} xs={7} spacing={3}>
                                 Vorname

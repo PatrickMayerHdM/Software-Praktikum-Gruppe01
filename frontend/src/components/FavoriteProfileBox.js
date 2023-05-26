@@ -51,7 +51,7 @@ class FavoriteProfileBox extends React.Component{
                         <ChatBubbleIcon/>
                     </button>
                 </Grid>
-                <Grid xs={2} spacing={2}>
+                <Grid item xs={2} spacing={2}>
                     <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                         <PersonRemoveIcon/>
                     </button>

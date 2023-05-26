@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./components/BlockProfileBoxList";
 import SearchProfile from "./components/SearchProfile";
-import SearchOptions from "./components/SearchOptions";
+import Search from "./pages/Search";
 
 /** Definition der App-Komponente */
 
