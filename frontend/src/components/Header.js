@@ -38,7 +38,7 @@ class Header extends Component {
                     <PersonIcon className="header_icon" />
                 </IconButton>
             </Link>
-            <Link to="/Suchprofil">
+            <Link to="/Suche">
                 <IconButton>
                     <SearchIcon className="header_icon" />
                 </IconButton>

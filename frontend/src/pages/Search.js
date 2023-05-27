@@ -8,7 +8,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ProfileBoxList from "../components/ProfileBoxList";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
-
+import { Link } from "react-router-dom"
+import DatingSiteAPI from "../api/DatingSiteAPI";
 
 /**
  * Innerhalb der Suche, gibt es für den User später verschiedene Optionen.
@@ -27,12 +28,21 @@ class Search extends React.Component{
         super(props);
         this.state = {
           selectedProfileIndex: null,
+          profiles: [ ],
+          profile_id: 22,
         };
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann nur neue Profile angezeigt werden.
+    // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
     NewProfiles(){
         console.log("Button nur noch neue Profile gedrückt")
+        const { profile_id } = this.state; // Testweise Zugriff auf profile_id aus dem state
+        DatingSiteAPI.getAPI().getOnlyNewProfiles(profile_id).then(newprofiles =>
+            this.setState(prevState => ({
+                profiles: [...prevState.profiles, ...newprofiles]
+        }))).catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das aktuell ausgewähle Profil bearbeitet werden kann.
@@ -53,6 +63,9 @@ class Search extends React.Component{
     }
 
 
+    /**
+     * rendert den Komponenten
+     */
     render() {
 
 
@@ -86,7 +99,7 @@ class Search extends React.Component{
     return (
 
       <div>
-        <h1>Suche Jetzt:</h1>
+        <h2> Suche Jetzt: </h2>
         <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
              <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={3} >
                  <Item sx={{ width: "100%"}}>
@@ -117,21 +130,23 @@ class Search extends React.Component{
 
                                   {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
                                 <Grid item md={2} xs={2} >
-                                  <button
-                                      onClick={() => this.EditSearchProfiles()}
-                                    style={{
-                                      height: "120%",
-                                      width: "100%",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      backgroundColor: "#ef7714",
-                                      color: "#fff",
-                                      cursor: "pointer"
-                                    }}
-                                  >
-                                    <EditIcon />
-                                  </button>
+                                  <Link to="/Suche/Suchprofil">
+                                      <button
+                                          onClick={() => this.EditSearchProfiles()}
+                                        style={{
+                                          height: "120%",
+                                          width: "100%",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          backgroundColor: "#ef7714",
+                                          color: "#fff",
+                                          cursor: "pointer"
+                                        }}
+                                      >
+                                        <EditIcon />
+                                      </button>
+                                  </Link>
                                 </Grid>
                             </Grid>
                         </Item>

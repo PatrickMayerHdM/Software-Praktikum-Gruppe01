@@ -124,7 +124,7 @@ class SearchProfile extends React.Component{
 
         return(
             <div>
-                <h1>Lege hier dein Suchprofil an:</h1>
+                <h2>Lege hier dein Suchprofil an:</h2>
 
                 <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'}, margin: '0 auto'}}>
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
