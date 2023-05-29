@@ -10,14 +10,13 @@ class ProfileMapper(mapper):
         """ Auslesen aller Profile """
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT profile_id, favoriteNote_id, account_id, blockNote_id FROM main.Profile")
+        cursor.execute("SELECT profile_id, favoriteNote_id, blockNote_id FROM main.Profile")
         tuples = cursor.fetchall()
 
         for (profile_id, favoriteNote_id, account_id, blockNote_id) in tuples:
             profile = Profile()
             profile.set_id(profile_id)
             profile.set_favorite_note_id(favoriteNote_id)
-            profile.set_account_id(account_id)
             profile.set_block_note_id(blockNote_id)
             result.append(profile)
 
@@ -30,17 +29,17 @@ class ProfileMapper(mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = f'SELECT profile_id, favoriteNote_id, account_id, blockNote_id FROM main.Profile WHERE profile_id={key}'
+        command = f'SELECT profile_id, favoriteNote_id, blockNote_id FROM main.Profile WHERE profile_id={key}'
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (profile_id, favorite_note_id, account_id, block_note_id) = tuples[0]
+            (profile_id, favoriteNote_id, blockNote_id) = tuples[0]
             profile = Profile()
             profile.set_id(profile_id)
-            profile.set_favorite_note_id(favorite_note_id)
-            profile.account_id(account_id)
-            profile.blockNote_id(block_note_id)
+            profile.set_favorite_note_id(favoriteNote_id)
+            #profile.account_id(account_id)
+            profile.blockNote_id(blockNote_id)
 
             result = profile
         else:
@@ -51,30 +50,30 @@ class ProfileMapper(mapper):
 
         return result
 
-    def find_by_account_id(self, account_id):
-        result = None
-        cursor = self._connection.cursor()
-        command = 'SELECT profile_id, favoriteNote_id, account_id, blockNote_id FROM main.Profile WHERE account_id=%s'
-        data = (account_id,)
-        cursor.execute(command, data)
-        tuples = cursor.fetchall()
-
-        try:
-            (profile_id, favoriteNote_id, account_id, blockNote_id) = tuples[0]
-            p = Profile()
-            p.set_id(profile_id)
-            p.set_favorite_note_id(favoriteNote_id)
-            p.set_account_id(account_id)
-            p.set_block_note_id(blockNote_id)
-            result = p
-
-        except IndexError:
-            "Wenn Tupel leer sind, dann wird IndexError geworfen"
-            result = None
-
-        self._connection.commit()
-        cursor.close()
-        return result
+    # def find_by_account_id(self, account_id):
+    #     result = None
+    #     cursor = self._connection.cursor()
+    #     command = 'SELECT profile_id, favoriteNote_id, account_id, blockNote_id FROM main.Profile WHERE account_id=%s'
+    #     data = (account_id,)
+    #     cursor.execute(command, data)
+    #     tuples = cursor.fetchall()
+    #
+    #     try:
+    #         (profile_id, favoriteNote_id, account_id, blockNote_id) = tuples[0]
+    #         p = Profile()
+    #         p.set_id(profile_id)
+    #         p.set_favorite_note_id(favoriteNote_id)
+    #         p.set_account_id(account_id)
+    #         p.set_block_note_id(blockNote_id)
+    #         result = p
+    #
+    #     except IndexError:
+    #         "Wenn Tupel leer sind, dann wird IndexError geworfen"
+    #         result = None
+    #
+    #     self._connection.commit()
+    #     cursor.close()
+    #     return result
 
     def insert(self, profile):
         # Verbindugn zur DB + cursor-objekt erstellt
@@ -91,8 +90,8 @@ class ProfileMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO main.Profile (profile_id, favorite_note_id, account_id, block_note_id) VALUES (%s, %s, %s, %s)"
-        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_account_id(), profile.get_block_note_id())
+        command = "INSERT INTO main.Profile (profile_id, favoriteNote_id, blockNote_id) VALUES (%s, %s, %s)"
+        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -104,8 +103,8 @@ class ProfileMapper(mapper):
         """ Aktualisierung einer Profil-Instanz"""
         cursor = self._connection.cursor()
 
-        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, account_id=%s, block_note_id=%s"
-        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_account_id(), profile.get_block_note_id())
+        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, block_note_id=%s"
+        data = (profile.get_id(), profile.get_favorite_note_id(),    profile.get_block_note_id())
 
         cursor.execute(command, data)
 
@@ -116,7 +115,7 @@ class ProfileMapper(mapper):
         """ Löschen eines Datensatzes """
         cursor = self._connection.cursor()
 
-        command = f"DELETE FROM main.Profile WHERE profile_id = {profile.get_id()}"
+        command = f'DELETE FROM main.Profile WHERE profile_id = {profile.get_id()}'
         cursor.execute(command)
 
         self._connection.commit()
