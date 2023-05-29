@@ -14,7 +14,7 @@ const prefix = "/system"
 module.exports = SetupEndpoint({
     name: 'system',
     urls: [{
-        params: '/Search/{id}/newprofiles',
+        params: '/newprofiles',
         requests: [{
             method: 'GET',
             response: '/response-files/api/newprofiles.json'

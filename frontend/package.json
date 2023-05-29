@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "json-server --watch fake-backend/datingsite/api/messages.json --port 3001 --delay 2500"
+    "start": "json-server --watch fake-backend/datingsite/api/newprofiles.json --port 3001 --delay 2500"
   },
   "eslintConfig": {
     "extends": [

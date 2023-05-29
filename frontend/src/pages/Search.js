@@ -30,13 +30,16 @@ class Search extends React.Component{
           selectedProfileIndex: null,
           profiles: [ ],
           profile_id: 22,
-        };
+        }
+
+        this.NewProfiles = this.NewProfiles.bind(this); // Binden Sie die Methode an den Komponentenkontext
     }
 
     // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
     NewProfiles(){
         console.log("Button nur noch neue Profile gedrückt")
         const { profile_id } = this.state; // Testweise Zugriff auf profile_id aus dem state
+        console.log(profile_id)
         DatingSiteAPI.getAPI().getOnlyNewProfiles(profile_id).then(newprofiles =>
             this.setState(prevState => ({
                 profiles: [...prevState.profiles, ...newprofiles]
