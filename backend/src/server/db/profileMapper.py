@@ -1,6 +1,5 @@
-from mapper import mapper
 from Profile import Profile
-from Account import Account
+from server.db.mapper import mapper
 
 class ProfileMapper(mapper):
     def __init__(self):
@@ -79,7 +78,7 @@ class ProfileMapper(mapper):
     def insert(self, profile):
         # Verbindugn zur DB + cursor-objekt erstellt
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM main.Profile")
+        cursor.execute("SELECT MAX(profile_id) AS maxid FROM main.Profile")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
@@ -91,20 +90,24 @@ class ProfileMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO main.Profile (profile_id, favorite_note_id, account_id, block_note_id) VALUES (%s, %s, %s, %s)"
-        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_account_id(), profile.get_block_note_id())
+        command = "INSERT INTO main.Profile (profile_id, favoritenote_id, blocknote_id) VALUES (%s, %s, %s)"
+        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
+        cursor.execute(command, data)
+
+        # Erzeugte Profil_ID als Fremdschlüssel in Account Tabelle hinzufügen
+        command = "UPDATE main.Account SET profile_id = %s WHERE account_id=%s"
+        data = (profile.get_id(), profile.get_account_id())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
-
         return profile
 
     def update(self, profile):
         """ Aktualisierung einer Profil-Instanz"""
         cursor = self._connection.cursor()
 
-        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, account_id=%s, block_note_id=%s"
+        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, account_id=%s, blocknote_id=%s"
         data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_account_id(), profile.get_block_note_id())
 
         cursor.execute(command, data)

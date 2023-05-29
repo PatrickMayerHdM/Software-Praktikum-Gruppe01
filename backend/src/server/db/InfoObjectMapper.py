@@ -1,5 +1,5 @@
 from InfoObject import InfoObject
-from mapper import mapper
+from server.db.mapper import mapper
 
 
 """ Mapper-Klasse des BOs Info-Objekt."""

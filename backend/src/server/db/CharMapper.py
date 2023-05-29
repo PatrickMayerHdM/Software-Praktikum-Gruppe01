@@ -1,5 +1,5 @@
 from Characteristic import Characteristics
-from mapper import mapper
+from server.db.mapper import mapper
 
 """ Eigenschafts-Klasse die Merkmale eines Profils widerspiegeln. """
 

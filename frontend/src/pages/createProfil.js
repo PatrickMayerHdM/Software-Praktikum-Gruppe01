@@ -9,11 +9,11 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import {Button, TextField} from "@mui/material";
 import * as React from "react";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+/*import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { differenceInYears, parse } from 'date-fns';
+import { differenceInYears, parse } from 'date-fns';*/
 import DatingSiteAPI, { addProfile } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
 
@@ -39,7 +39,7 @@ class CreateProfil extends Component {
         this.handleChangeHeight = this.handleChangeHeight.bind(this);
         this.handleChangeReligion = this.handleChangeReligion.bind(this);
         this.handleChangeSmoking = this.handleChangeSmoking.bind(this);
-        this.handleChangeAge = this.handleChangeAge.bind(this);
+        //this.handleChangeAge = this.handleChangeAge.bind(this);
         this.handleChangeDescription = this.handleChangeDescription.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -79,7 +79,7 @@ class CreateProfil extends Component {
     };
 
 
-    handleChangeAge = (date) => {
+    /*handleChangeAge = (date) => {
         console.log(date)
         const selectedDate = parse(date, 'yyyy/MM/dd', new Date());
         const currentDate = new Date();
@@ -87,7 +87,7 @@ class CreateProfil extends Component {
         const newAge = differenceInYears(currentDate, selectedDate);
 
         this.setState({ age: newAge });
-    };
+    };*/
 
     handleChangeDescription = (event) => {
         const newDescription = event.target.value;
@@ -143,7 +143,7 @@ class CreateProfil extends Component {
                                 </Box>
                             </FormGroup>
                         </Item>
-                        <Item>
+                        {/*<Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 200, margin: '0 auto'}}>
                                 <FormLabel> Wie alt bist du? </FormLabel>
@@ -159,7 +159,7 @@ class CreateProfil extends Component {
                                 </LocalizationProvider>
                             </Box>
                             </FormGroup>
-                        </Item>
+                        </Item>*/}
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>

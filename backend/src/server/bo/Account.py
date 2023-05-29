@@ -10,7 +10,6 @@ class Account(bo):
         #self.account_id = None # Die Account ID des Nutzers
         self.name = "" # Name eines Nutzers
         self.email = "" # E-Mail eines Nutzers
-q
     def set_profile_id(self, profile_id):
         """Anlegen profile_id"""
         self.profile_id = profile_id

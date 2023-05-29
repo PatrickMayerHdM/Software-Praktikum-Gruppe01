@@ -1018,7 +1018,7 @@ CREATE TABLE `ProfileContainsInfoObjects` (
 -- Table structure for table `ProfileContainsMessage`
 --
 
-DROP TABLE IF EXISTS `ProfileContainsMessage`;
+DROP TABLE IF EXISTS ChatContainsMessage;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ProfileContainsMessage` (

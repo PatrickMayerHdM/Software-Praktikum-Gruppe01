@@ -18,10 +18,10 @@ export default class profileBO extends BusinessObject {
 
     constructor(aprofile_id, afavoriteNote_id, aaccount_id, ablockNote_id) {
         super();
-        this.profile_id = aprofile_id;
-        this.favoriteNote_id = afavoriteNote_id;
-        this.account_id = aaccount_id;
-        this.blockNote_id = ablockNote_id;
+        this.profile_id = 0;
+        this.favoriteNote_id = 0;
+        this.account_id = 0;
+        this.blockNote_id = 0;
     }
 
     /**
