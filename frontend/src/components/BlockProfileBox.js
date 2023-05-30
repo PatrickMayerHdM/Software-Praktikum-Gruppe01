@@ -28,13 +28,13 @@ class BlockProfileBox extends React.Component{
             <Box sx={{ flexGrow: 1 }}>
               <Grid container
                 direction="row" justifyContent="center" alignItems="stretch" container>
-                <Grid  item xs={10} spacing={2} >
+                <Grid item xs={10} spacing={2} >
                   <Item>
                       <ProfileBox/>
                   </Item >
                 </Grid >
-                <Grid item xs={2} >
-                    <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                <Grid item item xs={2} >
+                    <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                         <PersonRemoveIcon/>
                     </button>
                 </Grid>

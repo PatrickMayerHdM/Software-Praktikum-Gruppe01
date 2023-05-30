@@ -25,15 +25,25 @@ class Profile extends React.Component{
         return(
             <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
                 <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
-                    <Item >
-                        <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                    <Item>
+                        <Grid container direction="row" justifyContent="center" alignItems="strech">
                             <Grid md={4} xs={7} spacing={3}>
+                                Vorname
+                            </Grid>
+                            <Grid md={8} xs={7} spacing={3}>
                                 Patrick
                             </Grid>
-                            <Grid md={4} xs={7} spacing={3}>
+
+                        </Grid >
+                    </Item>
+                     <Item >
+                        <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                            <Grid md={4} xs={7} spacing={2}>
+                                Nachname:
+                            </Grid>
+                            <Grid md={8} xs={7} spacing={2}>
                                 Mayer
                             </Grid>
-
                         </Grid >
                     </Item>
                     <Item >
@@ -41,7 +51,7 @@ class Profile extends React.Component{
                             <Grid md={4} xs={7} spacing={2}>
                                 Alter:
                             </Grid>
-                            <Grid md={4} xs={7} spacing={2}>
+                            <Grid md={8} xs={7} spacing={2}>
                                 20
                             </Grid>
                         </Grid >
@@ -51,7 +61,7 @@ class Profile extends React.Component{
                             <Grid md={4} xs={7} spacing={2}>
                                 Geschlecht:
                             </Grid>
-                            <Grid md={4} xs={7} spacing={2}>
+                            <Grid md={8} xs={7} spacing={2}>
                                 Männlich
                             </Grid>
                         </Grid >
@@ -61,7 +71,7 @@ class Profile extends React.Component{
                             <Grid md={4} xs={7} spacing={2}>
                                 Körpergröße:
                             </Grid>
-                            <Grid md={4} xs={7} spacing={2}>
+                            <Grid md={8} xs={7} spacing={2}>
                                 181 cm
                             </Grid>
                         </Grid >
@@ -71,7 +81,7 @@ class Profile extends React.Component{
                             <Grid md={4} xs={7} spacing={2}>
                                 Religion:
                             </Grid>
-                            <Grid md={4} xs={7} spacing={2}>
+                            <Grid md={8} xs={7} spacing={2}>
                                 Atheist
                             </Grid>
                         </Grid >
@@ -81,7 +91,7 @@ class Profile extends React.Component{
                             <Grid md={4} xs={7} spacing={2}>
                                 Haarfarbe:
                             </Grid>
-                            <Grid md={4} xs={7} spacing={2}>
+                            <Grid md={8} xs={7} spacing={2}>
                                 Blond
                             </Grid>
                         </Grid >
@@ -91,7 +101,7 @@ class Profile extends React.Component{
                             <Grid md={4} xs={7} spacing={2}>
                                 Raucher:
                             </Grid>
-                            <Grid md={4} xs={7} spacing={2}>
+                            <Grid md={8} xs={7} spacing={2}>
                                 Nein
                             </Grid>
                         </Grid >
