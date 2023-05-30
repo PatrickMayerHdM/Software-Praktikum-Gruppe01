@@ -1,6 +1,6 @@
 from mapper import mapper
-from Profile import Profile
-from Account import Account
+from server.bo.Profile import Profile
+
 
 class ProfileMapper(mapper):
     def __init__(self):
@@ -38,8 +38,8 @@ class ProfileMapper(mapper):
             profile = Profile()
             profile.set_id(profile_id)
             profile.set_favorite_note_id(favoriteNote_id)
-            #profile.account_id(account_id)
-            profile.blockNote_id(blockNote_id)
+            # profile.account_id(account_id)
+            profile.set_block_note_id(blockNote_id)
 
             result = profile
         else:
@@ -103,8 +103,8 @@ class ProfileMapper(mapper):
         """ Aktualisierung einer Profil-Instanz"""
         cursor = self._connection.cursor()
 
-        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, block_note_id=%s"
-        data = (profile.get_id(), profile.get_favorite_note_id(),    profile.get_block_note_id())
+        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, blockNote_id=%s"
+        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
 
         cursor.execute(command, data)
 
@@ -120,4 +120,3 @@ class ProfileMapper(mapper):
 
         self._connection.commit()
         cursor.close()
-

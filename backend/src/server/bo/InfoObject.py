@@ -35,11 +35,13 @@ class InfoObject(bo):
     def from_dict(dictionary=dict()):
         obj = InfoObject()
         obj.set_id(dictionary['id'])
+        obj.set_char_fk(dictionary['char_fk'])
+        obj.set_profile_fk(dictionary['profile_fk'])
         obj.set_value(dictionary['value'])
         return obj
 
 
-
+"""
 x = "Haarfarbe"
 
 diction = {"id": 1, "char_name": x}
@@ -50,6 +52,6 @@ Characteristics.from_dict(diction)
 info = InfoObject()
 info.set_char_fk(char)
 print(info.get_char_fk())
-
+"""
 # In diesem Beispiel wird immer die Ausgabe 0 folgen, da wir die set_id() Methode erst in den
 # Mapper-Klassen automatisch hochzählen lassen

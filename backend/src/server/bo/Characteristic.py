@@ -27,6 +27,7 @@ class Characteristics(bo):
         obj = Characteristics()
         obj.set_id(dictionary['id'])
         obj.set_characteristic(dictionary['char_name'])
+        obj.set_characteristic_typ(dictionary['char_typ'])
         return obj
 
 
