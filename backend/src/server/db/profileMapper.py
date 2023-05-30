@@ -78,7 +78,7 @@ class ProfileMapper(mapper):
     def insert(self, profile):
         # Verbindugn zur DB + cursor-objekt erstellt
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM main.Profile")
+        cursor.execute("SELECT MAX(profile_id) AS maxid FROM main.Profile")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
