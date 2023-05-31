@@ -49,7 +49,7 @@ class OptionsOtherProfile extends React.Component{
                     <BookmarkAddedIcon/>
                 </button>
             </Grid>
-            <Grid md={2} xs={4} spacing={2}>
+            <Grid item md={2} xs={4} spacing={2}>
                <button onClick={this.PersonBlocked} style={{ height: "200%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BlockIcon/>
                </button>
@@ -60,9 +60,4 @@ class OptionsOtherProfile extends React.Component{
     )}
 }
 
-function OptionsOtherdProfile(){
-
-
-
-}
 export default OptionsOtherProfile

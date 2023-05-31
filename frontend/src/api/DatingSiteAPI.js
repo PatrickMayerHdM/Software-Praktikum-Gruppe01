@@ -13,7 +13,7 @@ export default class DatingSiteAPI {
     #datingServerBaseURL = '/system';
 
     // Local http-fake-backend
-    // #datingServerBaseURL = '/hierbennen/system';
+    //#datingServerBaseURL = '/api/system';
 
 
     // Message related
@@ -130,6 +130,30 @@ export default class DatingSiteAPI {
                 resolve(responseProfileBO);
             })
         })
+
+    }
+
+    /**
+     * Bereich für die Suche
+     */
+
+    #getNewProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/newprofiles`;
+
+    /**
+     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
+     * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
+    */
+
+    getOnlyNewProfiles(profileID){
+        return this.#fetchAdvanced(this.#getNewProfilesByIdURL())
+            .then((responseJSON) => {
+                console.log("Das responseJSON")
+                console.log(responseJSON)
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                })
+
+            })
 
     }
 }

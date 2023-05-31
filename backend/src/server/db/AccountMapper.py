@@ -70,7 +70,13 @@ class AccountMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            account.set_id(maxid[0] +1) # Höchste ID + 1
+            if maxid[0] is not None:
+                """Wenn eine ID vorhanden ist, zählen wir diese um 1 hoch"""
+                account.set_id(maxid[0] + 1)
+
+            else:
+                """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
+                account.set_id(1)
 
         command = 'INSERT INTO main.Account (account_id, google_id, profile_id, name, email) VALUES (%s, %s, %s, %s, %s)'
         """Datensatz wird in Tabelle "Account" hinzugefügt. Die Values "%s" sind Platzhalter und 

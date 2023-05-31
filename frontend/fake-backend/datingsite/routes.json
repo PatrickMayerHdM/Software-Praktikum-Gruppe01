@@ -3,5 +3,7 @@
   "/blockNotes": "/api/blockNotes",
   "/profiles": "/api/profiles",
   "/favoriteNotes": "/api/favoriteNotes",
-  "/messages": "/api/messages"
+  "/messages": "/api/messages",
+  "/newprofiles": "/api/newprofiles"
+
 }

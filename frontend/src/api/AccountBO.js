@@ -16,7 +16,7 @@ export default class accountBO extends BusinessObject {
      * @param {*} aemail
      */
 
-    constructor(aprofile_id, agoogle_id, aname, aaccount_id, aemail) {
+    constructor(aprofile_id, agoogle_id, aname, aaccount_id, aemail)  {
         super();
             this.account_id = aaccount_id;
             this.google_id = agoogle_id

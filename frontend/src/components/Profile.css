@@ -1,0 +1,20 @@
+/*
+Style CSS für SearchProfile, BlockProfileBox, BlockProfileBoxList, FavoriteProfileBox, FavoriteProfileBoxList,
+ProfileBox
+*/
+
+.slider_age .MuiSlider-thumb{
+    color: #ff0059;
+}
+
+.slider_age .MuiSlider-track {
+    color: #ff0059;
+}
+
+.checkbox_search .MuiSvgIcon-root{
+    color: #ff0059;
+}
+
+.cont2 {
+  background-color: yellow;
+}

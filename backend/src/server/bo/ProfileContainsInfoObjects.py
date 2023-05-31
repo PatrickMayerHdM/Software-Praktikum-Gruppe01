@@ -21,3 +21,4 @@ class ProfileContainsInfoObj(bo):
     def get_infoobj(self):
         """ Auslesen der Infoobjekte zu einem Profil """
         return self.infoobj_id
+

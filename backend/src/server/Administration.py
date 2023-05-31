@@ -10,8 +10,8 @@ from server.db.profileMapper import ProfileMapper
 from server.db.CharMapper import CharMapper
 from server.db.InfoObjectMapper import InfoObjectMapper
 from Profile import Profile
-
-
+from InfoObject import InfoObject
+from Characteristic import Characteristics
 class Administration(object):
     def __init__(self):
         pass
@@ -160,11 +160,11 @@ class Administration(object):
             return mapper.find_by_user(user_id)
 
    # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
-    def create_profile(self,favourite_note_id, block_note_id, account_id, profile):
+    def create_profile(self, favouriteNote_id, blockNote_id, profile):
         prof = Profile()
-        prof.set_favorite_note_id(favourite_note_id)
-        prof.set_block_note_id(block_note_id)
-        prof.set_account_id(account_id)
+        prof.set_favorite_note_id(favouriteNote_id)
+        prof.set_block_note_id(blockNote_id)
+        #.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             return mapper.insert(profile)
@@ -185,9 +185,9 @@ class Administration(object):
         with ProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def get_profile_by_account_id(self, account_id):
-        with ProfileMapper() as mapper:
-            return mapper.find_by_account_id(account_id)
+    # def get_profile_by_account_id(self, account_id):
+    #     with ProfileMapper() as mapper:
+    #         return mapper.find_by_account_id(account_id)
 
     # Hier wird die Logik für das Characteristic auf Basis der Mapper realisiert
 
@@ -222,3 +222,4 @@ class Administration(object):
             return mapper.delete(infoobject)
 
     # Logik für Profil, did die Info-Objekte in
+
