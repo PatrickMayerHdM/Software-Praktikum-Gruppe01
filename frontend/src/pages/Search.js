@@ -14,14 +14,11 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 /**
- * Innerhalb der Suche, gibt es für den User später verschiedene Optionen.
+ * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
  * Hierbei kann dieser einerseits, nur neue Profile anzeigen und andererseits kann dieser zwischen seinen Suchprofilen
  * das Suchprofil auswählen, mit welcher er aktuell suchen will.
- * sx={{ width: {sm: '100%'}
+ *
  */
-
-
-
 
 
 class Search extends React.Component{
@@ -29,13 +26,24 @@ class Search extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          numSearchProfiles: 4,
+          numSearchProfiles: 0,
           selectedProfileIndex: null,
+          Searchprofiles: [],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile - Zu Development Zwecken gerne dieses Array nutzen: [12,56,34]
           profiles: [ ],
           profile_id: 22,
+          deletingError: null,
         }
 
-        this.NewProfiles = this.NewProfiles.bind(this); // Binden Sie die Methode an den Komponentenkontext
+        this.NewProfiles = this.NewProfiles.bind(this);
+        this.AddSearchProfiles = this.AddSearchProfiles.bind(this);
+        this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
+    }
+
+
+
+    loadpage(){
+
+
     }
 
     // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
@@ -70,13 +78,34 @@ class Search extends React.Component{
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier angelegt wird.
     AddSearchProfiles() {
-        console.log("Es wird ein neues Suchprofil erstellt");
-        this.setState(prevState => ({numSearchProfiles: prevState.numSearchProfiles + 1}));
+        this.setState(prevState => ({ numSearchProfiles: prevState.numSearchProfiles + 1 }), () => {
+        });
+
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier gelöscht wird.
     DeleteSearchProfile(){
         console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
+        console.log(this.state.profiles[[2]])
+    }
+
+
+    // funktion welche funktionen beim Laden der Seite aufruft
+    componentDidMount() {
+      DatingSiteAPI.getAPI()
+        .getSearchProfileIDs()
+        .then(Searchprofilesvar => {
+          this.setState(prevState => ({
+            Searchprofiles: [...prevState.Searchprofiles, ...Searchprofilesvar]
+          }));
+
+          const lengthSearchprofiles = this.state.Searchprofiles.length;
+          console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+          this.setState({ numSearchProfiles: lengthSearchprofiles });
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
     }
 
 
