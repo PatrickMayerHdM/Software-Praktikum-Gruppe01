@@ -10,6 +10,8 @@ import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import { Link } from "react-router-dom"
 import DatingSiteAPI from "../api/DatingSiteAPI";
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 /**
  * Innerhalb der Suche, gibt es für den User später verschiedene Optionen.
@@ -27,6 +29,7 @@ class Search extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+          numSearchProfiles: 4,
           selectedProfileIndex: null,
           profiles: [ ],
           profile_id: 22,
@@ -65,6 +68,17 @@ class Search extends React.Component{
         this.setState({ selectedProfileIndex: index });
     }
 
+    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier angelegt wird.
+    AddSearchProfiles() {
+        console.log("Es wird ein neues Suchprofil erstellt");
+        this.setState(prevState => ({numSearchProfiles: prevState.numSearchProfiles + 1}));
+    }
+
+    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier gelöscht wird.
+    DeleteSearchProfile(){
+        console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
+    }
+
 
     /**
      * rendert den Komponenten
@@ -73,10 +87,10 @@ class Search extends React.Component{
 
 
         // const welche die Anzahl an zu erstellenden Suchprofilen angibt
-        const numSearchProfiles = 4;
+        //const numSearchProfiles = 4;
 
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
-        const SearchProfileListing = Array(numSearchProfiles)
+        const SearchProfileListing = Array(this.state.numSearchProfiles)
           .fill(null)
           .map((item, index) => (
             <Grid item key={index} md={2} xs={2} >
@@ -91,7 +105,7 @@ class Search extends React.Component{
                   backgroundColor:
                     this.state.selectedProfileIndex === index ? "#820263" : "#30638E", // Wenn ein Profil ausgewählt ist, wird "#820263" als Farbe verwendet, sonst: "#30638E"
                   color: "#fff",
-                  cursor: "pointer",
+                  cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
                 }}
               >
                 Suchprofil {index + 1}
@@ -119,7 +133,7 @@ class Search extends React.Component{
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "center",
-                                      backgroundColor: "#7AA095",
+                                      backgroundColor: "#587D71",
                                       color: "#fff",
                                       cursor: "pointer"
                                     }}
@@ -128,8 +142,45 @@ class Search extends React.Component{
                                   </button>
                                 </Grid>
 
-                                  {/** Hier werden die Buttons für die Anzahl der Suchprofile eingetragen */}
-                                {SearchProfileListing}
+
+                                {/** Hier werden die Buttons zum Erstellen eines Suchprofils erstellt */}
+                                <Grid item md={2} xs={2} >
+                                  <button
+                                    onClick={this.AddSearchProfiles}
+                                    style={{
+                                      height: "120%",
+                                      width: "100%",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      backgroundColor: "#6665DD",
+                                      color: "#fff",
+                                      cursor: "pointer"
+                                    }}
+                                  >
+                                    <AddIcon/>
+                                  </button>
+                                </Grid>
+
+                                {/** Hier wird der Button zum suchen nach dem aktuell ausgewählten Suchprofil angezeigt */}
+                                <Grid item md={4} xs={4}>
+                                  <button
+                                    onClick={() => this.Search()}
+                                    style={{
+                                      height: "120%",
+                                      width: "100%",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      backgroundColor: "#8F3985",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                      margin: "auto",
+                                    }}
+                                  >
+                                    <SearchIcon />
+                                  </button>
+                                </Grid>
 
                                   {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
                                 <Grid item md={2} xs={2} >
@@ -151,29 +202,34 @@ class Search extends React.Component{
                                       </button>
                                   </Link>
                                 </Grid>
+
+                                  {/** Hier wird der Button zum Löschen des ausgewählten Suchprofils erstellt */}
+                                <Grid item md={2} xs={2} >
+
+                                      <button
+                                          onClick={() => this.DeleteSearchProfile()}
+                                        style={{
+                                          height: "120%",
+                                          width: "100%",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          backgroundColor: "#d00000",
+                                          color: "#fff",
+                                          cursor: "pointer"
+                                        }}
+                                      >
+                                        <DeleteIcon/>
+                                      </button>
+
+                                </Grid>
                             </Grid>
                         </Item>
 
                         <Item sx={{ width: "100%"}}>
-                            {/** Hier wird der Button zum suchen nach dem aktuell ausgewählten Suchprofil angezeigt */}
-                            <Grid item>
-                              <button
-                                onClick={() => this.Search()}
-                                style={{
-                                  height: "120%",
-                                  width: "100%",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  backgroundColor: "#ff0059",
-                                  color: "#fff",
-                                  cursor: "pointer",
-                                  margin: "auto",
-                                }}
-                              >
-                                <SearchIcon />
-                              </button>
-                            </Grid>
+                            {/** Hier werden die Buttons für die Anzahl der Suchprofile eingetragen */}
+                                {SearchProfileListing}
+
                         </Item>
                      </Stack>
                  </Item>
