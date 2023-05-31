@@ -13,11 +13,14 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import DatingSiteAPI, { addProfile } from '../api/DatingSiteAPI';
+import DatingSiteAPI, { removeProfile, updateProfile, createCharForProfile } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
-import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import Characteristic from "../api/CharacteristicBO";
+
+
 
 
 class UpdateProfile extends Component {
@@ -32,7 +35,9 @@ class UpdateProfile extends Component {
             religion: '',
             hair: '',
             smoking: '',
-            customProp: '',
+            char_name: '',
+            char_desc: '',
+            showTextFields: false,
         };
 
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this);
@@ -42,14 +47,13 @@ class UpdateProfile extends Component {
         this.handleChangeReligion = this.handleChangeReligion.bind(this);
         this.handleChangeSmoking = this.handleChangeSmoking.bind(this);
         this.handleChangeAge = this.handleChangeAge.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChangeCustomProperty = this.handleChangeCustomProperty.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
+        this.handleCreateChar = this.handleCreateChar.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSaveInputs = this.handleSaveInputs.bind(this);
     }
 
-    handleChangeCustomProperty(event) {
-        const value = event.target.value;
-        this.setState({customProp: value})
-    }
     handleChangeFirstName(event) {
         const newName = event.target.value;
         this.setState({firstName: newName});
@@ -91,18 +95,54 @@ class UpdateProfile extends Component {
         this.setState({ age: newAge });
     };
 
-    handleSubmit(event) {
+    handleCreateChar = () => {
+        this.setState({showTextFields: true});
+    };
+    handleInputChange = (event, field) => {
+        this.setState({ [field]: event.target.value });
+    };
+    handleSaveInputs = () => {
+        console.log(this.state)
+        const { char_name, char_desc } = this.state;
+        this.setState({ char_name: char_name, char_desc: char_desc})
+        const createCharForProfile = new Characteristic(this.state._aid ,this.state._name);
+        DatingSiteAPI.getAPI()
+            .createCharForProfile(createCharForProfile)
+            .catch((e) => {
+                this.setState({
+                    error: e
+                });
+            });
+    };
+
+
+    handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        const updatedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
         DatingSiteAPI.getAPI()
-            .addProfile(newProfile)
+            .updateProfile(updatedProfile)
             .catch((e) =>
                 this.setState({
                     error: e,
                 })
             );
     };
+
+    handleRemove(event) {
+        console.log(this.state)
+        event.preventDefault();
+        const removedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        DatingSiteAPI.getAPI()
+            .removeProfile(removedProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+    };
+
+
 
     render() {
             const {
@@ -114,7 +154,9 @@ class UpdateProfile extends Component {
                 religion,
                 hair,
                 smoking,
-                customProp,
+                char_name,
+                char_desc,
+                showTextFields,
             } = this.state;
             return (
             <div>
@@ -224,25 +266,26 @@ class UpdateProfile extends Component {
                         <Item>
                         <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel> Eigenschaft erstellen! </FormLabel>
-                                <IconButton color="secondary" aria-label="edit">
-                                    <EditIcon/>
-                                </IconButton>
+                                <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
+                                {showTextFields && (
+                                    <>
+                                        <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')}></TextField>
+                                        <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')}></TextField>
+                                        <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
+                                    </>
+                                )}
                             </Box>
                         </FormGroup>
                         </Item>
                         <Item>
                         <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel> Profil löschen! </FormLabel>
-                                <IconButton aria-label="delete" size="large" style={{ color: 'red' }}>
-                                    <DeleteIcon/>
-                                </IconButton>
+                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />} > Profil löschen! </Button>
                             </Box>
                         </FormGroup>
                         </Item>
                         <Item>
-                            <Button onClick={this.handleSubmit}> Profile Update </Button>
+                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profile Update </Button>
                         </Item>
                     </Stack>
                 </Box>
