@@ -20,7 +20,7 @@ class ProfileBoxList extends React.Component {
 
         // Methode zum darstellen einer Profilbox
         const Listing = Array(count).fill(null).map((item, index) => (
-            <Grid item xs={12} >
+            <Grid item xs={12} key={index}>
                 <Item>
                     <ProfileBox/>
                 </Item >

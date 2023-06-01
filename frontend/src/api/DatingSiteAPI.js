@@ -204,6 +204,7 @@ export default class DatingSiteAPI {
      */
 
     #getNewProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/newprofiles`;
+    #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
 
     /**
      * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
@@ -222,5 +223,18 @@ export default class DatingSiteAPI {
             })
 
     }
+
+    getSearchProfileIDs(){
+        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL())
+            .then((responseJSON) => {
+                console.log("Das responseJSON")
+                console.log(responseJSON)
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                })
+
+            })
+    }
+
 }
 
