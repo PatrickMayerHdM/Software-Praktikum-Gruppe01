@@ -22,7 +22,7 @@ import CreateProfil from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
 import * as React from "react";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Chats from "./components/Chats";
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,7 @@ import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./components/BlockProfileBoxList";
 import SearchProfile from "./components/SearchProfile";
 import Search from "./pages/Search";
+import UpdateProfile from "./components/updateProfile";
 
 /** Definition der App-Komponente */
 
@@ -162,8 +163,16 @@ class App extends Component {
   /** render() gibt das HTML zurück, das gerendert werden soll */
 
   render() {
-    // const {currentUser, menuAnchor} = this.state;
-    // const open = Boolean(menuAnchor);
+
+    const { currentUser } = this.state;
+
+    if (!currentUser) {
+    // Wenn kein User angemeldet ist wird nur das Anmeldefenster gerendert.
+    return <LogIn onLogIn={this.handleLogIn} />;
+    } else if (!currentUser.displayName || !currentUser.photoURL) {
+    // Wenn ein User sich angemeldet hat wird er zuerst nur auf die Profil Seite gebracht
+    return <Navigate to="/Profil" />;
+    }
 
     return (
         <div>
@@ -187,16 +196,13 @@ class App extends Component {
                   </div>
                 </div>
             }
-            {!this.state.currentUser && /** Wenn kein Benutzer angemeldet wird nur das Anmeldeformular gerendert */
-                <LogIn onLogIn={this.handleLogIn}/>
-            }
 
             <Router>
               <Header />
                 <Routes>
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<Profile />}></Route>
-                      <Route path="/Profil" element={<CreateProfil/>}></Route>
+                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil /></Secured>}></Route>
                       <Route path="/Suche" element={<Search/>}></Route>
                       <Route path="/Suche/Suchprofil" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
@@ -211,4 +217,21 @@ class App extends Component {
   }
 }
 
+/**
+ *
+ * @param {props} The React props
+ * @returns
+ *
+ * Mögliche Änderung stehen noch aus?!
+ *
+ */
+function Secured(props) {
+	let location = useLocation();
+
+	if (!props.user) {
+		return <Navigate to={process.env.PUBLIC_URL + '/index.html'} state={{ from: location }} replace />;
+	}
+
+	return props.children;
+}
 export default App;

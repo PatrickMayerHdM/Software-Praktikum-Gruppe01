@@ -1,4 +1,4 @@
-from mapper import mapper
+from server.db.mapper import mapper
 from server.bo.Profile import Profile
 
 
@@ -90,7 +90,7 @@ class ProfileMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO main.Profile (profile_id, favoriteNote_id, blockNote_id) VALUES (%s, %s, %s)"
+        command = "INSERT INTO main.Profile (profile_id, favoritenote_id, blocknote_id) VALUES (%s, %s, %s)"
         data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
         cursor.execute(command, data)
 

@@ -99,7 +99,7 @@ class ProfileListOperations(Resource):
 
             p = adm.create_profile(
                 proposal.get_favorite_note_id(),
-                proposal.get_account_id(), proposal.get_block_note_id())
+                proposal.get_block_note_id())
 
             return p, 200
         else:

@@ -2,6 +2,7 @@ import messageBO from './MessageBO';
 import MessageBO from "./AccountBO";
 import profileBO from "./ProfileBO";
 import ProfileBO from "./ProfileBO";
+import Characteristic from "./CharacteristicBO";
 
 
 export default class DatingSiteAPI {
@@ -89,10 +90,13 @@ export default class DatingSiteAPI {
 
     #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
     #getProfileByIdURL = (id) => `${this.#datingServerBaseURL}/Profile/${id}`;
 
 
-/**
+    /**
      * @param {profileBO} profile object
      * @public
      */
@@ -109,6 +113,68 @@ export default class DatingSiteAPI {
             let prfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(prfileBO);
+            })
+        })
+    }
+
+    /**
+     * @param {profileBO} profile object
+     * @public
+     */
+
+    removeProfile(profile) {
+        return this.#fetchAdvanced(this.#removeProfileURL(), {
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile)
+        }).then((responseJSON) => {
+            let removedprfileBO = profileBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(removedprfileBO);
+            })
+        })
+    }
+
+    /**
+     * @param {profileBO} profile object
+     * @public
+     */
+
+    updateProfile(profile) {
+        return this.#fetchAdvanced(this.#updateProfileURL(), {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile)
+        }).then((responseJSON) => {
+            let updatedprfileBO = profileBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(updatedprfileBO);
+            })
+        })
+    }
+
+    /**
+     * @param {characteristicBO} characteristic object
+     * @public
+     */
+    createCharForProfile(characteristic) {
+        return this.#fetchAdvanced(this.#createCharForProfileURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(characteristic)
+        }).then((responseJSON) => {
+            let createdCharForProfile = profileBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(createdCharForProfile);
             })
         })
     }
