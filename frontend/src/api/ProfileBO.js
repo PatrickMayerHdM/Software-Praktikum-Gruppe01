@@ -11,16 +11,14 @@ export default class profileBO extends BusinessObject {
      *
      * @param {*} aprofile_id
      * @param {*} afavoriteNote_id
-     * @param {*} aaccount_id
      * @param {*} ablockNote_id
      */
 
 
-    constructor(aprofile_id, afavoriteNote_id, aaccount_id, ablockNote_id) {
+    constructor(aprofile_id, afavoriteNote_id, ablockNote_id) {
         super();
         this.profile_id = 0;
         this.favoriteNote_id = 0;
-        this.account_id = 0;
         this.blockNote_id = 0;
     }
 
@@ -65,18 +63,6 @@ export default class profileBO extends BusinessObject {
      *
      * @param {*} aaccount_id
      */
-
-    set_account_id(aaccount_id) {
-        this.account_id = aaccount_id;
-    }
-
-    /**
-     * Holt sich einen Account
-     */
-
-    get_account_id() {
-        return this.account_id
-    }
 
     /**
      * Setzt eine blockNote_id

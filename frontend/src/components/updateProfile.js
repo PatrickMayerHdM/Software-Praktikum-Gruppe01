@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Characteristic from "../api/CharacteristicBO";
+import PropTypes from "prop-types";
 
 
 
@@ -105,9 +106,9 @@ class UpdateProfile extends Component {
         console.log(this.state)
         const { char_name, char_desc } = this.state;
         this.setState({ char_name: char_name, char_desc: char_desc})
-        const createCharForProfile = new Characteristic(this.state._aid ,this.state._name);
+        const createdCharForProfile = new Characteristic(this.state._aid ,this.state._name);
         DatingSiteAPI.getAPI()
-            .createCharForProfile(createCharForProfile)
+            .createCharForProfile(createdCharForProfile)
             .catch((e) => {
                 this.setState({
                     error: e
@@ -132,9 +133,9 @@ class UpdateProfile extends Component {
     handleRemove(event) {
         console.log(this.state)
         event.preventDefault();
-        const removedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        const { profile } = this.props;
         DatingSiteAPI.getAPI()
-            .removeProfile(removedProfile)
+            .removeProfile(profile.getID())
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -257,7 +258,7 @@ class UpdateProfile extends Component {
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Rauchst du ? </FormLabel>
                                 <RadioGroup row value={smoking} onChange={this.handleChangeSmoking}>
-                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nich-Raucher" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nicht-Raucher" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '15%' }} value="smoker" control={<Radio />} label="Raucher" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
@@ -294,4 +295,11 @@ class UpdateProfile extends Component {
             );
         }
 }
+
+
+UpdateProfile.propTypes = {
+    profile: PropTypes.object.isRequired,
+};
+
 export default UpdateProfile;
+
