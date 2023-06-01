@@ -1,17 +1,17 @@
 from server.bo.Message import Message
 from server.db.MessageMapper import MessageMapper
-from blockNote import blockNote
+from server.bo.blockNote import blockNote
 from server.db.blockNoteMapper import BlockNoteMapper
-from favoriteNote import favoriteNote
+from server.bo.favoriteNote import favoriteNote
 from server.db.FavoriteNoteMapper import FavoriteNoteMapper
-from Account import Account
+from server.bo.Account import Account
 from server.db.AccountMapper import AccountMapper
 from server.db.profileMapper import ProfileMapper
 from server.db.CharMapper import CharMapper
 from server.db.InfoObjectMapper import InfoObjectMapper
-from Profile import Profile
-from InfoObject import InfoObject
-from Characteristic import Characteristics
+from server.bo.Profile import Profile
+from server.bo.InfoObject import InfoObject
+from server.bo.Characteristic import Characteristics
 class Administration(object):
     def __init__(self):
         pass
@@ -160,14 +160,14 @@ class Administration(object):
             return mapper.find_by_user(user_id)
 
    # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
-    def create_profile(self, favouriteNote_id, blockNote_id, profile):
+    def create_profile(self, favouriteNote_id, blockNote_id):
         prof = Profile()
         prof.set_favorite_note_id(favouriteNote_id)
         prof.set_block_note_id(blockNote_id)
         #.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
-            return mapper.insert(profile)
+            return mapper.insert(prof)
 
     def save_profile(self, profile):
         with ProfileMapper() as mapper:
@@ -175,7 +175,7 @@ class Administration(object):
 
     def delete_profile(self, profile):
         with ProfileMapper() as mapper:
-            mapper.update(profile)
+            mapper.delete(profile)
 
     def get_all_profiles(self, profile):
         with ProfileMapper() as mapper:
@@ -198,6 +198,22 @@ class Administration(object):
     def get_char_by_id(self, key):
         with CharMapper() as mapper:
             return mapper.find_by_key(key)
+
+    def create_char(self, char_name, char_typ):
+        c = Characteristics()
+        c.set_characteristic(char_name)
+        c.set_characteristic_typ(char_typ)
+        c.set_id(1)
+        with CharMapper() as mapper:
+            return mapper.insert(c)
+
+    def save_char(self, char):
+        with CharMapper() as mapper:
+            mapper.update(char)
+
+    def delete_char(self, char):
+        with CharMapper() as mapper:
+            mapper.delete(char)
 
     # Hier wird die Logik für das InfoObjekt auf Basis der Mapper realisiert
 
