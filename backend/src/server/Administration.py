@@ -175,7 +175,7 @@ class Administration(object):
 
     def delete_profile(self, profile):
         with ProfileMapper() as mapper:
-            mapper.update(profile)
+            mapper.delete(profile)
 
     def get_all_profiles(self, profile):
         with ProfileMapper() as mapper:
@@ -198,6 +198,22 @@ class Administration(object):
     def get_char_by_id(self, key):
         with CharMapper() as mapper:
             return mapper.find_by_key(key)
+
+    def create_char(self, char_name, char_typ):
+        c = Characteristics()
+        c.set_characteristic(char_name)
+        c.set_characteristic_typ(char_typ)
+        c.set_id(1)
+        with CharMapper() as mapper:
+            return mapper.insert(c)
+
+    def save_char(self, char):
+        with CharMapper() as mapper:
+            mapper.update(char)
+
+    def delete_char(self, char):
+        with CharMapper() as mapper:
+            mapper.delete(char)
 
     # Hier wird die Logik für das InfoObjekt auf Basis der Mapper realisiert
 
