@@ -21,7 +21,12 @@ import profileBO from "../api/ProfileBO";
 class CreateProfil extends Component {
     constructor(props) {
         super(props);
+        /** Initalisierung der Zustände der CreateProfil Komponente */
+
         this.state = {
+            profile_id: null,
+            favoriteNote_id: null,
+            blockNote_id: null,
             firstName: '',
             lastName: '',
             age: '',
@@ -32,6 +37,7 @@ class CreateProfil extends Component {
             smoking: '',
         };
 
+        /** Bindung der Handler an die Komponente */
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this);
         this.handleChangeLastName = this.handleChangeLastName.bind(this);
         this.handleChangeGender = this.handleChangeGender.bind(this);
@@ -41,51 +47,51 @@ class CreateProfil extends Component {
         this.handleChangeAge = this.handleChangeAge.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+    /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
         const newName = event.target.value;
         this.setState({firstName: newName});
     };
-
+    /** Event-Handler für die Änderung des Nachnamens */
     handleChangeLastName(event) {
         const newName = event.target.value;
         this.setState({lastName: newName});
     };
-
+    /** Event-Handler für die Änderung des Geschlechts */
     handleChangeGender = (event) => {
         const selectedGender = event.target.value;
         this.setState({ gender: selectedGender});
     };
-
+    /** Event-Handler für die Änderung der Größe */
     handleChangeHeight = (event) => {
         const newHeight = event.target.value;
         this.setState({height: newHeight});
     };
-
+    /** Event-Handler für die Änderung der Religion */
     handleChangeReligion = (event) => {
       const selectedReligion = event.target.value;
       this.setState({ religion: selectedReligion});
     };
-
+    /** Event-Handler für die Änderung als Raucher/Nicht-Raucher */
     handleChangeSmoking = (event) => {
         const selectedSmoker = event.target.value;
         this.setState({ smoking: selectedSmoker });
     };
-
+    /** Event-Handler für die Änderung der Haarfarbe */
     handleChangeHair = (event) => {
         const selectedHair = event.target.value;
         this.setState({ hair: selectedHair });
     };
-
-
+    /** Event-Handler für die Änderung des Alters */
     handleChangeAge = (date) => {
         const newAge = date.toISOString();
         this.setState({ age: newAge });
     };
-
+    /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id);
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
             .catch((e) =>
@@ -95,6 +101,7 @@ class CreateProfil extends Component {
             );
     };
 
+    /** render() gibt das HTML zurück, das gerendert werden soll */
     render() {
             const {
                 firstName,
@@ -109,24 +116,33 @@ class CreateProfil extends Component {
             return (
             <div>
                 <h1></h1>
+                {/** Box für die gerenderten Items der React Komponente */}
                 <Box sx={{width: {lg: '40%', md: '60%', sm: '80%'}, margin: '0 auto'}}>
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1}
                            sx={{alignItems: 'stretch'}}>
                         <Item>
-                            <FormLabel> Wie ist dein Name? </FormLabel>
+                            <FormLabel> Wie lautet dein Name? </FormLabel>
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 200, margin: '0 auto'}}>
+                                    {/** Textfeld für den Vornamen */}
                                     <TextField
                                         type={"text"}
                                         label={"Vorname"}
                                         value={firstName}
                                         onChange={this.handleChangeFirstName}
+                                        inputProps={{
+                                            maxLength: 17,
+                                        }}
                                     />
+                                    {/** Textfeld für den Nachnamen */}
                                     <TextField
                                         type="text"
                                         label="Nachname"
                                         value={lastName}
                                         onChange={this.handleChangeLastName}
+                                        inputProps={{
+                                            maxLength: 17,
+                                        }}
                                     />
                                 </Box>
                             </FormGroup>
@@ -134,13 +150,14 @@ class CreateProfil extends Component {
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 200, margin: '0 auto'}}>
-                                <FormLabel> Wie alt bist du? </FormLabel>
+                                <FormLabel> Wann wurdest du geboren? </FormLabel>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DemoContainer components={['DatePicker']}>
+                                        {/** Datepicker für das Geburtsdatum, ReactMUI der einen Kalender rendert bzw. ausgibt */}
                                         <DatePicker
                                             value={age}
                                             onChange={this.handleChangeAge}
-                                            label="Geburtsdatum"
+                                            label="Datum"
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -151,6 +168,7 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Was für ein Geschlecht hast du ? </FormLabel>
+                                {/** Auswahlbuttons für das Geschlecht */}
                                 <RadioGroup row value={gender} onChange={this.handleChangeGender}>
                                     <FormControlLabel sx={{ width: '25%' }} value="male" control={<Radio/>} label="Mann" labelPlacement="bottom"/>
                                     <FormControlLabel sx={{ width: '25%' }} value="female" control={<Radio/>} label="Frau" labelPlacement="bottom"/>
@@ -163,10 +181,17 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 150, margin: '0 auto'}}>
                                 <FormLabel> Wie Groß bist du? </FormLabel>
+                                {/** Eingabefeld für die Größe */}
                                 <TextField
                                     type={"number"}
                                     value={height}
                                     onChange={this.handleChangeHeight}
+                                    label={'cm'}
+                                    inputProps={{
+                                        min: 100,
+                                        max: 999,
+                                        pattern: "\\d{3}",
+                                    }}
                                 />
                             </Box>
                             </FormGroup>
@@ -175,6 +200,7 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Welcher Religion gehörst du an? </FormLabel>
+                                {/** Auswahlbuttons für die Religion */}
                                 <RadioGroup row value={religion} onChange={this.handleChangeReligion}>
                                     <FormControlLabel sx={{ width: '25%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '25%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
@@ -190,6 +216,7 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Welche Haarfarbe du? </FormLabel>
+                                {/** Auswahlbuttons für die Haarfarbe */}
                                 <RadioGroup row value={hair} onChange={this.handleChangeHair}>
                                     <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
@@ -204,14 +231,16 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Rauchst du ? </FormLabel>
+                                {/** Buttons für die Auswahl als Raucher */}
                                 <RadioGroup row value={smoking} onChange={this.handleChangeSmoking}>
-                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nich-Raucher" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nicht-Raucher" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '15%' }} value="smoker" control={<Radio />} label="Raucher" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
                         </Item>
                         <Item>
+                            {/** Button für die Profilerstellung */}
                             <Button onClick={this.handleSubmit}> Profil erstellen </Button>
                         </Item>
                     </Stack>
