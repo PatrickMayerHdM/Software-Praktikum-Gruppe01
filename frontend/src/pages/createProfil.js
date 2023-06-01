@@ -123,7 +123,7 @@ class CreateProfil extends Component {
                         <Item>
                             <FormLabel> Wie lautet dein Name? </FormLabel>
                             <FormGroup row style={{justifyContent: 'center'}}>
-                                <Box sx={{width: 200, margin: '0 auto'}}>
+                                <Box sx={{width: 200, margin: '0 auto', marginBottom: '10px'}}>
                                     {/** Textfeld für den Vornamen */}
                                     <TextField
                                         type={"text"}
@@ -134,6 +134,8 @@ class CreateProfil extends Component {
                                             maxLength: 17,
                                         }}
                                     />
+                                </Box>
+                                <Box sx={{width: 200, margin: '0 auto', marginBottom: '10px'}}>
                                     {/** Textfeld für den Nachnamen */}
                                     <TextField
                                         type="text"

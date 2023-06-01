@@ -59,12 +59,6 @@ export default class profileBO extends BusinessObject {
     }
 
     /**
-     * Setzt einen Account
-     *
-     * @param {*} aaccount_id
-     */
-
-    /**
      * Setzt eine blockNote_id
      *
      * @param {*} ablockNote_id
