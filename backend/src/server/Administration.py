@@ -1,17 +1,17 @@
 from server.bo.Message import Message
 from server.db.MessageMapper import MessageMapper
-from blockNote import blockNote
+from server.bo.blockNote import blockNote
 from server.db.blockNoteMapper import BlockNoteMapper
-from favoriteNote import favoriteNote
+from server.bo.favoriteNote import favoriteNote
 from server.db.FavoriteNoteMapper import FavoriteNoteMapper
-from Account import Account
+from server.bo.Account import Account
 from server.db.AccountMapper import AccountMapper
 from server.db.profileMapper import ProfileMapper
 from server.db.CharMapper import CharMapper
 from server.db.InfoObjectMapper import InfoObjectMapper
-from Profile import Profile
-from InfoObject import InfoObject
-from Characteristic import Characteristics
+from server.bo.Profile import Profile
+from server.bo.InfoObject import InfoObject
+from server.bo.Characteristic import Characteristics
 class Administration(object):
     def __init__(self):
         pass
