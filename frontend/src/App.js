@@ -208,7 +208,7 @@ class App extends Component {
                 </Routes>
             </Router>
 
-            <UpdateProfile/>
+
 
         </div>
     );

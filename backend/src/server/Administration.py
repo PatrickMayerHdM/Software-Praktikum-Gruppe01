@@ -4,7 +4,7 @@ from blockNote import blockNote
 from server.db.blockNoteMapper import BlockNoteMapper
 from favoriteNote import favoriteNote
 from server.db.FavoriteNoteMapper import FavoriteNoteMapper
-from Account import Account
+from server.bo.Account import Account
 from server.db.AccountMapper import AccountMapper
 from server.db.profileMapper import ProfileMapper
 from server.db.CharMapper import CharMapper
@@ -160,14 +160,14 @@ class Administration(object):
             return mapper.find_by_user(user_id)
 
    # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
-    def create_profile(self, favouriteNote_id, blockNote_id, profile):
+    def create_profile(self, favoritenote_id, blocknote_id):
         prof = Profile()
-        prof.set_favorite_note_id(favouriteNote_id)
-        prof.set_block_note_id(blockNote_id)
+        prof.set_favorite_note_id(favoritenote_id)
+        prof.set_block_note_id(blocknote_id)
         #.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
-            return mapper.insert(profile)
+            mapper.insert(prof)
 
     def save_profile(self, profile):
         with ProfileMapper() as mapper:
