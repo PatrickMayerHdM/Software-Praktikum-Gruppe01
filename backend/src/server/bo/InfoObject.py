@@ -25,8 +25,8 @@ class InfoObject(bo):
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
-    def set_char_fk(self, char):
-        self.char_fk = char.get_char_id()
+    def set_char_fk(self, char_fk):
+        self.char_fk = char_fk
 
     def get_char_fk(self):
         return self.char_fk
@@ -86,6 +86,20 @@ class InfoObject(bo):
 
     def get_smoking_status(self):
         return self.smoking
+
+    def get_char_by_key(self, key):
+        # Mapping der Schlüssel zu char_fk
+        char_fk_mapping = {
+            'age': 10,
+            'firstName': 20,
+            'gender': 30,
+            'hair': 40,
+            'height': 50,
+            'lastName': 60,
+            'religion': 70,
+            'smoking': 80
+        }
+        return char_fk_mapping.get(key, None)
 
     @staticmethod
     def from_dict(dictionary=dict()):

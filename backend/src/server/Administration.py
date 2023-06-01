@@ -231,8 +231,13 @@ class Administration(object):
                 info_obj = InfoObject()
                 info_obj.set_profile_fk(profile_fk)
                 info_obj.set_value(value)
-                #info_obj.set_char_fk(key)
-                mapper.insert(info_obj)
+                char_fk = self.get_char_by_id(key)
+                if char_fk is not None:
+                    info_obj.set_char_fk(char_fk)
+                    mapper.insert(info_obj)
+                else:
+                    print(f'Ungültiger Key: {key}')
+
 
     def update_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
