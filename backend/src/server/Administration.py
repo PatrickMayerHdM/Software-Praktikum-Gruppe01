@@ -167,7 +167,7 @@ class Administration(object):
         #.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
-            return mapper.insert(profile)
+            return mapper.insert(prof)
 
     def save_profile(self, profile):
         with ProfileMapper() as mapper:
