@@ -57,13 +57,18 @@ class InfoObjectMapper(mapper):
 
     def insert(self, info_obj):
         cursor = self._connection.cursor()
-        cursor.execute('SELECT MAX(info_object_id) AS maxid FROM main.InfoObject')
+        cursor.execute('SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject')
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            info_obj.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                info_obj.set_id(maxid[0] + 1)
 
-        command = 'INSERT INTO main.InfoObject (info_object_id, char_fk, profile_fk, value) VALUES (%s, %s, %s, %s)'
+            else:
+                info_obj.set_id(1)
+
+
+        command = 'INSERT INTO main.InfoObject (infoobject_id, char_id, profile_id, char_value) VALUES (%s, %s, %s, %s)'
 
         data = (info_obj.get_id(),
                 info_obj.get_char_fk(),

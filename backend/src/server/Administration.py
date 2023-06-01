@@ -225,9 +225,14 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def create_info_object(self, infoobject):
+    def create_info_object(self, profile_fk, info_dict):
         with InfoObjectMapper() as mapper:
-            return mapper.insert(infoobject)
+            for key, value in info_dict.items():
+                info_obj = InfoObject()
+                info_obj.set_profile_fk(profile_fk)
+                info_obj.set_value(value)
+                #info_obj.set_char_fk(key)
+                mapper.insert(info_obj)
 
     def update_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
