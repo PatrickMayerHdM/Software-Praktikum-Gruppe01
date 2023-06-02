@@ -73,6 +73,10 @@ chat = api.inherit('Chat', bo, {
     'profile_id': fields.Integer(attribut='_profile_id', description='Unique Id eines Profils')
 })
 
+chat = api.inherit('Chat', bo, {
+    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht')
+})
+
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
