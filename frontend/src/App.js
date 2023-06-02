@@ -44,6 +44,7 @@ class App extends Component {
 
     this.state = {
       currentUser: null,
+      currentUserUid: null,
       menuAnchor: null,
       authError:null,
       appError:null,
@@ -58,6 +59,7 @@ class App extends Component {
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const currentUser = auth.currentUser
 
     onAuthStateChanged(auth, (user) => {
 
@@ -102,6 +104,12 @@ class App extends Component {
         });
       }
     });
+
+    if (currentUser) {
+      const currentUserUid = currentUser.uid;
+      this.setState({ currentUserUid });
+
+    }
   }
 
   /** Handler-Funktion, die beim Klicken auf den "Anmelden"-Button aufgerufen wird */
@@ -164,7 +172,7 @@ class App extends Component {
 
   render() {
 
-    const { currentUser } = this.state;
+    const { currentUser, currentUserUid } = this.state;
 
     if (!currentUser) {
     // Wenn kein User angemeldet ist wird nur das Anmeldefenster gerendert.
@@ -202,7 +210,7 @@ class App extends Component {
                 <Routes>
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<Profile />}></Route>
-                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil /></Secured>}></Route>
+                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil profile={currentUserUid}/></Secured>}></Route>
                       <Route path="/Suche" element={<Search/>}></Route>
                       <Route path="/Suche/Suchprofil" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>

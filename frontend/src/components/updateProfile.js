@@ -19,16 +19,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Characteristic from "../api/CharacteristicBO";
-import PropTypes from "prop-types";
 
 
 class UpdateProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            profile_id: null,
-            favoriteNote_id: null,
-            blockNote_id: null,
+            profile_id: 0,
+            favoriteNote_id: 0,
+            blockNote_id: 0,
             firstName: '',
             lastName: '',
             age: '',
@@ -307,7 +306,7 @@ class UpdateProfile extends Component {
                         </FormGroup>
                         </Item>
                         <Item>
-                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profile Update </Button>
+                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profil Update </Button>
                         </Item>
                     </Stack>
                 </Box>
@@ -316,11 +315,5 @@ class UpdateProfile extends Component {
             );
         }
 }
-
-
-UpdateProfile.propTypes = {
-    profile: PropTypes.object.isRequired,
-};
-
 export default UpdateProfile;
 

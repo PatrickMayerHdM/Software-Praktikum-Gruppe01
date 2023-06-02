@@ -15,18 +15,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DatingSiteAPI, { addProfile } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
-
-
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Characteristic from "../api/CharacteristicBO";
+import PropTypes from 'prop-types';
 
 class CreateProfil extends Component {
     constructor(props) {
         super(props);
         /** Initalisierung der Zustände der CreateProfil Komponente */
-
         this.state = {
-            profile_id: null,
-            favoriteNote_id: null,
-            blockNote_id: null,
+            profile_id: props.profile,
+            favoriteNote_id: 0,
+            blockNote_id: 0,
             firstName: '',
             lastName: '',
             age: '',
@@ -35,6 +37,10 @@ class CreateProfil extends Component {
             religion: '',
             hair: '',
             smoking: '',
+            char_name: '',
+            char_desc: '',
+            showTextFields: false,
+            profileCreated: false,
         };
 
         /** Bindung der Handler an die Komponente */
@@ -46,7 +52,13 @@ class CreateProfil extends Component {
         this.handleChangeSmoking = this.handleChangeSmoking.bind(this);
         this.handleChangeAge = this.handleChangeAge.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
+        this.handleCreateChar = this.handleCreateChar.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSaveInputs = this.handleSaveInputs.bind(this);
+    };
+
     /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
         const newName = event.target.value;
@@ -91,9 +103,60 @@ class CreateProfil extends Component {
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.props.profile, this.state.favoriteNote_id, this.state.blockNote_id);
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
+            .then(() => {
+                this.setState({ profileCreated: true });
+            })
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+    };
+
+    handleCreateChar = () => {
+        this.setState({showTextFields: true});
+    };
+    handleInputChange = (event, field) => {
+        this.setState({ [field]: event.target.value });
+    };
+    handleSaveInputs = () => {
+        console.log(this.state)
+        const { char_name, char_desc } = this.state;
+        this.setState({ char_name: char_name, char_desc: char_desc})
+        const createdCharForProfile = new Characteristic(this.state._aid ,this.state._name);
+        DatingSiteAPI.getAPI()
+            .createCharForProfile(createdCharForProfile)
+            .catch((e) => {
+                this.setState({
+                    error: e
+                });
+            });
+    };
+
+
+    handleUpdate(event) {
+        console.log(this.state)
+        event.preventDefault();
+        const updatedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        DatingSiteAPI.getAPI()
+            .updateProfile(updatedProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+    };
+
+    handleRemove(event) {
+        console.log(this.props.profile)
+        console.log(this.state)
+        event.preventDefault();
+        const { profile } = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id);
+        DatingSiteAPI.getAPI()
+            .removeProfile(profile.getID())
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -112,6 +175,9 @@ class CreateProfil extends Component {
                 religion,
                 hair,
                 smoking,
+                char_name,
+                char_desc,
+                showTextFields,
             } = this.state;
             return (
             <div>
@@ -245,6 +311,36 @@ class CreateProfil extends Component {
                             {/** Button für die Profilerstellung */}
                             <Button onClick={this.handleSubmit}> Profil erstellen </Button>
                         </Item>
+                        <Item>
+                        <FormGroup row style={{justifyContent: 'center'}}>
+                            <Box sx={{width: 400, margin: '0 auto'}}>
+                                <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
+                                {showTextFields && (
+                                    <>
+                                        <Box sx={{ marginBottom: '10px' }}>
+                                            <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')}></TextField>
+                                        </Box>
+                                        <Box sx={{ marginBottom: '10px' }}>
+                                            <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')}></TextField>
+                                        </Box>
+                                        <Box sx={{ marginBottom: '10px' }}>
+                                            <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
+                                        </Box>
+                                    </>
+                                )}
+                            </Box>
+                        </FormGroup>
+                        </Item>
+                        <Item>
+                        <FormGroup row style={{justifyContent: 'center'}}>
+                            <Box sx={{width: 400, margin: '0 auto'}}>
+                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />} > Profil löschen! </Button>
+                            </Box>
+                        </FormGroup>
+                        </Item>
+                        <Item>
+                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profil Update </Button>
+                        </Item>
                     </Stack>
                 </Box>
                 <span></span>
@@ -252,4 +348,9 @@ class CreateProfil extends Component {
             );
         }
 }
+
+CreateProfil.propTypes = {
+    currentUser: PropTypes.string.isRequired,
+};
+
 export default CreateProfil;
