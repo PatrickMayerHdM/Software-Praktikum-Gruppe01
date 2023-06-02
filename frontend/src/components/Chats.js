@@ -1,35 +1,38 @@
 import React from "react";
 import Chat from "./Chat";
+import {Link} from "react-router-dom";
 
 
 class Chats extends React.Component{
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            chats: [] // Dies stellt die Liste mit allen Chats einer Person dar.
+        };
+    }
+
     render () {
+        const { chats } = this.state;
+
         return (
             <div>
-                <Chat
-                    name="Dominik Wu"
-                    content="Hallo, wie geht es dir?"
-                    timestamp="vor 10 Minuten"
-                />
-                <Chat
-                    name="Efstratios Va"
-                    content="Wann treffen wir uns an der Uni?"
-                    timestamp="vor 20 Minuten"
-                />
-                <Chat
-                    name="Oresto GPT"
-                    content="Hallo, ich bin eine KI."
-                    timestamp="vor 45 Minuten"
-                />
-                <Chat
-                    name="Patrick Me"
-                    content="Whats going on guys?"
-                    timestamp="vor 1 Stunde"
-                />
+                {chats.length > 0 ? (
+                // Prüfen, ob Chats mit anderen Nutzern vorhanden sind
+                    <ul>
+                        {chats.map(chat => (
+                            <li key={chat.id}>
+                                {/*<Link to="/ChatWindow/${ChatId}">*/}
+                                    {chat.id}
+                                {/*</Link>*/}
+                            </li>
+                        ))}
+                    </ul>
+                )   :   (
+                    <p>Du hast keine offenen Chats...</p>
+                )}
             </div>
-    )
-    }
+    )}
 }
 
 export default Chats;

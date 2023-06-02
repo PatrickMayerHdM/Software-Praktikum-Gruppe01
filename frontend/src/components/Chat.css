@@ -32,12 +32,6 @@
     border-radius: 20px;
 }
 
-.chatWindow_timestamp {
-    text-align: center;
-    padding: 20px;
-    color: grey;
-}
-
 .chatWindow_contentUser {
     margin-left: auto;
     background-color: mediumseagreen;
