@@ -18,7 +18,7 @@ class BlockProfileBoxList extends React.Component{
 
         // Methode zur Darstellung einer FavoriteProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
-            <Grid item xs={12} >
+            <Grid item xs={12} key={index} >
                 <Item>
                     <BlockProfileBox/>
                 </Item >
