@@ -10,16 +10,15 @@ import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import { Link } from "react-router-dom"
 import DatingSiteAPI from "../api/DatingSiteAPI";
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 /**
- * Innerhalb der Suche, gibt es für den User später verschiedene Optionen.
+ * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
  * Hierbei kann dieser einerseits, nur neue Profile anzeigen und andererseits kann dieser zwischen seinen Suchprofilen
  * das Suchprofil auswählen, mit welcher er aktuell suchen will.
- * sx={{ width: {sm: '100%'}
+ *
  */
-
-
-
 
 
 class Search extends React.Component{
@@ -27,13 +26,23 @@ class Search extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+          numSearchProfiles: 0,
           selectedProfileIndex: null,
+          Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
           profiles: [ ],
           profile_id: 22,
+          deletingError: null,
         }
 
-        this.NewProfiles = this.NewProfiles.bind(this); // Binden Sie die Methode an den Komponentenkontext
+        this.NewProfiles = this.NewProfiles.bind(this);
+        this.AddSearchProfiles = this.AddSearchProfiles.bind(this);
+        this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
+        this.loadPage = this.loadPage.bind(this);
+        this.loading = this.loading.bind(this);
     }
+
+
+
 
     // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
     NewProfiles(){
@@ -43,9 +52,14 @@ class Search extends React.Component{
         DatingSiteAPI.getAPI().getOnlyNewProfiles(profile_id).then(newprofiles =>
             this.setState(prevState => ({
                 profiles: [...prevState.profiles, ...newprofiles]
-        }))).catch(error => {
+            }), () => {
+            console.log(this.state.profiles[0]);
+            })
+        ).catch(error => {
           console.error('Error fetching data from API:', error);
         });
+
+        console.log(this.state.profiles[0])
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das aktuell ausgewähle Profil bearbeitet werden kann.
@@ -65,6 +79,52 @@ class Search extends React.Component{
         this.setState({ selectedProfileIndex: index });
     }
 
+    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier angelegt wird.
+    AddSearchProfiles() {
+        this.setState(prevState => ({ numSearchProfiles: prevState.numSearchProfiles + 1 }), () => {
+        });
+
+    }
+
+    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier gelöscht wird.
+    DeleteSearchProfile(){
+        console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
+        console.log(this.state.profiles[[2]])
+    }
+
+    // Funktion für das Laden der Seite, wenn die Fetch Anfrage möglich ist
+    loading(){
+        DatingSiteAPI.getAPI()
+        .getSearchProfileIDs()
+        .then(Searchprofilesvar => {
+          this.setState(prevState => ({
+            Searchprofiles: [...prevState.Searchprofiles, ...Searchprofilesvar]
+          }));
+
+          const lengthSearchprofiles = this.state.Searchprofiles.length;
+          console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+          this.setState({ numSearchProfiles: lengthSearchprofiles });
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
+    }
+
+    // Funktion für das Laden der Seite, wenn die Fetch Anfrage nicht möglich ist (Development Zwecke)
+    loadPage() {
+      this.setState({ Searchprofiles: [12, 56, 34] }, () => {
+        const lengthSearchprofiles = this.state.Searchprofiles.length;
+        console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+        this.setState({ numSearchProfiles: lengthSearchprofiles });
+      });
+    }
+
+    // funktion welche funktionen beim Laden der Seite aufruft
+
+    componentDidMount() {
+      this.loadPage()
+    }
+
 
     /**
      * rendert den Komponenten
@@ -73,10 +133,10 @@ class Search extends React.Component{
 
 
         // const welche die Anzahl an zu erstellenden Suchprofilen angibt
-        const numSearchProfiles = 4;
+        //const numSearchProfiles = 4;
 
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
-        const SearchProfileListing = Array(numSearchProfiles)
+        const SearchProfileListing = Array(this.state.numSearchProfiles)
           .fill(null)
           .map((item, index) => (
             <Grid item key={index} md={2} xs={2} >
@@ -89,9 +149,9 @@ class Search extends React.Component{
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor:
-                    this.state.selectedProfileIndex === index ? "#820263" : "#30638E", // Wenn ein Profil ausgewählt ist, wird "#820263" als Farbe verwendet, sonst: "#30638E"
+                    this.state.selectedProfileIndex === index ? "#8F3985" : "#30638E", // Wenn ein Profil ausgewählt ist, wird "#820263" als Farbe verwendet, sonst: "#30638E"
                   color: "#fff",
-                  cursor: "pointer",
+                  cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
                 }}
               >
                 Suchprofil {index + 1}
@@ -119,7 +179,7 @@ class Search extends React.Component{
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "center",
-                                      backgroundColor: "#7AA095",
+                                      backgroundColor: "#587D71",
                                       color: "#fff",
                                       cursor: "pointer"
                                     }}
@@ -128,8 +188,45 @@ class Search extends React.Component{
                                   </button>
                                 </Grid>
 
-                                  {/** Hier werden die Buttons für die Anzahl der Suchprofile eingetragen */}
-                                {SearchProfileListing}
+
+                                {/** Hier werden die Buttons zum Erstellen eines Suchprofils erstellt */}
+                                <Grid item md={2} xs={2} >
+                                    <Link to="/Suche/Suchprofil">
+                                        <button
+                                        onClick={this.AddSearchProfiles} style={{
+                                          height: "120%",
+                                          width: "100%",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          backgroundColor: "#6665DD",
+                                          color: "#fff",
+                                          cursor: "pointer"}}>
+                                            <AddIcon/>
+                                        </button>
+                                    </Link>
+
+                                </Grid>
+
+                                {/** Hier wird der Button zum Suchen nach dem aktuell ausgewählten Suchprofil angezeigt */}
+                                <Grid item md={4} xs={4}>
+                                  <button
+                                    onClick={() => this.Search()}
+                                    style={{
+                                      height: "120%",
+                                      width: "100%",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      backgroundColor: "#8F3985",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                      margin: "auto",
+                                    }}
+                                  >
+                                    <SearchIcon />
+                                  </button>
+                                </Grid>
 
                                   {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
                                 <Grid item md={2} xs={2} >
@@ -151,29 +248,34 @@ class Search extends React.Component{
                                       </button>
                                   </Link>
                                 </Grid>
+
+                                  {/** Hier wird der Button zum Löschen des ausgewählten Suchprofils erstellt */}
+                                <Grid item md={2} xs={2} >
+
+                                      <button
+                                          onClick={() => this.DeleteSearchProfile()}
+                                        style={{
+                                          height: "120%",
+                                          width: "100%",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          backgroundColor: "#d00000",
+                                          color: "#fff",
+                                          cursor: "pointer"
+                                        }}
+                                      >
+                                        <DeleteIcon/>
+                                      </button>
+
+                                </Grid>
                             </Grid>
                         </Item>
 
                         <Item sx={{ width: "100%"}}>
-                            {/** Hier wird der Button zum suchen nach dem aktuell ausgewählten Suchprofil angezeigt */}
-                            <Grid item>
-                              <button
-                                onClick={() => this.Search()}
-                                style={{
-                                  height: "120%",
-                                  width: "100%",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  backgroundColor: "#ff0059",
-                                  color: "#fff",
-                                  cursor: "pointer",
-                                  margin: "auto",
-                                }}
-                              >
-                                <SearchIcon />
-                              </button>
-                            </Grid>
+                            {/** Hier werden die Buttons für die Anzahl der Suchprofile eingetragen */}
+                                {SearchProfileListing}
+
                         </Item>
                      </Stack>
                  </Item>
