@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 
 class Search extends React.Component{
-    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -32,6 +32,7 @@ class Search extends React.Component{
           profiles: [ ],
           profile_id: 22,
           deletingError: null,
+          clickable: false,
         }
 
         this.NewProfiles = this.NewProfiles.bind(this);
@@ -39,6 +40,7 @@ class Search extends React.Component{
         this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
         this.loadPage = this.loadPage.bind(this);
         this.loading = this.loading.bind(this);
+        this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
     }
 
 
@@ -65,6 +67,7 @@ class Search extends React.Component{
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das aktuell ausgewähle Profil bearbeitet werden kann.
     EditSearchProfiles() {
         console.log("Das Suchprofil", this.state.selectedProfileIndex, " wird bearbeitet")
+        console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[this.state.selectedProfileIndex], "geändert");
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn der Such Button gedrückt wird, damit später dann danach gesucht wird.
@@ -74,9 +77,11 @@ class Search extends React.Component{
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
     ChangeSearchProfiles(index) {
-        console.log("Es wurde auf das Suchprofil", index, "geändert");
+        console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
+        console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[index], "geändert");
         // State handling, damit die Farbe von dem ausgewählten Profil geändert wird
         this.setState({ selectedProfileIndex: index });
+        this.setState({ clickable: true });
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier angelegt wird.
@@ -104,6 +109,7 @@ class Search extends React.Component{
           const lengthSearchprofiles = this.state.Searchprofiles.length;
           console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
           this.setState({ numSearchProfiles: lengthSearchprofiles });
+
         })
         .catch(error => {
           console.error('Error fetching data from API:', error);
@@ -112,17 +118,21 @@ class Search extends React.Component{
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage nicht möglich ist (Development Zwecke)
     loadPage() {
-      this.setState({ Searchprofiles: [12, 56, 34] }, () => {
-        const lengthSearchprofiles = this.state.Searchprofiles.length;
-        console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
-        this.setState({ numSearchProfiles: lengthSearchprofiles });
-      });
+        const dummySearchProfiles = [12, 56, 34];
+
+        this.setState({ Searchprofiles: dummySearchProfiles }, () => {
+            const lengthSearchprofiles = this.state.Searchprofiles.length;
+            //console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+            //console.log("Die Seite wird geladen, dass ist das Array mit Suchprofilen", this.state.Searchprofiles);
+            //console.log("Die Seite wird geladen, dass ist ein einzelnes Suchprofil", this.state.Searchprofiles[1]);
+            this.setState({ numSearchProfiles: lengthSearchprofiles });
+        });
     }
 
     // funktion welche funktionen beim Laden der Seite aufruft
 
     componentDidMount() {
-      this.loadPage()
+      this.loadPage();
     }
 
 
@@ -130,6 +140,8 @@ class Search extends React.Component{
      * rendert den Komponenten
      */
     render() {
+
+        const { clickable } = this.state
 
 
         // const welche die Anzahl an zu erstellenden Suchprofilen angibt
@@ -222,6 +234,7 @@ class Search extends React.Component{
                                       color: "#fff",
                                       cursor: "pointer",
                                       margin: "auto",
+                                      pointerEvents: clickable ? '' : 'none',
                                     }}
                                   >
                                     <SearchIcon />
@@ -230,7 +243,7 @@ class Search extends React.Component{
 
                                   {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
                                 <Grid item md={2} xs={2} >
-                                  <Link to="/Suche/Suchprofil">
+                                  <Link to="/Suche/Suchprofil" style={{ pointerEvents: clickable ? '' : 'none' }} >
                                       <button
                                           onClick={() => this.EditSearchProfiles()}
                                         style={{
@@ -244,7 +257,7 @@ class Search extends React.Component{
                                           cursor: "pointer"
                                         }}
                                       >
-                                        <EditIcon />
+                                        <EditIcon/>
                                       </button>
                                   </Link>
                                 </Grid>
@@ -262,7 +275,8 @@ class Search extends React.Component{
                                           justifyContent: "center",
                                           backgroundColor: "#d00000",
                                           color: "#fff",
-                                          cursor: "pointer"
+                                          cursor: "pointer",
+                                          pointerEvents: clickable ? '' : 'none',
                                         }}
                                       >
                                         <DeleteIcon/>

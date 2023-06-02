@@ -224,7 +224,7 @@ class SearchProfile extends React.Component{
                         <Item >
                             {/** Hier kann die gewünschte Höhe einer Person ausgewählt werden */}
                             <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel>Welche größe sollte die Person haben?</FormLabel>
+                                <FormLabel>Welche Körpergröße sollte die Person haben?</FormLabel>
                                 <Slider
                                     value={[height.minHeight, height.maxHeight]}
                                     onChange={this.handleChangeHeight}
