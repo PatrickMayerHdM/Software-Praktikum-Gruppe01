@@ -27,7 +27,10 @@ class ChatProfileBox extends React.Component{
                 </Grid >
                 <Grid item item xs={2} >
                     <button onClick={ChatDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2A9D8F", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
-                        <ChatBubbleIcon/>
+                        {/*<Link to="/ChatWindow/${ChatId}">*/}
+                        {/*Hier muss der Chat dargestellt werden zwischen Current User (Ich) und dem des angezeigten Profils*/}
+                            <ChatBubbleIcon/>
+                        {/*</Link>*/}
                     </button>
                 </Grid>
 

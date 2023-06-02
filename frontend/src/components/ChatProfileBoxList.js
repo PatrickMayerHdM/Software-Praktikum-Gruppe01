@@ -30,16 +30,16 @@ class ChatProfileBoxList extends React.Component{
             <div>
                 <h2>Liste der Chats:</h2>
 
-                <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'},  margin: '0 auto'}} >
-                  <Grid item container spacing={2}
-                    justifyContent="center">
-                      {Listing}
-                  </Grid >
-                </Box >
-
+                {Listing.length > 0 ? (
+                    <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'}, margin: '0 auto'}} >
+                        <Grid item container spacing={2} justifyContent="center">
+                            {Listing}
+                        </Grid>
+                    </Box>
+                ) : (
+                    <p>Du hast keine offenen Chats...</p>
+                )}
             </div>
-
-
         )
     }
 

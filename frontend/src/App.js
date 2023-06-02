@@ -25,7 +25,6 @@ import Header from "./components/Header";
 import * as React from "react";
 import {BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import Chats from "./components/Chats";
 import { useNavigate } from 'react-router-dom';
 import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./components/BlockProfileBoxList";
