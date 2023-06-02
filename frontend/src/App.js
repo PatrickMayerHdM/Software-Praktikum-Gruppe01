@@ -45,7 +45,7 @@ class App extends Component {
 
     this.state = {
       currentUser: null,
-      currentUserUid: null,
+      currentUserUid: '',
       menuAnchor: null,
       authError:null,
       appError:null,

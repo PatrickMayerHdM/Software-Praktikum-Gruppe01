@@ -1,8 +1,7 @@
 import React from "react";
 import "./Chat.css";
-import chatBO from "../api/ChatBO";
 import DatingSiteAPI from "../api/DatingSiteAPI";
-
+import chatBO from "../api/ChatBO";
 
 class Chat extends React.Component{
     render() {
