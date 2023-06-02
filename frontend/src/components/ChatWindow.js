@@ -68,7 +68,6 @@ class ChatWindow extends Component {
 
         return (
             <div className="chat_window">
-                <p className="chatWindow_timestamp">Du hast mit Dominik am 10/05/2023 gematcht!</p>
                 {content.map((message, index) => (
                 // Darstellung des Chat-Verlaufs
                 // Die map-Funktion iteriert über das message-Array und erstellt für jede Nachricht
