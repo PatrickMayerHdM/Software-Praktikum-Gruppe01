@@ -205,9 +205,11 @@ export default class DatingSiteAPI {
 
     #getNewProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/newprofiles`;
     #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
+    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`;
+
 
     /**
-     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
+     * Gibt ein Promise zurück, welches dann ein Array mit ProfilIDs enthält
      * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
     */
 
@@ -224,6 +226,11 @@ export default class DatingSiteAPI {
 
     }
 
+    /**
+     * Gibt ein Promise zurück, welches dann ein Array mit den verschiedenen ProfilIDs für Suchprofile
+     * @param {Number} accountID übergibt die accountID für welche die Profile nicht
+    */
+
     getSearchProfileIDs(){
         return this.#fetchAdvanced(this.#getSearchProfilesByIdURL())
             .then((responseJSON) => {
@@ -235,6 +242,23 @@ export default class DatingSiteAPI {
 
             })
     }
+
+    /**
+     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
+     * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
+    */
+
+    deleteSearchProfile(profile_id) {
+    return this.#fetchAdvanced(this.#deleteSearchProfile(profile_id), {
+      method: 'DELETE'
+    })
+      .then((responseJSON) => {
+        let profileBOs = ProfileBO.fromJSON(responseJSON)[0];
+        return new Promise(function (resolve) {
+          resolve(profileBOs);
+        })
+      })
+  }
 
 }
 
