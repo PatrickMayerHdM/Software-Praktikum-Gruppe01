@@ -29,9 +29,9 @@ class Search extends React.Component{
           numSearchProfiles: 0,
           selectedProfileIndex: null,
           Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
-          profiles: [ ],
-          profile_id: 22,
-          deletingError: null,
+          profiles: [ ], // Die Profile die wir als Antwort bekommen.
+          profile_id: 22, // Die eigene Profil_id diese soll im fertigen Code wahrscheinlich durch props handling erhalten werden.
+          deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
           clickable: false,
         }
 
@@ -64,7 +64,10 @@ class Search extends React.Component{
         console.log(this.state.profiles[0])
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das aktuell ausgewähle Profil bearbeitet werden kann.
+    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das aktuell
+    // ausgewähle Profil bearbeitet werden kann.
+    // Hier soll die URL an welche der User zum bearbeiten weitergeleitet wird, die Suchprofil_ID des zu bearbeitenden
+    // Suchprofils beinhalten.
     EditSearchProfiles() {
         console.log("Das Suchprofil", this.state.selectedProfileIndex, " wird bearbeitet")
         console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[this.state.selectedProfileIndex], "geändert");
@@ -107,7 +110,8 @@ class Search extends React.Component{
           }));
 
           const lengthSearchprofiles = this.state.Searchprofiles.length;
-          console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+          //console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+          //this.setState({ numSearchProfiles: lengthSearchprofiles });
           this.setState({ numSearchProfiles: lengthSearchprofiles });
 
         })
@@ -141,11 +145,8 @@ class Search extends React.Component{
      */
     render() {
 
+        // const für den Status, ob die buttons (Suche, edit, delete ausführbar sind)
         const { clickable } = this.state
-
-
-        // const welche die Anzahl an zu erstellenden Suchprofilen angibt
-        //const numSearchProfiles = 4;
 
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
         const SearchProfileListing = Array(this.state.numSearchProfiles)
