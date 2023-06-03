@@ -20,15 +20,18 @@ class ChatProfileBoxList extends React.Component{
         // const für die Anzahl der anzuzeigenden Profile innerhalb der ChatListe
         const count = 1;
 
+        const current_profile = this.props.user.uid;
+
+        const other_profile = 13;
+
         // Methode zur Darstellung einer ChatProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} >
                 <Item>
-                    <ChatProfileBox/>
+                    <ChatProfileBox current_profile={current_profile} other_profile={other_profile}/>
                 </Item >
             </Grid >
         ));
-
 
         return (
             <div>

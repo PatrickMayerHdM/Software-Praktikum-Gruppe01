@@ -11,10 +11,9 @@ class ChatWindow extends Component {
         super(props);
         this.state = {
             // id: this.props.messageId,
-            sender_id: 1, /*Hier muss "this.props.profile hin"*/
-            recipient_id: 2, /*Hier muss "this.props.profile hin"*/
+            sender_id: this.props.current_profile, /*Hier muss "this.props.profile hin"*/
+            recipient_id: this.props.other_profile, /*Hier muss "this.props.profile hin"*/
             content: [],
-            timestamp: this.props.timestamp,
             error: '',
             input: '',
 
@@ -25,12 +24,13 @@ class ChatWindow extends Component {
         this.setInput = this.setInput.bind(this);
     }
 
-    componentDidMount() {
-        const { eigeneID, andereID } = this.props.match.params;
-        this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
-            this.getAllMessages();
-        });
-    }
+    // componentDidMount() {
+    //     console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id)
+    //     const { eigeneID, andereID } = this.props.match.params;
+    //     this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
+    //         this.getAllMessages();
+    //     });
+    // }
 
     getAllMessages() {
         const { sender_id, recipient_id } = this.state;
