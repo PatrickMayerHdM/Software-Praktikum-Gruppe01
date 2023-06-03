@@ -68,6 +68,15 @@ infoobject = api.inherit('InfoObject', bo, {
     'value': fields.Integer(attribute='_value', description='Eingabewerte / Merkmalsausprägung zur Eigenschaft')
 })
 
+chat = api.inherit('Chat', bo, {
+    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht'),
+    'profile_id': fields.Integer(attribut='_profile_id', description='Unique Id eines Profils')
+})
+
+chat = api.inherit('Chat', bo, {
+    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht')
+})
+
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
@@ -94,14 +103,25 @@ class ProfileListOperations(Resource):
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
+        proposal_two = InfoObject.from_dict(api.payload)
 
-        if proposal is not None:
+        if proposal and proposal_two is not None:
 
             p = adm.create_profile(
                 proposal.get_favorite_note_id(),
                 proposal.get_block_note_id())
 
-            return p, 200
+            infobj = adm.create_info_object(
+                proposal_two.get_profile_fk(),
+                proposal_two.to_dict()
+            )
+
+            response = {
+                'profiles': p,
+                'info_objets': infobj
+            }
+
+            return response, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
