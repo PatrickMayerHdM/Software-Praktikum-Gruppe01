@@ -4,17 +4,17 @@ import Grid from "@mui/material/Grid";
 import React from "react";
 import ProfileBox from "./ProfileBox";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import {Link} from "react-router-dom";
+import chatBO from "../api/ChatBO";
 
 class ChatProfileBox extends React.Component{
 
     render() {
-            /** Funktion welche ausgeführt wird, wenn der Button "Von ChatListe Entfernen" gedrückt wird.
-         * Bisher zu Testzwecken noch nicht weiter ausgeführt */
-        function ChatDelClicked(){
-            console.log("Hier führt es später zum Chat Fenster mit einer Person")
+        function newChat(){
+                console.log("Neues Chat-Fenster von eigenem Profil XY mit dem Profil XY.")
         }
 
-        /** Die Profilbox an sich, speziell angepasst auf die Gegebenheiten zur Darstellung der ChatListe **/
+        const { eigeneID, andereID } = this.props;
 
         return(
             <Box sx={{ flexGrow: 1 }}>
@@ -25,15 +25,14 @@ class ChatProfileBox extends React.Component{
                       <ProfileBox/>
                   </Item >
                 </Grid >
-                <Grid item item xs={2} >
-                    <button onClick={ChatDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2A9D8F", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
-                        {/*<Link to="/ChatWindow/${ChatId}">*/}
-                        {/*Hier muss der Chat dargestellt werden zwischen Current User (Ich) und dem des angezeigten Profils*/}
+                    <Grid item item xs={2} >
+                    {/*<Link to={`/ChatWindow/${eigeneID}/${andereID}`}>*/}
+                        <button onClick={newChat} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2A9D8F", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                            {/*Hier muss der Chat dargestellt werden zwischen Current User (Ich) und dem des angezeigten Profils*/}
                             <ChatBubbleIcon/>
-                        {/*</Link>*/}
-                    </button>
-                </Grid>
-
+                        </button>
+                    {/*</Link>*/}
+                    </Grid>
               </Grid >
             </Box >
             )

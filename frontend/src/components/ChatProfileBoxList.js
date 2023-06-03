@@ -11,10 +11,14 @@ import React from "react";
 
 class ChatProfileBoxList extends React.Component{
 
+    componentDidMount() {
+        console.log(this.props.user.uid);
+    }
+
     render() {
 
         // const für die Anzahl der anzuzeigenden Profile innerhalb der ChatListe
-        const count = 3;
+        const count = 1;
 
         // Methode zur Darstellung einer ChatProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
