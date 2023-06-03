@@ -10,7 +10,6 @@ import LogIn from "./pages/LogIn";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import ChatProfileBox from "./components/ChatProfileBox";
-import Chat from "./components/Chat";
 import Merkliste from "./pages/Merkliste";
 import Sperrliste from "./pages/Sperrliste";
 import Profile from "./components/Profile";
@@ -208,8 +207,8 @@ class App extends Component {
                       <Route path="/Suche/Suchprofil" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
                       <Route path="/Sperrliste" element={<BlockProfileBoxList/>}></Route>
-                      <Route path="/Chats" element={<ChatProfileBoxList />}></Route>
-                      <Route path="/ChatWindow/:user" element={<ChatWindow />}></Route>
+                      <Route path="/Chats" element={<ChatProfileBoxList user={currentUser}/>}></Route>
+                      <Route path="/ChatWindow/:eigeneID/:andereID" element={<ChatWindow/>}></Route>
                     </Route>
                 </Routes>
             </Router>
