@@ -43,8 +43,6 @@ class ChatProfileBoxList extends React.Component{
 
         const current_profile = this.props.user.uid;
 
-        const other_profile = this.state.profiles[this.state.otherProfileIndex];
-
         // Methode zur Darstellung einer ChatProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} >

@@ -1,5 +1,4 @@
 import messageBO from './MessageBO';
-import MessageBO from "./AccountBO";
 import profileBO from "./ProfileBO";
 import ProfileBO from "./ProfileBO";
 import Characteristic from "./CharacteristicBO";
@@ -47,8 +46,7 @@ export default class DatingSiteAPI {
 
     getAllMessages() {
         return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
-            let messageBOs = MessageBO.fromJSON(responseJSON);
-
+            let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
             })
