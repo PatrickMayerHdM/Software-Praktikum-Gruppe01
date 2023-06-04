@@ -90,13 +90,13 @@ class InfoObject(bo):
     def get_char_by_key(self, key):
         # Mapping der Schlüssel zu char_fk
         char_fk_mapping = {
-            'age': 10,
-            'firstName': 20,
-            'gender': 30,
-            'hair': 40,
+            'age': 30,
+            'firstName': 10,
+            'gender': 40,
+            'hair': 70,
             'height': 50,
-            'lastName': 60,
-            'religion': 70,
+            'lastName': 20,
+            'religion': 60,
             'smoking': 80
         }
         return char_fk_mapping.get(key, None)

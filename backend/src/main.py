@@ -118,7 +118,7 @@ class ProfileListOperations(Resource):
 
             response = {
                 'profiles': p,
-                'info_objets': infobj
+                'info_objects': infobj
             }
 
             return response, 200

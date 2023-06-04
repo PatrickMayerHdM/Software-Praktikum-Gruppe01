@@ -15,11 +15,10 @@ class CharMapper(mapper):
         cursor.execute('SELECT * FROM main.Characteristic')
         tuples = cursor.fetchall()
 
-        for (char_id, char_name, char_typ) in tuples:
+        for (char_id, char_name) in tuples:
             char = Characteristics()
             char.set_id(char_id)
             char.set_characteristic(char_name)
-            char.set_characteristic_typ(char_typ)
             result.append(char)
 
         self._connection.commit()
@@ -33,16 +32,16 @@ class CharMapper(mapper):
         """ Auslesen der Characteristics nach Key """
 
         cursor = self._connection.cursor()
-        command = f'SELECT char_id, char_name, char_typ FROM main.Characteristic WHERE char_id={key}'
-        cursor.execute(command)
+        command = f'SELECT char_id, char_name FROM main.Characteristic WHERE char_name=%s'
+        data = (key, )
+        cursor.execute(command, data)
         tuples = cursor.fetchall()
 
         if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (char_id, char_name, char_typ) = tuples[0]
+            (char_id, char_name) = tuples[0]
             char = Characteristics()
             char.set_id(char_id)
             char.set_characteristic(char_name)
-            char.set_characteristic_typ(char_typ)
 
             result = char
         else:
@@ -61,11 +60,10 @@ class CharMapper(mapper):
         for (maxid) in tuples:
             char.set_id(maxid[0] + 1)
 
-        command = 'INSERT INTO main.Characteristic (char_id, char_name, char_typ) VALUES (%s, %s, %s)'
+        command = 'INSERT INTO main.Characteristic (char_id, char_name) VALUES (%s, %s)'
 
         data = (char.get_id(),
-                char.get_characteristic_name(),
-                char.get_characteristic_typ())
+                char.get_characteristic_name())
 
         cursor.execute(command, data)
 
@@ -77,10 +75,9 @@ class CharMapper(mapper):
     def update(self, char):
         cursor = self._connection.cursor()
 
-        command = 'UPDATE main.Characteristic SET char_name=%s, char_typ=%s WHERE char_id=%s'
+        command = 'UPDATE main.Characteristic SET char_name=%s WHERE char_id=%s'
         data = (char.get_id(),
-                char.get_characteristic_name(),
-                char.get_characteristic_typ())
+                char.get_characteristic_name())
 
         cursor.execute(command, data)
 
