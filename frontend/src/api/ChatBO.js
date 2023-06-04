@@ -9,14 +9,24 @@ export default class chatBO extends BusinessObject {
     /**
      * Baut die chatBO mit message_ids und profile_ids
      *
+     * @param {*} achat_id
      * @param {*} amessage_id
      * @param {*} aprofile_id
      */
 
-    constructor(amessage_id, aprofile_id) {
+    constructor(achat_id, amessage_id, aprofile_id) {
         super();
+            this.chat_id = achat_id
             this.message_id = amessage_id
             this.profile_id = aprofile_id
+    }
+
+    setChatId(achat_id) {
+        this.chat_id = achat_id;
+    }
+
+    getChatId() {
+        return this.chat_id
     }
 
     setMessageId(amessage_id) {

@@ -12,6 +12,10 @@ from server.db.InfoObjectMapper import InfoObjectMapper
 from server.bo.Profile import Profile
 from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
+from server.bo.Chat import Chat
+from server.db.ChatMapper import ChatMapper
+
+
 class Administration(object):
     def __init__(self):
         pass
@@ -159,12 +163,12 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_user(user_id)
 
-   # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
+    # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
     def create_profile(self, favoritenote_id, blocknote_id):
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
-        #.set_account_id(account_id)
+        # .set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             mapper.insert(prof)
@@ -238,7 +242,6 @@ class Administration(object):
                 else:
                     print(f'Ungültiger Key: {key}')
 
-
     def update_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
             return mapper.update(infoobject)
@@ -249,3 +252,47 @@ class Administration(object):
 
     # Logik für Profil, did die Info-Objekte in
 
+    def create_searchprofile(self):
+        suchprof = Profile()
+        suchprof.set_id(1)
+        with ProfileMapper() as mapper:
+            mapper.insert(suchprof)
+
+    def save_searchprofile(self, searchprofile):
+        with ProfileMapper() as mapper:
+            mapper.update(searchprofile)
+
+    def delete_searchprofile(self, searchprofile):
+        with ProfileMapper() as mapper:
+            mapper.delete(searchprofile)
+
+    def get_all_searchprofile(self):
+        with ProfileMapper() as mapper:
+            return mapper.find_all()
+
+    def get_searchprofile_by_id(self, key):
+        with ProfileMapper() as mapper:
+            return mapper.find_by_key(key)
+
+    def create_chat(self, message_id):
+        chat = Chat()
+        chat.set_id(1)
+        chat.set_message_id(message_id)
+        with ChatMapper() as mapper:
+            mapper.insert(chat)
+
+    def get_all_chats(self):
+        with ChatMapper() as mapper:
+            return mapper.find_all()
+
+    def get_chat_by_id(self, key):
+        with ChatMapper() as mapper:
+            return mapper.find_by_key(key)
+
+    def save_chat(self, chat):
+        with ChatMapper() as mapper:
+            mapper.update(chat)
+
+    def delete_chat(self, chat):
+        with ChatMapper() as mapper:
+            mapper.delete(chat)

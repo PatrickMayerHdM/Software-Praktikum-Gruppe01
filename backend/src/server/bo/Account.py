@@ -7,9 +7,9 @@ class Account(bo):
         super().__init__()
         self.google_id = ""  # Die Google ID des Nutzers
         self.profile_id = None
-        #self.account_id = None # Die Account ID des Nutzers
-        self.name = "" # Name eines Nutzers
-        self.email = "" # E-Mail eines Nutzers
+        # self.account_id = None # Die Account ID des Nutzers
+        self.name = ""  # Name eines Nutzers
+        self.email = ""  # E-Mail eines Nutzers
 
     def set_profile_id(self, profile_id):
         """Anlegen profile_id"""
@@ -45,8 +45,8 @@ class Account(bo):
 
     def __str__(self):
         # str Methode gibt das erstellte profil in Form eines String zurück
-        return "account: {}, {}, {}, {}, {}, {}".format(self.get_id(), self.profile_id,
-                                                  self.account_id, self.google_id, self.name, self.email)
+        return "account: {}, {}, {}, {}, {}".format(self.get_id(), self.profile_id,
+                                                    self.google_id, self.name, self.email)
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -57,7 +57,3 @@ class Account(bo):
         obj.set_profile_id(dictionary['profile_id'])
         obj.set_email(dictionary['email'])
         return obj
-
-
-
-
