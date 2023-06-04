@@ -11,8 +11,8 @@ class ChatWindow extends Component {
         super(props);
         this.state = {
             // id: this.props.messageId,
-            sender_id: this.props.current_profile, /*Hier muss "this.props.profile hin"*/
-            recipient_id: this.props.other_profile, /*Hier muss "this.props.profile hin"*/
+            sender_id: this.props.user.uid,
+            recipient_id: 13,
             content: [],
             error: '',
             input: '',
@@ -24,13 +24,15 @@ class ChatWindow extends Component {
         this.setInput = this.setInput.bind(this);
     }
 
-    // componentDidMount() {
-    //     console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id)
-    //     const { eigeneID, andereID } = this.props.match.params;
-    //     this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
-    //         this.getAllMessages();
-    //     });
-    // }
+    componentDidMount() {
+        // console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id)
+        // const { eigeneID, andereID } = this.props.match.params;
+        // this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
+        //     this.getAllMessages();
+        this.getAllMessages()
+        console.log(this.state.sender_id, this.state.recipient_id)
+        // });
+    }
 
     getAllMessages() {
         const { sender_id, recipient_id } = this.state;
@@ -39,7 +41,11 @@ class ChatWindow extends Component {
             .then((messageBOs) =>
                 this.setState({
                     content: messageBOs,
-                })
+                }, () => {
+                    console.log(this.state.content)
+                    console.log(this.state.content[0].asenderid)
+                    console.log(this.state.content[1].arecipientid)
+                }),
             )
             .catch((e) =>
                 this.setState({
@@ -47,7 +53,6 @@ class ChatWindow extends Component {
                     error: e,
                 })
             );
-        console.log("Error:", this.state.error);
     }
 
     setInput(value) {
@@ -78,19 +83,20 @@ class ChatWindow extends Component {
 
         return (
             <div className="chat_window">
-                {content.map((message, index) => (
+                {content.map((content, index) => (
                 // Darstellung des Chat-Verlaufs
                 // Die map-Funktion iteriert über das message-Array und erstellt für jede Nachricht
                 // ein neues div mit der entsprechenden id.
                 // HIER FÜGEN WIR EINE LOGIK EIN, DIE ERKENNT OB ES EINE EIGENE NACHRICHT IST
-                    <div className="chatWindow_message" key={index}>
-                        {message.sender_id === this.state.sender_id ? (
+                    <div key={index}>
+                        {console.log("TEST", content.asenderid)}
+                        {this.state.sender_id === content.asenderid ? (
                             <div className="chatWindow_message">
-                                <p className="chatWindow_content">{message.content}</p>
+                                <p className="chatWindow_content">{content.acontent}</p>
                             </div>
                     ) : (
                             <div className="chatWindow_message">
-                            <p className="chatWindow_contentUser">{message.content}</p>
+                            <p className="chatWindow_contentUser">{content.acontent}</p>
                             </div>
                     )}
                     </div>
