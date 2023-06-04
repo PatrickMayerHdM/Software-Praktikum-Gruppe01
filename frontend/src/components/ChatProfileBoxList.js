@@ -11,24 +11,47 @@ import React from "react";
 
 class ChatProfileBoxList extends React.Component{
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            numProfiles: 0,
+            profiles: [],
+            otherProfileIndex: null,
+        }
+    }
+
     componentDidMount() {
         console.log(this.props.user.uid);
+
+        const dummyChatProfiles = [13, 42, 51];
+
+        this.setState({profiles: dummyChatProfiles}, () => {
+            const lengthProfiles = this.state.profiles.length;
+            this.setState({numProfiles: lengthProfiles})
+            console.log(this.state.profiles, this.state.numProfiles)
+        });
     }
+
+    handleProfileClick = (index) => {
+        this.setState({ otherProfileIndex: index });
+    };
 
     render() {
 
         // const für die Anzahl der anzuzeigenden Profile innerhalb der ChatListe
-        const count = 1;
+        const count = this.state.numProfiles;
 
         const current_profile = this.props.user.uid;
 
-        const other_profile = 13;
+        const other_profile = this.state.profiles[this.state.otherProfileIndex];
 
         // Methode zur Darstellung einer ChatProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} >
                 <Item>
-                    <ChatProfileBox current_profile={current_profile} other_profile={other_profile}/>
+                    <ChatProfileBox current_profile={current_profile}
+                                    other_profile={this.state.profiles[index]}
+                                    onClick={() => this.handleProfileClick(index)}/>
                 </Item >
             </Grid >
         ));
