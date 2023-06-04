@@ -64,8 +64,15 @@ characteristic = api.inherit('Characteristics', bo, {
 })
 
 infoobject = api.inherit('InfoObject', bo, {
-    'charx_id': fields.Integer(attribute='_charx_id', description='Fremdschlüssel der Eigenschafts-ID'),
-    'value': fields.Integer(attribute='_value', description='Eingabewerte / Merkmalsausprägung zur Eigenschaft')
+    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
+    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
+    'age': fields.DateTime(attribute='_age', description='Geburtsdatum des Profilinhabers'),
+    'gender': fields.String(attribute='_gender', description='Geschlecht'),
+    'height': fields.Integer(attribute='_height', description='Größe'),
+    'religion': fields.String(attribute='_religion', description='Religion'),
+    'hair': fields.String(attribute='_hair', description='Haarfarbe'),
+    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher')
+
 })
 
 chat = api.inherit('Chat', bo, {
@@ -96,14 +103,16 @@ class ProfileListOperations(Resource):
 
     @datingapp.marshal_with(profile, code=200)
     # Wir erwarten ein Profile-Objekt von Client-Seite.
-    @datingapp.expect(profile)
+    @datingapp.expect(profile, infoobject)
     @secured
     def post(self):
         """ Anlegen eines neuen Profil-Objekts. """
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
+        print(api.payload)
         proposal_two = InfoObject.from_dict(api.payload)
+        print(proposal_two.to_dict())
 
         if proposal and proposal_two is not None:
 

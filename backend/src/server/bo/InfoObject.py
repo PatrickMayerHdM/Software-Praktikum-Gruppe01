@@ -9,13 +9,13 @@ class InfoObject(bo):
         self.profile_fk = None
         self.value = None
         self.age = None
-        self.firstname = None
-        self.gender = None
-        self.hair = None
+        self.firstname = ""
+        self.gender = ""
+        self.hair = ""
         self.height = None
-        self.lastname = None
-        self.religion = None
-        self.smoking = None
+        self.lastname = ""
+        self.religion = ""
+        self.smoking = ""
 
     def set_value(self, value):
         self.value = value
