@@ -28,9 +28,10 @@ class Search extends React.Component{
         this.state = {
           numSearchProfiles: 0,
           selectedProfileIndex: null,
+          selectedProfile: null,
           Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
           profiles: [ ], // Die Profile die wir als Antwort bekommen.
-          profile_id: 22, // Die eigene Profil_id diese soll im fertigen Code wahrscheinlich durch props handling erhalten werden.
+          profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
           deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
           clickable: false,
         }
@@ -49,7 +50,7 @@ class Search extends React.Component{
     // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
     NewProfiles(){
         console.log("Button nur noch neue Profile gedrückt")
-        const { profile_id } = this.state; // Testweise Zugriff auf profile_id aus dem state
+        const { profile_id } = this.state; // Zugriff auf profile_id aus dem state
         console.log(profile_id)
         DatingSiteAPI.getAPI().getOnlyNewProfiles(profile_id).then(newprofiles =>
             this.setState(prevState => ({
@@ -81,10 +82,14 @@ class Search extends React.Component{
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
     ChangeSearchProfiles(index) {
         console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
-        console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[index], "geändert");
+        //console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[index], "geändert");
         // State handling, damit die Farbe von dem ausgewählten Profil geändert wird
         this.setState({ selectedProfileIndex: index });
         this.setState({ clickable: true });
+        this.setState({ selectedProfile: this.state.Searchprofiles[index] }, () => {
+          console.log("Es wurde auf das Suchprofil: ", this.state.selectedProfile, "geändert (mit selectedProfile)");
+        });
+
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier angelegt wird.
@@ -130,6 +135,7 @@ class Search extends React.Component{
             //console.log("Die Seite wird geladen, dass ist das Array mit Suchprofilen", this.state.Searchprofiles);
             //console.log("Die Seite wird geladen, dass ist ein einzelnes Suchprofil", this.state.Searchprofiles[1]);
             this.setState({ numSearchProfiles: lengthSearchprofiles });
+            console.log(this.state.profile_id)
         });
     }
 

@@ -203,7 +203,7 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/newprofiles`;
+    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`;
     #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
     #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`;
 
@@ -214,8 +214,9 @@ export default class DatingSiteAPI {
     */
 
     getOnlyNewProfiles(profileID){
-        return this.#fetchAdvanced(this.#getNewProfilesByIdURL())
+        return this.#fetchAdvanced(this.#getNewProfilesByIdURL(profileID))
             .then((responseJSON) => {
+                console.log("Das ist das profile_id Dings im API call: ",profileID )
                 console.log("Das responseJSON")
                 console.log(responseJSON)
                 return new Promise(function (resolve) {
