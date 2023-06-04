@@ -1,26 +1,36 @@
+from abc import ABC
+
 from relationship import relationship
 from BusinessObject import BusinessObject as bo
 
 
-class blockNote(bo, relationship):
+class BlockNote(bo):
     def __init__(self):
         super().__init__()
-        """Erstellen einer Liste um dort Profile zu speichern"""
-        self.block_list = []
+        self.blocked_id = None
+        self.blocking_id = None
 
-    def add_user(self, blocked_user):
-        """if abfrage, um doppelte Nutzer in Liste zu vermeiden"""
-        if blocked_user not in self.block_list:
-            self.block_list.append(blocked_user)
+    def set_blocked_id(self, blocked_id):
+        self.blocked_id = blocked_id
 
-    def del_user(self, profile_id):
-        """Nutzer kann nur gelöscht werden, wenn Nutzer auch in Liste vorhanden ist"""
-        if profile_id in self.block_list:
-            self.block_list.remove(profile_id)
+    def get_blocked_id(self):
+        return self.blocked_id
 
-    def get_all_users(self):
-        return self.block_list
+    def set_blocking_id(self, blocking_id):
+        self.blocking_id = blocking_id
+
+    def get_blocking_id(self):
+        return self.blocking_id
 
     def __str__(self):
-        # str Methode gibt die favoriteNote in Form eines String zurück
-        return "Blockliste: {}, {}".format(self.get_id(), self.get_all_users())
+        # str Methode gibt das erstellte profil in Form eines String zurück
+        return "blocknote: {}, {}, {}".format(self.get_id(), self.blocked_id,
+                                              self.blocking_id)
+
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        bn = BlockNote()
+        bn.set_id(dictionary['id'])
+        bn.set_blocked_id(dictionary['blocked_id'])
+        bn.set_blocking_id(dictionary['blocking_id'])
+        return bn

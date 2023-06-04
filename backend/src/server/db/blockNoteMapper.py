@@ -1,4 +1,4 @@
-from server.bo.blockNote import blockNote
+from server.bo.blockNote import BlockNote
 from server.db.mapper import mapper
 
 """Notiz: in DB wird der Name blockNote verwendet"""
@@ -14,13 +14,14 @@ class BlockNoteMapper(mapper):
         result = []
         cursor = self._connection.cursor()
 
-        cursor.execute('SELECT blockNote_id, profile_id FROM blockNote')
+        cursor.execute('SELECT blocknote_id, blocked_id, blocking_id FROM main.Blocknote')
         tuples = cursor.fetchall()
 
-        for (blockNote_id, profile_id) in tuples:
-            blockliste = blockNote()
-            blockliste.set_id(blockNote_id)
-            blockliste.add_user(profile_id)
+        for (blocknote_id, blocked_id, blocking_id) in tuples:
+            blockliste = BlockNote()
+            blockliste.set_id(blocknote_id)
+            blockliste.set_blocked_id(blocked_id)
+            blockliste.set_blocking_id(blocking_id)
             result.append(blockliste)
 
         self._connection.commit()
@@ -28,17 +29,18 @@ class BlockNoteMapper(mapper):
 
         return result
 
-    def find_by_user(self, user):
+    def find_by_blocking_user(self, blocking_id):
         result = []
         cursor = self._connection.cursor()
-        command = f'SELECT blockNote_id, profile_id FROM blockNote WHERE blockNote_id={user}'
+        command = f'SELECT blocknote_id, blocked_id, blocking_id FROM main.Blocknote WHERE blocking_id={blocking_id}'
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (blockNote_id, profile_id) in tuples:
-            blockliste = blockNote()
-            blockliste.set_id(blockNote_id)
-            blockliste.add_user(profile_id)
+        for (blocknote_id, blocked_id, blocking_id) in tuples:
+            blockliste = BlockNote()
+            blockliste.set_id(blocknote_id)
+            blockliste.set_blocked_id(blocked_id)
+            blockliste.set_blocking_id(blocking_id)
             result.append(blockliste)
 
         self._connection.commit()
@@ -50,18 +52,18 @@ class BlockNoteMapper(mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = f'SELECT blockNote_id, profile_id FROM blockNote WHERE blockNote_id={key}'
+        command = f'SELECT blocknote_id, blocked_id, blocking_id FROM main.Blocknote WHERE blocknote_id={key}'
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples is not None \
                 and len(tuples) > 0 \
                 and tuples[0] is not None:
-            (blockNote_id, profile_id) = tuples[0]
-            blockliste = blockNote()
-            blockliste.set_id(blockNote_id)
-            blockliste.add_user(profile_id)
-
+            (blocknote_id, blocked_id, blocking_id) = tuples[0]
+            blockliste = BlockNote()
+            blockliste.set_id(blocknote_id)
+            blockliste.set_blocked_id(blocked_id)
+            blockliste.set_blocking_id(blocking_id)
             result = blockliste
         else:
             result = None
@@ -73,14 +75,16 @@ class BlockNoteMapper(mapper):
 
     def insert(self, blockliste):
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM blockNote")
+        cursor.execute("SELECT MAX(blocknote_id) AS maxid FROM main.Blocknote")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             blockliste.set_id(maxid[0] + 1)
 
-        command = "Insert INTO blockNote (blockNote_id, profile_id) Values (%s, %s)"
-        data = (blockliste.get_id(), blockliste.get_all_users())
+        command = "Insert INTO main.Blocknote (blocknote_id, blocked_id, blocking_id) Values (%s, %s, %s)"
+        data = (blockliste.get_id(),
+                blockliste.get_blocked_id(),
+                blockliste.get_blocking_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -89,8 +93,10 @@ class BlockNoteMapper(mapper):
     def update(self, blockliste):
         cursor = self._connection.cursor()
 
-        command = "UPDATE blockNote" + "SET profile_id=%s WHERE id=%s"
-        data = (blockliste.get_id, blockliste.get_all_users)
+        command = 'UPDATE main.Blocknote SET blocked_id=%s, blocking_id=%s WHERE blocknote_id=%s'
+
+        data = (blockliste.get_blocked_id(),
+                blockliste.get_blocking_id())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -98,7 +104,7 @@ class BlockNoteMapper(mapper):
 
     def delete(self, blockliste):
         cursor = self._connection.cursor()
-        command = f'DELETE FROM blockNote WHERE profile_id={blockliste.get_id()}'
+        command = f'DELETE FROM main.Blocknote WHERE blocknote_id ={blockliste.get_id()}'
         cursor.execute(command)
 
         self._connection.commit()
@@ -106,7 +112,7 @@ class BlockNoteMapper(mapper):
 
 
 if (__name__ == "__main__"):
-    with blockNote() as mapper:
+    with BlockNote() as mapper:
         result = mapper.find_all()
         for b in result:
             print(b)
