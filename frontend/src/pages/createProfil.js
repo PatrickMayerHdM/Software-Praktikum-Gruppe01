@@ -13,20 +13,22 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import DatingSiteAPI, { addProfile } from '../api/DatingSiteAPI';
+import DatingSiteAPI, { getProfileByID } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
+import AddIcon from "@mui/icons-material/Add";
+import * as properties from "react-bootstrap/ElementChildren";
 
 class CreateProfil extends Component {
     constructor(props) {
         super(props);
         /** Initalisierung der Zustände der CreateProfil Komponente */
         this.state = {
-            profile_id: props.profile,
+            profile_id: this.props.user.uid,
             favoriteNote_id: 0,
             blockNote_id: 0,
             firstName: '',
@@ -40,7 +42,8 @@ class CreateProfil extends Component {
             char_name: '',
             char_desc: '',
             showTextFields: false,
-            profileCreated: false,
+            profileExists: true,
+            properties: [],
         };
 
         /** Bindung der Handler an die Komponente */
@@ -57,6 +60,25 @@ class CreateProfil extends Component {
         this.handleCreateChar = this.handleCreateChar.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSaveInputs = this.handleSaveInputs.bind(this);
+    };
+
+    /** Abfrage ob ein Profil bereits vorhanden ist oder nicht*/
+    componentDidMount() {
+        this.checkProfilExc();
+    };
+
+    /** Handler und API für "checkProfilExc" */
+    checkProfilExc() {
+      const profile_id = this.props.user.uid;
+      DatingSiteAPI.getAPI()
+          .getProfileByID(profile_id)
+          .then((profileBOs) => {
+              this.setState({ profileExists: true })
+          }).catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
     };
 
     /** Event-Handler für die Änderung des Vornamens */
@@ -103,12 +125,9 @@ class CreateProfil extends Component {
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.props.profile, this.state.favoriteNote_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
-            .then(() => {
-                this.setState({ profileCreated: true });
-            })
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -119,12 +138,24 @@ class CreateProfil extends Component {
     handleCreateChar = () => {
         this.setState({showTextFields: true});
     };
-    handleInputChange = (event, field) => {
-        this.setState({ [field]: event.target.value });
+
+    handleInputChange = (event, field, index) => {
+        const { properties } = this.state;
+        properties[index][field] = event.target.value;
+        this.setState({ properties });
     };
+
     handleSaveInputs = () => {
         console.log(this.state)
+        const { properties } = this.state;
         const { char_name, char_desc } = this.state;
+        const newProperty = {
+            name: char_name,
+            description: char_desc
+        };
+        const updatedProperties = [...properties, newProperty];
+
+        this.setState({ properties: updatedProperties, char_name: '', char_desc: ''})
         this.setState({ char_name: char_name, char_desc: char_desc})
         const createdCharForProfile = new Characteristic(this.state._aid ,this.state._name);
         DatingSiteAPI.getAPI()
@@ -136,11 +167,27 @@ class CreateProfil extends Component {
             });
     };
 
+    renderProperties() {
+      const { Properties } = this.state
+
+      return properties.map((property, index) => (
+            <div key={index}>
+                <input
+                value={property.name}
+                onChange={(event) => this.handleInputChange(event, index, 'name')}
+                />
+                <input
+                value={property.description}
+                onChange={(event) => this.handleInputChange(event, index, 'description')}
+                />
+            </div>
+      ));
+    };
 
     handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const updatedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        const updatedProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
         DatingSiteAPI.getAPI()
             .updateProfile(updatedProfile)
             .catch((e) =>
@@ -151,12 +198,11 @@ class CreateProfil extends Component {
     };
 
     handleRemove(event) {
-        console.log(this.props.profile)
         console.log(this.state)
         event.preventDefault();
-        const { profile } = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id);
+        const removedProfile  = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
         DatingSiteAPI.getAPI()
-            .removeProfile(profile.getID())
+            .removeProfile(removedProfile)
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -178,6 +224,7 @@ class CreateProfil extends Component {
                 char_name,
                 char_desc,
                 showTextFields,
+                profileExists,
             } = this.state;
             return (
             <div>
@@ -308,39 +355,62 @@ class CreateProfil extends Component {
                             </FormGroup>
                         </Item>
                         <Item>
-                            {/** Button für die Profilerstellung */}
-                            <Button onClick={this.handleSubmit}> Profil erstellen </Button>
+                            <FormGroup row style={{justifyContent: 'center'}}>
+                                <Box sx={{width: 400, margin: '0 auto'}}>
+                                    {/** Liste die für jede Eigenschaft erstellt werden kann */}
+                                    {this.state.properties && this.state.properties.map((property, index) => (
+                                        <Item key={index}>
+                                            <h3>{property.name}</h3>
+                                            <p>{property.description}</p>
+                                        </Item>
+                                    ))}
+                                </Box>
+                            </FormGroup>
                         </Item>
+                        {/** Wenn ein Proifl vorhanden ist sollen die Buttons Eigenschaft/Löschen/Update angezeigt werden */}
+                        {profileExists && (
                         <Item>
-                        <FormGroup row style={{justifyContent: 'center'}}>
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
-                                {showTextFields && (
+                            <FormGroup row style={{ justifyContent: 'center' }}>
+                                <Box sx={{ width: 400, margin: '0 auto' }}>
+                                    <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
+                                    {showTextFields && (
                                     <>
-                                        <Box sx={{ marginBottom: '10px' }}>
-                                            <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')}></TextField>
-                                        </Box>
-                                        <Box sx={{ marginBottom: '10px' }}>
-                                            <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')}></TextField>
-                                        </Box>
-                                        <Box sx={{ marginBottom: '10px' }}>
-                                            <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
-                                        </Box>
+                                    <Box sx={{ marginBottom: '10px' }}>
+                                        <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                    </Box>
+                                    <Box sx={{ marginBottom: '10px' }}>
+                                        <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
+                                    </Box>
+                                    <Box sx={{ marginBottom: '10px' }}>
+                                        <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
+                                    </Box>
                                     </>
-                                )}
+                                    )}
+                                </Box>
+                            </FormGroup>
+                    </Item>
+                    )}
+                    {profileExists && (
+                    <Item>
+                        <FormGroup row style={{ justifyContent: 'center' }}>
+                            <Box sx={{ width: 400, margin: '0 auto' }}>
+                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
                             </Box>
                         </FormGroup>
-                        </Item>
-                        <Item>
-                        <FormGroup row style={{justifyContent: 'center'}}>
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />} > Profil löschen! </Button>
-                            </Box>
-                        </FormGroup>
-                        </Item>
-                        <Item>
-                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profil Update </Button>
-                        </Item>
+                    </Item>
+                    )}
+                    {profileExists && (
+                    <Item>
+                        <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profil Update </Button>
+                    </Item>
+                    )}
+                    {/** Falls kein Profil vorhanden ist soll nur der Button "Profil erstellen" wird */}
+                    {!profileExists && (
+                    <Item>
+                    {/** Button für die Profilerstellung */}
+                        <Button onClick={this.handleSubmit} variant="outlined" startIcon={<AddIcon />}>Profil erstellen</Button>
+                    </Item>
+                    )}
                     </Stack>
                 </Box>
                 <span></span>

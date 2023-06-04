@@ -18,7 +18,7 @@ import OptionsOwnProfile from "./components/OptionsOwnProfile";
 import ChatWindow from "./components/ChatWindow";
 import ProfileBox from "./components/ProfileBox";
 import ProfileBoxList from "./components/ProfileBoxList";
-import CreateProfil from "./pages/createProfil";
+import CreateProfil, { checkProfilExc } from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
 import * as React from "react";
@@ -30,8 +30,6 @@ import BlockProfileBoxList from "./components/BlockProfileBoxList";
 import ChatProfileBoxList from "./components/ChatProfileBoxList";
 import SearchProfile from "./components/SearchProfile";
 import Search from "./pages/Search";
-import UpdateProfile from "./components/updateProfile";
-
 /** Definition der App-Komponente */
 
 class App extends Component {
@@ -44,7 +42,6 @@ class App extends Component {
 
     this.state = {
       currentUser: null,
-      currentUserUid: '',
       menuAnchor: null,
       authError:null,
       appError:null,
@@ -59,7 +56,6 @@ class App extends Component {
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const currentUser = auth.currentUser
 
     onAuthStateChanged(auth, (user) => {
 
@@ -104,12 +100,6 @@ class App extends Component {
         });
       }
     });
-
-    if (currentUser) {
-      const currentUserUid = currentUser.uid;
-      this.setState({ currentUserUid });
-
-    }
   }
 
   /** Handler-Funktion, die beim Klicken auf den "Anmelden"-Button aufgerufen wird */
@@ -210,7 +200,7 @@ class App extends Component {
                 <Routes>
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<Profile />}></Route>
-                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil profile={currentUserUid}/></Secured>}></Route>
+                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
                       <Route path="/Suche" element={<Search/>}></Route>
                       <Route path="/Suche/Suchprofil" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
