@@ -3,8 +3,8 @@ import BusinessObject from "./BusinessObject";
 export default class Characteristic extends BusinessObject {
 
     /**
-     * Baut eine CharacteristicBO mit id und name
-     * Parameter für Characteristics BO (aus Characteristics.py) id und name
+     * Baut eine CharacteristicBO mit id, name und typ
+     * Parameter für Characteristics BO
      * @param {*} aid
      * @param {*} achar_name
      * @param {*} achar_typ
