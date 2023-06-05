@@ -2,6 +2,7 @@ import messageBO from './MessageBO';
 import profileBO from "./ProfileBO";
 import ProfileBO from "./ProfileBO";
 import Characteristic from "./CharacteristicBO";
+import infoobjectBO from "./InfoObjectBO";
 
 
 export default class DatingSiteAPI {
@@ -90,6 +91,7 @@ export default class DatingSiteAPI {
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #addInfoObject = () => `${this.#datingServerBaseURL}/characteristics`;
     #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
     #getProfileByIdURL = (id) => `${this.#datingServerBaseURL}/Profile/${id}`;
 
@@ -158,9 +160,25 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * @param {characteristicBO} characteristic object
+     * @param {infoobjectBO} infoobject object
      * @public
      */
+    addInfoObject(infoobject) {
+        return this.#fetchAdvanced(this.#addInfoObject(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(infoobject)
+        }).then((responseJSON) => {
+            let infoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(infoobjectBO);
+            })
+        })
+    }
+
     createCharForProfile(characteristic) {
         return this.#fetchAdvanced(this.#createCharForProfileURL(), {
             method: "POST",
