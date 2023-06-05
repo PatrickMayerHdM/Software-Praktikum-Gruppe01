@@ -24,7 +24,7 @@ class BlockNote(bo):
 
     def __str__(self):
         # str Methode gibt das erstellte profil in Form eines String zurück
-        return "blocknote: {}, {}, {}".format(self.get_id(), self.blocked_id,
+        return "blocknote ID: {}, blocked ID: {}, blocking ID: {}".format(self.get_id(), self.blocked_id,
                                               self.blocking_id)
 
     @staticmethod
