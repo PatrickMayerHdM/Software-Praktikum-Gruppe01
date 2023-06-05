@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DatingSiteAPI, { getProfileByID } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
+import characteristicBO from "../api/CharacteristicBO"
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -42,7 +43,7 @@ class CreateProfil extends Component {
             char_name: '',
             char_desc: '',
             showTextFields: false,
-            profileExists: true,
+            profileExists: false,
             properties: [],
         };
 
@@ -126,6 +127,14 @@ class CreateProfil extends Component {
         console.log(this.state)
         event.preventDefault();
         const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const propertyNames = [
+            ""
+        ];
+        const newCharacteristics = [];
+        for (let i = 0; < propertyNames.length; i++) {
+
+        }
+
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
             .catch((e) =>

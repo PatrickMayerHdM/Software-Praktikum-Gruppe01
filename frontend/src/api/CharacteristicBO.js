@@ -6,63 +6,40 @@ export default class Characteristic extends BusinessObject {
      * Baut eine CharacteristicBO mit id und name
      * Parameter für Characteristics BO (aus Characteristics.py) id und name
      * @param {*} aid
-     * @param {*} aname
+     * @param {*} achar_name
+     * @param {*} achar_typ
      */
 
-    constructor(
-        aid = null,
-        aname = null,
-
-    ) {
+    constructor() {
         super();
-        this._aid = aid;
-        this._aname = aname;
+        this.id = null;
+        this.char_name = "";
+        this.char_typ = "";
     }
 
-     /**
-     *  Setzen der Id
-     */
-    set_aid(id) {
-        this._aid = id;
+    /** Auslesen der Char-ID */
+    get_Char_id() {
+        return this.id;
     }
 
-    /**
-     *  Löschen der Id
-     */
-
-    delete_aid() {
-        this._aid = null;
+    /** Auslesen des Char_Names */
+    get_char_name() {
+        return this.char_name;
     }
 
-    /**
-     *  Gibt die Id zurück
-     */
-
-    get_aid() {
-        return this._aid
+    /** Auslesen des Char_Types */
+    get_char_typ() {
+        return this.char_typ;
     }
 
-    /**
-     *  Setzen des Namens
-     */
-    set_aname(name) {
-        this._aid = name;
+    /** Setzen des Char_Names */
+    set_char_name(achar_name) {
+        this.char_name = achar_name;
     }
 
-    /**
-     *  Löschen des Namens
-     */
-
-    delete_aname() {
-        this._aname = null;
-    }
-
-    /**
-     *  Gibt den Namen zurück
-     */
-
-     get_aname() {
-        return this._aname
+    /** Setzen des Char_Types */
+    set_char_type(achar_typ) {
+        this.char_typ = achar_typ;
     }
 
     static fromJSON(characteristic) {
