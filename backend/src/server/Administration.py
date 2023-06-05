@@ -1,8 +1,8 @@
 from server.bo.Message import Message
 from server.db.MessageMapper import MessageMapper
-from server.bo.blockNote import blockNote
+from server.bo.blockNote import BlockNote
 from server.db.blockNoteMapper import BlockNoteMapper
-from server.bo.favoriteNote import favoriteNote
+from server.bo.favoriteNote import FavoriteNote
 from server.db.FavoriteNoteMapper import FavoriteNoteMapper
 from server.bo.Account import Account
 from server.db.AccountMapper import AccountMapper
@@ -105,39 +105,41 @@ class Administration(object):
 
     """Spezifische Methoden für blockNote"""
 
-    def create_blocknote(self, profile_id):
-        blocklist = blockNote()
-        blocklist.add_user(profile_id)
+    def create_blocknote(self, blocked_id, blocking_id):
+        blocklist = BlockNote()
+        blocklist.set_blocked_id(blocked_id)
+        blocklist.set_blocking_id(blocking_id)
         blocklist.set_id(1)
 
         with BlockNoteMapper() as mapper:
             return mapper.insert(blocklist)
 
-    def save_blocklist(self, blocklist):
+    def save_blocknote(self, blocklist):
         with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
-    def delete_blocklist(self, blocklist):
+    def delete_blocknote(self, blocklist):
         with BlockNoteMapper() as mapper:
             mapper.delete(blocklist)
 
-    def get_all_blocklists(self):
+    def get_all_blocknote(self):
         with BlockNoteMapper() as mapper:
             return mapper.find_all()
 
-    def get_blocklist_by_id(self, key):
+    def get_blocknote_by_blocknote_id(self, key):
         with BlockNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def get_blocklist_by_user(self, user_id):
+    def get_blocklist_by_blocking_user(self, blocking_id):
         with BlockNoteMapper() as mapper:
-            return mapper.find_by_user(user_id)
+            return mapper.find_by_blocking_user(blocking_id)
 
-    """Spezifische Methoden für blockNote"""
+    """Spezifische Methoden für favoritenote"""
 
-    def create_favoritenote(self, profile_id):
-        favoritenote = favoriteNote()
-        favoritenote.add_user(profile_id)
+    def create_favoritenote(self, added_id, adding_id):
+        favoritenote = FavoriteNote()
+        favoritenote.set_added_id(added_id)
+        favoritenote.set_adding_id(adding_id)
         favoritenote.set_id(1)
 
         with FavoriteNoteMapper() as mapper:
@@ -155,20 +157,20 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_all()
 
-    def get_favoritenote_by_id(self, key):
+    def get_favoritenote_by_favoritenote_id(self, key):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def get_favoritenote_by_user(self, user_id):
+    def get_favoritenote_by_adding_user(self, adding_id):
         with FavoriteNoteMapper() as mapper:
-            return mapper.find_by_user(user_id)
+            return mapper.find_by_adding_user(adding_id)
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
+    @staticmethod
     def create_profile(self, favoritenote_id, blocknote_id):
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
-        # .set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             mapper.insert(prof)
@@ -181,13 +183,17 @@ class Administration(object):
         with ProfileMapper() as mapper:
             mapper.delete(profile)
 
-    def get_all_profiles(self, profile):
+    @staticmethod
+    def get_all_profiles(self):
         with ProfileMapper() as mapper:
             return mapper.find_all()
 
     def get_profile_by_id(self, key):
         with ProfileMapper() as mapper:
             return mapper.find_by_key(key)
+
+    def get_all_profiles_by_blocknote_id(self):
+        pass
 
     # def get_profile_by_account_id(self, account_id):
     #     with ProfileMapper() as mapper:
@@ -252,6 +258,7 @@ class Administration(object):
 
     # Logik für Profil, did die Info-Objekte in
 
+    "Spezifische Methoden für das Suchprofil"
     def create_searchprofile(self):
         suchprof = Profile()
         suchprof.set_id(1)
@@ -274,6 +281,7 @@ class Administration(object):
         with ProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
+    "Chat-spezifische Methoden"
     def create_chat(self, message_id):
         chat = Chat()
         chat.set_id(1)
@@ -296,3 +304,5 @@ class Administration(object):
     def delete_chat(self, chat):
         with ChatMapper() as mapper:
             mapper.delete(chat)
+
+
