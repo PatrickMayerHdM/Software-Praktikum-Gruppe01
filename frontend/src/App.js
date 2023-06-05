@@ -207,7 +207,7 @@ class App extends Component {
                       <Route path="/Sperrliste" element={<BlockProfileBoxList/>}></Route>
                       <Route element={<ChatProfileBox user={currentUser}/>}></Route>
                       <Route path="/Chats" element={<ChatProfileBoxList user={currentUser}/>}></Route>
-                      <Route path="/ChatWindow/:eigeneID/:andereID" element={<ChatWindow/>}></Route>
+                      <Route path="/ChatWindow/:eigeneID/:andereID" element={<ChatWindow user={currentUser}/>}></Route>
                     </Route>
                 </Routes>
             </Router>

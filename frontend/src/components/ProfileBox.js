@@ -10,6 +10,13 @@ import Item from "../theme";
 
 class ProfileBox extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            profileBox_id: this.props.other_profile,
+        }
+    }
+
     render() {
         return(
             <Box sx={{width: '100%'}} >
@@ -19,8 +26,8 @@ class ProfileBox extends React.Component {
                 <Grid item lg={12} md={12} xs={12} >
                     {/** Ein Item für das Grid, hier der Vorname*/}
                   <Item>
-                      VVVVVVVVVVVVVVVV
-                  </Item >
+                      Profil-ID: {this.state.profileBox_id}
+                  </Item>
                 </Grid >
                   {/** Ein Item für das Grid, hier der Nachname */}
                 <Grid item lg={12} md={12} xs={12} >
