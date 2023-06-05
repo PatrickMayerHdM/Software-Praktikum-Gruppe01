@@ -26,14 +26,14 @@ export default class infoobjectBO extends BusinessObject {
         super();
         this.char_fk = null;
         this.profile_fk = null;
-        this.value = null;
-        this.age = null;
-        this.firstname = null;
-        this.gender = null;
-        this.height = null;
-        this.lastname = null;
-        this.religion = null;
-        this.smoking = null;
+        this.value = "";
+        this.age = "";
+        this.firstname = "";
+        this.gender = "";
+        this.height = "";
+        this.lastname = "";
+        this.religion = "";
+        this.smoking = "";
     }
 
     /** Setzen des Values */

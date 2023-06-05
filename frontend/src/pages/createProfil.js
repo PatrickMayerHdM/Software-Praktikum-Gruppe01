@@ -13,9 +13,10 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import DatingSiteAPI, { getProfileByID } from '../api/DatingSiteAPI';
+import DatingSiteAPI, { getProfileByID, addInfoObject } from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
 import characteristicBO from "../api/CharacteristicBO"
+import infoobjectBO from "../api/InfoObjectBO";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -32,6 +33,8 @@ class CreateProfil extends Component {
             profile_id: this.props.user.uid,
             favoriteNote_id: 0,
             blockNote_id: 0,
+            char_fk: 0,
+            profile_fk: 0,
             firstName: '',
             lastName: '',
             age: '',
@@ -127,16 +130,28 @@ class CreateProfil extends Component {
         console.log(this.state)
         event.preventDefault();
         const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
-        const propertyNames = [
-            ""
-        ];
-        const newCharacteristics = [];
-        for (let i = 0; < propertyNames.length; i++) {
-
-        }
+        const newInfoObject = new infoobjectBO(
+            this.state.char_fk,
+            this.state.profile_fk,
+            this.state.age,
+            this.state.firstName,
+            this.state.gender,
+            this.state.hair,
+            this.state.height,
+            this.state.lastName,
+            this.state.religion,
+            this.state.smoking)
 
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+
+        DatingSiteAPI.getAPI()
+            .addInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
                     error: e,
