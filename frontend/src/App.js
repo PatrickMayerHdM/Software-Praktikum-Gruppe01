@@ -18,7 +18,7 @@ import OptionsOwnProfile from "./components/OptionsOwnProfile";
 import ChatWindow from "./components/ChatWindow";
 import ProfileBox from "./components/ProfileBox";
 import ProfileBoxList from "./components/ProfileBoxList";
-import CreateProfil from "./pages/createProfil";
+import CreateProfil, { checkProfilExc } from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
 import * as React from "react";
@@ -30,8 +30,6 @@ import BlockProfileBoxList from "./components/BlockProfileBoxList";
 import ChatProfileBoxList from "./components/ChatProfileBoxList";
 import SearchProfile from "./components/SearchProfile";
 import Search from "./pages/Search";
-import UpdateProfile from "./components/updateProfile";
-
 /** Definition der App-Komponente */
 
 class App extends Component {
@@ -164,7 +162,7 @@ class App extends Component {
 
   render() {
 
-    const { currentUser } = this.state;
+    const { currentUser, currentUserUid } = this.state;
 
     if (!currentUser) {
     // Wenn kein User angemeldet ist wird nur das Anmeldefenster gerendert.
@@ -202,7 +200,7 @@ class App extends Component {
                 <Routes>
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<Profile />}></Route>
-                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil /></Secured>}></Route>
+                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
                       <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
                       <Route path="/Suche/Suchprofil" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
