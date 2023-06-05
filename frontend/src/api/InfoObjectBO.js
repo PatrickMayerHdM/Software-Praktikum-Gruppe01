@@ -7,66 +7,122 @@ import BusinessObject from "./BusinessObject";
 export default class infoobjectBO extends BusinessObject {
 
     /**
-     * Baut ein infoobjectBO mit infoobject_id, und infoobject wert (value)
+     * Baut ein infoobjectBO mit Eigenschaftsvalues auf
      *
-     * @param {*} ainfoobject_id
-     * @param {*} ainfoobject_value
+     * @param {*} achar_fk
+     * @param {*} aprofile_fk
+     * @param {*} avalue
+     * @param {*} aage
+     * @param {*} afirstanme
+     * @param {*} agender
+     * @param {*} ahair
+     * @param {*} aheight
+     * @param {*} alastname
+     * @param {*} areligion
+     * @param {*} asmoking
      * */
 
-    constructor(
-        ainfoobject_id = null,
-        ainfoobject_value = null,
-    ) {
+    constructor() {
         super();
-        this._ainfoobject_id = ainfoobject_id;
-        this._ainfoobject_value = ainfoobject_value;
+        this.char_fk = null;
+        this.profile_fk = null;
+        this.value = "";
+        this.age = "";
+        this.firstname = "";
+        this.gender = "";
+        this.height = "";
+        this.lastname = "";
+        this.religion = "";
+        this.smoking = "";
     }
 
-    /**
-     *  Setzen der Id
-     */
-    set_ainfoobject_id(id) {
-        this._ainfoobject_id = id;
+    /** Setzen des Values */
+    set_value(avalue) {
+        this.value = avalue;
     }
-
-    /**
-     *  Löschen der Id
-     */
-
-    delete_ainfoobject_id() {
-        this._ainfoobject_id = null;
+    /** Auslesen des Values */
+    get_value() {
+        return this.value;
     }
-
-    /**
-     *  Gibt die Id zurück
-     */
-
-    get_ainfoobject_id() {
-        return this._ainfoobject_id
+    /** Setzen des Char_fk */
+    set_char_fk(achar_fk) {
+        this.char_fk = achar_fk;
     }
-
-
-    /**
-     *  Setzen des values
-     */
-    set_ainfoobject_value(value) {
-        this._ainfoobject_value = value;
+    /** Auslesen des Char_fk */
+    get_char_fk() {
+        return this.char_fk;
     }
-
-    /**
-     *  Löschen des values
-     */
-
-    delete_ainfoobject_value() {
-        this._ainfoobject_value = null;
+    /** Setzen des Profil_fk */
+    set_profile_fk(aprofile) {
+        this.profile_fk = aprofile;
     }
-
-    /**
-     *  Gibt den value zurück
-     */
-
-    get_ainfoobject_value() {
-        return this._ainfoobject_value
+    /** Auslesen des Profil_fk */
+    get_profile_fk() {
+        return this.profile_fk;
+    }
+    /** Setzen des Ages */
+    set_age(aage) {
+        this.age = aage;
+    }
+    /** Auslesen des Ages */
+    get_age() {
+        return this.age;
+    }
+    /** Setzen des Firstnames */
+    set_first_name(afirstname) {
+        this.firstname = afirstname;
+    }
+    /** Auslesen des Firstnames */
+    get_first_name() {
+        return this.firstname;
+    }
+    /** Setzen des Genders */
+    set_gender(agender) {
+        this.gender = agender;
+    }
+    /** Auslesen des Genders */
+    get_gender() {
+        return this.gender;
+    }
+    /** Setzen des Hairs */
+    set_hair(ahair) {
+        this.hair = ahair;
+    }
+    /** Auslesen des Hairs */
+    get_hair() {
+        return this.hair;
+    }
+    /** Setzen des Heights */
+    set_height(aheight) {
+        this.height = aheight;
+    }
+    /** Auslesen des Heights */
+    get_height() {
+        return this.height;
+    }
+    /** Setzen des Lastnames */
+    set_last_name(alastname) {
+        this.lastname = alastname;
+    }
+    /** Auslesen des Lastnames */
+    get_last_name() {
+        return this.lastname;
+    }
+    /** Setzen der Religions */
+    set_religion(areligion) {
+        this.religion = areligion;
+    }
+    /** Auslesen der Religions */
+    get_religion() {
+        return this.religion;
+    }
+    /** Setzen des Smokings */
+    set_smoking_status(asmoking) {
+        this.smoking = asmoking;
+    }
+    /** Auslesen des Smokings */
+    get_smoking_status() {
+        return this.smoking;
     }
 
       static fromJSON(infoobject) {
