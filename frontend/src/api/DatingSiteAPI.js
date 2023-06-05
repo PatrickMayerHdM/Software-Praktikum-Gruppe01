@@ -91,7 +91,7 @@ export default class DatingSiteAPI {
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
-    #addInfoObject = () => `${this.#datingServerBaseURL}/characteristics`;
+    #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
     #getProfileByIdURL = (id) => `${this.#datingServerBaseURL}/Profile/${id}`;
 
@@ -172,9 +172,9 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(infoobject)
         }).then((responseJSON) => {
-            let infoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            let newinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(infoobjectBO);
+                resolve(newinfoobjectBO);
             })
         })
     }

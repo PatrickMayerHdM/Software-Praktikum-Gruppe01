@@ -103,34 +103,22 @@ class ProfileListOperations(Resource):
 
     @datingapp.marshal_with(profile, code=200)
     # Wir erwarten ein Profile-Objekt von Client-Seite.
-    @datingapp.expect(profile, infoobject)
+    @datingapp.expect(profile)
     @secured
     def post(self):
         """ Anlegen eines neuen Profil-Objekts. """
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
-        print(api.payload)
-        proposal_two = InfoObject.from_dict(api.payload)
-        print(proposal_two.to_dict())
+        #print(api.payload)
 
-        if proposal and proposal_two is not None:
+        if proposal is not None:
 
             p = adm.create_profile(
                 proposal.get_favorite_note_id(),
                 proposal.get_block_note_id())
 
-            infobj = adm.create_info_object(
-                proposal_two.get_profile_fk(),
-                proposal_two.to_dict()
-            )
-
-            response = {
-                'profiles': p,
-                'info_objects': infobj
-            }
-
-            return response, 200
+            return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
@@ -190,6 +178,29 @@ class MessageOperations(Resource):
             return '', 500 # Wenn es keine Message unter ID gibt.
 
 
+@datingapp.route('/infoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class InfoObjectOperations(Resource):
+    @datingapp.marshal_with(infoobject, code=200)
+    @datingapp.expect(infoobject)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen InfoObject-Objekts. """
+        adm = Administration()
+        print(api.payload)
+
+        proposal = InfoObject.from_dict(api.payload)
+
+
+        if proposal is not None:
+            infoobj = adm.create_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
