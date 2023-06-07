@@ -160,10 +160,11 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * @param {infoobjectBO} infoobject object
+     * @param {infoobjectBO} infoobjec object
      * @public
      */
     addInfoObject(infoobject) {
+        console.log("InfoObject: ", infoobject)
         return this.#fetchAdvanced(this.#addInfoObject(), {
             method: "POST",
             headers: {

@@ -230,6 +230,7 @@ class Administration(object):
             return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
+        print("InfoDict: ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():

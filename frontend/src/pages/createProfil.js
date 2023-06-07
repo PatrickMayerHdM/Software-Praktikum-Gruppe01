@@ -24,6 +24,7 @@ import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
 import * as properties from "react-bootstrap/ElementChildren";
+import profile from "../components/Profile";
 
 class CreateProfil extends Component {
     constructor(props) {
@@ -47,7 +48,6 @@ class CreateProfil extends Component {
             char_desc: '',
             showTextFields: false,
             profileExists: false,
-            properties: [],
         };
 
         /** Bindung der Handler an die Komponente */
@@ -83,6 +83,25 @@ class CreateProfil extends Component {
                     error: e,
                 })
             );
+    };
+
+    getSelectedProperties() {
+      const profile_id = this.props.user.uid;
+      DatingSiteAPI.getAPI()
+          .getProfileByID(profile_id)
+          .then((infoobjectBOs) => {
+             const infoobjects = infoobjectBO[0];
+             this.setState({
+                firstName: infoobjectBOs.firstName,
+                lastName: infoobjectBOs.lastName,
+                age: infoobjectBOs.age,
+                gender: infoobjectBOs.gender,
+                height: infoobjectBOs.height,
+                religion: infoobjectBOs.religion,
+                hair: infoobjectBOs.hair,
+                smoking: infoobjectBOs.smoking,
+             });
+          });
     };
 
     /** Event-Handler für die Änderung des Vornamens */
@@ -131,8 +150,9 @@ class CreateProfil extends Component {
         event.preventDefault();
         const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
         const newInfoObject = new infoobjectBO(
+            this.props.user.uid,
             this.state.char_fk,
-            this.state.profile_fk,
+            this.state.value,
             this.state.age,
             this.state.firstName,
             this.state.gender,
@@ -189,23 +209,6 @@ class CreateProfil extends Component {
                     error: e
                 });
             });
-    };
-
-    renderProperties() {
-      const { Properties } = this.state
-
-      return properties.map((property, index) => (
-            <div key={index}>
-                <input
-                value={property.name}
-                onChange={(event) => this.handleInputChange(event, index, 'name')}
-                />
-                <input
-                value={property.description}
-                onChange={(event) => this.handleInputChange(event, index, 'description')}
-                />
-            </div>
-      ));
     };
 
     handleUpdate(event) {

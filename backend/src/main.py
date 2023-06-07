@@ -183,7 +183,7 @@ class MessageOperations(Resource):
 class InfoObjectOperations(Resource):
     @datingapp.marshal_with(infoobject, code=200)
     @datingapp.expect(infoobject)
-    @secured
+    # @secured
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()

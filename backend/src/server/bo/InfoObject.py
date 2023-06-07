@@ -8,11 +8,11 @@ class InfoObject(bo):
         self.char_fk = None
         self.profile_fk = None
         self.value = None
-        self.age = None
+        self.age = ""
         self.firstname = ""
         self.gender = ""
         self.hair = ""
-        self.height = None
+        self.height = ""
         self.lastname = ""
         self.religion = ""
         self.smoking = ""
@@ -119,14 +119,14 @@ class InfoObject(bo):
 
     def to_dict(self):
         info_dict = {
-            'age': self.get_age(),
-            'firstName': self.get_first_name(),
-            'gender': self.get_gender(),
-            'hair': self.get_hair(),
-            'height': self.get_height(),
-            'lastName': self.get_last_name(),
-            'religion': self.get_religion(),
-            'smoking': self.get_smoking_status()
+            '30': self.get_age(),
+            '10': self.get_first_name(),
+            '40': self.get_gender(),
+            '70': self.get_hair(),
+            '50': self.get_height(),
+            '20': self.get_last_name(),
+            '60': self.get_religion(),
+            '80': self.get_smoking_status()
         }
         return info_dict
 

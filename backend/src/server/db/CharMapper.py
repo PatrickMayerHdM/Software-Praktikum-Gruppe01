@@ -24,15 +24,13 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
+
+
         return result
 
     def find_by_key(self, key):
-        result = None
-
-        """ Auslesen der Characteristics nach Key """
-
         cursor = self._connection.cursor()
-        command = f'SELECT char_id, char_name FROM main.Characteristic WHERE char_name=%s'
+        command = f'SELECT char_id, char_name FROM main.Characteristic WHERE char_id=%s'
         data = (key, )
         cursor.execute(command, data)
         tuples = cursor.fetchall()
@@ -42,10 +40,9 @@ class CharMapper(mapper):
             char = Characteristics()
             char.set_id(char_id)
             char.set_characteristic(char_name)
-
             result = char
         else:
-            result = None
+            raise ValueError(f"Schlüssel {key} nicht gefunden.")
 
         self._connection.commit()
         cursor.close()
