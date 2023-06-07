@@ -12,8 +12,6 @@ from server.db.InfoObjectMapper import InfoObjectMapper
 from server.bo.Profile import Profile
 from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
-from server.bo.Chat import Chat
-from server.db.ChatMapper import ChatMapper
 
 
 class Administration(object):
@@ -166,11 +164,11 @@ class Administration(object):
             return mapper.find_by_adding_user(adding_id)
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
-    @staticmethod
     def create_profile(self, favoritenote_id, blocknote_id):
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
+        # .set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             mapper.insert(prof)
@@ -183,8 +181,7 @@ class Administration(object):
         with ProfileMapper() as mapper:
             mapper.delete(profile)
 
-    @staticmethod
-    def get_all_profiles(self):
+    def get_all_profiles(self, profile):
         with ProfileMapper() as mapper:
             return mapper.find_all()
 
@@ -261,7 +258,6 @@ class Administration(object):
 
     # Logik für Profil, did die Info-Objekte in
 
-    "Spezifische Methoden für das Suchprofil"
     def create_searchprofile(self):
         suchprof = Profile()
         suchprof.set_id(1)
@@ -285,6 +281,7 @@ class Administration(object):
             return mapper.find_by_key(key)
 
     "Chat-spezifische Methoden"
+    """
     def create_chat(self, message_id):
         chat = Chat()
         chat.set_id(1)
@@ -299,7 +296,28 @@ class Administration(object):
     def get_chat_by_id(self, key):
         with ChatMapper() as mapper:
             return mapper.find_by_key(key)
+"""
+    def get_profile_by_message(self, profile_id):
+        """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
+        welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
+        profiles = []
 
+        with MessageMapper() as message_mapper:
+            messages = message_mapper.find_all()
+
+            for message in messages:
+                sender_id = message.get_sender()
+                recipient_id = message.get_recipient()
+
+                #Überprüfen ob profile_id mit sender_id oder recipient_id übereinstimmt
+                if sender_id == profile_id and recipient_id not in profiles:
+                    profiles.append(recipient_id)
+
+                if recipient_id == profile_id and sender_id not in profiles:
+                    profiles.append(sender_id)
+
+        return profiles
+"""
     def save_chat(self, chat):
         with ChatMapper() as mapper:
             mapper.update(chat)
@@ -307,5 +325,7 @@ class Administration(object):
     def delete_chat(self, chat):
         with ChatMapper() as mapper:
             mapper.delete(chat)
+
+"""
 
 
