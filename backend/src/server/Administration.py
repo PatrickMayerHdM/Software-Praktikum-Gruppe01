@@ -199,7 +199,7 @@ class Administration(object):
         with CharMapper() as mapper:
             return mapper.find_all()
 
-    def get_char_by_id(self, key):
+    def get_char_by_key(self, key):
         with CharMapper() as mapper:
             return mapper.find_by_key(key)
 
@@ -231,16 +231,18 @@ class Administration(object):
 
     def create_info_object(self, profile_fk, info_dict):
         with InfoObjectMapper() as mapper:
-            for key, value in info_dict.items():
-                info_obj = InfoObject()
-                info_obj.set_profile_fk(profile_fk)
-                info_obj.set_value(value)
-                char_fk = self.get_char_by_id(key)
-                if char_fk is not None:
-                    info_obj.set_char_fk(char_fk)
-                    mapper.insert(info_obj)
-                else:
-                    print(f'Ungültiger Key: {key}')
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    # Hier wird der CharMapper aufgerufen!
+                    char_fk = char_mapper.find_by_key(key).get_id()
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.insert(info_obj)
+                    else:
+                        print(f'Ungültiger Key: {key}')
 
     def update_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:

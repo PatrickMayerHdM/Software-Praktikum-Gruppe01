@@ -64,8 +64,15 @@ characteristic = api.inherit('Characteristics', bo, {
 })
 
 infoobject = api.inherit('InfoObject', bo, {
-    'charx_id': fields.Integer(attribute='_charx_id', description='Fremdschlüssel der Eigenschafts-ID'),
-    'value': fields.Integer(attribute='_value', description='Eingabewerte / Merkmalsausprägung zur Eigenschaft')
+    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
+    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
+    'age': fields.DateTime(attribute='_age', description='Geburtsdatum des Profilinhabers'),
+    'gender': fields.String(attribute='_gender', description='Geschlecht'),
+    'height': fields.Integer(attribute='_height', description='Größe'),
+    'religion': fields.String(attribute='_religion', description='Religion'),
+    'hair': fields.String(attribute='_hair', description='Haarfarbe'),
+    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher')
+
 })
 
 chat = api.inherit('Chat', bo, {
@@ -103,25 +110,15 @@ class ProfileListOperations(Resource):
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
-        proposal_two = InfoObject.from_dict(api.payload)
+        #print(api.payload)
 
-        if proposal and proposal_two is not None:
+        if proposal is not None:
 
             p = adm.create_profile(
                 proposal.get_favorite_note_id(),
                 proposal.get_block_note_id())
 
-            infobj = adm.create_info_object(
-                proposal_two.get_profile_fk(),
-                proposal_two.to_dict()
-            )
-
-            response = {
-                'profiles': p,
-                'info_objets': infobj
-            }
-
-            return response, 200
+            return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
@@ -181,6 +178,29 @@ class MessageOperations(Resource):
             return '', 500 # Wenn es keine Message unter ID gibt.
 
 
+@datingapp.route('/infoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class InfoObjectOperations(Resource):
+    @datingapp.marshal_with(infoobject, code=200)
+    @datingapp.expect(infoobject)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen InfoObject-Objekts. """
+        adm = Administration()
+        print(api.payload)
+
+        proposal = InfoObject.from_dict(api.payload)
+
+
+        if proposal is not None:
+            infoobj = adm.create_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

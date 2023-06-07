@@ -172,9 +172,9 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(infoobject)
         }).then((responseJSON) => {
-            let infoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            let newinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(infoobjectBO);
+                resolve(newinfoobjectBO);
             })
         })
     }
