@@ -61,12 +61,12 @@ export default class blockNoteBO extends BusinessObject {
 
             if (Array.isArray(ablockNote_list)) {
                 ablockNote_list.forEach((m) => {
-                    Object.setPrototypeOf(m, ablockNote_list.prototype);
+                    Object.setPrototypeOf(m, blockNoteBO.prototype);
                     result.push(m);
                 })
             } else {
                 let b = ablockNote_list
-                Object.setPrototypeOf(b, ablockNote_list.prototype);
+                Object.setPrototypeOf(b, blockNoteBO.prototype);
                 result.push(b);
             }
 

@@ -23,8 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
-import * as properties from "react-bootstrap/ElementChildren";
-import profile from "../components/Profile";
+
 
 class CreateProfil extends Component {
     constructor(props) {
@@ -47,7 +46,7 @@ class CreateProfil extends Component {
             char_name: '',
             char_desc: '',
             showTextFields: false,
-            profileExists: false,
+            profileExists: true,
         };
 
         /** Bindung der Handler an die Komponente */
@@ -215,8 +214,29 @@ class CreateProfil extends Component {
         console.log(this.state)
         event.preventDefault();
         const updatedProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const newInfoObject = new infoobjectBO(
+            this.props.user.uid,
+            this.state.char_fk,
+            this.state.value,
+            this.state.age,
+            this.state.firstName,
+            this.state.gender,
+            this.state.hair,
+            this.state.height,
+            this.state.lastName,
+            this.state.religion,
+            this.state.smoking)
+
         DatingSiteAPI.getAPI()
             .updateProfile(updatedProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+
+        DatingSiteAPI.getAPI()
+            .addInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
                     error: e,

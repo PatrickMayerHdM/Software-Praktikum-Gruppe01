@@ -1,6 +1,6 @@
 import BusinessObject from "./BusinessObject";
 
-export default class Characteristic extends BusinessObject {
+export default class CharacteristicBO extends BusinessObject {
 
     /**
      * Baut eine CharacteristicBO mit id, name und typ
@@ -10,11 +10,11 @@ export default class Characteristic extends BusinessObject {
      * @param {*} achar_typ
      */
 
-    constructor() {
+    constructor(aid, achar_name, achar_typ) {
         super();
-        this.id = null;
-        this.char_name = "";
-        this.char_typ = "";
+        this.id = aid;
+        this.char_name = achar_name;
+        this.char_typ = achar_typ;
     }
 
     /** Auslesen der Char-ID */
@@ -47,12 +47,12 @@ export default class Characteristic extends BusinessObject {
 
             if (Array.isArray(characteristic)) {
                 characteristic.forEach((c) => {
-                    Object.setPrototypeOf(c, characteristic.prototype);
+                    Object.setPrototypeOf(c, CharacteristicBO.prototype);
                     result.push(c);
                 })
             } else {
                 let c = characteristic
-                Object.setPrototypeOf(c, characteristic.prototype);
+                Object.setPrototypeOf(c, CharacteristicBO.prototype);
                 result.push(c);
             }
 
