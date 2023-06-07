@@ -21,7 +21,28 @@ module.exports = SetupEndpoint({
         },
         {
             method: ['POST'],
-            response: '/response-files/bank/customer.json'
+            response: '/response-files/bank/newprofiles.json'
+        }]
+    }, {
+        params: '/SearchProfileIDs',
+        requests: [{
+            method: 'GET',
+            response: '/response-files/api/SearchProfileIDs.json'
+        },
+        {
+            method: ['POST'],
+            response: '/response-files/bank/SearchProfileIDs.json'
+        }]
+    },
+        {
+        params: '/messages',
+        requests: [{
+            method: 'GET',
+            response: '/response-files/api/messages.json'
+        },
+        {
+            method: ['POST'],
+            response: '/response-files/bank/SearchProfileIDs.json'
         }]
     }
     ]

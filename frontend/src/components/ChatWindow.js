@@ -10,11 +10,10 @@ class ChatWindow extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.messageId,
-            sender_id: 1, /*Hier muss "this.props.profile hin"*/
-            recipient_id: 2, /*Hier muss "this.props.profile hin"*/
+            // id: this.props.messageId,
+            sender_id: this.props.user.uid,
+            recipient_id: 13,
             content: [],
-            timestamp: this.props.timestamp,
             error: '',
             input: '',
 
@@ -26,19 +25,34 @@ class ChatWindow extends Component {
     }
 
     componentDidMount() {
-        this.getAllMessages();
+        // console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id)
+        // const { eigeneID, andereID } = this.props.match.params;
+        // this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
+        //     this.getAllMessages();
+        this.getAllMessages()
+        console.log(this.state.sender_id, this.state.recipient_id)
+        // });
     }
 
     getAllMessages() {
-            DatingSiteAPI.getAPI().getAllMessages(this.state.id).then(messageBOs =>
-            this.setState( {
-                content:messageBOs
-            })).catch(e =>
+        const { sender_id, recipient_id } = this.state;
+        DatingSiteAPI.getAPI()
+            .getAllMessages(sender_id, recipient_id)
+            .then((messageBOs) =>
                 this.setState({
-                    content:[],
-                    error:e
-            }));
-            console.log('Error:', this.state.error)
+                    content: messageBOs,
+                }, () => {
+                    console.log(this.state.content)
+                    console.log(this.state.content[0].asenderid)
+                    console.log(this.state.content[1].arecipientid)
+                }),
+            )
+            .catch((e) =>
+                this.setState({
+                    content: [],
+                    error: e,
+                })
+            );
     }
 
     setInput(value) {
@@ -47,7 +61,8 @@ class ChatWindow extends Component {
 
     handleSend(event) {
     event.preventDefault();
-    const newMessage = new messageBO(this.state.input, this.state.sender_id, this.state.recipient_id);
+    const { sender_id, recipient_id, input } = this.state;
+    const newMessage = new messageBO(input, sender_id, recipient_id);
     DatingSiteAPI.getAPI()
         .addMessage(newMessage)
         .then(() => {
@@ -68,20 +83,20 @@ class ChatWindow extends Component {
 
         return (
             <div className="chat_window">
-                <p className="chatWindow_timestamp">Du hast mit Dominik am 10/05/2023 gematcht!</p>
-                {content.map((message, index) => (
+                {content.map((content, index) => (
                 // Darstellung des Chat-Verlaufs
                 // Die map-Funktion iteriert über das message-Array und erstellt für jede Nachricht
                 // ein neues div mit der entsprechenden id.
                 // HIER FÜGEN WIR EINE LOGIK EIN, DIE ERKENNT OB ES EINE EIGENE NACHRICHT IST
-                    <div className="chatWindow_message" key={index}>
-                        {message.sender_id === 1 ? (
+                    <div key={index}>
+                        {console.log("TEST", content.asenderid)}
+                        {this.state.sender_id === content.asenderid ? (
                             <div className="chatWindow_message">
-                                <p className="chatWindow_content">{message.content}</p>
+                                <p className="chatWindow_content">{content.acontent}</p>
                             </div>
                     ) : (
                             <div className="chatWindow_message">
-                            <p className="chatWindow_contentUser">{message.content}</p>
+                            <p className="chatWindow_contentUser">{content.acontent}</p>
                             </div>
                     )}
                     </div>

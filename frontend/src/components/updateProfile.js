@@ -21,12 +21,13 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Characteristic from "../api/CharacteristicBO";
 
 
-
-
 class UpdateProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            profile_id: 0,
+            favoriteNote_id: 0,
+            blockNote_id: 0,
             firstName: '',
             lastName: '',
             age: '',
@@ -105,9 +106,9 @@ class UpdateProfile extends Component {
         console.log(this.state)
         const { char_name, char_desc } = this.state;
         this.setState({ char_name: char_name, char_desc: char_desc})
-        const createCharForProfile = new Characteristic(this.state._aid ,this.state._name);
+        const createdCharForProfile = new Characteristic(this.state._aid ,this.state._name);
         DatingSiteAPI.getAPI()
-            .createCharForProfile(createCharForProfile)
+            .createCharForProfile(createdCharForProfile)
             .catch((e) => {
                 this.setState({
                     error: e
@@ -132,9 +133,9 @@ class UpdateProfile extends Component {
     handleRemove(event) {
         console.log(this.state)
         event.preventDefault();
-        const removedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.account_id, this.state.blockNote_id);
+        const { profile } = this.props;
         DatingSiteAPI.getAPI()
-            .removeProfile(removedProfile)
+            .removeProfile(profile.getID())
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -167,18 +168,26 @@ class UpdateProfile extends Component {
                         <Item>
                             <FormLabel> Wie ist dein Name? </FormLabel>
                             <FormGroup row style={{justifyContent: 'center'}}>
-                                <Box sx={{width: 200, margin: '0 auto'}}>
+                                <Box sx={{width: 200, margin: '0 auto', marginBottom: '10px'}}>
                                     <TextField
                                         type={"text"}
                                         label={"Vorname"}
                                         value={firstName}
                                         onChange={this.handleChangeFirstName}
+                                        inputProps={{
+                                            maxLength: 17,
+                                        }}
                                     />
+                                </Box>
+                                <Box sx={{width: 200, margin: '0 auto', marginBottom: '10px'}}>
                                     <TextField
                                         type="text"
                                         label="Nachname"
                                         value={lastName}
                                         onChange={this.handleChangeLastName}
+                                        inputProps={{
+                                            maxLength: 17,
+                                        }}
                                     />
                                 </Box>
                             </FormGroup>
@@ -192,7 +201,7 @@ class UpdateProfile extends Component {
                                         <DatePicker
                                             value={age}
                                             onChange={this.handleChangeAge}
-                                            label="Geburtsdatum"
+                                            label="Datum"
                                         />
                                     </DemoContainer>
                                 </LocalizationProvider>
@@ -219,6 +228,12 @@ class UpdateProfile extends Component {
                                     type={"number"}
                                     value={height}
                                     onChange={this.handleChangeHeight}
+                                    label={'cm'}
+                                    inputProps={{
+                                        min: 100,
+                                        max: 999,
+                                        pattern: "\\d{3}",
+                                    }}
                                 />
                             </Box>
                             </FormGroup>
@@ -257,7 +272,7 @@ class UpdateProfile extends Component {
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel> Rauchst du ? </FormLabel>
                                 <RadioGroup row value={smoking} onChange={this.handleChangeSmoking}>
-                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nich-Raucher" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nicht-Raucher" labelPlacement="bottom" />
                                     <FormControlLabel sx={{ width: '15%' }} value="smoker" control={<Radio />} label="Raucher" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
@@ -269,9 +284,15 @@ class UpdateProfile extends Component {
                                 <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
                                 {showTextFields && (
                                     <>
-                                        <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')}></TextField>
-                                        <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')}></TextField>
-                                        <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
+                                        <Box sx={{ marginBottom: '10px' }}>
+                                            <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')}></TextField>
+                                        </Box>
+                                        <Box sx={{ marginBottom: '10px' }}>
+                                            <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')}></TextField>
+                                        </Box>
+                                        <Box sx={{ marginBottom: '10px' }}>
+                                            <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
+                                        </Box>
                                     </>
                                 )}
                             </Box>
@@ -285,7 +306,7 @@ class UpdateProfile extends Component {
                         </FormGroup>
                         </Item>
                         <Item>
-                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profile Update </Button>
+                            <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profil Update </Button>
                         </Item>
                     </Stack>
                 </Box>
@@ -295,3 +316,4 @@ class UpdateProfile extends Component {
         }
 }
 export default UpdateProfile;
+

@@ -10,6 +10,13 @@ import Item from "../theme";
 
 class ProfileBox extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            profileBox_id: this.props.other_profile,
+        }
+    }
+
     render() {
         return(
             <Box sx={{width: '100%'}} >
@@ -19,8 +26,8 @@ class ProfileBox extends React.Component {
                 <Grid item lg={12} md={12} xs={12} >
                     {/** Ein Item für das Grid, hier der Vorname*/}
                   <Item>
-                      VVVVVVVVVVVVVVVV
-                  </Item >
+                      Profil-ID: {this.state.profileBox_id}
+                  </Item>
                 </Grid >
                   {/** Ein Item für das Grid, hier der Nachname */}
                 <Grid item lg={12} md={12} xs={12} >
@@ -29,28 +36,21 @@ class ProfileBox extends React.Component {
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier das Alter*/}
-                <Grid item lg={2} md={2} xs={4} >
+                <Grid item lg={3} md={3} xs={3} >
                   <Item>
                       20
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier das Geschlecht */}
-                <Grid item lg={5} md={5} xs={8} >
+                <Grid item lg={6} md={6} xs={5} >
                   <Item>
                       Nicht-binär
                   </Item >
                 </Grid >
                   {/** Ein Item für das Grid, hier die Größe*/}
-                <Grid item lg={3} md={3} xs={6} >
+                <Grid item lg={3} md={3} xs={4} >
                   <Item>
                       182cm
-                  </Item >
-                </Grid >
-                  {/** Ein Item für das Grid, hier das Ähnlichkeitsmaß zwischen dem Suchprofil und dem
-                   in der Profilbox dargestellten Profil*/}
-                <Grid item lg={2} md={2} xs={6} >
-                  <Item >
-                      72%
                   </Item >
                 </Grid >
               </Grid >
