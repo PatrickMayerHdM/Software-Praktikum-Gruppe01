@@ -13,27 +13,28 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} aprofile_fk
      * @param {*} avalue
      * @param {*} aage
-     * @param {*} afirstanme
+     * @param {*} afirstName
      * @param {*} agender
      * @param {*} ahair
      * @param {*} aheight
-     * @param {*} alastname
+     * @param {*} alastName
      * @param {*} areligion
      * @param {*} asmoking
      * */
 
-    constructor() {
-        super();
-        this.char_fk = null;
-        this.profile_fk = null;
-        this.value = "";
-        this.age = "";
-        this.firstname = "";
-        this.gender = "";
-        this.height = "";
-        this.lastname = "";
-        this.religion = "";
-        this.smoking = "";
+    constructor(aprofile_fk, achar_fk, avalue, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking) {
+    super();
+    this.profile_fk = aprofile_fk;
+    this.char_fk = achar_fk;
+    this.value = avalue;
+    this.age = aage;
+    this.firstName = afirstName;
+    this.gender = agender;
+    this.hair = ahair;
+    this.height = aheight;
+    this.lastName = alastName;
+    this.religion = areligion;
+    this.smoking = asmoking;
     }
 
     /** Setzen des Values */
@@ -69,8 +70,8 @@ export default class infoobjectBO extends BusinessObject {
         return this.age;
     }
     /** Setzen des Firstnames */
-    set_first_name(afirstname) {
-        this.firstname = afirstname;
+    set_first_name(afirstName) {
+        this.firstname = afirstName;
     }
     /** Auslesen des Firstnames */
     get_first_name() {
@@ -101,8 +102,8 @@ export default class infoobjectBO extends BusinessObject {
         return this.height;
     }
     /** Setzen des Lastnames */
-    set_last_name(alastname) {
-        this.lastname = alastname;
+    set_last_name(alastName) {
+        this.lastname = alastName;
     }
     /** Auslesen des Lastnames */
     get_last_name() {
@@ -130,12 +131,12 @@ export default class infoobjectBO extends BusinessObject {
 
             if (Array.isArray(infoobject)) {
                 infoobject.forEach((i) => {
-                    Object.setPrototypeOf(i, infoobject.prototype);
+                    Object.setPrototypeOf(i, infoobjectBO.prototype);
                     result.push(i);
                 })
             } else {
                 let i = infoobject
-                Object.setPrototypeOf(i, infoobject.prototype);
+                Object.setPrototypeOf(i, infoobjectBO.prototype);
                 result.push(i);
             }
 
