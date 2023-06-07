@@ -36,6 +36,12 @@ class SearchProfile extends React.Component{
                 nonBinary: false,
                 various: false,
             },
+
+            height: {
+                minHeight: null,
+                maxHeight: null,
+            },
+
             religions: {
                 atheist: false,
                 christianity: false,
@@ -56,7 +62,6 @@ class SearchProfile extends React.Component{
                 red: false,
                 different: false,
                 indifferent: false,
-
             },
         };
     }
@@ -64,15 +69,26 @@ class SearchProfile extends React.Component{
     handleChangeGen = (val) => {
         const {name, checked} = val.target;
         this.setState((prevState) => ({
-            gender: {...prevState.gender, [name]: checked},
+            gender: {
+                male: name === "male",
+                female: name === "female",
+                nonBinary: name === "nonBinary",
+                various: name === "various",
+            },
         }))
     }
 
     handleChangeRel = (val) => {
         const {name, checked} = val.target;
         this.setState((prevState) => ({
-
-            religions: {...prevState.religions, [name]: checked},
+            religions: {
+                atheist: name === "atheist",
+                christianity: name === "christianity",
+                islam: name === "islam",
+                judaism: name === "judaism",
+                buddhism: name === "buddhism",
+                indifferent: name === "indifferent",
+            }
         }))
     }
 
@@ -90,7 +106,14 @@ class SearchProfile extends React.Component{
     handleChangeHai = (val) => {
         const {name, checked} = val.target;
         this.setState((prevState) => ({
-            hair: {...prevState.hair, [name]: checked},
+            hair: {
+                black: name === "black",
+                brown: name === "brown",
+                blond: name === "blond",
+                red: name === "red",
+                different: name === "different",
+                indifferent: name === "indifferent",
+            }
         }))
     }
 
@@ -101,7 +124,18 @@ class SearchProfile extends React.Component{
           ...prevState.age, minAge: value[0], maxAge: value[1],
         }
       }));
-}
+    }
+
+    handleChangeHeight = (event, value) => {
+      const [minHeight, maxHeight] = value;
+      this.setState((prevState) => ({
+        height: {
+          ...prevState.height,
+          minHeight: minHeight,
+          maxHeight: maxHeight,
+        },
+      }));
+    }
 
     submit = (val) => {
         console.log(this.state )
@@ -117,7 +151,8 @@ class SearchProfile extends React.Component{
             gender,
             smoking,
             hair,
-            age
+            age,
+            height
 
         } = this.state;
 
@@ -132,22 +167,22 @@ class SearchProfile extends React.Component{
                             {/** Hier kann das Geschlecht der in diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welches Geschlecht soll die gesuchte Person haben?</FormLabel>
                             <FormGroup row style={{ justifyContent: 'center'}} className={"checkbox_search"}>
-                                <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="male" checked={gender.male}
+                                <FormControlLabel sx={{ width: '10%'}} control={<Radio name="male" checked={gender.male}
                                                                                           onChange={this.handleChangeGen} />} label="Mann" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="female" checked={gender.female}
+                                <FormControlLabel sx={{ width: '10%'}} control={<Radio name="female" checked={gender.female}
                                                                                           onChange={this.handleChangeGen} />} label="Frau" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="nonBinary" checked={gender.nonBinary}
+                                <FormControlLabel sx={{ width: '10%'}} control={<Radio name="nonBinary" checked={gender.nonBinary}
                                                                                           onChange={this.handleChangeGen} />} label="Nicht-binär" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{ width: '10%'}} control={<Checkbox name="various" checked={gender.various}
+                                <FormControlLabel sx={{ width: '10%'}} control={<Radio name="various" checked={gender.various}
                                                                                           onChange={this.handleChangeGen} />} label="Divers" labelPlacement="bottom"
                                 />
                             </FormGroup>
                         </Item>
                         <Item >
-                            {/** Hier kann das Geschlecht der in diesem Suchprofil gesuchten Person ausgewählt werden */}
+                            {/** Hier kann die gewünschte Altersspanne in diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <Box sx={{width: 400, margin: '0 auto'}}>
                                 <FormLabel>Wie alt soll die Person sein?</FormLabel>
                                 <Slider
@@ -156,7 +191,7 @@ class SearchProfile extends React.Component{
                                     valueLabelDisplay="auto"
                                     min={18}
                                     max={100}
-                                    className="slider_age"
+                                    className="slider"
                                 />
                             </Box>
                         </Item>
@@ -165,25 +200,40 @@ class SearchProfile extends React.Component{
                             {/** Hier kann die gewünschte Religion der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Religion sollte die gesuchte Person haben?</FormLabel>
                             <FormGroup row style={{justifyContent: 'center'}} className={"checkbox_search"}>
-                                <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="atheist" checked={religions.atheist}
+                                <FormControlLabel sx={{width: '12%'}} control={<Radio name="atheist" checked={religions.atheist}
                                                                                          onChange={this.handleChangeRel}/>} label="Atheist" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="christianity" checked={religions.christianity}
+                                <FormControlLabel sx={{width: '12%'}} control={<Radio name="christianity" checked={religions.christianity}
                                                                                          onChange={this.handleChangeRel}/>}  label="Christlich" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="islam" checked={religions.islam}
+                                <FormControlLabel sx={{width: '12%'}} control={<Radio name="islam" checked={religions.islam}
                                                                                          onChange={this.handleChangeRel}/>}  label="Muslimisch" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="judaism" checked={religions.judaism}
+                                <FormControlLabel sx={{width: '12%'}} control={<Radio name="judaism" checked={religions.judaism}
                                                                                          onChange={this.handleChangeRel}/>}  label="Jüdisch" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="buddhism" checked={religions.buddhism}
+                                <FormControlLabel sx={{width: '12%'}} control={<Radio name="buddhism" checked={religions.buddhism}
                                                                                          onChange={this.handleChangeRel}/>}  label="Budistisch" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '12%'}} control={<Checkbox name="indifferent" checked={religions.indifferent}
+                                <FormControlLabel sx={{width: '12%'}} control={<Radio name="indifferent" checked={religions.indifferent}
                                                                                          onChange={this.handleChangeRel} />} label="indifferent" labelPlacement="bottom"
                                 />
                             </FormGroup>
+                        </Item>
+
+                        <Item >
+                            {/** Hier kann die gewünschte Höhe einer Person ausgewählt werden */}
+                            <Box sx={{width: 400, margin: '0 auto'}}>
+                                <FormLabel>Welche Körpergröße sollte die Person haben?</FormLabel>
+                                <Slider
+                                    value={[height.minHeight, height.maxHeight]}
+                                    onChange={this.handleChangeHeight}
+                                    valueLabelDisplay="auto"
+                                    min={140}
+                                    max={220}
+                                    className="slider"
+                                />
+                            </Box>
                         </Item>
 
                         <Item>
@@ -205,27 +255,28 @@ class SearchProfile extends React.Component{
                             {/** Hier kann die gewünschte Haarfarbe der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Haarfarbe sollte die gesuchte Person haben?</FormLabel>
                             <FormGroup row style={{justifyContent: 'center'}} className={"checkbox_search"}>
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox  name="black" checked={hair.black}
+                                <FormControlLabel sx={{width: '10%'}} control={<Radio  name="black" checked={hair.black}
                                                                                          onChange={this.handleChangeHai}/>} label="Schwarz" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox  name="brown" checked={hair.brown}
+                                <FormControlLabel sx={{width: '10%'}} control={<Radio  name="brown" checked={hair.brown}
                                                                                          onChange={this.handleChangeHai}/>} label="Braun" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="blond" checked={hair.blond}
+                                <FormControlLabel sx={{width: '10%'}} control={<Radio name="blond" checked={hair.blond}
                                                                                          onChange={this.handleChangeHai}/>} label="Blond" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="red" checked={hair.red}
+                                <FormControlLabel sx={{width: '10%'}} control={<Radio name="red" checked={hair.red}
                                                                                          onChange={this.handleChangeHai}/>} label="Rot" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox name="different" checked={hair.different}
+                                <FormControlLabel sx={{width: '10%'}} control={<Radio name="different" checked={hair.different}
                                                                                          onChange={this.handleChangeHai}/>} label="Andere" labelPlacement="bottom"
                                 />
-                                <FormControlLabel sx={{width: '10%'}} control={<Checkbox defaultChecked name="indifferent" checked={hair.indifferent}
+                                <FormControlLabel sx={{width: '10%'}} control={<Radio defaultChecked name="indifferent" checked={hair.indifferent}
                                                                                          onChange={this.handleChangeHai}/>} label="indifferent" labelPlacement="bottom"
                                 />
                             </FormGroup>
                         </Item>
                         <Item>
+                            {/** Wir dann schlussendlich der submit des Suchprofils gemacht */}
                             <Button onClick={this.submit}>Suchprofil erstellen</Button>
                         </Item>
 

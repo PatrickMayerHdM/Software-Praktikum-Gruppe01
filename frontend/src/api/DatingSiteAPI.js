@@ -19,7 +19,7 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/messages`;
+    #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/messages/${profileID}/${otherprofileID}`;
     #addMessageURL = () => `${this.#datingServerBaseURL}/messages`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
@@ -45,8 +45,9 @@ export default class DatingSiteAPI {
      * @public
      */
 
-    getAllMessages() {
-        return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
+    getAllMessages(profileID, otherprofileID) {
+        return this.#fetchAdvanced(this.#getAllMessagesURL(profileID, otherprofileID)).then((responseJSON) => {
+            console.log("Innerhalb der Daiting API: ", profileID, otherprofileID )
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -219,17 +220,20 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/newprofiles`;
+    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`;
     #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
+    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`;
+
 
     /**
-     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
+     * Gibt ein Promise zurück, welches dann ein Array mit ProfilIDs enthält
      * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
     */
 
     getOnlyNewProfiles(profileID){
-        return this.#fetchAdvanced(this.#getNewProfilesByIdURL())
+        return this.#fetchAdvanced(this.#getNewProfilesByIdURL(profileID))
             .then((responseJSON) => {
+                console.log("Das ist das profile_id Dings im API call: ",profileID )
                 console.log("Das responseJSON")
                 console.log(responseJSON)
                 return new Promise(function (resolve) {
@@ -239,6 +243,11 @@ export default class DatingSiteAPI {
             })
 
     }
+
+    /**
+     * Gibt ein Promise zurück, welches dann ein Array mit den verschiedenen ProfilIDs für Suchprofile
+     * @param {Number} accountID übergibt die accountID für welche die Profile nicht
+    */
 
     getSearchProfileIDs(){
         return this.#fetchAdvanced(this.#getSearchProfilesByIdURL())
@@ -251,6 +260,23 @@ export default class DatingSiteAPI {
 
             })
     }
+
+    /**
+     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
+     * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
+    */
+
+    deleteSearchProfile(profile_id) {
+    return this.#fetchAdvanced(this.#deleteSearchProfile(profile_id), {
+      method: 'DELETE'
+    })
+      .then((responseJSON) => {
+        let profileBOs = ProfileBO.fromJSON(responseJSON)[0];
+        return new Promise(function (resolve) {
+          resolve(profileBOs);
+        })
+      })
+  }
 
 }
 

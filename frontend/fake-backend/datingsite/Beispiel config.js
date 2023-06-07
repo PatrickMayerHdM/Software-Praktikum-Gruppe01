@@ -14,14 +14,14 @@ const prefix = "/system"
 module.exports = SetupEndpoint({
     name: 'system',
     urls: [{
-        params: '/newprofiles',
+        params: '/dsvJfMX2RuRx9Tha1XpXdN4eTVE2/newprofiles',
         requests: [{
             method: 'GET',
             response: '/response-files/api/newprofiles.json'
         },
         {
             method: ['POST'],
-            response: '/response-files/bank/newprofiles.json'
+            response: '/response-files/api/newprofiles.json'
         }]
     }, {
         params: '/SearchProfileIDs',
@@ -31,7 +31,7 @@ module.exports = SetupEndpoint({
         },
         {
             method: ['POST'],
-            response: '/response-files/bank/SearchProfileIDs.json'
+            response: '/response-files/api/SearchProfileIDs.json'
         }]
     },
         {
@@ -42,7 +42,7 @@ module.exports = SetupEndpoint({
         },
         {
             method: ['POST'],
-            response: '/response-files/bank/SearchProfileIDs.json'
+            response: '/response-files/api/SearchProfileIDs.json'
         }]
     }
     ]

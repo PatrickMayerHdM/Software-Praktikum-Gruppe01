@@ -12,7 +12,7 @@ class ChatWindow extends Component {
         this.state = {
             // id: this.props.messageId,
             sender_id: this.props.user.uid,
-            recipient_id: 13,
+            recipient_id: null,
             content: [],
             error: '',
             input: '',
@@ -25,13 +25,12 @@ class ChatWindow extends Component {
     }
 
     componentDidMount() {
-        // console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id)
-        // const { eigeneID, andereID } = this.props.match.params;
-        // this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
-        //     this.getAllMessages();
-        this.getAllMessages()
-        console.log(this.state.sender_id, this.state.recipient_id)
-        // });
+        const currentPath = window.location.pathname;
+        const lastPartURL = currentPath.split('/').pop();
+        this.setState({recipient_id: lastPartURL}, () => {
+          console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id);
+          this.getAllMessages();
+        });
     }
 
     getAllMessages() {
@@ -43,8 +42,8 @@ class ChatWindow extends Component {
                     content: messageBOs,
                 }, () => {
                     console.log(this.state.content)
-                    console.log(this.state.content[0].asenderid)
-                    console.log(this.state.content[1].arecipientid)
+                    //console.log(this.state.content[0].asenderid)
+                    //console.log(this.state.content[1].arecipientid)
                 }),
             )
             .catch((e) =>
@@ -89,7 +88,6 @@ class ChatWindow extends Component {
                 // ein neues div mit der entsprechenden id.
                 // HIER FÜGEN WIR EINE LOGIK EIN, DIE ERKENNT OB ES EINE EIGENE NACHRICHT IST
                     <div key={index}>
-                        {console.log("TEST", content.asenderid)}
                         {this.state.sender_id === content.asenderid ? (
                             <div className="chatWindow_message">
                                 <p className="chatWindow_content">{content.acontent}</p>
