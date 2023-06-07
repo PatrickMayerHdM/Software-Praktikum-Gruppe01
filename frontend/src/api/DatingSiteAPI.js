@@ -19,7 +19,7 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = () => `${this.#datingServerBaseURL}/messages`;
+    #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/messages/${profileID}/${otherprofileID}`;
     #addMessageURL = () => `${this.#datingServerBaseURL}/messages`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
@@ -46,7 +46,7 @@ export default class DatingSiteAPI {
      */
 
     getAllMessages(profileID, otherprofileID) {
-        return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
+        return this.#fetchAdvanced(this.#getAllMessagesURL(profileID, otherprofileID)).then((responseJSON) => {
             console.log("Innerhalb der Daiting API: ", profileID, otherprofileID )
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
