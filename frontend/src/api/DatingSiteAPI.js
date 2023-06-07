@@ -45,8 +45,9 @@ export default class DatingSiteAPI {
      * @public
      */
 
-    getAllMessages() {
+    getAllMessages(profileID, otherprofileID) {
         return this.#fetchAdvanced(this.#getAllMessagesURL()).then((responseJSON) => {
+            console.log("Innerhalb der Daiting API: ", profileID, otherprofileID )
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
