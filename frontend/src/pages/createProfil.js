@@ -68,6 +68,7 @@ class CreateProfil extends Component {
     /** Abfrage ob ein Profil bereits vorhanden ist oder nicht*/
     componentDidMount() {
         this.checkProfilExc();
+        this.getSelectedProperties();
     };
 
     /** Handler und API für "checkProfilExc" */
@@ -86,20 +87,24 @@ class CreateProfil extends Component {
 
     getSelectedProperties() {
       const profile_id = this.props.user.uid;
+
       DatingSiteAPI.getAPI()
-          .getProfileByID(profile_id)
-          .then((infoobjectBOs) => {
-             const infoobjects = infoobjectBO[0];
-             this.setState({
-                firstName: infoobjectBOs.firstName,
-                lastName: infoobjectBOs.lastName,
-                age: infoobjectBOs.age,
-                gender: infoobjectBOs.gender,
-                height: infoobjectBOs.height,
-                religion: infoobjectBOs.religion,
-                hair: infoobjectBOs.hair,
-                smoking: infoobjectBOs.smoking,
-             });
+          .getInfoObjects()
+          .then((infoObjects) => {
+              const selectedInfoObjects = infoObjects.find(infoObjects => infoObjects.get_profile_fk() === profile_id);
+
+              if (selectedInfoObjects) {
+                  this.setState({
+                      firstName: selectedInfoObjects.get_first_name(),
+                      lastName: selectedInfoObjects.get_last_name(),
+                      age: selectedInfoObjects.get_age(),
+                      gender: selectedInfoObjects.get_gender(),
+                      height: selectedInfoObjects.get_height(),
+                      religion: selectedInfoObjects.get_religion(),
+                      hair: selectedInfoObjects.get_hair(),
+                      smoking: selectedInfoObjects.get_smoking_status()
+                  });
+              };
           });
     };
 

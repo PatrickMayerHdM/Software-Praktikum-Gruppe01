@@ -93,6 +93,7 @@ export default class DatingSiteAPI {
     #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
+    #getInfoObjectsURL = () => `${this.#datingServerBaseURL}/infoobjects`;
     #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
     #getProfileByIdURL = (id) => `${this.#datingServerBaseURL}/profiles/${id}`;
 
@@ -195,6 +196,20 @@ export default class DatingSiteAPI {
                 resolve(createdCharForProfile);
             })
         })
+    }
+
+    getInfoObjects() {
+        return this.#fetchAdvanced(this.#getInfoObjectsURL(), {
+            method: "GET",
+            header: {
+                'Accept': 'application/json, text/plain'
+            }
+        }).then((responseJSON) => {
+            let infoObects = infoobjectBO.fromJSON(responseJSON);
+            return new Promise(function (resolve){
+                resolve(infoObects);
+            });
+        });
     }
 
     getAllProfiles() {
