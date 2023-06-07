@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatProfileBox from "./ChatProfileBox";
 import React from "react";
+import DatingSiteAPI from "../api/DatingSiteAPI";
 
 /**
- * Dies ist eine  Seite, zum darstellen mehrerer ChatProfileBox innerhalb eines weiteren Grids.
+ * Dies ist eine Seite, zum Darstellen mehrerer ChatProfileBox innerhalb eines weiteren Grids.
  * Damit dies dann nicht mehr innerhalb der App.js geschehen muss und die App.js dadurch übersichtlicher bleibt.
  */
 
@@ -20,9 +21,8 @@ class ChatProfileBoxList extends React.Component{
         }
     }
 
-    componentDidMount() {
-        console.log(this.props.user.uid);
-
+    // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man DummyDaten und das Fake Back-End verwenden will.
+    MountFakeBackEnd() {
         const dummyChatProfiles = [13, 42, 51];
 
         this.setState({profiles: dummyChatProfiles}, () => {
@@ -30,6 +30,29 @@ class ChatProfileBoxList extends React.Component{
             this.setState({numProfiles: lengthProfiles})
             console.log(this.state.profiles, this.state.numProfiles)
         });
+    }
+
+    // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man das richtige Back-End verwenden will.
+    MountBackEnd() {
+        DatingSiteAPI.getAPI()
+        .getChats()
+        .then(profilesvar => {
+          this.setState(prevState => ({
+            profiles: [...prevState.profiles, ...profilesvar]
+          }));
+
+          const lengthSearchprofiles = this.state.Searchprofiles.length;
+          this.setState({ numSearchProfiles: lengthSearchprofiles });
+
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
+    }
+
+    // componentDidMount() welche Ausgeführt wird, wenn der Komponent gelanden wird.
+    componentDidMount() {
+        this.MountFakeBackEnd();
     }
 
     handleProfileClick = (index) => {

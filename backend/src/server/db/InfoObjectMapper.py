@@ -72,8 +72,8 @@ class InfoObjectMapper(mapper):
         command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id) VALUES (%s, %s, %s, %s)"
         data = (info_obj.get_id(),
                 info_obj.get_char_fk(),
-                info_obj.get_profile_fk(),
-                info_obj.get_value())
+                info_obj.get_value(),
+                info_obj.get_profile_fk())
 
         cursor.execute(command, data)
 
@@ -85,7 +85,7 @@ class InfoObjectMapper(mapper):
     def update(self, info_obj):
         cursor = self._connection.cursor()
 
-        command = 'UPDATE main.InfoObject SET char_fk=%s, profile_fk=%s, value=%s WHERE info_object_id=%s'
+        command = 'UPDATE main.InfoObject SET char_id=%s, profile_id=%s, char_value=%s WHERE infoobject_id=%s'
         data = (info_obj.get_id(),
                 info_obj.get_char_fk(),
                 info_obj.get_profile_fk(),
