@@ -47,10 +47,10 @@ account = api.inherit('Account', bo, {
 })
 
 profile = api.inherit('Profile', bo, {
-    'favoriteNote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
-    'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
-    'blockNote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
-    'google_fk': fields.String(attribute='_google_id', description='Google_ID des Admin-Kontos')
+    'favoritenote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
+    # 'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
+    'blocknote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
+    'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
 })
 
 message = api.inherit('Message', bo, {
@@ -140,6 +140,7 @@ class ProfileOperations(Resource):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
         prof = adm.get_profile_by_google_id(googleID)
+        print(prof)
         return prof
 
     @secured

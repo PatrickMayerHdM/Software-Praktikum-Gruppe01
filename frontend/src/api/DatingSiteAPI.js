@@ -111,6 +111,7 @@ export default class DatingSiteAPI {
     #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
+    #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
     #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
@@ -215,6 +216,20 @@ export default class DatingSiteAPI {
         })
     }
 
+    getInfoObjects() {
+        return this.#fetchAdvanced(this.#getInfoObjectsURL(), {
+            method: "GET",
+            header: {
+                'Accept': 'application/json, text/plain'
+            }
+        }).then((responseJSON) => {
+            let infoObects = infoobjectBO.fromJSON(responseJSON);
+            return new Promise(function (resolve){
+                resolve(infoObects);
+            });
+        });
+    }
+
     getAllProfiles() {
         return this.#fetchAdvanced(this.#getAllProfilesURL()).then((responseJSON) => {
             let profileBOs = ProfileBO.fromJSON(responseJSON);
@@ -225,14 +240,15 @@ export default class DatingSiteAPI {
         })
     }
 
-    getProfileByID(profileID) {
-        return this.#fetchAdvanced(this.#getProfileByIdURL(profileID)).then((responseJSON) => {
+    getProfileByID(google_fk) {
+        return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
+            .then((responseJSON) => {
+            console.log("BackEnd Objekt:", responseJSON)
             let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);
             })
         })
-
     }
 
     /**

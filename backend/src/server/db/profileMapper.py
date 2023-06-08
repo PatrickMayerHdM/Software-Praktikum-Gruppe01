@@ -43,6 +43,7 @@ class ProfileMapper(mapper):
             # profile.account_id(account_id)
             profile.set_block_note_id(blockNote_id)
             profile.set_google_fk(google_fk)
+            print("Profil von der Datenbank im Mapper:", profile)
 
             result = profile
         else:
