@@ -23,7 +23,7 @@ class ChatProfileBoxList extends React.Component{
 
     // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man DummyDaten und das Fake Back-End verwenden will.
     MountFakeBackEnd() {
-        const dummyChatProfiles = [13, 42, 51]; // Dummy Daten die später ersetzt werden durch einen GET
+        const dummyChatProfiles = [13, 42, 51, 'H2Qfee67TCh7dbHQz2qafu9Q9XB2']; // Dummy Daten die später ersetzt werden durch einen GET
 
         this.setState({profiles: dummyChatProfiles}, () => {
             const lengthProfiles = this.state.profiles.length;

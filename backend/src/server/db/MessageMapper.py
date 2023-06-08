@@ -28,6 +28,27 @@ class MessageMapper(mapper):
 
         return result
 
+    def find_by_chat(self, sender_profile, recipient_profile):
+        """ Auslesen aller Nachrichten zwischen zwei Personen. """
+        result = []
+        cursor = self._connection.cursor()
+        command = f"SELECT * FROM main.Message WHERE (sender_id='{sender_profile}' AND recipient_id='{recipient_profile}') OR (sender_id='{recipient_profile}' AND recipient_id='{sender_profile}') ORDER BY message_id"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (message_id, sender_id, recipient_id, content) in tuples:
+            message = Message()
+            message.set_id(message_id)
+            message.set_sender(sender_id)
+            message.set_recipient(recipient_id)
+            message.set_content(content)
+            result.append(message)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def find_by_sender_id(self, sender_id):
         """ Auslesen aller Nachrichten eines Absenders."""
         result = []

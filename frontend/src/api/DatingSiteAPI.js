@@ -19,9 +19,9 @@ export default class DatingSiteAPI {
 
     // Message related
 
-    #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/messages/${profileID}/${otherprofileID}`;
-    #addMessageURL = () => `${this.#datingServerBaseURL}/messages`;
-    #getChatsURL = (profileID) => `${this.#datingServerBaseURL}/messages/${profileID}`;
+    #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/ChatWindow/${profileID}/${otherprofileID}`;
+    #addMessageURL = () => `${this.#datingServerBaseURL}/ChatWindow`;
+    #getChatsURL = (profileID) => `${this.#datingServerBaseURL}/ChatWindow/${profileID}`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
