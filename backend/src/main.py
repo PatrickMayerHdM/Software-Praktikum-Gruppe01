@@ -47,15 +47,15 @@ account = api.inherit('Account', bo, {
 })
 
 profile = api.inherit('Profile', bo, {
-    'favoriteNote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
-    'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
-    'blockNote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
-    'google_fk': fields.String(attribute='_google_id', description='Google_ID des Admin-Kontos')
+    'favoritenote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
+    # 'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
+    'blocknote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
+    'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
 })
 
 message = api.inherit('Message', bo, {
-    'sender_id': fields.Integer(attribute='_sender_id', description='Absender einer Nachricht'),
-    'recipient_id': fields.Integer(attribute='_recipient_id', description='Empfänger einer Nachricht'),
+    'sender_id': fields.String(attribute='_sender_id', description='Absender einer Nachricht'),
+    'recipient_id': fields.String(attribute='_recipient_id', description='Empfänger einer Nachricht'),
     'content': fields.String(attribute='_content', description='Inhalt einer Nachricht')
 })
 
@@ -141,6 +141,7 @@ class ProfileOperations(Resource):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
         prof = adm.get_profile_by_google_id(googleID)
+        print(prof)
         return prof
 
     @secured
@@ -196,21 +197,21 @@ class ChatWindowOperations(Resource):
         else:
             return '', 500
 
-@datingapp.route('/messages/<int:id>')
+@datingapp.route('/ChatWindow/<string:sender_id>/<string:recipient_id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
 @datingapp.param('id', 'Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
     @secured
-    def get(self, id):
-        """ Auslesen eines bestimmten Chat-Objekts."""
+    def get(self, sender_id, recipient_id):
+        """ Auslesen eines Chat-Verlaufs."""
         adm = Administration()
-        msg = adm.get_messages(id)
+        messages = adm.get_message_by_chat(sender_id, recipient_id)
 
-        if msg is not None:
-            return msg
+        if messages is not None:
+            return messages
         else:
-            return '', 500 # Wenn es keine Message unter ID gibt.
+            return '', 500 # Wenn es keine Messages gibt.
 
 
 @datingapp.route('/infoobjects')

@@ -35,7 +35,7 @@ class Header extends Component {
         <div className="header">
             <Link to={`/Profil/${this.props.user.uid}`}>
                 <IconButton>
-                    <PersonIcon className="header_icon" />
+                    <PersonIcon className="hader_icon" />
                 </IconButton>
             </Link>
             <Link to="/Suche">

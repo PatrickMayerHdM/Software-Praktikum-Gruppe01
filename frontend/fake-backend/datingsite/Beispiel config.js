@@ -35,10 +35,10 @@ module.exports = SetupEndpoint({
         }]
     },
         {
-        params: '/messages',
+        params: '/ChatWindow',
         requests: [{
             method: 'GET',
-            response: '/response-files/api/messages.json'
+            response: '/response-files/api/ChatWindow.json'
         },
         {
             method: ['POST'],

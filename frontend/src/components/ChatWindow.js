@@ -11,7 +11,7 @@ class ChatWindow extends Component {
             // id: this.props.messageId,
             sender_id: this.props.user.uid,
             recipient_id: null,
-            content: [],
+            msg_list: [],
             error: '',
             input: '',
 
@@ -46,15 +46,15 @@ class ChatWindow extends Component {
             // Erhalten der Nachrichten in Form eines Arrays
             .then((messageBOs) =>
                 this.setState({
-                    content: messageBOs,
+                    msg_list: messageBOs,
                 }, () => {
-                    console.log(this.state.content)
+                    console.log(this.state.msg_list)
                 }),
             )
             // Ausgabe beim Fall eines Errors
             .catch((e) =>
                 this.setState({
-                    content: [],
+                    msg_list: [],
                     error: e,
                 })
             );
@@ -92,23 +92,23 @@ class ChatWindow extends Component {
 
     render() {
         // Speichern der aktuellen Zustände in den Variablen
-        const{content, input} = this.state
+        const{msg_list, input} = this.state
 
         // Darstellung des Chat-Verlaufs
         return (
             <div className="chat_window">
                 {/*Map-Funktion iteriert über message-Array und erstellt für jede Nachricht neues div*/}
-                {content.map((content, index) => (
+                {msg_list.map((msg, index) => (
                     <div key={index}>
-                        {this.state.sender_id === content.asenderid ? (
+                        {this.state.sender_id === msg.getRecipientId() ? (
                             // Darstellung einer Nachricht, die nicht von der eigenen Person stammt
                             <div className="chatWindow_message">
-                                <p className="chatWindow_content">{content.acontent}</p>
+                                <p className="chatWindow_content">{msg.getContent()}</p>
                             </div>
                     ) : (
                             // Darstellung einer eigenen Nachricht
                             <div className="chatWindow_message">
-                            <p className="chatWindow_contentUser">{content.acontent}</p>
+                            <p className="chatWindow_contentUser">{msg.getContent()}</p>
                             </div>
                     )}
                     </div>

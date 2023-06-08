@@ -28,7 +28,7 @@ class Profile(bo):
 
     def __str__(self):
         # str Methode gibt das erstellte profil in Form eines String zurück
-        return "profile: {}, {}, {}".format(self.get_id(),
+        return "profile: {}, {}, {}, {}".format(self.get_id(),
                                             self.favoriteNote_id,
                                             self.blockNote_id,
                                             self.google_fk)

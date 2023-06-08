@@ -23,8 +23,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
-import * as properties from "react-bootstrap/ElementChildren";
 import profile from "../components/Profile";
+
 
 class CreateProfil extends Component {
     constructor(props) {
@@ -69,16 +69,21 @@ class CreateProfil extends Component {
     /** Abfrage ob ein Profil bereits vorhanden ist oder nicht*/
     componentDidMount() {
         this.checkProfilExc();
+        this.getSelectedProperties();
     };
 
     /** Handler und API für "checkProfilExc" */
     checkProfilExc() {
-      const google_fk = this.props.user.uid;
       DatingSiteAPI.getAPI()
-          .getProfileByID(google_fk)
-          .then((profileBOs) => {
-              this.setState({ profileExists: true })
-          }).catch((e) =>
+          .getProfileByID(this.props.user.uid)
+          .then((profile) => {
+              console.log(profile)
+              if (profile.id === null) {
+                this.setState({ profileExists: false });
+              } else {
+                this.setState({ profileExists: true });
+              }
+            }).catch((e) =>
                 this.setState({
                     error: e,
                 })
@@ -86,21 +91,23 @@ class CreateProfil extends Component {
     };
 
     getSelectedProperties() {
-      const profile_id = this.props.user.uid;
       DatingSiteAPI.getAPI()
-          .getProfileByID(profile_id)
-          .then((infoobjectBOs) => {
-             const infoobjects = infoobjectBO[0];
-             this.setState({
-                firstName: infoobjectBOs.firstName,
-                lastName: infoobjectBOs.lastName,
-                age: infoobjectBOs.age,
-                gender: infoobjectBOs.gender,
-                height: infoobjectBOs.height,
-                religion: infoobjectBOs.religion,
-                hair: infoobjectBOs.hair,
-                smoking: infoobjectBOs.smoking,
-             });
+          .getInfoObjects(this.props.user.uid)
+          .then((infoObjects) => {
+              const selectedInfoObjects = infoObjects.find(infoObjects => infoObjects.get_profile_fk() === this.props.user.uid);
+
+              if (selectedInfoObjects) {
+                  this.setState({
+                      firstName: selectedInfoObjects.get_first_name(),
+                      lastName: selectedInfoObjects.get_last_name(),
+                      age: selectedInfoObjects.get_age(),
+                      gender: selectedInfoObjects.get_gender(),
+                      height: selectedInfoObjects.get_height(),
+                      religion: selectedInfoObjects.get_religion(),
+                      hair: selectedInfoObjects.get_hair(),
+                      smoking: selectedInfoObjects.get_smoking_status()
+                  });
+              }
           });
     };
 
@@ -148,7 +155,7 @@ class CreateProfil extends Component {
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id,this.props.user.uid);
         const newInfoObject = new infoobjectBO(
             this.props.user.uid,
             this.state.char_fk,
@@ -206,7 +213,7 @@ class CreateProfil extends Component {
             .createCharForProfile(createdCharForProfile)
             .catch((e) => {
                 this.setState({
-                    error: e
+                    error: e,
                 });
             });
     };
@@ -214,9 +221,30 @@ class CreateProfil extends Component {
     handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const updatedProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const updatedProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
+        const newInfoObject = new infoobjectBO(
+            this.props.user.uid,
+            this.state.char_fk,
+            this.state.value,
+            this.state.age,
+            this.state.firstName,
+            this.state.gender,
+            this.state.hair,
+            this.state.height,
+            this.state.lastName,
+            this.state.religion,
+            this.state.smoking)
+
         DatingSiteAPI.getAPI()
             .updateProfile(updatedProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+
+        DatingSiteAPI.getAPI()
+            .addInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -225,16 +253,19 @@ class CreateProfil extends Component {
     };
 
     handleRemove(event) {
-        console.log(this.state)
-        event.preventDefault();
-        const removedProfile  = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
-        DatingSiteAPI.getAPI()
-            .removeProfile(removedProfile)
-            .catch((e) =>
-                this.setState({
-                    error: e,
-                })
-            );
+    console.log(this.state)
+    event.preventDefault();
+    const removedProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
+    DatingSiteAPI.getAPI()
+        .removeProfile(removedProfile)
+        .then((profileBOs) => {
+            this.setState({ profileExists: false });
+        })
+        .catch((e) =>
+            this.setState({
+                error: e,
+            })
+        );
     };
 
     /** render() gibt das HTML zurück, das gerendert werden soll */
@@ -449,5 +480,6 @@ class CreateProfil extends Component {
 CreateProfil.propTypes = {
     currentUser: PropTypes.string.isRequired,
 };
+
 
 export default CreateProfil;

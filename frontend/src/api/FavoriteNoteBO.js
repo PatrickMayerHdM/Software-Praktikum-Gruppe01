@@ -14,7 +14,7 @@ export default class favoriteNoteBO extends BusinessObject {
 
 
 
-    constructor(afavoriteNote_list) {
+    constructor() {
         super();
         this.afavoriteNote_list = [];
     }
@@ -61,12 +61,12 @@ export default class favoriteNoteBO extends BusinessObject {
 
             if (Array.isArray(afavoriteNote_list)) {
                 afavoriteNote_list.forEach((f) => {
-                    Object.setPrototypeOf(f, afavoriteNote_list.prototype);
+                    Object.setPrototypeOf(f, favoriteNoteBO.prototype);
                     result.push(f);
                 })
             } else {
                 let f = afavoriteNote_list
-                Object.setPrototypeOf(f, afavoriteNote_list.prototype);
+                Object.setPrototypeOf(f, favoriteNoteBO.prototype);
                 result.push(f);
             }
 
