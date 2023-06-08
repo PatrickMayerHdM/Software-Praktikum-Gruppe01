@@ -221,7 +221,7 @@ class CreateProfil extends Component {
     handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const updatedProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
+        const updatedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id,this.props.user.uid);
         const newInfoObject = new infoobjectBO(
             this.props.user.uid,
             this.state.char_fk,
@@ -255,9 +255,8 @@ class CreateProfil extends Component {
     handleRemove(event) {
     console.log(this.state)
     event.preventDefault();
-    const removedProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
     DatingSiteAPI.getAPI()
-        .removeProfile(removedProfile)
+        .removeProfile(this.props.user.uid)
         .then((profileBOs) => {
             this.setState({ profileExists: false });
         })
