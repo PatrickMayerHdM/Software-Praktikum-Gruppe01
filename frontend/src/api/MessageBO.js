@@ -6,7 +6,7 @@ import BusinessObject from "./BusinessObject";
 export default class messageBO extends BusinessObject {
 
     /**
-     * Baut eine messageBO mit content, senderId und recipientId
+     * Baut eine messageBO mit senderId, recipientId und content
      *
      * @param {*} acontent
      * @param {*} asenderid
@@ -17,11 +17,11 @@ export default class messageBO extends BusinessObject {
      * Kommentar zgl. asenderid und arecipientid: id beibehalten? Ja, da in der Nachricht
      * Bezug zur Senderid und nicht zum Namen genommen wird.
      */
-    constructor(acontent, asenderid, arecipientid) {
+    constructor(asenderid, arecipientid, acontent) {
         super();
-        this.content = acontent;
         this.sender_id = asenderid;
         this.recipient_id = arecipientid;
+        this.content = acontent;
     }
 
     /**
