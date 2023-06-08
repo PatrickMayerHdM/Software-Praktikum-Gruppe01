@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-/** Importieren von React und der Hooks "useState" sowie "useEffect"
-    Diese Hooks werden benötigt, um den Zustand und das Verhalten (der Nachrichten) zu speichern. */
 import "./Chat.css";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import messageBO from "../api/MessageBO";

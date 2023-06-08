@@ -80,9 +80,7 @@ chat = api.inherit('Chat', bo, {
     'profile_id': fields.Integer(attribut='_profile_id', description='Unique Id eines Profils')
 })
 
-chat = api.inherit('Chat', bo, {
-    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht')
-})
+
 
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
@@ -139,6 +137,31 @@ class ProfileOperations(Resource):
         pass
 
     # hier muss noch die put methode hin.
+
+
+"""Handling im main, für den getChats() in der DaitingSiteAPI.
+Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
+
+
+@datingapp.route('/ChatProfileBoxList/<id>/')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id','profileBO')
+class ChatListOperations(Resource):
+
+    #@datingapp.marshal_with(chatList)
+    #@secured
+    def get(self, id):
+        # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
+        adm = Administration()
+        x = adm.get_profile_by_message(id)
+
+        # Holt sich das result (return) von der get_profile_by_message(id), dies ist dann eine Liste mit Chatpartnern.
+        if x is not None:
+            return x, 200
+        else:
+            return "", 500
+
+
 
 @datingapp.route('/messages')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
