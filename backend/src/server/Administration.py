@@ -101,6 +101,19 @@ class Administration(object):
         with MessageMapper() as mapper:
             return mapper.find_by_key(key)
 
+    def get_message_by_chat(self, sender_profile, recipient_profile):
+        """ messages zwischen zwei Personen auslesen """
+        with MessageMapper() as mapper:
+            print(mapper.find_by_chat(sender_profile, recipient_profile))
+            return mapper.find_by_chat(sender_profile, recipient_profile)
+
+    # @staticmethod
+    # def find_by_chat(sender_profile, recipient_profile):
+    #     """Auslesen aller Nachrichten zwischen zwei Personen."""
+    #     message_mapper = MessageMapper()
+    #     messages = message_mapper.find_by_chat(sender_profile, recipient_profile)
+    #     return messages
+
     """Spezifische Methoden für blockNote"""
     def create_blocknote(self, blocked_id, blocking_id):
         blocklist = BlockNote()

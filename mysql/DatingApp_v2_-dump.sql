@@ -1206,8 +1206,8 @@ DROP TABLE IF EXISTS `Message`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Message` (
   `message_id` int NOT NULL,
-  `sender_id` int DEFAULT NULL,
-  `recipient_id` int DEFAULT NULL,
+  `sender_id` VARCHAR(128) DEFAULT NULL,
+  `recipient_id` VARCHAR(128) DEFAULT NULL,
   `content` varchar(256) NOT NULL,
   PRIMARY KEY (`message_id`),
   KEY `Message_Profile_profile_id_fk` (`sender_id`),
