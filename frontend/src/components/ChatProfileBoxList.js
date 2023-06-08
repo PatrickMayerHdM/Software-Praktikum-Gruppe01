@@ -17,13 +17,13 @@ class ChatProfileBoxList extends React.Component{
         this.state = {
             numProfiles: 0,
             profiles: [],
-            otherProfileIndex: null,
+            otherProfileIndex: null
         }
     }
 
     // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man DummyDaten und das Fake Back-End verwenden will.
     MountFakeBackEnd() {
-        const dummyChatProfiles = [13, 42, 51];
+        const dummyChatProfiles = [13, 42, 51]; // Dummy Daten die später ersetzt werden durch einen GET
 
         this.setState({profiles: dummyChatProfiles}, () => {
             const lengthProfiles = this.state.profiles.length;
@@ -54,7 +54,7 @@ class ChatProfileBoxList extends React.Component{
     }
 
     handleProfileClick = (index) => {
-        this.setState({ otherProfileIndex: index });
+        this.setState({ otherProfileIndex: index});
     };
 
     render() {

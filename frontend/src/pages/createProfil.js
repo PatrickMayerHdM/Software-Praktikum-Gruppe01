@@ -73,9 +73,9 @@ class CreateProfil extends Component {
 
     /** Handler und API für "checkProfilExc" */
     checkProfilExc() {
-      const profile_id = this.props.user.uid;
+      const google_fk = this.props.user.uid;
       DatingSiteAPI.getAPI()
-          .getProfileByID(profile_id)
+          .getProfileByID(google_fk)
           .then((profileBOs) => {
               this.setState({ profileExists: true })
           }).catch((e) =>

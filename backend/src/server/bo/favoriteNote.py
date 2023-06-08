@@ -1,4 +1,4 @@
-from relationship import relationship
+from server.bo.relationship import relationship
 from BusinessObject import BusinessObject as bo
 
 

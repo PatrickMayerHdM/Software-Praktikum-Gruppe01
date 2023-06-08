@@ -34,17 +34,18 @@ class InfoObjectMapper(mapper):
         """ Auslesen der Info-Objekte nach Key """
 
         cursor = self._connection.cursor()
-        command = f'SELECT info_object_id, char_fk, profile_fk, value FROM main.InfoObject WHERE info_object_id={key}'
-        cursor.execute(command)
+        command = f'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id=%s'
+        data = (key, )
+        cursor.execute(command, data)
         tuples = cursor.fetchall()
 
         if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (info_object_id, char_fk, profile_fk, value) = tuples[0]
+            (infoobject_id, char_id, char_value, profile_id) = tuples[0]
             info_obj = InfoObject()
-            info_obj.set_id(info_object_id)
-            info_obj.set_char_fk(char_fk)
-            info_obj.set_profile_fk(profile_fk)
-            info_obj.set_value(value)
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
 
             result = info_obj
         else:
