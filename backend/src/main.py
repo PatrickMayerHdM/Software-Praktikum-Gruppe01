@@ -50,6 +50,7 @@ profile = api.inherit('Profile', bo, {
     'favoriteNote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
     'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
     'blockNote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
+    'google_fk': fields.String(attribute='_google_id', description='Google_ID des Admin-Kontos')
 })
 
 message = api.inherit('Message', bo, {
@@ -116,22 +117,25 @@ class ProfileListOperations(Resource):
 
             p = adm.create_profile(
                 proposal.get_favorite_note_id(),
-                proposal.get_block_note_id())
+                proposal.get_block_note_id(),
+                proposal.get_google_fk())
 
             return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
 
-@datingapp.route('/profiles/<int:id>')
+@datingapp.route('/profiles/<string:googleID>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('id', 'Die ID des Profil-Objekts')
+@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
 class ProfileOperations(Resource):
     @datingapp.marshal_with(profile)
     @secured
-    def get(self, id):
+    def get(self, googleID):
         """ Auslesen eines bestimmten Profil-Objekts. """
-        pass
+        adm = Administration()
+        prof = adm.get_profile_by_google_id(googleID)
+        return prof
 
     @secured
     def delete(self, id):
@@ -180,17 +184,16 @@ class MessageOperations(Resource):
 
 @datingapp.route('/infoobjects')
 @datingapp.response(500, 'Serverseitiger Fehler')
-class InfoObjectOperations(Resource):
+class InfoObjectListOperations(Resource):
     @datingapp.marshal_with(infoobject, code=200)
     @datingapp.expect(infoobject)
-    # @secured
+    @secured
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
         print(api.payload)
 
         proposal = InfoObject.from_dict(api.payload)
-
 
         if proposal is not None:
             infoobj = adm.create_info_object(
@@ -201,6 +204,18 @@ class InfoObjectOperations(Resource):
             return infoobj, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/infoobjects/<string:googleID>')
+@datingapp.response(500, 'Serverseitiger-Fehler')
+@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
+class InfoObjectsOperations(Resource):
+    @datingapp.marshal_with(infoobject)
+    @secured
+    def get(self, googleID):
+        """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
+        adm = Administration()
+        infoobj = adm.get_info_object_by_id(googleID)
+        return infoobj
 
 
 class ChatOperations(Resource):

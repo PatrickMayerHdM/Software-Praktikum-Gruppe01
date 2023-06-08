@@ -196,11 +196,11 @@ class App extends Component {
             }
 
             <Router>
-              <Header />
+              <Header user={currentUser}/>
                 <Routes>
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<Profile />}></Route>
-                      <Route path="/Profil" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
+                      <Route path="/Profil/:eigeneID" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
                       <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
                       <Route path="/Suche/Suchprofil" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>

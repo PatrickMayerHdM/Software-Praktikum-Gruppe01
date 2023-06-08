@@ -112,7 +112,7 @@ export default class DatingSiteAPI {
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
-    #getProfileByIdURL = (id) => `${this.#datingServerBaseURL}/profiles/${id}`;
+    #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
 
     /**
