@@ -202,5 +202,22 @@ class InfoObjectOperations(Resource):
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
+
+class ChatOperations(Resource):
+    @datingapp.marshal_with(chat, code=200)
+    @datingapp.expect(chat)
+    @secured
+    def post(self):
+        adm = Administration()
+        proposal = Message.from_dict(api.payload)
+
+        if proposal is not None:
+            profile_id = profile.get_id()
+            result = adm.create_chat(profile_id)
+
+            return result, 200
+        else:
+            return '', 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

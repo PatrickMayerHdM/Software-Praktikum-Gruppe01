@@ -21,6 +21,7 @@ export default class DatingSiteAPI {
 
     #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/messages/${profileID}/${otherprofileID}`;
     #addMessageURL = () => `${this.#datingServerBaseURL}/messages`;
+    #getChatsURL = (profileID) => `${this.#datingServerBaseURL}/messages/${profileID}`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
@@ -74,6 +75,23 @@ export default class DatingSiteAPI {
                 resolve(mssageBO);
             })
         })
+    }
+
+    /**
+     *
+     * @param profileID
+     * @returns {Promise<unknown>}
+     */
+    getChats(profileID){
+        return this.#fetchAdvanced(this.#getChatsURL(profileID))
+            .then((responseJSON) => {
+                console.log("Das responseJSON:")
+                console.log(responseJSON)
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                })
+
+            })
     }
 
     /*getMessageByID(messageID) {
