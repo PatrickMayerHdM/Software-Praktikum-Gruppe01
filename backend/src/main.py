@@ -77,13 +77,18 @@ infoobject = api.inherit('InfoObject', bo, {
 
 chat = api.inherit('Chat', bo, {
     'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht'),
-    'profile_id': fields.Integer(attribut='_profile_id', description='Unique Id eines Profils')
+    'profile_id': fields.Integer(attribute='_profile_id', description='Unique Id eines Profils')
 })
 
-chat = api.inherit('Chat', bo, {
-    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht')
+favoritenote = api.inherit('FavoriteNote', bo, {
+    'added_id': fields.Integer(attribute='_added_id', description='Id des hinzugefügten Profils'),
+    'adding_id': fields.Integer(attribute='_adding_id', description='Id des hinzufügenden Profils')
 })
 
+blocknote = api.inherit('BlockNote', bo, {
+    'blocked_id': fields.Integer(attribute='_blocked_id', description='Id des geblockten Profils'),
+    'blocking_id': fields.Integer(attribute='_blocking_id', description='Id des blockenden Profils')
+})
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
@@ -123,6 +128,7 @@ class ProfileListOperations(Resource):
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
 
+
 @datingapp.route('/profiles/<int:id>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
 @datingapp.param('id', 'Die ID des Profil-Objekts')
@@ -139,6 +145,7 @@ class ProfileOperations(Resource):
         pass
 
     # hier muss noch die put methode hin.
+
 
 @datingapp.route('/messages')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
@@ -161,9 +168,10 @@ class ChatWindowOperations(Resource):
         else:
             return '', 500
 
+
 @datingapp.route('/messages/<int:id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
-@datingapp.param('id','Die ID des Message-Objekts.')
+@datingapp.param('id', 'Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
     @secured
@@ -191,7 +199,6 @@ class InfoObjectOperations(Resource):
 
         proposal = InfoObject.from_dict(api.payload)
 
-
         if proposal is not None:
             infoobj = adm.create_info_object(
                 proposal.get_profile_fk(),
@@ -203,21 +210,161 @@ class InfoObjectOperations(Resource):
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
 
-class ChatOperations(Resource):
-    @datingapp.marshal_with(chat, code=200)
-    @datingapp.expect(chat)
+"""Ab hier FavoriteNote"""
+
+
+@datingapp.route('/FavoriteNote')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class FavoriteNoteListOperations(Resource):
+    @datingapp.doc('Create new FavoriteNote')
+    @datingapp.marshal_with(favoritenote, code=201)
+    @datingapp.expect(favoritenote)
     @secured
     def post(self):
+        """Erstellen einer neuen FavoriteNote"""
+
         adm = Administration()
-        proposal = Message.from_dict(api.payload)
+
+        proposal = FavoriteNote.from_dict(api.payload)
 
         if proposal is not None:
-            profile_id = profile.get_id()
-            result = adm.create_chat(profile_id)
 
+            added_id = proposal.get_added_id()
+            adding_id = proposal.get_adding_id()
+            result = adm.create_favoritenote(added_id, adding_id)
             return result, 200
         else:
+            """Falls was schiefgeht, passiert nicht und Fehlerausgabe"""
             return '', 500
+
+
+@datingapp.route('/FavoriteNote/<int:id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+@datingapp.param('id', 'Die ID des FavoriteNote-Objekts')
+class FavoriteNoteOperations(Resource):
+    @datingapp.marshal_with(favoritenote)
+    @secured
+    def get(self, id):
+        """Auslesen eines FavoriteNote-Objekts.
+        Das Objekt wird durch die id in dem URI bestimmt"""
+
+        adm = Administration()
+        fnote = adm.get_favoritenote_by_favoritenote_id(id)
+
+        if fnote is not None:
+            return fnote
+        else:
+            return '', 500
+
+    @secured
+    def delete(self, id):
+        """Löschen eines FavoriteNote-Objekts.
+        Das Objekt wird durch die id in dem URI bestimmt"""
+
+        adm = Administration()
+        fnote = adm.get_favoritenote_by_favoritenote_id(id)
+
+        if fnote is not None:
+            adm.delete_favoritenote(fnote)
+            return '', 200
+        else:
+            return '', 500
+
+    @datingapp.marshal_with(favoritenote)
+    @secured
+    def put(self, id):
+        "Update eines bestimmten FavoriteNote-Objektes"
+
+        adm = Administration()
+        fnote = FavoriteNote.from_dict(api.payload)
+
+        if fnote is not None:
+
+            """Hierdurch wird die id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
+            fnote.set_id(id)
+            adm.save_favoritenote(fnote)
+            return '', 200
+        else:
+            return '', 500
+
+
+"""Ab hier BlockNote"""
+
+
+@datingapp.route('/BlockNote')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class BlockNoteListOperations(Resource):
+    @datingapp.doc('Create new BlockNote')
+    @datingapp.marshal_with(blocknote, code=201)
+    @datingapp.expect(blocknote)
+    @secured
+    def post(self):
+        """Erstellen einer neuen BlockNote"""
+
+        adm = Administration()
+
+        proposal = BlockNote.from_dict(api.payload)
+
+        if proposal is not None:
+
+            blocked_id = proposal.get_blocked_id()
+            blocking_id = proposal.get_blocking_id()
+            result = adm.create_blocknote(blocked_id, blocking_id)
+            return result, 200
+        else:
+            """Falls was schiefgeht, passiert nicht und Fehlerausgabe"""
+            return '', 500
+
+
+@datingapp.route('/BlockNote/<int:id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+@datingapp.param('id', 'Die ID des BlockNote-Objekts')
+class BlockNoteOperations(Resource):
+    @datingapp.marshal_with(blocknote)
+    @secured
+    def get(self, id):
+        """Auslesen eines FavoriteNote-Objekts.
+        Das Objekt wird durch die id in dem URI bestimmt"""
+
+        adm = Administration()
+        bnote = adm.get_blocknote_by_blocknote_id(id)
+
+        if bnote is not None:
+            return bnote
+        else:
+            return '', 500
+
+    @secured
+    def delete(self, id):
+        """Löschen eines BlockNote-Objekts.
+        Das Objekt wird durch die id in dem URI bestimmt"""
+
+        adm = Administration()
+        bnote = adm.get_blocknote_by_blocknote_id(id)
+
+        if bnote is not None:
+            adm.delete_favoritenote(bnote)
+            return '', 200
+        else:
+            return '', 500
+
+    @datingapp.marshal_with(blocknote)
+    @secured
+    def put(self, id):
+        "Update eines bestimmten BlockNote-Objektes"
+
+        adm = Administration()
+        bnote = BlockNote.from_dict(api.payload)
+
+        if bnote is not None:
+
+            """Hierdurch wird die id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
+            bnote.set_id(id)
+            adm.save_favoritenote(bnote)
+            return '', 200
+        else:
+            return '', 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

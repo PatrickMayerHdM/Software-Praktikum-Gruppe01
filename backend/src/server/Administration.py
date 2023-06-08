@@ -102,7 +102,6 @@ class Administration(object):
             return mapper.find_by_key(key)
 
     """Spezifische Methoden für blockNote"""
-    @staticmethod
     def create_blocknote(self, blocked_id, blocking_id):
         blocklist = BlockNote()
         blocklist.set_blocked_id(blocked_id)
