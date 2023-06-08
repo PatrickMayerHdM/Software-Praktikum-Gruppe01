@@ -74,12 +74,12 @@ export default class profileBO extends BusinessObject {
      */
 
     get_blockNote_id() {
-        return this.blockNote_id
+        return this.blockNote_id;
     }
 
     /* Auslesen der GoogleID */
     get_google_id() {
-        return this.agoogle_fk
+        return this.agoogle_fk;
     }
     /* Setzen der GoogleID */
     set_google_id(agoogle_fk) {

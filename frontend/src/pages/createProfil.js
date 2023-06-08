@@ -23,6 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
+import profile from "../components/Profile";
 
 
 class CreateProfil extends Component {
@@ -73,12 +74,16 @@ class CreateProfil extends Component {
 
     /** Handler und API für "checkProfilExc" */
     checkProfilExc() {
-      const google_fk = this.props.user.uid;
       DatingSiteAPI.getAPI()
-          .getProfileByID(google_fk)
-          .then((profileBOs) => {
-              this.setState({ profileExists: true })
-          }).catch((e) =>
+          .getProfileByID(this.props.user.uid)
+          .then((profile) => {
+              console.log(profile)
+              if (profile.id === null) {
+                this.setState({ profileExists: false });
+              } else {
+                this.setState({ profileExists: true });
+              }
+            }).catch((e) =>
                 this.setState({
                     error: e,
                 })
@@ -152,7 +157,7 @@ class CreateProfil extends Component {
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id,this.props.user.uid);
         const newInfoObject = new infoobjectBO(
             this.props.user.uid,
             this.state.char_fk,
@@ -477,5 +482,6 @@ class CreateProfil extends Component {
 CreateProfil.propTypes = {
     currentUser: PropTypes.string.isRequired,
 };
+
 
 export default CreateProfil;

@@ -216,8 +216,8 @@ export default class DatingSiteAPI {
         })
     }
 
-    getInfoObjects(profile_id) {
-        return this.#fetchAdvanced(this.#getInfoObjectsURL(profile_id), {
+    getInfoObjects() {
+        return this.#fetchAdvanced(this.#getInfoObjectsURL(), {
             method: "GET",
             header: {
                 'Accept': 'application/json, text/plain'
@@ -240,15 +240,15 @@ export default class DatingSiteAPI {
         })
     }
 
-    getProfileByID(profile_id) {
-        console.log("ID:" , profile_id)
-        return this.#fetchAdvanced(this.#getProfileByIdURL(profile_id)).then((responseJSON) => {
+    getProfileByID(google_fk) {
+        return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
+            .then((responseJSON) => {
+            console.log("BackEnd Objekt:", responseJSON)
             let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);
             })
         })
-
     }
 
     /**
