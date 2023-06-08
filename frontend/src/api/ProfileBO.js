@@ -10,18 +10,17 @@ export default class profileBO extends BusinessObject {
      * blockNote_id
      *
      * @param {*} aprofile_id
-     * @param {*} agoogle_id
      * @param {*} afavoriteNote_id
      * @param {*} ablockNote_id
      */
 
 
-    constructor(aprofile_id, agoogle_fk,afavoriteNote_id, ablockNote_id) {
+    constructor(aprofile_id, afavoriteNote_id, ablockNote_id, agoogle_fk) {
         super();
         this.profile_id = aprofile_id;
-        this.google_fk = agoogle_fk;
         this.favoriteNote_id = afavoriteNote_id;
         this.blockNote_id = ablockNote_id;
+        this.google_id = agoogle_fk;
     }
 
     /**
@@ -40,24 +39,6 @@ export default class profileBO extends BusinessObject {
 
     get_profile_id() {
         return this.profile_id
-    }
-
-    /**
-     * Setzt die google_id
-     *
-     * @param {*} agoogle_fk
-     */
-
-    set_google_id(agoogle_fk) {
-        this.google_id = agoogle_fk;
-    }
-
-    /**
-     * Holt sich die google_id
-     */
-
-    get_google_fk() {
-        return this.google_fk
     }
 
     /**
@@ -94,6 +75,15 @@ export default class profileBO extends BusinessObject {
 
     get_blockNote_id() {
         return this.blockNote_id
+    }
+
+    /* Auslesen der GoogleID */
+    get_google_id() {
+        return this.agoogle_fk
+    }
+    /* Setzen der GoogleID */
+    set_google_id(agoogle_fk) {
+        this.google_id = agoogle_fk;
     }
 
 

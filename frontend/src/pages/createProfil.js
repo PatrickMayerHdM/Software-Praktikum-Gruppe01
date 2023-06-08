@@ -33,7 +33,6 @@ class CreateProfil extends Component {
             profile_id: this.props.user.uid,
             favoriteNote_id: 0,
             blockNote_id: 0,
-            google_id: 0,
             char_fk: 0,
             profile_fk: 0,
             firstName: '',
@@ -77,7 +76,7 @@ class CreateProfil extends Component {
       const google_fk = this.props.user.uid;
       DatingSiteAPI.getAPI()
           .getProfileByID(google_fk)
-          .then(() => {
+          .then((profileBOs) => {
               this.setState({ profileExists: true })
           }).catch((e) =>
                 this.setState({
@@ -265,6 +264,7 @@ class CreateProfil extends Component {
             })
         );
     };
+
     /** render() gibt das HTML zurück, das gerendert werden soll */
     render() {
             const {
