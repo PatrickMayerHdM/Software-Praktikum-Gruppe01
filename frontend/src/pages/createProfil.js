@@ -33,6 +33,7 @@ class CreateProfil extends Component {
             profile_id: this.props.user.uid,
             favoriteNote_id: 0,
             blockNote_id: 0,
+            google_id: 0,
             char_fk: 0,
             profile_fk: 0,
             firstName: '',
@@ -46,7 +47,7 @@ class CreateProfil extends Component {
             char_name: '',
             char_desc: '',
             showTextFields: false,
-            profileExists: true,
+            profileExists: false,
         };
 
         /** Bindung der Handler an die Komponente */
@@ -73,10 +74,10 @@ class CreateProfil extends Component {
 
     /** Handler und API für "checkProfilExc" */
     checkProfilExc() {
-      const profile_id = this.props.user.uid;
+      const google_fk = this.props.user.uid;
       DatingSiteAPI.getAPI()
-          .getProfileByID(profile_id)
-          .then((profileBOs) => {
+          .getProfileByID(google_fk)
+          .then(() => {
               this.setState({ profileExists: true })
           }).catch((e) =>
                 this.setState({
@@ -104,7 +105,7 @@ class CreateProfil extends Component {
                       hair: selectedInfoObjects.get_hair(),
                       smoking: selectedInfoObjects.get_smoking_status()
                   });
-              };
+              }
           });
     };
 
@@ -152,7 +153,7 @@ class CreateProfil extends Component {
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
         const newInfoObject = new infoobjectBO(
             this.props.user.uid,
             this.state.char_fk,
@@ -210,7 +211,7 @@ class CreateProfil extends Component {
             .createCharForProfile(createdCharForProfile)
             .catch((e) => {
                 this.setState({
-                    error: e
+                    error: e,
                 });
             });
     };
@@ -218,7 +219,7 @@ class CreateProfil extends Component {
     handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const updatedProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const updatedProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
         const newInfoObject = new infoobjectBO(
             this.props.user.uid,
             this.state.char_fk,
@@ -250,18 +251,20 @@ class CreateProfil extends Component {
     };
 
     handleRemove(event) {
-        console.log(this.state)
-        event.preventDefault();
-        const removedProfile  = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
-        DatingSiteAPI.getAPI()
-            .removeProfile(removedProfile)
-            .catch((e) =>
-                this.setState({
-                    error: e,
-                })
-            );
+    console.log(this.state)
+    event.preventDefault();
+    const removedProfile = new profileBO(this.props.user.uid, this.state.google_fk,this.state.favoriteNote_id, this.state.blockNote_id);
+    DatingSiteAPI.getAPI()
+        .removeProfile(removedProfile)
+        .then((profileBOs) => {
+            this.setState({ profileExists: false });
+        })
+        .catch((e) =>
+            this.setState({
+                error: e,
+            })
+        );
     };
-
     /** render() gibt das HTML zurück, das gerendert werden soll */
     render() {
             const {

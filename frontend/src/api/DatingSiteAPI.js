@@ -111,9 +111,9 @@ export default class DatingSiteAPI {
     #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
-    #getInfoObjectsURL = () => `${this.#datingServerBaseURL}/infoobjects`;
+    #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
     #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
-    #getProfileByIdURL = (id) => `${this.#datingServerBaseURL}/profiles/${id}`;
+    #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
 
     /**
@@ -216,8 +216,8 @@ export default class DatingSiteAPI {
         })
     }
 
-    getInfoObjects() {
-        return this.#fetchAdvanced(this.#getInfoObjectsURL(), {
+    getInfoObjects(profile_id) {
+        return this.#fetchAdvanced(this.#getInfoObjectsURL(profile_id), {
             method: "GET",
             header: {
                 'Accept': 'application/json, text/plain'
@@ -240,8 +240,9 @@ export default class DatingSiteAPI {
         })
     }
 
-    getProfileByID(profileID) {
-        return this.#fetchAdvanced(this.#getProfileByIdURL(profileID)).then((responseJSON) => {
+    getProfileByID(profile_id) {
+        console.log("ID:" , profile_id)
+        return this.#fetchAdvanced(this.#getProfileByIdURL(profile_id)).then((responseJSON) => {
             let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);

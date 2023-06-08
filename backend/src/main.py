@@ -202,6 +202,17 @@ class InfoObjectOperations(Resource):
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
+    def get(self):
+        """ Auslesen der InfoObjects """
+        adm = Administration()
+
+        info = adm.get_info_object_by_id()  # Muss noch getestet werden ?
+
+        if info is not None:
+            return info
+        else:
+            return '', 500  # Wenn es keine Message unter ID gibt.
+
 
 class ChatOperations(Resource):
     @datingapp.marshal_with(chat, code=200)
@@ -219,16 +230,6 @@ class ChatOperations(Resource):
         else:
             return '', 500
 
-    def get(self):
-        """ Auslesen der InfoObjects """
-        adm = Administration()
-
-        info = adm.get_info_object_by_id() # Muss noch getestet werden ?
-
-        if info is not None:
-            return info
-        else:
-            return '', 500 # Wenn es keine Message unter ID gibt.
 
 
 if __name__ == '__main__':
