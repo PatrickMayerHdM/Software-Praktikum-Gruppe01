@@ -91,12 +91,10 @@ class CreateProfil extends Component {
     };
 
     getSelectedProperties() {
-      const profile_id = this.props.user.uid;
-
       DatingSiteAPI.getAPI()
-          .getInfoObjects()
+          .getInfoObjects(this.props.user.uid)
           .then((infoObjects) => {
-              const selectedInfoObjects = infoObjects.find(infoObjects => infoObjects.get_profile_fk() === profile_id);
+              const selectedInfoObjects = infoObjects.find(infoObjects => infoObjects.get_profile_fk() === this.props.user.uid);
 
               if (selectedInfoObjects) {
                   this.setState({
