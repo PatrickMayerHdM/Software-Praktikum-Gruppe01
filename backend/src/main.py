@@ -7,8 +7,8 @@ from flask_cors import CORS, cross_origin
 from server.Administration import Administration
 from server.bo.Account import Account
 from server.bo.Profile import Profile
-from server.bo.favoriteNote import favoriteNote
-from server.bo.blockNote import blockNote
+from server.bo.favoriteNote import FavoriteNote
+from server.bo.blockNote import BlockNote
 from server.bo.Message import Message
 from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
