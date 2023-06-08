@@ -71,7 +71,7 @@ class ChatWindow extends Component {
     // Speichern der aktuellen Zustände in den Variablen
     const { sender_id, recipient_id, input } = this.state;
     // Erstellen eines neuen Nachrichtenobjektes
-    const newMessage = new messageBO(input, sender_id, recipient_id);
+    const newMessage = new messageBO(sender_id, recipient_id, input);
     DatingSiteAPI.getAPI()
         // Hinzufügen der neuen Nachicht
         .addMessage(newMessage)
@@ -79,7 +79,7 @@ class ChatWindow extends Component {
         .then(() => {
             this.setState({
                 input:'',
-                content: [...this.state.content, newMessage],
+                msg_list: [...this.state.msg_list, newMessage],
             });
         })
         // Ausgabe beim Fall eines Errors

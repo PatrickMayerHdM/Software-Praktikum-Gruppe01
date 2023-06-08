@@ -176,13 +176,13 @@ class ChatListOperations(Resource):
 
 
 
-@datingapp.route('/messages')
+@datingapp.route('/ChatWindow')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 class ChatWindowOperations(Resource):
     @datingapp.doc("Create new message")
-    @datingapp.marshal_with(message, code=201)
+    @datingapp.marshal_with(message, code=200)
     @datingapp.expect(message)
-    @secured
+    # @secured
 
     def post(self):
         adm = Administration()
@@ -202,7 +202,7 @@ class ChatWindowOperations(Resource):
 @datingapp.param('id', 'Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
-    @secured
+    # @secured
     def get(self, sender_id, recipient_id):
         """ Auslesen eines Chat-Verlaufs."""
         adm = Administration()
