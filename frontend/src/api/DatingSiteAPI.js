@@ -21,7 +21,7 @@ export default class DatingSiteAPI {
 
     #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/ChatWindow/${profileID}/${otherprofileID}`;
     #addMessageURL = () => `${this.#datingServerBaseURL}/ChatWindow`;
-    #getChatsURL = (profileID) => `${this.#datingServerBaseURL}/ChatWindow/${profileID}`;
+    #getChatsURL = (id) => `${this.#datingServerBaseURL}/ChatProfileBoxList/${id}`;
     //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
@@ -79,11 +79,11 @@ export default class DatingSiteAPI {
 
     /**
      *
-     * @param profileID
+     * @param ID
      * @returns {Promise<unknown>}
      */
-    getChats(profileID){
-        return this.#fetchAdvanced(this.#getChatsURL(profileID))
+    getChats(id){
+        return this.#fetchAdvanced(this.#getChatsURL(id))
             .then((responseJSON) => {
                 console.log("Das responseJSON:")
                 console.log(responseJSON)

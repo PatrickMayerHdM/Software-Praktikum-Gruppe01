@@ -86,6 +86,7 @@ favoritenote = api.inherit('FavoriteNote', bo, {
     'adding_id': fields.Integer(attribute='_adding_id', description='Id des hinzufügenden Profils')
 })
 
+
 blocknote = api.inherit('BlockNote', bo, {
     'blocked_id': fields.Integer(attribute='_blocked_id', description='Id des geblockten Profils'),
     'blocking_id': fields.Integer(attribute='_blocking_id', description='Id des blockenden Profils')
@@ -172,13 +173,38 @@ class ProfileOperations(Resource):
         else:
             return '', 500
 
-@datingapp.route('/messages')
+
+"""Handling im main, für den getChats() in der DaitingSiteAPI.
+Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
+
+
+@datingapp.route('/ChatProfileBoxList/<id>/')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id','profileBO')
+class ChatListOperations(Resource):
+
+    #@datingapp.marshal_with(chatList)
+    #@secured
+    def get(self, id):
+        # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
+        adm = Administration()
+        x = adm.get_profile_by_message(id)
+
+        # Holt sich das result (return) von der get_profile_by_message(id), dies ist dann eine Liste mit Chatpartnern.
+        if x is not None:
+            return x, 200
+        else:
+            return "", 500
+
+
+
+@datingapp.route('/ChatWindow')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 class ChatWindowOperations(Resource):
     @datingapp.doc("Create new message")
-    @datingapp.marshal_with(message, code=201)
+    @datingapp.marshal_with(message, code=200)
     @datingapp.expect(message)
-    @secured
+    # @secured
 
     def post(self):
         adm = Administration()
@@ -198,7 +224,7 @@ class ChatWindowOperations(Resource):
 @datingapp.param('id', 'Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
-    @secured
+    # @secured
     def get(self, sender_id, recipient_id):
         """ Auslesen eines Chat-Verlaufs."""
         adm = Administration()

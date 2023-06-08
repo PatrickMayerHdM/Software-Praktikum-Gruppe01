@@ -32,18 +32,16 @@ class ChatProfileBoxList extends React.Component{
         });
     }
 
-    // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man das richtige Back-End verwenden will.
+    //   Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man das richtige Back-End verwenden will.
     MountBackEnd() {
         DatingSiteAPI.getAPI()
-        .getChats()
+        .getChats(this.props.user.uid)
         .then(profilesvar => {
-          this.setState(prevState => ({
-            profiles: [...prevState.profiles, ...profilesvar]
-          }));
-
-          const lengthSearchprofiles = this.state.Searchprofiles.length;
-          this.setState({ numSearchProfiles: lengthSearchprofiles });
-
+            const lengthProfiles = this.state.profiles.length;
+            this.setState(prevState => ({
+                profiles: [...prevState.profiles, ...profilesvar],
+                numProfiles: lengthProfiles
+            }));
         })
         .catch(error => {
           console.error('Error fetching data from API:', error);
@@ -52,7 +50,7 @@ class ChatProfileBoxList extends React.Component{
 
     // componentDidMount() welche Ausgeführt wird, wenn der Komponent gelanden wird.
     componentDidMount() {
-        this.MountFakeBackEnd();
+        this.MountBackEnd();
     }
 
     handleProfileClick = (index) => {

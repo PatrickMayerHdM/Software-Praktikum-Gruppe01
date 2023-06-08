@@ -322,12 +322,14 @@ class Administration(object):
                 sender_id = message.get_sender()
                 recipient_id = message.get_recipient()
 
-                #Überprüfen ob profile_id mit sender_id oder recipient_id übereinstimmt
+                # Überprüfen ob profile_id mit sender_id oder recipient_id übereinstimmt
                 if sender_id == profile_id and recipient_id not in profiles:
                     profiles.append(recipient_id)
 
                 if recipient_id == profile_id and sender_id not in profiles:
                     profiles.append(sender_id)
+
+        print("Profiles:", profiles)
 
         return profiles
 """
