@@ -7,8 +7,8 @@ from flask_cors import CORS, cross_origin
 from server.Administration import Administration
 from server.bo.Account import Account
 from server.bo.Profile import Profile
-from server.bo.favoriteNote import favoriteNote
-from server.bo.blockNote import blockNote
+from server.bo.favoriteNote import FavoriteNote
+from server.bo.blockNote import BlockNote
 from server.bo.Message import Message
 from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
@@ -201,6 +201,23 @@ class InfoObjectOperations(Resource):
             return infoobj, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+
+class ChatOperations(Resource):
+    @datingapp.marshal_with(chat, code=200)
+    @datingapp.expect(chat)
+    @secured
+    def post(self):
+        adm = Administration()
+        proposal = Message.from_dict(api.payload)
+
+        if proposal is not None:
+            profile_id = profile.get_id()
+            result = adm.create_chat(profile_id)
+
+            return result, 200
+        else:
+            return '', 500
 
     def get(self):
         """ Auslesen der InfoObjects """

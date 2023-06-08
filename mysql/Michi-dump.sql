@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for macos13.0 (x86_64)
 --
--- Host: 127.0.0.1    Database:
+-- Host: 127.0.0.1    Database: 
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
@@ -352,7 +352,7 @@ UNLOCK TABLES;
 --
 
 /*!40000 ALTER TABLE `innodb_index_stats` DISABLE KEYS */;
-INSERT  IGNORE INTO `innodb_index_stats` VALUES ('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','n_diff_pfx01',1,1,'profile_id'),('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','n_diff_pfx02',2,1,'profile_id,account_id'),('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','size',1,NULL,'Number of pages in the index'),('main','account','PRIMARY','2023-05-26 11:37:53','n_diff_pfx01',2,1,'account_id'),('main','account','PRIMARY','2023-05-26 11:37:53','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','account','PRIMARY','2023-05-26 11:37:53','size',1,NULL,'Number of pages in the index'),('main','blocknotecontainsprofile','BlockNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:28:14','n_diff_pfx01',0,1,'profile_id'),('main','blocknotecontainsprofile','BlockNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:28:14','n_diff_pfx02',0,1,'profile_id,blocknote_id'),('main','blocknotecontainsprofile','BlockNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:28:14','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','blocknotecontainsprofile','BlockNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:28:14','size',1,NULL,'Number of pages in the index'),('main','blocknotecontainsprofile','PRIMARY','2023-05-03 06:28:14','n_diff_pfx01',0,1,'blocknote_id'),('main','blocknotecontainsprofile','PRIMARY','2023-05-03 06:28:14','n_diff_pfx02',0,1,'blocknote_id,profile_id'),('main','blocknotecontainsprofile','PRIMARY','2023-05-03 06:28:14','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','blocknotecontainsprofile','PRIMARY','2023-05-03 06:28:14','size',1,NULL,'Number of pages in the index'),('main','characteristic','PRIMARY','2023-05-22 08:43:46','n_diff_pfx01',9,1,'char_id'),('main','characteristic','PRIMARY','2023-05-22 08:43:46','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','characteristic','PRIMARY','2023-05-22 08:43:46','size',1,NULL,'Number of pages in the index'),('main','favoritenotecontainsprofile','FavoriteNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:30:30','n_diff_pfx01',0,1,'profile_id'),('main','favoritenotecontainsprofile','FavoriteNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:30:30','n_diff_pfx02',0,1,'profile_id,favoritenote_id'),('main','favoritenotecontainsprofile','FavoriteNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:30:30','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','favoritenotecontainsprofile','FavoriteNoteContainsProfile_Profile_profile_id_fk','2023-05-03 06:30:30','size',1,NULL,'Number of pages in the index'),('main','favoritenotecontainsprofile','PRIMARY','2023-05-03 06:30:30','n_diff_pfx01',0,1,'favoritenote_id'),('main','favoritenotecontainsprofile','PRIMARY','2023-05-03 06:30:30','n_diff_pfx02',0,1,'favoritenote_id,profile_id'),('main','favoritenotecontainsprofile','PRIMARY','2023-05-03 06:30:30','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','favoritenotecontainsprofile','PRIMARY','2023-05-03 06:30:30','size',1,NULL,'Number of pages in the index'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','n_diff_pfx01',0,1,'char_id'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','n_diff_pfx02',0,1,'char_id,infoobject_id'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','size',1,NULL,'Number of pages in the index'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','n_diff_pfx01',0,1,'profile_id'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','n_diff_pfx02',0,1,'profile_id,infoobject_id'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','size',1,NULL,'Number of pages in the index'),('main','infoobject','PRIMARY','2023-05-26 13:30:27','n_diff_pfx01',0,1,'infoobject_id'),('main','infoobject','PRIMARY','2023-05-26 13:30:27','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','infoobject','PRIMARY','2023-05-26 13:30:27','size',1,NULL,'Number of pages in the index'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','n_diff_pfx01',3,1,'sender_id'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','n_diff_pfx02',37,1,'sender_id,message_id'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','size',1,NULL,'Number of pages in the index'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','n_diff_pfx01',2,1,'recipient_id'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','n_diff_pfx02',37,1,'recipient_id,message_id'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','size',1,NULL,'Number of pages in the index'),('main','message','PRIMARY','2023-05-20 10:30:45','n_diff_pfx01',37,1,'message_id'),('main','message','PRIMARY','2023-05-20 10:30:45','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','message','PRIMARY','2023-05-20 10:30:45','size',1,NULL,'Number of pages in the index'),('main','profile','PRIMARY','2023-05-26 13:01:17','n_diff_pfx01',2,1,'profile_id'),('main','profile','PRIMARY','2023-05-26 13:01:17','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profile','PRIMARY','2023-05-26 13:01:17','size',1,NULL,'Number of pages in the index'),('main','profile','Profile_BlockNoteContainsProfile_blocknote_id_fk','2023-05-26 13:01:17','n_diff_pfx01',1,1,'blocknote_id'),('main','profile','Profile_BlockNoteContainsProfile_blocknote_id_fk','2023-05-26 13:01:17','n_diff_pfx02',2,1,'blocknote_id,profile_id'),('main','profile','Profile_BlockNoteContainsProfile_blocknote_id_fk','2023-05-26 13:01:17','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profile','Profile_BlockNoteContainsProfile_blocknote_id_fk','2023-05-26 13:01:17','size',1,NULL,'Number of pages in the index'),('main','profile','Profile_FavoriteNoteContainsProfile_favoritenote_id_fk','2023-05-26 13:01:17','n_diff_pfx01',1,1,'favoritenote_id'),('main','profile','Profile_FavoriteNoteContainsProfile_favoritenote_id_fk','2023-05-26 13:01:17','n_diff_pfx02',2,1,'favoritenote_id,profile_id'),('main','profile','Profile_FavoriteNoteContainsProfile_favoritenote_id_fk','2023-05-26 13:01:17','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profile','Profile_FavoriteNoteContainsProfile_favoritenote_id_fk','2023-05-26 13:01:17','size',1,NULL,'Number of pages in the index'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','n_diff_pfx01',0,1,'Chat_id'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','n_diff_pfx02',0,1,'Chat_id,message_id'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','size',1,NULL,'Number of pages in the index'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','n_diff_pfx01',0,1,'message_id'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','n_diff_pfx02',0,1,'message_id,Chat_id'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','size',1,NULL,'Number of pages in the index'),('mysql','component','PRIMARY','2023-05-03 05:18:26','n_diff_pfx01',0,1,'component_id'),('mysql','component','PRIMARY','2023-05-03 05:18:26','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('mysql','component','PRIMARY','2023-05-03 05:18:26','size',1,NULL,'Number of pages in the index'),('sys','sys_config','PRIMARY','2023-05-03 05:18:26','n_diff_pfx01',6,1,'variable'),('sys','sys_config','PRIMARY','2023-05-03 05:18:26','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('sys','sys_config','PRIMARY','2023-05-03 05:18:26','size',1,NULL,'Number of pages in the index');
+INSERT  IGNORE INTO `innodb_index_stats` VALUES ('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','n_diff_pfx01',1,1,'profile_id'),('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','n_diff_pfx02',2,1,'profile_id,account_id'),('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','account','Account_Profile_profile_id_fk','2023-05-26 11:37:53','size',1,NULL,'Number of pages in the index'),('main','account','PRIMARY','2023-05-26 11:37:53','n_diff_pfx01',2,1,'account_id'),('main','account','PRIMARY','2023-05-26 11:37:53','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','account','PRIMARY','2023-05-26 11:37:53','size',1,NULL,'Number of pages in the index'),('main','blocknote','BlockNote_Profile_profile_id_fk','2023-05-03 06:28:14','n_diff_pfx01',0,1,'profile_id'),('main','blocknote','BlockNote_Profile_profile_id_fk','2023-05-03 06:28:14','n_diff_pfx02',0,1,'profile_id,blocknote_id'),('main','blocknote','BlockNote_Profile_profile_id_fk','2023-05-03 06:28:14','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','blocknote','BlockNote_Profile_profile_id_fk','2023-05-03 06:28:14','size',1,NULL,'Number of pages in the index'),('main','blocknote','PRIMARY','2023-05-03 06:28:14','n_diff_pfx01',0,1,'blocknote_id'),('main','blocknote','PRIMARY','2023-05-03 06:28:14','n_diff_pfx02',0,1,'blocknote_id,profile_id'),('main','blocknote','PRIMARY','2023-05-03 06:28:14','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','blocknote','PRIMARY','2023-05-03 06:28:14','size',1,NULL,'Number of pages in the index'),('main','characteristic','PRIMARY','2023-05-22 08:43:46','n_diff_pfx01',9,1,'char_id'),('main','characteristic','PRIMARY','2023-05-22 08:43:46','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','characteristic','PRIMARY','2023-05-22 08:43:46','size',1,NULL,'Number of pages in the index'),('main','favoritenote','FavoriteNote_Profile_profile_id_fk','2023-05-03 06:30:30','n_diff_pfx01',0,1,'profile_id'),('main','favoritenote','FavoriteNote_Profile_profile_id_fk','2023-05-03 06:30:30','n_diff_pfx02',0,1,'profile_id,favoritenote_id'),('main','favoritenote','FavoriteNote_Profile_profile_id_fk','2023-05-03 06:30:30','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','favoritenote','FavoriteNote_Profile_profile_id_fk','2023-05-03 06:30:30','size',1,NULL,'Number of pages in the index'),('main','favoritenote','PRIMARY','2023-05-03 06:30:30','n_diff_pfx01',0,1,'favoritenote_id'),('main','favoritenote','PRIMARY','2023-05-03 06:30:30','n_diff_pfx02',0,1,'favoritenote_id,profile_id'),('main','favoritenote','PRIMARY','2023-05-03 06:30:30','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','favoritenote','PRIMARY','2023-05-03 06:30:30','size',1,NULL,'Number of pages in the index'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','n_diff_pfx01',0,1,'char_id'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','n_diff_pfx02',0,1,'char_id,infoobject_id'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','infoobject','InfoObject_Characteristic_char_id_fk','2023-05-26 13:30:27','size',1,NULL,'Number of pages in the index'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','n_diff_pfx01',0,1,'profile_id'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','n_diff_pfx02',0,1,'profile_id,infoobject_id'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','infoobject','InfoObject_Profile_profile_id_fk','2023-05-26 13:30:27','size',1,NULL,'Number of pages in the index'),('main','infoobject','PRIMARY','2023-05-26 13:30:27','n_diff_pfx01',0,1,'infoobject_id'),('main','infoobject','PRIMARY','2023-05-26 13:30:27','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','infoobject','PRIMARY','2023-05-26 13:30:27','size',1,NULL,'Number of pages in the index'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','n_diff_pfx01',3,1,'sender_id'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','n_diff_pfx02',37,1,'sender_id,message_id'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','message','Message_Profile_profile_id_fk','2023-05-20 10:30:45','size',1,NULL,'Number of pages in the index'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','n_diff_pfx01',2,1,'recipient_id'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','n_diff_pfx02',37,1,'recipient_id,message_id'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','message','Message_Profile_profile_id_fk2','2023-05-20 10:30:45','size',1,NULL,'Number of pages in the index'),('main','message','PRIMARY','2023-05-20 10:30:45','n_diff_pfx01',37,1,'message_id'),('main','message','PRIMARY','2023-05-20 10:30:45','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','message','PRIMARY','2023-05-20 10:30:45','size',1,NULL,'Number of pages in the index'),('main','profile','PRIMARY','2023-05-26 13:01:17','n_diff_pfx01',2,1,'profile_id'),('main','profile','PRIMARY','2023-05-26 13:01:17','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profile','PRIMARY','2023-05-26 13:01:17','size',1,NULL,'Number of pages in the index'),('main','profile','Profile_BlockNote_blocknote_id_fk','2023-05-26 13:01:17','n_diff_pfx01',1,1,'blocknote_id'),('main','profile','Profile_BlockNote_blocknote_id_fk','2023-05-26 13:01:17','n_diff_pfx02',2,1,'blocknote_id,profile_id'),('main','profile','Profile_BlockNote_blocknote_id_fk','2023-05-26 13:01:17','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profile','Profile_BlockNote_blocknote_id_fk','2023-05-26 13:01:17','size',1,NULL,'Number of pages in the index'),('main','profile','Profile_FavoriteNote_favoritenote_id_fk','2023-05-26 13:01:17','n_diff_pfx01',1,1,'favoritenote_id'),('main','profile','Profile_FavoriteNote_favoritenote_id_fk','2023-05-26 13:01:17','n_diff_pfx02',2,1,'favoritenote_id,profile_id'),('main','profile','Profile_FavoriteNote_favoritenote_id_fk','2023-05-26 13:01:17','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profile','Profile_FavoriteNote_favoritenote_id_fk','2023-05-26 13:01:17','size',1,NULL,'Number of pages in the index'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','n_diff_pfx01',0,1,'Chat_id'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','n_diff_pfx02',0,1,'Chat_id,message_id'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profilecontainsmessage','PRIMARY','2023-05-26 13:28:58','size',1,NULL,'Number of pages in the index'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','n_diff_pfx01',0,1,'message_id'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','n_diff_pfx02',0,1,'message_id,Chat_id'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('main','profilecontainsmessage','ProfileContainsMessage_Message_message_id_fk','2023-05-26 13:28:58','size',1,NULL,'Number of pages in the index'),('mysql','component','PRIMARY','2023-05-03 05:18:26','n_diff_pfx01',0,1,'component_id'),('mysql','component','PRIMARY','2023-05-03 05:18:26','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('mysql','component','PRIMARY','2023-05-03 05:18:26','size',1,NULL,'Number of pages in the index'),('sys','sys_config','PRIMARY','2023-05-03 05:18:26','n_diff_pfx01',6,1,'variable'),('sys','sys_config','PRIMARY','2023-05-03 05:18:26','n_leaf_pages',1,NULL,'Number of leaf pages in the index'),('sys','sys_config','PRIMARY','2023-05-03 05:18:26','size',1,NULL,'Number of pages in the index');
 /*!40000 ALTER TABLE `innodb_index_stats` ENABLE KEYS */;
 
 --
@@ -360,7 +360,7 @@ INSERT  IGNORE INTO `innodb_index_stats` VALUES ('main','account','Account_Profi
 --
 
 /*!40000 ALTER TABLE `innodb_table_stats` DISABLE KEYS */;
-INSERT  IGNORE INTO `innodb_table_stats` VALUES ('main','account','2023-05-26 11:37:53',2,1,1),('main','blocknotecontainsprofile','2023-05-03 06:28:14',0,1,1),('main','characteristic','2023-05-22 08:43:46',9,1,0),('main','favoritenotecontainsprofile','2023-05-03 06:30:30',0,1,1),('main','infoobject','2023-05-26 13:30:27',0,1,2),('main','message','2023-05-20 10:30:45',37,1,2),('main','profile','2023-05-26 13:01:17',2,1,2),('main','profilecontainsmessage','2023-05-26 13:28:58',0,1,1),('mysql','component','2023-05-03 05:18:26',0,1,0),('sys','sys_config','2023-05-03 05:18:26',6,1,0);
+INSERT  IGNORE INTO `innodb_table_stats` VALUES ('main','account','2023-05-26 11:37:53',2,1,1),('main','blocknote','2023-05-03 06:28:14',0,1,1),('main','characteristic','2023-05-22 08:43:46',9,1,0),('main','favoritenote','2023-05-03 06:30:30',0,1,1),('main','infoobject','2023-05-26 13:30:27',0,1,2),('main','message','2023-05-20 10:30:45',37,1,2),('main','profile','2023-05-26 13:01:17',2,1,2),('main','profilecontainsmessage','2023-05-26 13:28:58',0,1,1),('mysql','component','2023-05-03 05:18:26',0,1,0),('sys','sys_config','2023-05-03 05:18:26',6,1,0);
 /*!40000 ALTER TABLE `innodb_table_stats` ENABLE KEYS */;
 
 --
@@ -1096,27 +1096,31 @@ INSERT INTO `Account` VALUES (1,'zQokAwj2tchqk4dkovLVvqCmzWp2',NULL,'Dominik Wun
 UNLOCK TABLES;
 
 --
--- Table structure for table `BlockNoteContainsProfile`
+-- Table structure for table `BlockNote`
 --
 
-DROP TABLE IF EXISTS `BlockNoteContainsProfile`;
+DROP TABLE IF EXISTS `BlockNote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `BlockNoteContainsProfile` (
+CREATE TABLE `BlockNote` (
   `blocknote_id` int NOT NULL,
-  `profile_id` int NOT NULL,
-  PRIMARY KEY (`blocknote_id`,`profile_id`),
-  KEY `BlockNoteContainsProfile_Profile_profile_id_fk` (`profile_id`)
+  `blocked_id` int DEFAULT NULL,
+  `blocking_id` int DEFAULT NULL,
+  PRIMARY KEY (`blocknote_id`),
+  KEY `BlockNote_Profile_blocked_id_fk` (`blocked_id`),
+  KEY `BlockNote_Profile_blocking_id_fk` (`blocking_id`),
+  CONSTRAINT `BlockNote_Profile_blocked_id_fk` FOREIGN KEY (`blocked_id`) REFERENCES `Profile` (`profile_id`),
+  CONSTRAINT `BlockNote_Profile_blocking_id_fk` FOREIGN KEY (`blocking_id`) REFERENCES `Profile` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `BlockNoteContainsProfile`
+-- Dumping data for table `BlockNote`
 --
 
-LOCK TABLES `BlockNoteContainsProfile` WRITE;
-/*!40000 ALTER TABLE `BlockNoteContainsProfile` DISABLE KEYS */;
-/*!40000 ALTER TABLE `BlockNoteContainsProfile` ENABLE KEYS */;
+LOCK TABLES `BlockNote` WRITE;
+/*!40000 ALTER TABLE `BlockNote` DISABLE KEYS */;
+/*!40000 ALTER TABLE `BlockNote` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1147,15 +1151,18 @@ UNLOCK TABLES;
 -- Table structure for table `FavoriteNoteContainsProfile`
 --
 
-DROP TABLE IF EXISTS `FavoriteNoteContainsProfile`;
+DROP TABLE IF EXISTS `FavoriteNote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `FavoriteNoteContainsProfile` (
+CREATE TABLE `FavoriteNote` (
   `favoritenote_id` int NOT NULL,
-  `profile_id` int NOT NULL,
-  PRIMARY KEY (`favoritenote_id`,`profile_id`),
-  KEY `FavoriteNoteContainsProfile_Profile_profile_id_fk` (`profile_id`),
-  CONSTRAINT `FavoriteNoteContainsProfile_Profile_profile_id_fk` FOREIGN KEY (`profile_id`) REFERENCES `Profile` (`profile_id`)
+  `added_id` int DEFAULT NULL,
+  `adding_id` int DEFAULT NULL,
+  PRIMARY KEY (`favoritenote_id`),
+  KEY `FavoriteNote_Profile_added_id_fk` (`added_id`),
+  KEY `FavoriteNote_Profile_adding_id_fk` (`adding_id`),
+  CONSTRAINT `FavoriteNote_Profile_added_id_fk` FOREIGN KEY (`added_id`) REFERENCES `Profile` (`profile_id`),
+  CONSTRAINT `FavoriteNote_Profile_adding_id_fk` FOREIGN KEY (`adding_id`) REFERENCES `Profile` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1163,9 +1170,9 @@ CREATE TABLE `FavoriteNoteContainsProfile` (
 -- Dumping data for table `FavoriteNoteContainsProfile`
 --
 
-LOCK TABLES `FavoriteNoteContainsProfile` WRITE;
-/*!40000 ALTER TABLE `FavoriteNoteContainsProfile` DISABLE KEYS */;
-/*!40000 ALTER TABLE `FavoriteNoteContainsProfile` ENABLE KEYS */;
+LOCK TABLES `FavoriteNote` WRITE;
+/*!40000 ALTER TABLE `FavoriteNote` DISABLE KEYS */;
+/*!40000 ALTER TABLE `FavoriteNote` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1237,8 +1244,8 @@ CREATE TABLE `Profile` (
   `favoritenote_id` int DEFAULT NULL,
   `blocknote_id` int DEFAULT NULL,
   PRIMARY KEY (`profile_id`),
-  KEY `Profile_BlockNoteContainsProfile_blocknote_id_fk` (`blocknote_id`),
-  KEY `Profile_FavoriteNoteContainsProfile_favoritenote_id_fk` (`favoritenote_id`)
+  FOREIGN KEY (`favoritenote_id`) REFERENCES `FavoriteNote` (`favoritenote_id`),
+  FOREIGN KEY (`blocknote_id`) REFERENCES `BlockNote` (`blocknote_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

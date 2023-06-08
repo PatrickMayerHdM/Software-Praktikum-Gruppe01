@@ -105,7 +105,7 @@ class InfoObject(bo):
     def from_dict(dictionary=dict()):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
-        obj.set_profile_fk(dictionary.get('profile_id'))
+        obj.set_profile_fk(dictionary.get('profile_fk'))
         obj.set_value(dictionary.get('value'))
         obj.set_age(dictionary.get('age'))
         obj.set_first_name(dictionary.get('firstName'))
