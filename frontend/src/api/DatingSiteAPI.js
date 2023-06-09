@@ -108,7 +108,7 @@ export default class DatingSiteAPI {
 
     #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
-    #removeProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #removeProfileURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
     #updateProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
@@ -142,14 +142,14 @@ export default class DatingSiteAPI {
      * @public
      */
 
-    removeProfile(profile) {
-        return this.#fetchAdvanced(this.#removeProfileURL(), {
+    removeProfile(google_fk) {
+        return this.#fetchAdvanced(this.#removeProfileURL(google_fk), {
             method: "DELETE",
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': "application/json",
             },
-            body: JSON.stringify(profile)
+            body: JSON.stringify(google_fk)
         }).then((responseJSON) => {
             let removedprfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {

@@ -23,6 +23,11 @@ class ChatWindow extends Component {
         this.setInput = this.setInput.bind(this);
     }
 
+    scrollToBottom() {
+    const chatWindow = document.getElementById("chat_messages");
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
     componentDidMount() {
         // Führt folgenden Code beim ersten Laden der Komponente aus
         // Auslesen des aktuellen Pfads der URL
@@ -49,6 +54,7 @@ class ChatWindow extends Component {
                     msg_list: messageBOs,
                 }, () => {
                     console.log(this.state.msg_list)
+                    this.scrollToBottom()
                 }),
             )
             // Ausgabe beim Fall eines Errors
@@ -90,13 +96,15 @@ class ChatWindow extends Component {
         );
     }
 
+
     render() {
         // Speichern der aktuellen Zustände in den Variablen
         const{msg_list, input} = this.state
 
         // Darstellung des Chat-Verlaufs
         return (
-            <div className="chat_window">
+            <div>
+                <div id={'chat_messages'}>
                 {/*Map-Funktion iteriert über message-Array und erstellt für jede Nachricht neues div*/}
                 {msg_list.map((msg, index) => (
                     <div key={index}>
@@ -113,6 +121,7 @@ class ChatWindow extends Component {
                     )}
                     </div>
                 ))}
+                </div>
 
                 <form className="chatWindow_input">
                     <input value={input}

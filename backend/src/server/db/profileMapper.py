@@ -119,8 +119,10 @@ class ProfileMapper(mapper):
         """ Löschen eines Datensatzes """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.profile WHERE profile_id = {profile.get_google_fk()}'
-        cursor.execute(command)
+        command = f'DELETE FROM main.profile WHERE google_fk=%s'
+        data = [google_id.google_fk]
+        print(google_id)
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
