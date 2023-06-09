@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import EditIcon from '@mui/icons-material/Edit';
 import "../components/Profile.css";
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,6 +11,7 @@ import { Link } from "react-router-dom"
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import UpdateIcon from '@mui/icons-material/Update';
 import SearchProfileBox from "../components/SearchProfileBox";
 
 /**
@@ -206,7 +206,7 @@ class Search extends React.Component{
                                       cursor: "pointer"
                                     }}
                                   >
-                                    <BubbleChartIcon/>
+                                    <UpdateIcon/>
                                   </button>
                                 </Grid>
 
