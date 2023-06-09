@@ -145,11 +145,33 @@ class ProfileOperations(Resource):
         return prof
 
     @secured
-    def delete(self, id):
+    def delete(self, googleID):
         """ Löschen eines besimmten Profil-Objekts. """
-        pass
 
-    # hier muss noch die put methode hin.
+        adm = Administration()
+        info_obj = adm.get_info_object_by_id(googleID)
+        adm.delete_info_object(info_obj)
+        prof = adm.get_profile_by_google_id(googleID)
+        adm.delete_profile(prof)
+        return '', 200
+
+
+    @datingapp.marshal_with(profile)
+    @secured
+    def put(self, googleID):
+        "Update eines bestimmten FavoriteNote-Objektes"
+
+        adm = Administration()
+        prof = Profile.from_dict(api.payload)
+
+        if prof is not None:
+
+            """Hierdurch wird die id des zu überschreibenden InfoObjects-Objekts gesetzt"""
+            prof.set_id(id)
+            adm.save_profile(prof)
+            return '', 200
+        else:
+            return '', 500
 
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
