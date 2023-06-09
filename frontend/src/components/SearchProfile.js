@@ -12,6 +12,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import "./Profile.css";
 import SaveIcon from '@mui/icons-material/Save';
+import searchprofileBO from '../api/SearchprofileBO';
+import infoobjectBO from "../api/InfoObjectBO";
 
 
 /**
@@ -33,14 +35,15 @@ class SearchProfile extends React.Component{
             religion: '',
             hair: '',
             smoking: '',
+
+            lastPartURL: null,
+            char_fk: 0,
         };
 
         this.handleChangeGen = this.handleChangeGen.bind(this);
         this.handleChangeRel = this.handleChangeRel.bind(this);
         this.handleChangeSmo = this.handleChangeSmo.bind(this);
         this.handleChangeHai = this.handleChangeHai.bind(this);
-
-
 
     }
 
@@ -74,11 +77,39 @@ class SearchProfile extends React.Component{
       this.setState({minHeight: minHeight, maxHeight: maxHeight})
     }
 
-    submit = () => {
-        console.log(this.state )
+    submit = (event) => {
+         if (this.state.lastPartURL === "new") {
+             console.log("POST");
+             console.log(this.state);
+             // HIER KOMMT DER CODE ZUM ERSTMALIGEN ANLEGEN
+             event.preventDefault();
+             const newSearchprofile = new searchprofileBO(this.state.searchprofile_id, this.props.user.uid);
+             const newInfoObject = new infoobjectBO(
+                 this.state.searchprofile_id,
+                 this.state.char_fk,
+                 this.state.minAge,
+                 this.state.maxAge,
+                 this.state.minHeight,
+                 this.state.maxHeight,
+                 this.state.gender,
+                 this.state.religion,
+                 this.state.hair,
+                 this.state.smoking
+             )
+         } else {
+             console.log("UPDATE");
+             // HIER KOMMT DER CODE ZUM ÄNDERN EINES VORHANDENEN SUCHPROFILS
+         }
+         console.log(this.state);
+    };
+
+
+    componentDidMount() {
+         const currentPath = window.location.pathname;
+         // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+         const lastPartURL = currentPath.split('/').pop();
+         this.setState({lastPartURL: lastPartURL})
     }
-
-
 
     render() {
         const {
