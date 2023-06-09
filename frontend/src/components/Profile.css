@@ -15,6 +15,10 @@ ProfileBox
     color: #ff0059;
 }
 
+.iconcol .MuiSvgIcon-root{
+    color: #ff0059;
+}
+
 .cont2 {
   background-color: yellow;
 }

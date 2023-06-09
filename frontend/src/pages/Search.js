@@ -81,13 +81,13 @@ class Search extends React.Component{
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
     ChangeSearchProfiles(index) {
-        console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
-        //console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[index], "geändert");
+        //console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
         // State handling, damit die Farbe von dem ausgewählten Profil geändert wird
         this.setState({ selectedProfileIndex: index });
         this.setState({ clickable: true });
         this.setState({ selectedProfile: this.state.Searchprofiles[index] }, () => {
-          console.log("Es wurde auf das Suchprofil: ", this.state.selectedProfile, "geändert (mit selectedProfile)");
+          console.log("Es wurde auf das Suchprofil: ", this.state.selectedProfile, "geändert (mit selectedProfile)" +
+              " mit diesem Index: ", index);
         });
 
     }
@@ -210,7 +210,7 @@ class Search extends React.Component{
 
                                 {/** Hier werden die Buttons zum Erstellen eines Suchprofils erstellt */}
                                 <Grid item md={2} xs={2} >
-                                    <Link to="/Suche/Suchprofil">
+                                    <Link to="/Suche/Suchprofil/new">
                                         <button
                                         onClick={this.AddSearchProfiles} style={{
                                           height: "120%",
@@ -250,7 +250,7 @@ class Search extends React.Component{
 
                                   {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
                                 <Grid item md={2} xs={2} >
-                                  <Link to="/Suche/Suchprofil" style={{ pointerEvents: clickable ? '' : 'none' }} >
+                                  <Link to={`/Suche/Suchprofil/${this.state.selectedProfile}`} style={{ pointerEvents: clickable ? '' : 'none' }} >
                                       <button
                                           onClick={() => this.EditSearchProfiles()}
                                         style={{
