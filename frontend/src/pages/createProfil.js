@@ -77,7 +77,6 @@ class CreateProfil extends Component {
       DatingSiteAPI.getAPI()
           .getProfileByID(this.props.user.uid)
           .then((profile) => {
-              console.log(profile)
               if (profile.id === null) {
                 this.setState({ profileExists: false });
               } else {
@@ -94,9 +93,7 @@ class CreateProfil extends Component {
       DatingSiteAPI.getAPI()
           .getInfoObjects(this.props.user.uid)
           .then((infoObjects) => {
-              const selectedInfoObjects = infoObjects.find(infoObjects => infoObjects.get_profile_fk() === this.props.user.uid);
-
-              if (selectedInfoObjects) {
+              const selectedInfoObjects = infoObjects
                   this.setState({
                       firstName: selectedInfoObjects.get_first_name(),
                       lastName: selectedInfoObjects.get_last_name(),
@@ -108,7 +105,7 @@ class CreateProfil extends Component {
                       smoking: selectedInfoObjects.get_smoking_status()
                   });
               }
-          });
+          );
     };
 
     /** Event-Handler für die Änderung des Vornamens */
@@ -374,12 +371,10 @@ class CreateProfil extends Component {
                                 <FormLabel> Welcher Religion gehörst du an? </FormLabel>
                                 {/** Auswahlbuttons für die Religion */}
                                 <RadioGroup row value={religion} onChange={this.handleChangeReligion}>
-                                    <FormControlLabel sx={{ width: '25%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="islam" control={<Radio />} label="Budistisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="judaism" control={<Radio />} label="Jüdisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="buddhism" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="orthodox" control={<Radio />} label="Orthodox" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="islam" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
@@ -390,11 +385,10 @@ class CreateProfil extends Component {
                                 <FormLabel> Welche Haarfarbe du? </FormLabel>
                                 {/** Auswahlbuttons für die Haarfarbe */}
                                 <RadioGroup row value={hair} onChange={this.handleChangeHair}>
-                                    <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="red" control={<Radio />} label="Rot" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="gray" control={<Radio />} label="Grau" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
                             </FormGroup>

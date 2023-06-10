@@ -243,7 +243,7 @@ class Administration(object):
 
     def get_info_object_by_id(self, key):
         with InfoObjectMapper() as mapper:
-            return mapper.find_by_key(key)
+            return mapper.find_by_id(key)
 
     def create_info_object(self, profile_fk, info_dict):
         print("InfoDict: ", info_dict)
@@ -263,7 +263,16 @@ class Administration(object):
 
     def update_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
-            return mapper.update(infoobject)
+            existing_info_object = infoobject.find_info_object_by_id(infoobject.get_id(), infoobject.get_profile_fk())
+            if existing_info_object is None:
+                return None
+            existing_info_object.set_value(infoobject.get_value())
+            return mapper.update(existing_info_object)
+
+    def find_info_object_by_id(self, infoobject_id, profile_id):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_by_id(infoobject_id, profile_id)
+
 
     def delete_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:

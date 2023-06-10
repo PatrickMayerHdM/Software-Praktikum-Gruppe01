@@ -53,6 +53,7 @@ class InfoObjectMapper(mapper):
 
         self._connection.commit()
         cursor.close()
+        print(result.get_value())
 
         return result
 
@@ -84,18 +85,54 @@ class InfoObjectMapper(mapper):
         return info_obj
 
     def update(self, info_obj):
-        cursor = self._connection.cursor()
+        command = 'UPDATE main.InfoObject SET char_value=%s WHERE infoobject_id=%s AND profile_id=%s'
+        data = (info_obj.get_value(), info_obj.get_id(), info_obj.get_profile_fk())
 
-        command = 'UPDATE main.InfoObject SET char_id=%s, profile_id=%s, char_value=%s WHERE infoobject_id=%s'
-        data = (info_obj.get_id(),
-                info_obj.get_char_fk(),
-                info_obj.get_profile_fk(),
-                info_obj.get_value())
-
-        cursor.execute(command, data)
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
 
         self._connection.commit()
-        cursor.close()
+
+    def find_by_id(self, key):
+        command = 'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id = %s'
+        data = (key,)
+
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
+            tuples = cursor.fetchall()
+
+        if tuples and tuples[0]:
+            (infoobject_id, char_id, char_value, profile_id) = tuples[0]
+            info_obj = InfoObject()
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
+
+            # Setze die Werte für die gewünschten Getter-Methoden
+            char_mapping = {
+                30: info_obj.set_age,
+                10: info_obj.set_first_name,
+                40: info_obj.set_gender,
+                70: info_obj.set_hair,
+                50: info_obj.set_height,
+                20: info_obj.set_last_name,
+                60: info_obj.set_religion,
+                80: info_obj.set_smoking_status
+            }
+
+            for tuple in tuples:
+                char_id = tuple[1]
+                setter = char_mapping.get(char_id)
+                if setter:
+                    char_value = tuple[2]
+                    setter(char_value)
+
+            print(info_obj.get_value())
+            print(info_obj.get_first_name())
+            return info_obj
+
+        return None
 
     def delete(self, google_id):
         print(type(google_id))
