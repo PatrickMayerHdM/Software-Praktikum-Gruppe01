@@ -13,6 +13,7 @@ from server.bo.Message import Message
 from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
+from server.bo.profilvisits import ProfileVisits
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -90,6 +91,12 @@ favoritenote = api.inherit('FavoriteNote', bo, {
 blocknote = api.inherit('BlockNote', bo, {
     'blocked_id': fields.Integer(attribute='_blocked_id', description='Id des geblockten Profils'),
     'blocking_id': fields.Integer(attribute='_blocking_id', description='Id des blockenden Profils')
+})
+
+profilevisits = api.inherit('ProfileVisits', bo, {
+    'mainprofile_id': fields.String(attribute='_mainprofile_id', description='Id des eingeloggten Users'),
+    'visitedprofile_id': fields.String(attribute='_visitedprofile_id', description='Id des gesehenen Profils')
+
 })
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
@@ -460,6 +467,45 @@ class BlockNoteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+
+    """get für profilevisits"""
+    @datingapp.route('/ProfilesNotVisited/<int:id>')
+    @datingapp.response(500, 'Serverseitiger Fehler')
+    @datingapp.param('id', 'Die ID des nicht gesehenen Profile-Objekts.')
+    class ProfileVisitsOperations(Resource):
+        @datingapp.marshal_with(profilevisits)
+        # @secured
+        def get(self, owner_id):
+            """ Auslesen eines Chat-Verlaufs."""
+            adm = Administration()
+            prof = adm.get_profile_by_visited(owner_id)
+
+            if prof is not None:
+                return prof
+            else:
+                return '', 500  # Wenn es keine Messages gibt.
+
+    @datingapp.route('/ProfilesNotVisited')
+    @datingapp.response(500, 'Serverseitiger Fehler')
+    class ProfilesNotVisitedListOperations(Resource):
+        @datingapp.marshal_with(profilevisits, code=200)
+        @datingapp.expect(profilevisits)
+        @secured
+        def post(self):
+            """ Anlegen eines neuen profilevisits-Objekts. """
+            adm = Administration()
+            print(api.payload)
+
+            proposal = ProfileVisits.from_dict(api.payload)
+
+            if proposal is not None:
+                main = proposal.get_mainprofile_id()
+                visited = proposal.get_visitedprofile_id()
+                result = adm.create_profilevisits(main, visited)
+                return result, 200
+            else:
+                return '', 500
 
 
 if __name__ == '__main__':

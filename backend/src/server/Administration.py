@@ -12,6 +12,8 @@ from server.db.InfoObjectMapper import InfoObjectMapper
 from server.bo.Profile import Profile
 from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
+from server.db.ProfileVIsitsMapper import ProfileVisitsMapper
+from server.bo.profilvisits import ProfileVisits
 
 
 class Administration(object):
@@ -115,6 +117,7 @@ class Administration(object):
     #     return messages
 
     """Spezifische Methoden für blockNote"""
+
     @staticmethod
     def create_blocknote(self, blocked_id, blocking_id):
         blocklist = BlockNote()
@@ -291,7 +294,6 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.find_by_id(infoobject_id, profile_id)
 
-
     def delete_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
@@ -337,6 +339,7 @@ class Administration(object):
         with ChatMapper() as mapper:
             return mapper.find_by_key(key)
 """
+
     def get_profile_by_message(self, profile_id):
         """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
         welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
@@ -359,6 +362,36 @@ class Administration(object):
         print("Profiles:", profiles)
 
         return profiles
+
+    def get_profile_by_visited(self, owner_id):
+        """Diese Methode gibt eine Liste von Profilen zurück,
+        welche der owner bereits gesehen hat"""
+        profiles = []
+
+        with ProfileVisitsMapper() as mapper:
+            profileslist = mapper.find_all()
+
+            for profile in profileslist:
+                mainprofile = profile.get_mainprofile_id()
+                visitedprofile = profile.get_visitedprofile_id()
+
+                # Überprüfen ob profile_id mit sender_id oder recipient_id übereinstimmt
+                if mainprofile == owner_id and visitedprofile not in profiles:
+                    profiles.append(visitedprofile)
+
+        print("Profiles:", profiles)
+
+        return profiles
+
+    def create_profilevisits(self, mainprofile_id, visitedprofile_id):
+        pf = ProfileVisits()
+        pf.set_mainprofile_id(mainprofile_id)
+        pf.set_visitedprofile_id(visitedprofile_id)
+        pf.set_id(1)
+        with ProfileVisitsMapper() as mapper:
+            return mapper.insert(pf)
+
+
 """
     def save_chat(self, chat):
         with ChatMapper() as mapper:
