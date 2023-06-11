@@ -255,7 +255,7 @@ class InfoObjectsOperations(Resource):
 
         if info_object is not None:
             print("main:", info_object)
-            return info_object
+            return list(info_object)
         else:
             return '', 500
 

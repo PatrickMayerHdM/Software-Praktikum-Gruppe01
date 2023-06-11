@@ -241,9 +241,9 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.find_all()
 
-    # def get_info_object_by_id(self, key):
-    #     with InfoObjectMapper() as mapper:
-    #         return mapper.find_by_key(key)
+    def get_info_object_by_id(self, key):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_by_id(key)
 
     def get_info_object(self, key):
         info_object = {}

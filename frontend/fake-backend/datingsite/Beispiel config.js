@@ -20,6 +20,12 @@ module.exports = SetupEndpoint({
             response: '/response-files/api/newprofiles.json'
         },
         {
+        params: '/infoobjects/DHtPGfPj6OXVvgzNul8qJiwLcbt1',
+        requests: [{
+            method: 'GET',
+            response: '/response-files/api/infoobjects.json'
+        },
+        {
             method: ['POST'],
             response: '/response-files/api/newprofiles.json'
         }]

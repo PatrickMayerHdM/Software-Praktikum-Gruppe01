@@ -14,7 +14,7 @@ export default class DatingSiteAPI {
     #datingServerBaseURL = '/system';
 
     // Local http-fake-backend
-    //#datingServerBaseURL = '/api/system';
+    // #datingServerBaseURL = '/api/system';
 
 
     // Message related
@@ -131,6 +131,7 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(profile)
         }).then((responseJSON) => {
+            console.log(profile)
             let prfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(prfileBO);
@@ -239,12 +240,28 @@ export default class DatingSiteAPI {
     return this.#fetchAdvanced(this.#getInfoObjectsURL(google_fk))
         .then((responseJSON) => {
             console.log("responseJSON: ", responseJSON);
-            let infoObjects = infoobjectBO.fromJSON(responseJSON);
+
+            const convertPythonDictToJSON = function (data) {
+                let d = data.replace(new RegExp(`(?<=[a-zA-Z])'(?=[a-zA-Z ])`, "g"), '__')
+                d = d.replace(new RegExp("'", 'g'), '"')
+                d = d.replace(new RegExp("__", 'g'), "'")
+                d = d.replace(new RegExp("None", 'g'), 'null')
+                d = d.replace(new RegExp("False", 'g'), 'false')
+                d = d.replace(new RegExp("True", 'g'), 'true')
+                return JSON.parse(d)
+            }
+
+            let convertedJSON = convertPythonDictToJSON(responseJSON);
+            console.log("convertedJSON: ", convertedJSON);
+
+            let infoObjects = infoobjectBO.fromJSON(convertedJSON);
+
             return new Promise(function (resolve) {
                 resolve(infoObjects);
             });
         });
-}
+    }
+
 
 
     getAllProfiles() {
