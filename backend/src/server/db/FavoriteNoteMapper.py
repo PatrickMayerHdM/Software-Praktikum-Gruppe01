@@ -79,7 +79,8 @@ class FavoriteNoteMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            merkliste.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                merkliste.set_id(maxid[0] + 1)
 
         command = "Insert INTO main.Favoritenote (favoritenote_id, added_id, adding_id) Values (%s, %s, %s)"
         data = (merkliste.get_id(),
