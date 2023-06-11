@@ -118,7 +118,6 @@ class Administration(object):
 
     """Spezifische Methoden für blockNote"""
 
-    @staticmethod
     def create_blocknote(self, blocked_id, blocking_id):
         blocklist = BlockNote()
         blocklist.set_blocked_id(blocked_id)
@@ -136,7 +135,6 @@ class Administration(object):
         with BlockNoteMapper() as mapper:
             mapper.delete(blocklist)
 
-    @staticmethod
     def get_all_blocknote(self):
         with BlockNoteMapper() as mapper:
             return mapper.find_all()
