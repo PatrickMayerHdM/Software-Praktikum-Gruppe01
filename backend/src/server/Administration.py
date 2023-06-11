@@ -261,7 +261,7 @@ class Administration(object):
                     value = info_obj.get_value()
                     info_object[char_key] = value
 
-        print(info_object)
+        print("Admin: ", info_object)
         return info_object
 
     def create_info_object(self, profile_fk, info_dict):

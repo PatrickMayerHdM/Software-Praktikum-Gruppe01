@@ -239,35 +239,15 @@ export default class DatingSiteAPI {
     getInfoObjects(google_fk) {
     return this.#fetchAdvanced(this.#getInfoObjectsURL(google_fk))
         .then((responseJSON) => {
-            console.log("responseJSON: ", responseJSON);
-
-            const convertPythonDictToJSON = function (data) {
-                let d = data.replace(new RegExp(`(?<=[a-zA-Z])'(?=[a-zA-Z ])`, "g"), '__')
-                d = d.replace(new RegExp("'", 'g'), '"')
-                d = d.replace(new RegExp("__", 'g'), "'")
-                d = d.replace(new RegExp("None", 'g'), 'null')
-                d = d.replace(new RegExp("False", 'g'), 'false')
-                d = d.replace(new RegExp("True", 'g'), 'true')
-                return JSON.parse(d)
-            }
-
-            let convertedJSON = convertPythonDictToJSON(responseJSON);
-            console.log("convertedJSON: ", convertedJSON);
-
-            let infoObjects = infoobjectBO.fromJSON(convertedJSON);
-
-            return new Promise(function (resolve) {
-                resolve(infoObjects);
+            console.log("responseJSON API Infoobjects Profil: ", responseJSON);
+            return responseJSON;
             });
-        });
     }
-
 
 
     getAllProfiles() {
         return this.#fetchAdvanced(this.#getAllProfilesURL()).then((responseJSON) => {
             let profileBOs = ProfileBO.fromJSON(responseJSON);
-
             return new Promise(function (resolve) {
                 resolve(profileBOs);
             })
@@ -277,6 +257,7 @@ export default class DatingSiteAPI {
     getProfileByID(google_fk) {
         return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
             .then((responseJSON) => {
+            console.log("Profilid: ", responseJSON)
             let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);

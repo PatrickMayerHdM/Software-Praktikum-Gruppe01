@@ -94,11 +94,9 @@ class CreateProfil extends Component {
       DatingSiteAPI.getAPI()
           .getInfoObjects(this.props.user.uid)
           .then((infoObjects) => {
-
+              const parsedJSON = JSON.stringify(infoObjects);
               this.setState({
-                  info_list: infoObjects,
-                }, () => {
-                  console.log(this.state.info_list)
+                  age: parsedJSON,
               })
               })
           };
@@ -152,6 +150,7 @@ class CreateProfil extends Component {
             this.props.user.uid,
             this.state.char_fk,
             this.state.value,
+            this.state.searchprofile_id,
             this.state.age,
             this.state.firstName,
             this.state.gender,
