@@ -8,20 +8,27 @@ class InfoObject(bo):
         self.char_fk = None
         self.profile_fk = None
         self.value = None
-        self.age = None
-        self.firstname = None
-        self.gender = None
-        self.hair = None
-        self.height = None
-        self.lastname = None
-        self.religion = None
-        self.smoking = None
+        self.searchprofile_id = None
+        self.age = ""
+        self.firstname = ""
+        self.gender = ""
+        self.hair = ""
+        self.height = ""
+        self.lastname = ""
+        self.religion = ""
+        self.smoking = ""
 
     def set_value(self, value):
         self.value = value
 
     def get_value(self):
         return self.value
+
+    def set_searchprofile_id(self, id):
+        self.searchprofile_id = id
+
+    def get_searchprofile_id(self):
+        return self.searchprofile_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
@@ -90,13 +97,13 @@ class InfoObject(bo):
     def get_char_by_key(self, key):
         # Mapping der Schlüssel zu char_fk
         char_fk_mapping = {
-            'age': 10,
-            'firstName': 20,
-            'gender': 30,
-            'hair': 40,
+            'age': 30,
+            'firstName': 10,
+            'gender': 40,
+            'hair': 70,
             'height': 50,
-            'lastName': 60,
-            'religion': 70,
+            'lastName': 20,
+            'religion': 60,
             'smoking': 80
         }
         return char_fk_mapping.get(key, None)
@@ -105,7 +112,8 @@ class InfoObject(bo):
     def from_dict(dictionary=dict()):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
-        obj.set_profile_fk(dictionary.get('profile_id'))
+        obj.set_profile_fk(dictionary.get('profile_fk'))
+        obj.set_searchprofile_id(dictionary.get('searchprofile_id'))
         obj.set_value(dictionary.get('value'))
         obj.set_age(dictionary.get('age'))
         obj.set_first_name(dictionary.get('firstName'))
@@ -119,14 +127,14 @@ class InfoObject(bo):
 
     def to_dict(self):
         info_dict = {
-            'age': self.get_age(),
-            'firstName': self.get_first_name(),
-            'gender': self.get_gender(),
-            'hair': self.get_hair(),
-            'height': self.get_height(),
-            'lastName': self.get_last_name(),
-            'religion': self.get_religion(),
-            'smoking': self.get_smoking_status()
+            '30': self.get_age(),
+            '10': self.get_first_name(),
+            '40': self.get_gender(),
+            '70': self.get_hair(),
+            '50': self.get_height(),
+            '20': self.get_last_name(),
+            '60': self.get_religion(),
+            '80': self.get_smoking_status()
         }
         return info_dict
 

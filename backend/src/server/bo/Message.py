@@ -2,12 +2,13 @@ from BusinessObject import BusinessObject as bo
 from datetime import datetime
 
 
+
 class Message(bo):
     def __init__(self):
         super().__init__()
         self._sender_id = None
         self._recipient_id = None
-        self.content = None
+        self._content = None
 
     def get_sender(self):
         """Auslesen des Senders."""
@@ -27,11 +28,11 @@ class Message(bo):
 
     def get_content(self):
         """Auslesen der Nachricht."""
-        return self.content
+        return self._content
 
     def set_content(self, content):
         """ Setzen des Nachrichteninhalts. """
-        self.content = content
+        self._content = content
 
     def __str__(self):
         """Auslesen der Nachricht."""

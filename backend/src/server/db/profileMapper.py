@@ -10,14 +10,15 @@ class ProfileMapper(mapper):
         """ Auslesen aller Profile """
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT profile_id, favoriteNote_id, blockNote_id FROM main.Profile")
+        cursor.execute("SELECT profile_id, favoritenote_id, blocknote_id, google_fk FROM main.profile")
         tuples = cursor.fetchall()
 
-        for (profile_id, favoriteNote_id, account_id, blockNote_id) in tuples:
+        for (profile_id, favoriteNote_id, blockNote_id, google_fk) in tuples:
             profile = Profile()
             profile.set_id(profile_id)
             profile.set_favorite_note_id(favoriteNote_id)
             profile.set_block_note_id(blockNote_id)
+            profile.set_google_fk(google_fk)
             result.append(profile)
 
         self._connection.commit()
@@ -29,17 +30,20 @@ class ProfileMapper(mapper):
         result = None
 
         cursor = self._connection.cursor()
-        command = f'SELECT profile_id, favoriteNote_id, blockNote_id FROM main.Profile WHERE profile_id={key}'
-        cursor.execute(command)
+        command = f'SELECT profile_id, favoritenote_id, blocknote_id, google_fk FROM main.profile WHERE google_fk=%s'
+        data = (key, )
+        cursor.execute(command, data)
         tuples = cursor.fetchall()
 
         if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (profile_id, favoriteNote_id, blockNote_id) = tuples[0]
+            (profile_id, favoriteNote_id, blockNote_id, google_fk) = tuples[0]
             profile = Profile()
             profile.set_id(profile_id)
             profile.set_favorite_note_id(favoriteNote_id)
             # profile.account_id(account_id)
             profile.set_block_note_id(blockNote_id)
+            profile.set_google_fk(google_fk)
+            print("Profil von der Datenbank im Mapper:", profile)
 
             result = profile
         else:
@@ -78,7 +82,7 @@ class ProfileMapper(mapper):
     def insert(self, profile):
         # Verbindugn zur DB + cursor-objekt erstellt
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(profile_id) AS maxid FROM main.Profile")
+        cursor.execute("SELECT MAX(profile_id) AS maxid FROM main.profile")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
@@ -90,8 +94,8 @@ class ProfileMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO main.Profile (profile_id, favoritenote_id, blocknote_id) VALUES (%s, %s, %s)"
-        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
+        command = "INSERT INTO main.profile (profile_id, favoritenote_id, blocknote_id, google_fk) VALUES (%s, %s, %s, %s)"
+        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id(), profile.get_google_fk())
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -103,20 +107,22 @@ class ProfileMapper(mapper):
         """ Aktualisierung einer Profil-Instanz"""
         cursor = self._connection.cursor()
 
-        command = "UPDATE main.Profile SET profile_id=%s, favoriteNote_id=%s, blockNote_id=%s"
-        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id())
+        command = "UPDATE main.profile SET profile_id=%s, favoriteNote_id=%s, blockNote_id=%s, google_fk=%s"
+        data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id(), profile.get_google_fk())
 
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-    def delete(self, profile):
+    def delete(self, google_id):
         """ Löschen eines Datensatzes """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.Profile WHERE profile_id = {profile.get_id()}'
-        cursor.execute(command)
+        command = f'DELETE FROM main.profile WHERE google_fk=%s'
+        data = [google_id.google_fk]
+        print(google_id)
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()

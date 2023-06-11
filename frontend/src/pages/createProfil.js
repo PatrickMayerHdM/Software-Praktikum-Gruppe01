@@ -23,7 +23,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
-import * as properties from "react-bootstrap/ElementChildren";
+import profile from "../components/Profile";
+import {json} from "react-router-dom";
+
 
 class CreateProfil extends Component {
     constructor(props) {
@@ -47,7 +49,6 @@ class CreateProfil extends Component {
             char_desc: '',
             showTextFields: false,
             profileExists: false,
-            properties: [],
         };
 
         /** Bindung der Handler an die Komponente */
@@ -69,21 +70,38 @@ class CreateProfil extends Component {
     /** Abfrage ob ein Profil bereits vorhanden ist oder nicht*/
     componentDidMount() {
         this.checkProfilExc();
+        this.getSelectedProperties();
     };
 
     /** Handler und API für "checkProfilExc" */
     checkProfilExc() {
-      const profile_id = this.props.user.uid;
       DatingSiteAPI.getAPI()
-          .getProfileByID(profile_id)
-          .then((profileBOs) => {
-              this.setState({ profileExists: true })
-          }).catch((e) =>
+          .getProfileByID(this.props.user.uid)
+          .then((profile) => {
+              if (profile.id === null) {
+                this.setState({ profileExists: false });
+              } else {
+                this.setState({ profileExists: true });
+              }
+            }).catch((e) =>
                 this.setState({
                     error: e,
                 })
             );
     };
+
+    getSelectedProperties() {
+      DatingSiteAPI.getAPI()
+          .getInfoObjects(this.props.user.uid)
+          .then((infoObjects) => {
+
+              this.setState({
+                  info_list: infoObjects,
+                }, () => {
+                  console.log(this.state.info_list)
+              })
+              })
+          };
 
     /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
@@ -129,10 +147,11 @@ class CreateProfil extends Component {
     handleSubmit(event) {
         console.log(this.state)
         event.preventDefault();
-        const newProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const newProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id,this.props.user.uid);
         const newInfoObject = new infoobjectBO(
+            this.props.user.uid,
             this.state.char_fk,
-            this.state.profile_fk,
+            this.state.value,
             this.state.age,
             this.state.firstName,
             this.state.gender,
@@ -186,34 +205,38 @@ class CreateProfil extends Component {
             .createCharForProfile(createdCharForProfile)
             .catch((e) => {
                 this.setState({
-                    error: e
+                    error: e,
                 });
             });
-    };
-
-    renderProperties() {
-      const { Properties } = this.state
-
-      return properties.map((property, index) => (
-            <div key={index}>
-                <input
-                value={property.name}
-                onChange={(event) => this.handleInputChange(event, index, 'name')}
-                />
-                <input
-                value={property.description}
-                onChange={(event) => this.handleInputChange(event, index, 'description')}
-                />
-            </div>
-      ));
     };
 
     handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const updatedProfile = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
+        const updatedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id,this.props.user.uid);
+        const newInfoObject = new infoobjectBO(
+            this.props.user.uid,
+            this.state.char_fk,
+            this.state.value,
+            this.state.age,
+            this.state.firstName,
+            this.state.gender,
+            this.state.hair,
+            this.state.height,
+            this.state.lastName,
+            this.state.religion,
+            this.state.smoking)
+
         DatingSiteAPI.getAPI()
             .updateProfile(updatedProfile)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+
+        DatingSiteAPI.getAPI()
+            .addInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -222,34 +245,37 @@ class CreateProfil extends Component {
     };
 
     handleRemove(event) {
-        console.log(this.state)
-        event.preventDefault();
-        const removedProfile  = new profileBO(this.props.user.uid, this.state.favoriteNote_id, this.state.blockNote_id);
-        DatingSiteAPI.getAPI()
-            .removeProfile(removedProfile)
-            .catch((e) =>
-                this.setState({
-                    error: e,
-                })
-            );
+    console.log(this.state)
+    event.preventDefault();
+    DatingSiteAPI.getAPI()
+        .removeProfile(this.props.user.uid)
+        .then((profileBOs) => {
+            this.setState({ profileExists: false });
+        })
+        .catch((e) =>
+            this.setState({
+                error: e,
+            })
+        );
     };
 
     /** render() gibt das HTML zurück, das gerendert werden soll */
     render() {
             const {
-                firstName,
-                lastName,
                 age,
+                firstName,
                 gender,
-                height,
-                religion,
                 hair,
+                height,
+                lastName,
+                religion,
                 smoking,
                 char_name,
                 char_desc,
                 showTextFields,
                 profileExists,
             } = this.state;
+
             return (
             <div>
                 <h1></h1>
@@ -341,12 +367,10 @@ class CreateProfil extends Component {
                                 <FormLabel> Welcher Religion gehörst du an? </FormLabel>
                                 {/** Auswahlbuttons für die Religion */}
                                 <RadioGroup row value={religion} onChange={this.handleChangeReligion}>
-                                    <FormControlLabel sx={{ width: '25%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="islam" control={<Radio />} label="Budistisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="judaism" control={<Radio />} label="Jüdisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="buddhism" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '25%' }} value="orthodox" control={<Radio />} label="Orthodox" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="islam" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
@@ -357,11 +381,10 @@ class CreateProfil extends Component {
                                 <FormLabel> Welche Haarfarbe du? </FormLabel>
                                 {/** Auswahlbuttons für die Haarfarbe */}
                                 <RadioGroup row value={hair} onChange={this.handleChangeHair}>
-                                    <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="red" control={<Radio />} label="Rot" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '10%' }} value="gray" control={<Radio />} label="Grau" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
+                                    <FormControlLabel sx={{ width: '16%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
@@ -446,5 +469,6 @@ class CreateProfil extends Component {
 CreateProfil.propTypes = {
     currentUser: PropTypes.string.isRequired,
 };
+
 
 export default CreateProfil;

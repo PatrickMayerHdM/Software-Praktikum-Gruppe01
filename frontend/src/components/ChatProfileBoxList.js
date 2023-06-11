@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatProfileBox from "./ChatProfileBox";
 import React from "react";
+import DatingSiteAPI from "../api/DatingSiteAPI";
 
 /**
- * Dies ist eine  Seite, zum darstellen mehrerer ChatProfileBox innerhalb eines weiteren Grids.
+ * Dies ist eine Seite, zum Darstellen mehrerer ChatProfileBox innerhalb eines weiteren Grids.
  * Damit dies dann nicht mehr innerhalb der App.js geschehen muss und die App.js dadurch übersichtlicher bleibt.
  */
 
@@ -16,14 +17,13 @@ class ChatProfileBoxList extends React.Component{
         this.state = {
             numProfiles: 0,
             profiles: [],
-            otherProfileIndex: null,
+            otherProfileIndex: null
         }
     }
 
-    componentDidMount() {
-        console.log(this.props.user.uid);
-
-        const dummyChatProfiles = [13, 42, 51];
+    // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man DummyDaten und das Fake Back-End verwenden will.
+    MountFakeBackEnd() {
+        const dummyChatProfiles = [13, 42, 51, 'H2Qfee67TCh7dbHQz2qafu9Q9XB2']; // Dummy Daten die später ersetzt werden durch einen GET
 
         this.setState({profiles: dummyChatProfiles}, () => {
             const lengthProfiles = this.state.profiles.length;
@@ -32,8 +32,29 @@ class ChatProfileBoxList extends React.Component{
         });
     }
 
+    //   Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man das richtige Back-End verwenden will.
+    MountBackEnd() {
+        DatingSiteAPI.getAPI()
+        .getChats(this.props.user.uid)
+        .then(profilesvar => {
+            const lengthProfiles = this.state.profiles.length;
+            this.setState(prevState => ({
+                profiles: [...prevState.profiles, ...profilesvar],
+                numProfiles: lengthProfiles
+            }));
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
+    }
+
+    // componentDidMount() welche Ausgeführt wird, wenn der Komponent gelanden wird.
+    componentDidMount() {
+        this.MountBackEnd();
+    }
+
     handleProfileClick = (index) => {
-        this.setState({ otherProfileIndex: index });
+        this.setState({ otherProfileIndex: index});
     };
 
     render() {

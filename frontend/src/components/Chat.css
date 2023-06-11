@@ -1,4 +1,9 @@
 
+#chat_messages {
+    overflow-y: scroll;
+    height: 570px;
+}
+
 .chatWindow_message {
     display: flex;
     align-items: center;
@@ -10,6 +15,7 @@
     background-color: lightgrey;
     padding: 15px;
     border-radius: 20px;
+    font-family: Arial, sans-serif;
 }
 
 .chatWindow_contentUser {
@@ -18,6 +24,7 @@
     padding: 15px;
     border-radius: 20px;
     color: white;
+    font-family: Arial, sans-serif;
 }
 
 .chatWindow_input {

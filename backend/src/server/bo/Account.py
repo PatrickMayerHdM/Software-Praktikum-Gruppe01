@@ -44,7 +44,7 @@ class Account(bo):
         return self.email
 
     def __str__(self):
-        # str Methode gibt das erstellte profil in Form eines String zurück
+        # str Methode gibt den account in Form eines String zurück
         return "account: {}, {}, {}, {}, {}".format(self.get_id(), self.profile_id,
                                                     self.google_id, self.name, self.email)
 

@@ -65,12 +65,12 @@ export default class profilecontainsobjectsBO extends BusinessObject {
 
         if (Array.isArray(profilecontainsinfoobjects)) {
             profilecontainsinfoobjects.forEach((p) => {
-                Object.setPrototypeOf(p, profilecontainsinfoobjectsBO.prototype);
+                Object.setPrototypeOf(p, profilecontainsobjectsBO.prototype);
                 result.push(p);
             })
         } else {
             let p = profilecontainsinfoobj
-            Object.setPrototypeOf(p, profilecontainsinfoobjectsBO.prototype);
+            Object.setPrototypeOf(p, profilecontainsobjectsBO.prototype);
             result.push(p);
         }
 

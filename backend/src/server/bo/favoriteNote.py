@@ -1,41 +1,34 @@
-from relationship import relationship
+from server.bo.relationship import relationship
 from BusinessObject import BusinessObject as bo
 
 
-class favoriteNote(bo, relationship):
+class FavoriteNote(bo):
     def __init__(self):
         super().__init__()
-        """Erstellen einer Liste Merkzettel um Profile dort zu speichern"""
-        self.Merkzettel_list = []
+        self.added_id = None
+        self.adding_id = None
 
-    def add_user(self, profile_id):
-        """if abfrage, um doppelte Nutzer in Liste zu vermeiden"""
-        if profile_id not in self.Merkzettel_list:
-            self.Merkzettel_list.append(profile_id)
+    def set_added_id(self, added_id):
+        self.added_id = added_id
 
-    def del_user(self, profile_id):
-        """Nutzer kann nur gelöscht werden, wenn Nutzer auch in Liste vorhanden ist"""
-        if profile_id in self.Merkzettel_list:
-            self.Merkzettel_list.remove(profile_id)
+    def get_added_id(self):
+        return self.added_id
 
-    def get_all_users(self):
-        return self.Merkzettel_list
+    def set_adding_id(self, adding_id):
+        self.adding_id = adding_id
+
+    def get_adding_id(self):
+        return self.adding_id
 
     def __str__(self):
-        # str Methode gibt die favoriteNote in Form eines String zurück
-        return "Merkliste: {}, {}".format(self.get_id(), self.get_all_users())
+        # str Methode gibt das erstellte profil in Form eines String zurück
+        return "favoritenote: {}, {}, {}".format(self.get_id(), self.added_id,
+                                                 self.adding_id)
 
-#
-# Merkzettel1 = favoriteNote()
-# Merkzettel2 = favoriteNote()
-#
-# Merkzettel1.add_user(4590)
-# Merkzettel1.add_user(9987)
-# Merkzettel1.add_user(9987)
-#
-# Merkzettel2.add_user(34)
-# Merkzettel2.add_user(314)
-# Merkzettel2.add_user(343)
-#
-# print(Merkzettel1)
-# print((Merkzettel2))
+    @staticmethod
+    def from_dict(dictionary=dict()):
+        fn = FavoriteNote()
+        fn.set_id(dictionary['id'])
+        fn.set_added_id(dictionary['added_id'])
+        fn.set_adding_id(dictionary['adding_id'])
+        return fn

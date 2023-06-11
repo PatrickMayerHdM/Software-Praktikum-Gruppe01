@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-/** Importieren von React und der Hooks "useState" sowie "useEffect"
-    Diese Hooks werden benötigt, um den Zustand und das Verhalten (der Nachrichten) zu speichern. */
 import "./Chat.css";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import messageBO from "../api/MessageBO";
@@ -12,65 +10,85 @@ class ChatWindow extends Component {
         this.state = {
             // id: this.props.messageId,
             sender_id: this.props.user.uid,
-            recipient_id: 13,
-            content: [],
+            recipient_id: null,
+            msg_list: [],
             error: '',
             input: '',
 
         }
 
+        // Binden der Methoden getAllMessages, handleSend und setInput an die aktuelle Instanz
         this.getAllMessages = this.getAllMessages.bind(this);
         this.handleSend = this.handleSend.bind(this);
         this.setInput = this.setInput.bind(this);
     }
 
+    scrollToBottom() {
+    const chatWindow = document.getElementById("chat_messages");
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
     componentDidMount() {
-        // console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id)
-        // const { eigeneID, andereID } = this.props.match.params;
-        // this.setState({ sender_id: eigeneID, recipient_id: andereID }, () => {
-        //     this.getAllMessages();
-        this.getAllMessages()
-        console.log(this.state.sender_id, this.state.recipient_id)
-        // });
+        // Führt folgenden Code beim ersten Laden der Komponente aus
+        // Auslesen des aktuellen Pfads der URL
+        const currentPath = window.location.pathname;
+        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+        const lastPartURL = currentPath.split('/').pop();
+        // Zustand von recipient_id wird aktualisiert
+        this.setState({recipient_id: lastPartURL}, () => {
+          console.log("Sender-ID:", this.state.sender_id, "Recipient-ID:", this.state.recipient_id);
+          // Abrufen aller Nachrichten
+          this.getAllMessages();
+        });
     }
 
     getAllMessages() {
+        // Speichern der aktuellen Zustände von sender_id und recipient_id in den Variablen
         const { sender_id, recipient_id } = this.state;
         DatingSiteAPI.getAPI()
+            // Abrufen aller Nachrichten zwischen sender_id und recipient_id
             .getAllMessages(sender_id, recipient_id)
+            // Erhalten der Nachrichten in Form eines Arrays
             .then((messageBOs) =>
                 this.setState({
-                    content: messageBOs,
+                    msg_list: messageBOs,
                 }, () => {
-                    console.log(this.state.content)
-                    console.log(this.state.content[0].asenderid)
-                    console.log(this.state.content[1].arecipientid)
+                    console.log(this.state.msg_list)
+                    this.scrollToBottom()
                 }),
             )
+            // Ausgabe beim Fall eines Errors
             .catch((e) =>
                 this.setState({
-                    content: [],
+                    msg_list: [],
                     error: e,
                 })
             );
     }
 
     setInput(value) {
+        // Input wird mit dem Wert value gespeichert
         this.setState({input: value});
     }
 
     handleSend(event) {
+    // Verhindern des Standardverhaltens: Neuladen der Seite beim Absenden der Nachricht
     event.preventDefault();
+    // Speichern der aktuellen Zustände in den Variablen
     const { sender_id, recipient_id, input } = this.state;
-    const newMessage = new messageBO(input, sender_id, recipient_id);
+    // Erstellen eines neuen Nachrichtenobjektes
+    const newMessage = new messageBO(sender_id, recipient_id, input);
     DatingSiteAPI.getAPI()
+        // Hinzufügen der neuen Nachicht
         .addMessage(newMessage)
+        // Leeren des input-Feldes und Darstellung des neuen Chat-Verlaufs
         .then(() => {
             this.setState({
                 input:'',
-                content: [...this.state.content, newMessage],
+                msg_list: [...this.state.msg_list, newMessage],
             });
         })
+        // Ausgabe beim Fall eines Errors
         .catch((e) =>
             this.setState({
                 error: e,
@@ -78,35 +96,38 @@ class ChatWindow extends Component {
         );
     }
 
-    render() {
-        const{content, input} = this.state
 
+    render() {
+        // Speichern der aktuellen Zustände in den Variablen
+        const{msg_list, input} = this.state
+
+        // Darstellung des Chat-Verlaufs
         return (
-            <div className="chat_window">
-                {content.map((content, index) => (
-                // Darstellung des Chat-Verlaufs
-                // Die map-Funktion iteriert über das message-Array und erstellt für jede Nachricht
-                // ein neues div mit der entsprechenden id.
-                // HIER FÜGEN WIR EINE LOGIK EIN, DIE ERKENNT OB ES EINE EIGENE NACHRICHT IST
+            <div>
+                <div id={'chat_messages'}>
+                {/*Map-Funktion iteriert über message-Array und erstellt für jede Nachricht neues div*/}
+                {msg_list.map((msg, index) => (
                     <div key={index}>
-                        {console.log("TEST", content.asenderid)}
-                        {this.state.sender_id === content.asenderid ? (
+                        {this.state.sender_id === msg.getRecipientId() ? (
+                            // Darstellung einer Nachricht, die nicht von der eigenen Person stammt
                             <div className="chatWindow_message">
-                                <p className="chatWindow_content">{content.acontent}</p>
+                                <p className="chatWindow_content">{msg.getContent()}</p>
                             </div>
                     ) : (
+                            // Darstellung einer eigenen Nachricht
                             <div className="chatWindow_message">
-                            <p className="chatWindow_contentUser">{content.acontent}</p>
+                            <p className="chatWindow_contentUser">{msg.getContent()}</p>
                             </div>
                     )}
                     </div>
                 ))}
+                </div>
 
                 <form className="chatWindow_input">
                     <input value={input}
                            onChange={e => this.setInput(e.target.value)}
-                            // Bei einer Änderung des Eingabetextes wird die setInput Funktion aufgerufen, um
-                            // den Inhalt zu aktualisieren.
+                           // Bei einer Änderung des Eingabetextes wird die setInput Funktion aufgerufen, um
+                           // den Inhalt zu aktualisieren.
                            className="chatWindow_inputField"
                            placeholder="Schreib eine Nachricht..."
                            type="text"/>

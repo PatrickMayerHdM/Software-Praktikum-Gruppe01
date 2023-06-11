@@ -33,7 +33,7 @@ class Header extends Component {
 
     return (
         <div className="header">
-            <Link to="/Profil">
+            <Link to={`/Profil/${this.props.user.uid}`}>
                 <IconButton>
                     <PersonIcon className="header_icon" />
                 </IconButton>
