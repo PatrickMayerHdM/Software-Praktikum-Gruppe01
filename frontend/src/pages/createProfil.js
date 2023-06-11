@@ -24,6 +24,7 @@ import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
 import profile from "../components/Profile";
+import {json} from "react-router-dom";
 
 
 class CreateProfil extends Component {
@@ -93,19 +94,11 @@ class CreateProfil extends Component {
       DatingSiteAPI.getAPI()
           .getInfoObjects(this.props.user.uid)
           .then((infoObjects) => {
-              const selectedInfoObjects = infoObjects
-                  this.setState({
-                      firstName: selectedInfoObjects.get_first_name(),
-                      lastName: selectedInfoObjects.get_last_name(),
-                      age: selectedInfoObjects.get_age(),
-                      gender: selectedInfoObjects.get_gender(),
-                      height: selectedInfoObjects.get_height(),
-                      religion: selectedInfoObjects.get_religion(),
-                      hair: selectedInfoObjects.get_hair(),
-                      smoking: selectedInfoObjects.get_smoking_status()
-                  });
-              }
-          );
+              this.setState({
+                  age: infoObjects.get_age(),
+                  firstName: infoObjects.get_first_name(),
+              })
+          });
     };
 
     /** Event-Handler für die Änderung des Vornamens */
@@ -267,19 +260,20 @@ class CreateProfil extends Component {
     /** render() gibt das HTML zurück, das gerendert werden soll */
     render() {
             const {
-                firstName,
-                lastName,
                 age,
+                firstName,
                 gender,
-                height,
-                religion,
                 hair,
+                height,
+                lastName,
+                religion,
                 smoking,
                 char_name,
                 char_desc,
                 showTextFields,
                 profileExists,
             } = this.state;
+
             return (
             <div>
                 <h1></h1>

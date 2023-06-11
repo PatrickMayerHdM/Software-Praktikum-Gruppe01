@@ -241,9 +241,25 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.find_all()
 
-    def get_info_object_by_id(self, key):
-        with InfoObjectMapper() as mapper:
-            return mapper.find_by_id(key)
+    # def get_info_object_by_id(self, key):
+    #     with InfoObjectMapper() as mapper:
+    #         return mapper.find_by_key(key)
+
+    def get_info_object(self, key):
+        info_object = {}
+
+        with InfoObjectMapper() as mapper, CharMapper() as char_mapper:
+            info_objs = mapper.find_by_key(key)
+
+            for info_obj in info_objs:
+                char_obj = char_mapper.find_by_key(info_obj.get_char_fk())
+                if char_obj is not None:
+                    char_key = char_obj.get_characteristic_name()  # Verwendung der get_char_by_key-Methode
+                    value = info_obj.get_value()
+                    info_object[char_key] = value
+
+        print(info_object)
+        return info_object
 
     def create_info_object(self, profile_fk, info_dict):
         print("InfoDict: ", info_dict)
@@ -253,7 +269,6 @@ class Administration(object):
                     info_obj = InfoObject()
                     info_obj.set_profile_fk(profile_fk)
                     info_obj.set_value(value)
-                    # Hier wird der CharMapper aufgerufen!
                     char_fk = char_mapper.find_by_key(key).get_id()
                     if char_fk is not None:
                         info_obj.set_char_fk(char_fk)

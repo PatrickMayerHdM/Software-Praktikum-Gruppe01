@@ -247,12 +247,17 @@ class InfoObjectListOperations(Resource):
 @datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
-    @secured
+    # @secured
     def get(self, googleID):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
-        infoobj = adm.get_info_object_by_id(googleID)
-        return infoobj
+        info_object = adm.get_info_object(googleID)
+
+        if info_object is not None:
+            print("main:", info_object)
+            return info_object
+        else:
+            return '', 500
 
     @datingapp.marshal_with(infoobject)
     @secured

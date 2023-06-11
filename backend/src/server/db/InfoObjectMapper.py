@@ -29,32 +29,29 @@ class InfoObjectMapper(mapper):
         return result
 
     def find_by_key(self, key):
-        result = None
+        result = []
 
         """ Auslesen der Info-Objekte nach Key """
 
         cursor = self._connection.cursor()
-        command = f'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id=%s'
-        data = (key, )
-        cursor.execute(command, data)
+        command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}')"
+        cursor.execute(command)
         tuples = cursor.fetchall()
+        print(tuples)
 
-        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (infoobject_id, char_id, char_value, profile_id) = tuples[0]
+        for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
             info_obj = InfoObject()
             info_obj.set_id(infoobject_id)
             info_obj.set_char_fk(char_id)
             info_obj.set_value(char_value)
             info_obj.set_profile_fk(profile_id)
-
-            result = info_obj
-        else:
-            result = None
+            info_obj.set_searchprofile_id(searchprofile_id)
+            result.append(info_obj)
 
         self._connection.commit()
         cursor.close()
-        print(result.get_value())
 
+        print("result: ", result)
         return result
 
     def insert(self, info_obj):
@@ -109,27 +106,6 @@ class InfoObjectMapper(mapper):
             info_obj.set_value(char_value)
             info_obj.set_profile_fk(profile_id)
 
-            # Setze die Werte für die gewünschten Getter-Methoden
-            char_mapping = {
-                30: info_obj.set_age,
-                10: info_obj.set_first_name,
-                40: info_obj.set_gender,
-                70: info_obj.set_hair,
-                50: info_obj.set_height,
-                20: info_obj.set_last_name,
-                60: info_obj.set_religion,
-                80: info_obj.set_smoking_status
-            }
-
-            for tuple in tuples:
-                char_id = tuple[1]
-                setter = char_mapping.get(char_id)
-                if setter:
-                    char_value = tuple[2]
-                    setter(char_value)
-
-            print(info_obj.get_value())
-            print(info_obj.get_first_name())
             return info_obj
 
         return None
