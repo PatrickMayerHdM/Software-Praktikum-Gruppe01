@@ -130,8 +130,7 @@ class SearchProfile extends React.Component{
                                 <FormControlLabel sx={{ width: '12%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '12%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '12%' }} value="islam" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '12%' }} value="judaism" control={<Radio />} label="Jüdisch" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '12%' }} value="buddhism" control={<Radio />} label="Budistisch" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '12%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '12%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
                             </RadioGroup>
                         </Item>
@@ -160,6 +159,7 @@ class SearchProfile extends React.Component{
                                 <FormControlLabel sx={{ width: '16%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
                             </RadioGroup>
                         </Item>
+
                         <Item>
                             {/** Hier kann die gewünschte Haarfarbe der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Haarfarbe sollte die gesuchte Person haben?</FormLabel>
@@ -167,7 +167,6 @@ class SearchProfile extends React.Component{
                                 <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '10%' }} value="red" control={<Radio />} label="Rot" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
                             </RadioGroup>

@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import EditIcon from '@mui/icons-material/Edit';
 import "../components/Profile.css";
 import SearchIcon from '@mui/icons-material/Search';
@@ -12,6 +11,8 @@ import { Link } from "react-router-dom"
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import UpdateIcon from '@mui/icons-material/Update';
+import SearchProfileBox from "../components/SearchProfileBox";
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
@@ -34,6 +35,8 @@ class Search extends React.Component{
           profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
           deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
           clickable: false,
+            numProfiles: 0, // Nummer der Profile welche als Antwort kamen
+
         }
 
         this.NewProfiles = this.NewProfiles.bind(this);
@@ -168,7 +171,7 @@ class Search extends React.Component{
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor:
-                    this.state.selectedProfileIndex === index ? "#8F3985" : "#30638E", // Wenn ein Profil ausgewählt ist, wird "#820263" als Farbe verwendet, sonst: "#30638E"
+                    this.state.selectedProfileIndex === index ? "#8F3985" : "#30638E",
                   color: "#fff",
                   cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
                 }}
@@ -203,7 +206,7 @@ class Search extends React.Component{
                                       cursor: "pointer"
                                     }}
                                   >
-                                    <BubbleChartIcon/>
+                                    <UpdateIcon/>
                                   </button>
                                 </Grid>
 
@@ -302,7 +305,7 @@ class Search extends React.Component{
                  </Item>
 
                  <Item>
-                     <ProfileBoxList/>
+                     <SearchProfileBox/>
                  </Item>
              </Stack>
         </Box>
