@@ -12,6 +12,8 @@ from server.db.InfoObjectMapper import InfoObjectMapper
 from server.bo.Profile import Profile
 from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
+from server.bo.SearchProfile import SearchProfile
+from server.db.SearchProfileMapper import SearchProfileMapper
 
 
 class Administration(object):
@@ -140,9 +142,17 @@ class Administration(object):
         with BlockNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def get_blocklist_by_blocking_user(self, blocking_id):
+    def get_blocknote_by_blocking_user(self, blocking_user):
+
+        profiles = []
         with BlockNoteMapper() as mapper:
-            return mapper.find_by_blocking_user(blocking_id)
+            block_profiles = mapper.find_by_blocking_user(blocking_user)
+
+            for block_profile in block_profiles:
+                blocked_user = block_profile.get_blocked_id()
+                profiles.append(blocked_user)
+
+        return profiles
 
     """Spezifische Methoden für favoritenote"""
 
@@ -171,9 +181,19 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def get_favoritenote_by_adding_user(self, adding_id):
+    def get_favoritenote_by_adding_user(self, adding_user):
+
+        profiles = []
         with FavoriteNoteMapper() as mapper:
-            return mapper.find_by_adding_user(adding_id)
+            fav_profiles = mapper.find_by_adding_user(adding_user)
+
+            for fav_profile in fav_profiles:
+                added_user = fav_profile.get_added_id()
+                profiles.append(added_user)
+
+        return profiles
+
+
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
     def create_profile(self, favoritenote_id, blocknote_id, google_fk):
@@ -337,10 +357,28 @@ class Administration(object):
         with ChatMapper() as mapper:
             mapper.update(chat)
 
-    def delete_chat(self, chat):
-        with ChatMapper() as mapper:
-            mapper.delete(chat)
+    """ Suchprofil-spezifische Methoden """
 
-"""
+    def create_searchprofile(self):
+        searchrpofile = SearchProfile()
+        searchrpofile.set_id(1)
+        with SearchProfileMapper() as mapper:
+            mapper.insert(searchrpofile)
+
+    def save_searchprofile(self, searchprofile):
+        with SearchProfileMapper() as mapper:
+            mapper.update(searchprofile)
+
+    def delete_searchprofile(self, searchprofile):
+        with SearchProfileMapper() as mapper:
+            mapper.delete(searchprofile)
+
+    def get_all_searchprofile(self):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_all()
+
+    def get_searchprofile_by_google_id(self, key):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_by_key(key)
 
 

@@ -1,7 +1,7 @@
 from server.bo.favoriteNote import FavoriteNote
 from server.db.mapper import mapper
 
-"""Notiz: in DB wird der Name favoriteNote verwendet"""
+"""Notiz: in DB wird der Name Favoritenote verwendet"""
 
 
 class FavoriteNoteMapper(mapper):
@@ -32,15 +32,15 @@ class FavoriteNoteMapper(mapper):
     def find_by_adding_user(self, adding_id):
         result = []
         cursor = self._connection.cursor()
-        command = f'SELECT favoritenote_id, added_id, adding_id FROM main.Favoritenote WHERE adding_user={adding_id}'
+        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (favoritenote_id, added_id, adding_id) in tuples:
+        for (favoritenote_id, adding_id, added_id) in tuples:
             merkliste = FavoriteNote()
             merkliste.set_id(favoritenote_id)
-            merkliste.set_added_id(added_id)
             merkliste.set_adding_id(adding_id)
+            merkliste.set_added_id(added_id)
             result.append(merkliste)
 
         self._connection.commit()
@@ -79,7 +79,8 @@ class FavoriteNoteMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            merkliste.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                merkliste.set_id(maxid[0] + 1)
 
         command = "Insert INTO main.Favoritenote (favoritenote_id, added_id, adding_id) Values (%s, %s, %s)"
         data = (merkliste.get_id(),

@@ -3,6 +3,7 @@ import profileBO from "./ProfileBO";
 import ProfileBO from "./ProfileBO";
 import Characteristic from "./CharacteristicBO";
 import infoobjectBO from "./InfoObjectBO";
+import favoriteNoteBO from "./FavoriteNoteBO";
 
 
 export default class DatingSiteAPI {
@@ -48,7 +49,7 @@ export default class DatingSiteAPI {
 
     getAllMessages(profileID, otherprofileID) {
         return this.#fetchAdvanced(this.#getAllMessagesURL(profileID, otherprofileID)).then((responseJSON) => {
-            console.log("Innerhalb der Daiting API: ", profileID, otherprofileID )
+            console.log("Innerhalb der Dating API: ", responseJSON )
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -311,7 +312,68 @@ export default class DatingSiteAPI {
           resolve(profileBOs);
         })
       })
-  }
+    }
+
+        // Favoritenote related
+
+    #getFavoritenoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+    // #removeFavoriteProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfilesIDs/${profile_id}`;
+    // #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+
+    getFavoritenoteProfileURL(profile_id){
+        return this.#fetchAdvanced(this.#getFavoritenoteProfileURL(profile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                });
+            });
+    }
+
+
+
+   // addFavoriteProfile(profile_id) {
+   //      return this.#fetchAdvanced(this.#addFavoriteProfile(profile_id), {
+   //          method: "POST",
+   //          headers: {
+   //              'Accept': 'application/json, text/plain',
+   //              'Content-type': "application/json",
+   //          },
+   //          body: JSON.stringify(profile_id)
+   //      }).then((responseJSON) => {
+   //          let favorBO = favoriteNoteBO.fromJSON(responseJSON)[0];
+   //          return new Promise(function (resolve) {
+   //              resolve(favorBO);
+   //          })
+   //      })
+   //  }
+   //
+   //  removeFavoritenoteProfileByIdURL(profile_id) {
+   //  return this.#fetchAdvanced(this.#removeFavoriteProfileByIdURL(profile_id), {
+   //    method: 'DELETE'
+   //  })
+   //    .then((responseJSON) => {
+   //      let favorBOs = favoriteNoteBO.fromJSON(responseJSON)[0];
+   //      return new Promise(function (resolve) {
+   //        resolve(favorBOs);
+   //      })
+   //    })
+   //  }
+
+
+    // blockNote related
+
+    #getBlocknoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}`;
+
+    getBlocknoteProfileURL(profile_id){
+        return this.#fetchAdvanced(this.#getBlocknoteProfileURL(profile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                });
+            });
+    }
 
 }
 

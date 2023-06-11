@@ -32,15 +32,15 @@ class BlockNoteMapper(mapper):
     def find_by_blocking_user(self, blocking_id):
         result = []
         cursor = self._connection.cursor()
-        command = f'SELECT blocknote_id, blocked_id, blocking_id FROM main.Blocknote WHERE blocking_id={blocking_id}'
+        command = f"SELECT blocknote_id, blocking_id, blocked_id FROM main.Blocknote WHERE blocking_id='{blocking_id}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (blocknote_id, blocked_id, blocking_id) in tuples:
+        for (blocknote_id, blocking_id, blocked_id) in tuples:
             blockliste = BlockNote()
             blockliste.set_id(blocknote_id)
-            blockliste.set_blocked_id(blocked_id)
             blockliste.set_blocking_id(blocking_id)
+            blockliste.set_blocked_id(blocked_id)
             result.append(blockliste)
 
         self._connection.commit()
@@ -81,7 +81,7 @@ class BlockNoteMapper(mapper):
         for (maxid) in tuples:
             blockliste.set_id(maxid[0] + 1)
 
-        command = "Insert INTO main.Blocknote (blocknote_id, blocked_id, blocking_id) Values (%s, %s, %s)"
+        command = "Insert INTO main.Blocknote (blocknote_id, blocking_id, blocked_id,) Values (%s, %s, %s)"
         data = (blockliste.get_id(),
                 blockliste.get_blocked_id(),
                 blockliste.get_blocking_id())

@@ -5,6 +5,7 @@ import React from "react";
 import ProfileBox from "./ProfileBox";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import {Link} from "react-router-dom";
 
 /**
  * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -43,13 +44,15 @@ class FavoriteProfileBox extends React.Component{
                 direction="row" justifyContent="center" alignItems="strech" >
                 <Grid item xs={8} spacing={2}>
                   <Item>
-                      <ProfileBox/>
+                      <ProfileBox other_profile={this.props.other_profile}/>
                   </Item >
                 </Grid >
                 <Grid item xs={2} spacing={2} >
-                    <button onClick={FavoriteAskClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#587D71", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
-                        <ChatBubbleIcon/>
-                    </button>
+                    <Link to={`/ChatWindow/${this.props.current_profile}/${this.props.other_profile}`}>
+                        <button onClick={FavoriteAskClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#587D71", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                            <ChatBubbleIcon/>
+                        </button>
+                    </Link>
                 </Grid>
                 <Grid item xs={2} spacing={2}>
                     <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
