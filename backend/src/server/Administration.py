@@ -197,7 +197,6 @@ class Administration(object):
         with ProfileMapper() as mapper:
             mapper.delete(profile)
 
-    @staticmethod
     def get_all_profiles(self):
         with ProfileMapper() as mapper:
             return mapper.find_all()
