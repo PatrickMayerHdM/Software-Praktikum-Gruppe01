@@ -178,12 +178,11 @@ class Administration(object):
             return mapper.find_by_adding_user(adding_id)
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
-    @staticmethod
-    def create_profile(self, favoritenote_id, blocknote_id):
+    def create_profile(self, favoritenote_id, blocknote_id, google_fk):
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
-        # prof.set_google_fk(google_fk)
+        prof.set_google_fk(google_fk)
         # prof.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
