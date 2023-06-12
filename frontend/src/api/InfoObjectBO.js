@@ -23,7 +23,7 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} asmoking
      * */
 
-    constructor(aprofile_fk,achar_fk, avalue, asearchprofile_id,aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking) {
+    constructor(aprofile_fk, achar_fk, avalue, asearchprofile_id, aage, afirstName, agender, ahair, aheight, alastName, areligion, asmoking) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
@@ -73,11 +73,11 @@ export default class infoobjectBO extends BusinessObject {
     }
     /** Setzen des Firstnames */
     set_first_name(afirstName) {
-        this.firstname = afirstName;
+        this.firstName = afirstName;
     }
     /** Auslesen des Firstnames */
     get_first_name() {
-        return this.firstname;
+        return this.firstName;
     }
     /** Setzen des Genders */
     set_gender(agender) {
@@ -105,11 +105,11 @@ export default class infoobjectBO extends BusinessObject {
     }
     /** Setzen des Lastnames */
     set_last_name(alastName) {
-        this.lastname = alastName;
+        this.lastName = alastName;
     }
     /** Auslesen des Lastnames */
     get_last_name() {
-        return this.lastname;
+        return this.lastName;
     }
     /** Setzen der Religions */
     set_religion(areligion) {
@@ -136,20 +136,20 @@ export default class infoobjectBO extends BusinessObject {
         return this.searchprofile_id;
     }
 
-      static fromJSON(infoobject) {
+      static fromJSON(infoobjects) {
             let result = [];
 
-            if (Array.isArray(infoobject)) {
-                infoobject.forEach((i) => {
+            if (Array.isArray(infoobjects)) {
+                infoobjects.forEach((i) => {
                     Object.setPrototypeOf(i, infoobjectBO.prototype);
                     result.push(i);
                 })
             } else {
-                let i = infoobject
+                let i = infoobjects
                 Object.setPrototypeOf(i, infoobjectBO.prototype);
                 result.push(i);
             }
-
+            console.log("Parsed infoobject:", result);
             return result;
     }
 }

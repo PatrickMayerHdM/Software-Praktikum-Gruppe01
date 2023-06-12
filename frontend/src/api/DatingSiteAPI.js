@@ -11,7 +11,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-    #datingServerBaseURL = '/system';
+     #datingServerBaseURL = '/system';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/api/system';
@@ -236,11 +236,14 @@ export default class DatingSiteAPI {
         })
     }
 
-    getInfoObjects(google_fk) {
-    return this.#fetchAdvanced(this.#getInfoObjectsURL(google_fk))
-        .then((responseJSON) => {
-            console.log("responseJSON API Infoobjects Profil: ", responseJSON);
-            return responseJSON;
+    getInfoObjects(googleID) {
+        return this.#fetchAdvanced(this.#getInfoObjectsURL(googleID))
+            .then((responseJSON) => {
+                let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
+                console.log("responseJSON API Infoobjects Profil: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(infoobjectBOs);
+                });
             });
     }
 

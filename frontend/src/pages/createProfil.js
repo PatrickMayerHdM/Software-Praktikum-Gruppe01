@@ -92,14 +92,15 @@ class CreateProfil extends Component {
 
     getSelectedProperties() {
       DatingSiteAPI.getAPI()
-          .getInfoObjects(this.props.user.uid)
-          .then((infoObjects) => {
-              const parsedJSON = JSON.stringify(infoObjects);
-              this.setState({
-                  age: parsedJSON,
-              })
-              })
-          };
+        .getInfoObjects(this.props.user.uid)
+        .then((responseInfoObjects) => {
+          this.setState({
+            infoObjects: responseInfoObjects,
+          });
+        });
+    }
+
+
 
     /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
