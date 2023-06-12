@@ -8,6 +8,7 @@ class InfoObject(bo):
         self.char_fk = None
         self.profile_fk = None
         self.value = None
+        self.searchprofile_id = None
         self.age = ""
         self.firstname = ""
         self.gender = ""
@@ -22,6 +23,12 @@ class InfoObject(bo):
 
     def get_value(self):
         return self.value
+
+    def set_searchprofile_id(self, id):
+        self.searchprofile_id = id
+
+    def get_searchprofile_id(self):
+        return self.searchprofile_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
@@ -106,6 +113,7 @@ class InfoObject(bo):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
         obj.set_profile_fk(dictionary.get('profile_fk'))
+        obj.set_searchprofile_id(dictionary.get('searchprofile_id'))
         obj.set_value(dictionary.get('value'))
         obj.set_age(dictionary.get('age'))
         obj.set_first_name(dictionary.get('firstName'))

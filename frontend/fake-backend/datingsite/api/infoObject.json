@@ -1,0 +1,15 @@
+{
+  "infoobjects": [
+    {
+      "age": "2002-11-10T23:00:00.000Z",
+      "firstName": "Strato",
+      "gender": "male",
+      "hair": "black",
+      "height": "187",
+      "lastName": "TestGET",
+      "religion": "orthodox",
+      "smoking": "smoker"
+    }
+
+  ]
+}

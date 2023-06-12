@@ -12,6 +12,7 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} achar_fk
      * @param {*} aprofile_fk
      * @param {*} avalue
+     * @param {*} asearchprofile_id
      * @param {*} aage
      * @param {*} afirstName
      * @param {*} agender
@@ -22,11 +23,12 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} asmoking
      * */
 
-    constructor(aprofile_fk, achar_fk, avalue, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking) {
+    constructor(aprofile_fk,achar_fk, avalue, asearchprofile_id,aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
     this.value = avalue;
+    this.searchprofile_id = asearchprofile_id;
     this.age = aage;
     this.firstName = afirstName;
     this.gender = agender;
@@ -124,6 +126,14 @@ export default class infoobjectBO extends BusinessObject {
     /** Auslesen des Smokings */
     get_smoking_status() {
         return this.smoking;
+    }
+
+    set_searchprofile_id(asearchprofile_id) {
+        this.searchprofile_id = asearchprofile_id;
+    }
+
+    get_searchprofile_id() {
+        return this.searchprofile_id;
     }
 
       static fromJSON(infoobject) {

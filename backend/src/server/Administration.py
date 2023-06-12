@@ -201,7 +201,7 @@ class Administration(object):
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
         prof.set_google_fk(google_fk)
-        # .set_account_id(account_id)
+        # prof.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             mapper.insert(prof)
@@ -214,7 +214,8 @@ class Administration(object):
         with ProfileMapper() as mapper:
             mapper.delete(profile)
 
-    def get_all_profiles(self, profile):
+    @staticmethod
+    def get_all_profiles(self):
         with ProfileMapper() as mapper:
             return mapper.find_all()
 
@@ -263,7 +264,23 @@ class Administration(object):
 
     def get_info_object_by_id(self, key):
         with InfoObjectMapper() as mapper:
-            return mapper.find_by_key(key)
+            return mapper.find_by_id(key)
+
+    def get_info_object(self, key):
+        info_object = {}
+
+        with InfoObjectMapper() as mapper, CharMapper() as char_mapper:
+            info_objs = mapper.find_by_key(key)
+
+            for info_obj in info_objs:
+                char_obj = char_mapper.find_by_key(info_obj.get_char_fk())
+                if char_obj is not None:
+                    char_key = char_obj.get_characteristic_name()  # Verwendung der get_char_by_key-Methode
+                    value = info_obj.get_value()
+                    info_object[char_key] = value
+
+        print(info_object)
+        return info_object
 
     def create_info_object(self, profile_fk, info_dict):
         print("InfoDict: ", info_dict)
@@ -273,7 +290,6 @@ class Administration(object):
                     info_obj = InfoObject()
                     info_obj.set_profile_fk(profile_fk)
                     info_obj.set_value(value)
-                    # Hier wird der CharMapper aufgerufen!
                     char_fk = char_mapper.find_by_key(key).get_id()
                     if char_fk is not None:
                         info_obj.set_char_fk(char_fk)
@@ -283,7 +299,16 @@ class Administration(object):
 
     def update_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
-            return mapper.update(infoobject)
+            existing_info_object = infoobject.find_info_object_by_id(infoobject.get_id(), infoobject.get_profile_fk())
+            if existing_info_object is None:
+                return None
+            existing_info_object.set_value(infoobject.get_value())
+            return mapper.update(existing_info_object)
+
+    def find_info_object_by_id(self, infoobject_id, profile_id):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_by_id(infoobject_id, profile_id)
+
 
     def delete_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:

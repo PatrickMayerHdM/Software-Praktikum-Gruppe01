@@ -162,24 +162,6 @@ class ProfileOperations(Resource):
         return '', 200
 
 
-    @datingapp.marshal_with(profile)
-    @secured
-    def put(self, googleID):
-        "Update eines bestimmten FavoriteNote-Objektes"
-
-        adm = Administration()
-        prof = Profile.from_dict(api.payload)
-
-        if prof is not None:
-
-            """Hierdurch wird die id des zu überschreibenden InfoObjects-Objekts gesetzt"""
-            prof.set_id(id)
-            adm.save_profile(prof)
-            return '', 200
-        else:
-            return '', 500
-
-
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
 
@@ -265,17 +247,69 @@ class InfoObjectListOperations(Resource):
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
+
 @datingapp.route('/infoobjects/<string:googleID>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
 @datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
-    @secured
+    # @secured
     def get(self, googleID):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
-        infoobj = adm.get_info_object_by_id(googleID)
-        return infoobj
+        info_object = adm.get_info_object(googleID)
+
+        if info_object is not None:
+            print("main:", info_object)
+            return list(info_object)
+        else:
+            return '', 500
+
+    @datingapp.marshal_with(infoobject)
+    @secured
+    def put(self, googleID):
+        adm = Administration()
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            info_obj_id = proposal.get_id()
+            new_value = proposal.get_value()
+
+            # InfoObject in der Datenbank suchen
+            info_obj = adm.get_info_object_by_id(info_obj_id, googleID)
+
+            if info_obj is not None:
+                # Überprüfen, welche Felder aktualisiert werden sollen und die entsprechenden Setter aufrufen
+                if new_value != "":
+                    info_obj.set_value(new_value)
+                if proposal.get_age() != "":
+                    info_obj.set_age(proposal.get_age())
+                if proposal.get_first_name() != "":
+                    info_obj.set_first_name(proposal.get_first_name())
+                if proposal.get_gender() != "":
+                    info_obj.set_gender(proposal.get_gender())
+                if proposal.get_hair() != "":
+                    info_obj.set_hair(proposal.get_hair())
+                if proposal.get_height() != "":
+                    info_obj.set_height(proposal.get_height())
+                if proposal.get_last_name() != "":
+                    info_obj.set_last_name(proposal.get_last_name())
+                if proposal.get_religion() != "":
+                    info_obj.set_religion(proposal.get_religion())
+                if proposal.get_smoking_status() != "":
+                    info_obj.set_smoking_status(proposal.get_smoking_status())
+
+                # InfoObject in der Datenbank aktualisieren
+                affected_rows = adm.update_info_object(info_obj)
+
+                if affected_rows > 0:
+                    return info_obj, 200
+                else:
+                    return 'InfoObject konnte nicht aktualisiert werden', 500
+            else:
+                return 'InfoObject nicht gefunden', 404
+        else:
+            return 'Ungültiges InfoObject', 400
 
 
 """Ab hier FavoriteNote"""
