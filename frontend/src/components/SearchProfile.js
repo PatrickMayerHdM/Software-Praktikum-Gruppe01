@@ -3,9 +3,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import FormLabel from "@mui/material/FormLabel";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -14,6 +12,7 @@ import "./Profile.css";
 import SaveIcon from '@mui/icons-material/Save';
 import searchprofileBO from '../api/SearchprofileBO';
 import infoobjectBO from "../api/InfoObjectBO";
+import DatingSiteAPI from "../api/DatingSiteAPI";
 
 
 /**
@@ -29,8 +28,7 @@ class SearchProfile extends React.Component{
         this.state = {
             minAge: '',
             maxAge: '',
-            minHeight: '',
-            maxHeight: '',
+            height: '',
             gender: '',
             religion: '',
             hair: '',
@@ -38,12 +36,15 @@ class SearchProfile extends React.Component{
 
             lastPartURL: null,
             char_fk: 0,
+            searchprofile_id: 213,
+            error: null,
         };
 
         this.handleChangeGen = this.handleChangeGen.bind(this);
         this.handleChangeRel = this.handleChangeRel.bind(this);
         this.handleChangeSmo = this.handleChangeSmo.bind(this);
         this.handleChangeHai = this.handleChangeHai.bind(this);
+        this.handleChangeHeight = this.handleChangeHeight.bind(this);
 
     }
 
@@ -67,40 +68,61 @@ class SearchProfile extends React.Component{
         this.setState({ hair: selectedHair });
     };
 
+    handleChangeHeight = (val) => {
+        const selectedHeight = val.target.value;
+        this.setState({ height: selectedHeight });
+    };
+
      handleChangeAge = (event, value) => {
       const [minAge, maxAge] = value;
       this.setState({ minAge: minAge, maxAge: maxAge });
     }
 
-    handleChangeHeight = (event, value) => {
-      const [minHeight, maxHeight] = value;
-      this.setState({minHeight: minHeight, maxHeight: maxHeight})
-    }
 
     submit = (event) => {
          if (this.state.lastPartURL === "new") {
              console.log("POST");
-             console.log(this.state);
+             // console.log(this.state);
              // HIER KOMMT DER CODE ZUM ERSTMALIGEN ANLEGEN
              event.preventDefault();
-             const newSearchprofile = new searchprofileBO(this.state.searchprofile_id, this.props.user.uid);
+             const newSearchprofile = new searchprofileBO( this.props.user.uid);
              const newInfoObject = new infoobjectBO(
-                 this.state.searchprofile_id,
+                 this.props.user.uid,
                  this.state.char_fk,
+                 null,
+                 null,
+                 null,
+                 this.state.gender,
+                 this.state.hair,
+                 this.state.height,
+                 null,
+                 this.state.religion,
+                 this.state.smoking,
                  this.state.minAge,
                  this.state.maxAge,
-                 this.state.minHeight,
-                 this.state.maxHeight,
-                 this.state.gender,
-                 this.state.religion,
-                 this.state.hair,
-                 this.state.smoking
              )
+
+             DatingSiteAPI.getAPI()
+                 .addSearchProfile(newSearchprofile)
+                 .catch((e) =>
+                     this.setState({error: e,})
+                 )
+
+             DatingSiteAPI.getAPI()
+                 .addSearchInfoObject(newInfoObject)
+                 .catch((e) =>
+                     this.setState({
+                         error: e,
+                     })
+                 );
+
+             console.log(newInfoObject)
+             console.log("FrontEnd Payload",newSearchprofile)
          } else {
              console.log("UPDATE");
              // HIER KOMMT DER CODE ZUM ÄNDERN EINES VORHANDENEN SUCHPROFILS
          }
-         console.log(this.state);
+         //console.log(this.state);
     };
 
 
@@ -115,12 +137,6 @@ class SearchProfile extends React.Component{
         const {
           minAge,
           maxAge,
-          minHeight,
-          maxHeight,
-          gender,
-          religion,
-          hair,
-          smoking
         } = this.state;
 
 
@@ -166,19 +182,14 @@ class SearchProfile extends React.Component{
                             </RadioGroup>
                         </Item>
 
-                        <Item >
+                        <Item>
                             {/** Hier kann die gewünschte Höhe einer Person ausgewählt werden */}
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel>Welche Körpergröße sollte die Person haben?</FormLabel>
-                                <Slider
-                                    value={[minHeight, maxHeight]}
-                                    onChange={this.handleChangeHeight}
-                                    valueLabelDisplay="auto"
-                                    min={140}
-                                    max={220}
-                                    className="slider"
-                                />
-                            </Box>
+                            <FormLabel> Wie groß soll die gesuchte Person sein?</FormLabel>
+                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.height} onChange={this.handleChangeHeight} className={"checkbox_search"}>
+                                <FormControlLabel sx={{ width: '16%' }} value="small" control={<Radio />} label="Klein" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '16%' }} value="mean" control={<Radio />} label="Mittel" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '16%' }} value="large" control={<Radio />} label="Groß" labelPlacement="bottom" />
+                            </RadioGroup>
                         </Item>
 
                         <Item>

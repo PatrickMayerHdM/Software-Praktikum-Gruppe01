@@ -13,6 +13,7 @@ from server.bo.Message import Message
 from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
+from server.bo.SearchProfile import SearchProfile
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -72,7 +73,10 @@ infoobject = api.inherit('InfoObject', bo, {
     'height': fields.Integer(attribute='_height', description='Größe'),
     'religion': fields.String(attribute='_religion', description='Religion'),
     'hair': fields.String(attribute='_hair', description='Haarfarbe'),
-    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher')
+    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher'),
+    # Ab hier die fürs SuchProfil
+    'minAge': fields.String(attribute='_minAge', description='Das minimalalter in einem SuchProfil'),
+    'maxAge': fields.String(attribute='_maxAge', description='Das maximalalter in einem SuchProfil'),
 
 })
 
@@ -90,6 +94,11 @@ favoritenote = api.inherit('FavoriteNote', bo, {
 blocknote = api.inherit('BlockNote', bo, {
     'blocked_id': fields.Integer(attribute='_blocked_id', description='Id des geblockten Profils'),
     'blocking_id': fields.Integer(attribute='_blocking_id', description='Id des blockenden Profils')
+})
+
+searchprofile = api.inherit('SearchProfile', bo, {
+    #'SearchProfile_id': fields.Integer(attribute='_SearchProfile_id', description='SearchProfile_id eines SuchProfils'),
+    'google_id': fields.String(attribute='_google_id', description='Google_ID eines SuchProfils')
 })
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
@@ -173,6 +182,64 @@ class ProfileOperations(Resource):
         else:
             return '', 500
 
+"""SuchProfil"""
+@datingapp.route('/SearchProfiles')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt")
+@datingapp.param('id','SearchProfileBO')
+class SearchProfileOpterations(Resource):
+
+    @datingapp.marshal_list_with(SearchProfile)
+    #@secured
+    def get(self):
+        """Auslesen aller Searchprofile-Objekte"""
+        adm = Administration()
+        SearchProfiles = adm.get_all_searchprofile()
+        return SearchProfiles
+
+    #@datingapp.marshal_with(SearchProfile, code=200)
+    @datingapp.expect(searchprofile)
+    #@secured
+    def post(self):
+        adm = Administration()
+        print("Da wir ein Suchprofil erwarten hier der print", SearchProfile)
+        print("Das ist die Payload (Suchprofil)",api.payload)
+        ranvar = SearchProfile.from_dict(api.payload)
+        print("Das ist das proposal (nach form.dict): ", ranvar)
+
+
+        if ranvar is not None:
+
+            adm.create_searchprofile(
+                ranvar
+            )
+
+            return 200
+        else:
+            return "Der Post in SearchProfileOpterations ist fehlgeschlagen ", 500
+
+"""Da das Suchprofil ein eigenes InfoObjekt Handling besitzt wird dies hier definiert """
+@datingapp.route('/SearchProfiles/infoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class InfoObjectListOperationsSearch(Resource):
+    @datingapp.marshal_with(infoobject, code=200)
+    @datingapp.expect(infoobject)
+    #@secured
+    def post(self):
+        """ Anlegen eines neuen InfoObject-Objekts. """
+        adm = Administration()
+        print(api.payload)
+
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.create_Search_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """

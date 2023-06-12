@@ -78,7 +78,7 @@ class SearchProfileMapper(mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE main.Searchprofile SET searchprofile_id=%s, google_id=%s"
-        data = (searchprofile.get_id(), searchprofile.get_google_fk())
+        data = (searchprofile.get_id(), searchprofile.get_google_id())
 
         cursor.execute(command, data)
 

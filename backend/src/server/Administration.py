@@ -12,7 +12,7 @@ from server.db.InfoObjectMapper import InfoObjectMapper
 from server.bo.Profile import Profile
 from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
-
+from server.db.SearchProfileMapper import SearchProfileMapper
 
 class Administration(object):
     def __init__(self):
@@ -269,29 +269,25 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
+    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
+
+    def create_Search_info_object(self, profile_fk, info_dict):
+        print("InfoDict: ", info_dict)
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    # Hier wird der CharMapper aufgerufen!
+                    char_fk = char_mapper.find_by_key(key).get_id()
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.Searchinsert(info_obj)
+                    else:
+                        print(f'Ungültiger Key im Search Insert: {key}')
+
     # Logik für Profil, did die Info-Objekte in
-
-    def create_searchprofile(self):
-        suchprof = Profile()
-        suchprof.set_id(1)
-        with ProfileMapper() as mapper:
-            mapper.insert(suchprof)
-
-    def save_searchprofile(self, searchprofile):
-        with ProfileMapper() as mapper:
-            mapper.update(searchprofile)
-
-    def delete_searchprofile(self, searchprofile):
-        with ProfileMapper() as mapper:
-            mapper.delete(searchprofile)
-
-    def get_all_searchprofile(self):
-        with ProfileMapper() as mapper:
-            return mapper.find_all()
-
-    def get_searchprofile_by_id(self, key):
-        with ProfileMapper() as mapper:
-            return mapper.find_by_key(key)
 
     "Chat-spezifische Methoden"
     """
@@ -332,15 +328,39 @@ class Administration(object):
         print("Profiles:", profiles)
 
         return profiles
-"""
-    def save_chat(self, chat):
-        with ChatMapper() as mapper:
-            mapper.update(chat)
+    """
+        def save_chat(self, chat):
+            with ChatMapper() as mapper:
+                mapper.update(chat)
+    
+        def delete_chat(self, chat):
+            with ChatMapper() as mapper:
+                mapper.delete(chat)
+    
+    """
 
-    def delete_chat(self, chat):
-        with ChatMapper() as mapper:
-            mapper.delete(chat)
+    """ Suchprofil-spezifische Methoden """
 
-"""
+    def create_searchprofile(self, searchprofile):
+        searchprofile.set_id(1)
+        with SearchProfileMapper() as mapper:
+            mapper.insert(searchprofile)
+
+    def save_searchprofile(self, searchprofile):
+        with SearchProfileMapper() as mapper:
+            mapper.update(searchprofile)
+
+    def delete_searchprofile(self, searchprofile):
+        with SearchProfileMapper() as mapper:
+            mapper.delete(searchprofile)
+
+    def get_all_searchprofile(self):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_all()
+
+    def get_searchprofile_by_google_id(self, key):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_by_key(key)
+
 
 

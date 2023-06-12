@@ -3,6 +3,7 @@ import profileBO from "./ProfileBO";
 import ProfileBO from "./ProfileBO";
 import Characteristic from "./CharacteristicBO";
 import infoobjectBO from "./InfoObjectBO";
+import searchprofileBO from "./SearchprofileBO";
 
 
 export default class DatingSiteAPI {
@@ -255,9 +256,12 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`;
-    #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
-    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`;
+    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
+    #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`; // bisher nur FakeBackEnd ausgeführt
+    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
+    #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
+    #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
+
 
 
     /**
@@ -268,7 +272,7 @@ export default class DatingSiteAPI {
     getOnlyNewProfiles(profileID){
         return this.#fetchAdvanced(this.#getNewProfilesByIdURL(profileID))
             .then((responseJSON) => {
-                console.log("Das ist das profile_id Dings im API call: ",profileID )
+                console.log("Das ist das profile_id im API call: ",profileID )
                 console.log("Das responseJSON")
                 console.log(responseJSON)
                 return new Promise(function (resolve) {
@@ -311,7 +315,47 @@ export default class DatingSiteAPI {
           resolve(profileBOs);
         })
       })
-  }
+    }
+
+    addSearchInfoObject(infoobject) {
+        console.log("InfoObject: ", infoobject)
+        return this.#fetchAdvanced(this.#addSearchInfoObject(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(infoobject)
+        }).then((responseJSON) => {
+            let newinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newinfoobjectBO);
+            })
+        })
+    }
+
+    /**
+     * @param {searchprofileBO} searchprofileBO object
+     * @public
+     */
+
+    addSearchProfile(searchprofile){
+        return this.#fetchAdvanced(this.#addSearchProfileURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(searchprofile)
+        }).then((responseJSON) => {
+            let oneSearchProfile = searchprofileBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(oneSearchProfile);
+            })
+        })
+    }
+
+
 
 }
 

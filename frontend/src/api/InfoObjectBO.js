@@ -20,9 +20,11 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} alastName
      * @param {*} areligion
      * @param {*} asmoking
+     * @param {*} aminAge
+     * @param {*} amaxAge
      * */
 
-    constructor(aprofile_fk, achar_fk, avalue, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking) {
+    constructor(aprofile_fk, achar_fk, avalue, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
@@ -35,6 +37,9 @@ export default class infoobjectBO extends BusinessObject {
     this.lastName = alastName;
     this.religion = areligion;
     this.smoking = asmoking;
+    // Ab hier hinzugefügt für Suchprofil
+    this.minAge = aminAge;
+    this.maxAge = amaxAge;
     }
 
     /** Setzen des Values */
@@ -124,6 +129,27 @@ export default class infoobjectBO extends BusinessObject {
     /** Auslesen des Smokings */
     get_smoking_status() {
         return this.smoking;
+    }
+
+    /** Hinzugefügt für Suchprofil*/
+    /** Setzen des minAge*/
+    set_minAge(aminAge) {
+        this.minAge = aminAge;
+    }
+
+    /** Auslesen des minAge*/
+    get_minAge(){
+        return this.minAge
+    }
+
+    /** Setzen des maxAge*/
+    set_maxAge(amaxAge) {
+        this.maxAge = amaxAge;
+    }
+
+    /** Auslesen des maxAge*/
+    get_maxAge(){
+        return this.maxAge
     }
 
       static fromJSON(infoobject) {

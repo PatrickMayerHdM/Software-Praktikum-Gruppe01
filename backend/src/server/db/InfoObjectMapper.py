@@ -83,6 +83,42 @@ class InfoObjectMapper(mapper):
 
         return info_obj
 
+    def Searchinsert(self, info_obj):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
+        tuples = cursor.fetchall()
+
+
+        for (maxid) in tuples:
+            if maxid[0] is not None:
+                info_obj.set_id(maxid[0] + 1)
+
+            else:
+                info_obj.set_id(1)
+
+
+        # Abrufen der searchprofile_id
+        cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")
+        searchprofile_id = cursor.fetchone()[0]
+
+        if searchprofile_id is not None:
+            info_obj.set_searchprofile_fk(searchprofile_id)
+
+        command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id, searchprofile_id) VALUES (%s, %s, %s, %s, %s)"
+        data = (info_obj.get_id(),
+                info_obj.get_char_fk(),
+                info_obj.get_value(),
+                info_obj.get_profile_fk(),
+                info_obj.get_searchprofile_fk(),
+                )
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return info_obj
+
     def update(self, info_obj):
         cursor = self._connection.cursor()
 

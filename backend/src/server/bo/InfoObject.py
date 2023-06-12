@@ -16,6 +16,11 @@ class InfoObject(bo):
         self.lastname = ""
         self.religion = ""
         self.smoking = ""
+        # Ab hier für das Suchprofil
+        self.minAge = ""
+        self.maxAge = ""
+        self.searchprofile_fk = None
+
 
     def set_value(self, value):
         self.value = value
@@ -87,6 +92,26 @@ class InfoObject(bo):
     def get_smoking_status(self):
         return self.smoking
 
+    # Ab hier die Änderungen wegen des Suchprofils
+
+    def get_minAge(self):
+        return self.minAge
+
+    def set_minAge(self, minAge):
+        self.minAge = minAge
+
+    def get_maxAge(self):
+        return self.maxAge
+
+    def set_maxAge(self, maxAge):
+        self.maxAge = maxAge
+
+    def get_searchprofile_fk(self):
+        return self.searchprofile_fk
+
+    def set_searchprofile_fk(self, searchprofile_fk):
+        self.searchprofile_fk = searchprofile_fk
+
     def get_char_by_key(self, key):
         # Mapping der Schlüssel zu char_fk
         char_fk_mapping = {
@@ -97,7 +122,10 @@ class InfoObject(bo):
             'height': 50,
             'lastName': 20,
             'religion': 60,
-            'smoking': 80
+            'smoking': 80,
+            # Ab hier die Änderungen für das SuchProfil
+            'minAge': 90,
+            'maxAge': 100
         }
         return char_fk_mapping.get(key, None)
 
@@ -115,6 +143,10 @@ class InfoObject(bo):
         obj.set_last_name(dictionary.get('lastName'))
         obj.set_religion(dictionary.get('religion'))
         obj.set_smoking_status(dictionary.get('smoking'))
+        # Ab hier die Änderungen für das SuchProfil
+        obj.set_minAge(dictionary.get('minAge'))
+        obj.set_maxAge(dictionary.get('maxAge'))
+        obj.set_searchprofile_fk('searchprofile_fk')
         return obj
 
     def to_dict(self):
@@ -126,7 +158,10 @@ class InfoObject(bo):
             '50': self.get_height(),
             '20': self.get_last_name(),
             '60': self.get_religion(),
-            '80': self.get_smoking_status()
+            '80': self.get_smoking_status(),
+            # Ab hier die Änderungen für das SuchProfil
+            '90': self.get_minAge(),
+            '100': self.get_maxAge(),
         }
         return info_dict
 
