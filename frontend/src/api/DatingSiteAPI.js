@@ -4,6 +4,7 @@ import ProfileBO from "./ProfileBO";
 import Characteristic from "./CharacteristicBO";
 import infoobjectBO from "./InfoObjectBO";
 import favoriteNoteBO from "./FavoriteNoteBO";
+import blockNoteBO from "./BlockNoteBO";
 
 
 export default class DatingSiteAPI {
@@ -317,8 +318,10 @@ export default class DatingSiteAPI {
         // Favoritenote related
 
     #getFavoritenoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+    #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/Favoritenote`;
+
     // #removeFavoriteProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfilesIDs/${profile_id}`;
-    // #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+
 
     getFavoritenoteProfileURL(profile_id){
         return this.#fetchAdvanced(this.#getFavoritenoteProfileURL(profile_id))
@@ -332,38 +335,39 @@ export default class DatingSiteAPI {
 
 
 
-   // addFavoriteProfile(profile_id) {
-   //      return this.#fetchAdvanced(this.#addFavoriteProfile(profile_id), {
-   //          method: "POST",
-   //          headers: {
-   //              'Accept': 'application/json, text/plain',
-   //              'Content-type': "application/json",
-   //          },
-   //          body: JSON.stringify(profile_id)
-   //      }).then((responseJSON) => {
-   //          let favorBO = favoriteNoteBO.fromJSON(responseJSON)[0];
-   //          return new Promise(function (resolve) {
-   //              resolve(favorBO);
+   addFavoritenoteProfileURL(profile_id) {
+        return this.#fetchAdvanced(this.#addFavoriteProfile(profile_id), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile_id)
+        }).then((responseJSON) => {
+            let favorBO = favoriteNoteBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(favorBO);
+            })
+        })
+    }
+
+   // removeFavoritenoteProfileURL(favoritenote_id) {
+   //      return this.#fetchAdvanced(this.#removeFavoriteProfileByIdURL(favoritenote_id), {
+   //          method: 'DELETE'
+   //      })
+   //          .then((responseJSON) => {
+   //              let favorBOs = favoriteNoteBO.fromJSON(responseJSON)[0];
+   //              return new Promise(function (resolve) {
+   //                  resolve(favorBOs);
+   //              })
    //          })
-   //      })
-   //  }
-   //
-   //  removeFavoritenoteProfileByIdURL(profile_id) {
-   //  return this.#fetchAdvanced(this.#removeFavoriteProfileByIdURL(profile_id), {
-   //    method: 'DELETE'
-   //  })
-   //    .then((responseJSON) => {
-   //      let favorBOs = favoriteNoteBO.fromJSON(responseJSON)[0];
-   //      return new Promise(function (resolve) {
-   //        resolve(favorBOs);
-   //      })
-   //    })
-   //  }
+   // }
 
 
     // blockNote related
 
     #getBlocknoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}`;
+    #addBlockProfile = (profile_id) => `${this.#datingServerBaseURL}/Blocknote`;
 
     getBlocknoteProfileURL(profile_id){
         return this.#fetchAdvanced(this.#getBlocknoteProfileURL(profile_id))
@@ -374,6 +378,24 @@ export default class DatingSiteAPI {
                 });
             });
     }
+
+    addBlocknoteProfileURL(profile_id) {
+        return this.#fetchAdvanced(this.#addBlockProfile(profile_id), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile_id)
+        }).then((responseJSON) => {
+            let blockBO = blockNoteBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(blockBO);
+            })
+        })
+    }
+
+
 
 }
 

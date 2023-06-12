@@ -7,29 +7,36 @@ import BusinessObject from "./BusinessObject";
 export default class favoriteNoteBO extends BusinessObject {
 
     /**
-     * Baut eine favoriteNoteBO mit favoriteNote_list
-     *
-     * @param {*} afavoriteNote_list
+     * Baut eine favoriteNoteBO mit adding_id und added_id
+
+     * @param {*} aadding_id
+     * @param {*} aadded_id
      */
 
 
 
-    constructor() {
+    constructor(aadding_id, aadded_id) {
         super();
-        this.afavoriteNote_list = [];
+        this.adding_id = aadding_id;
+        this.added_id = aadded_id;
     }
 
-    /**
-     * Fügt ein Profil der Liste hinzu
-     *
-     * @param {*} profil_id - die id des Profils
-     */
-
-    add_user(profil_id) {
-        if (!this.afavoriteNote_list.includes(profil_id)) {
-            this.afavoriteNote_list.push(profil_id);
-        }
+    get addingId() {
+        return this.adding_id;
     }
+
+    set addingId(aadding_id) {
+        this.adding_id = aadding_id;
+    }
+
+    get addedId() {
+        return this.added_id;
+    }
+
+    set addedId(aadded_id) {
+        this.added_id = aadded_id;
+    }
+
 
     /**
      * Entfernt ein Profil aus der Liste
@@ -42,14 +49,6 @@ export default class favoriteNoteBO extends BusinessObject {
         if (index !== -1) {
             this.afavoriteNote_list.splice(index, 1);
         }
-    }
-
-    /**
-     * Holt sich alle Profile aus der Liste
-     */
-
-    get_all_users() {
-        return this.afavoriteNote_list;
     }
 
     /**

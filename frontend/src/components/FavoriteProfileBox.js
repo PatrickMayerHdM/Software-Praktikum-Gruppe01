@@ -6,6 +6,8 @@ import ProfileBox from "./ProfileBox";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {Link} from "react-router-dom";
+import DatingSiteAPI from "../api/DatingSiteAPI";
+import favoriteNoteBO from "../api/FavoriteNoteBO";
 
 /**
  * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -22,17 +24,21 @@ class FavoriteProfileBox extends React.Component{
          * Zu Testzwecken noch nicht weiter ausgeführt, sondern nur mit einem console.log
          */
         function FavoriteDelClicked(){
+
+            // const Favnote =
+            // DatingSiteAPI.getAPI()
+            // // Löschen des FavoriteNote-Eintrags
+            // .removeFavoritenoteProfileURL(Favnote)
+            // .catch((e) =>
+            //     this.setState({
+            //         error: e,
+            //     })
+            // );
+
+
             console.log("Von Merkzettel entfernt")
         }
 
-        /**
-         * Funktion welche zu einer Kontaktanfrage für ein anderes Profil führt.
-         * Zu Testzwecken noch nicht weiter ausgeführt, sondern nur mit einem console.log
-         */
-
-        function FavoriteAskClicked(){
-            console.log("Kontaktanfrage geschickt")
-        }
 
         /**
          * Die Profilbox an sich speziell angepasst auf die gegebenheiten zur Darstellung auf dem Merkzettel
@@ -49,7 +55,7 @@ class FavoriteProfileBox extends React.Component{
                 </Grid >
                 <Grid item xs={2} spacing={2} >
                     <Link to={`/ChatWindow/${this.props.current_profile}/${this.props.other_profile}`}>
-                        <button onClick={FavoriteAskClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#587D71", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                        <button style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#587D71", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                             <ChatBubbleIcon/>
                         </button>
                     </Link>

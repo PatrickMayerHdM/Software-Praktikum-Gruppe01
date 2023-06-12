@@ -117,14 +117,14 @@ class Administration(object):
     #     return messages
 
     """Spezifische Methoden für blockNote"""
-    def create_blocknote(self, blocked_id, blocking_id):
-        blocklist = BlockNote()
-        blocklist.set_blocked_id(blocked_id)
-        blocklist.set_blocking_id(blocking_id)
-        blocklist.set_id(1)
+    def create_blocknote(self, blocking_id, blocked_id):
+        blocknote = BlockNote()
+        blocknote.set_id(1)
+        blocknote.set_blocking_id(blocking_id)
+        blocknote.set_blocked_id(blocked_id)
 
         with BlockNoteMapper() as mapper:
-            return mapper.insert(blocklist)
+            return mapper.insert(blocknote)
 
     def save_blocknote(self, blocklist):
         with BlockNoteMapper() as mapper:
@@ -156,11 +156,11 @@ class Administration(object):
 
     """Spezifische Methoden für favoritenote"""
 
-    def create_favoritenote(self, added_id, adding_id):
+    def create_favoritenote(self, adding_id, added_id):
         favoritenote = FavoriteNote()
-        favoritenote.set_added_id(added_id)
-        favoritenote.set_adding_id(adding_id)
         favoritenote.set_id(1)
+        favoritenote.set_adding_id(adding_id)
+        favoritenote.set_added_id(added_id)
 
         with FavoriteNoteMapper() as mapper:
             mapper.insert(favoritenote)
@@ -289,47 +289,6 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
-    # Logik für Profil, did die Info-Objekte in
-
-    def create_searchprofile(self):
-        suchprof = Profile()
-        suchprof.set_id(1)
-        with ProfileMapper() as mapper:
-            mapper.insert(suchprof)
-
-    def save_searchprofile(self, searchprofile):
-        with ProfileMapper() as mapper:
-            mapper.update(searchprofile)
-
-    def delete_searchprofile(self, searchprofile):
-        with ProfileMapper() as mapper:
-            mapper.delete(searchprofile)
-
-    def get_all_searchprofile(self):
-        with ProfileMapper() as mapper:
-            return mapper.find_all()
-
-    def get_searchprofile_by_id(self, key):
-        with ProfileMapper() as mapper:
-            return mapper.find_by_key(key)
-
-    "Chat-spezifische Methoden"
-    """
-    def create_chat(self, message_id):
-        chat = Chat()
-        chat.set_id(1)
-        chat.set_message_id(message_id)
-        with ChatMapper() as mapper:
-            mapper.insert(chat)
-
-    def get_all_chats(self):
-        with ChatMapper() as mapper:
-            return mapper.find_all()
-
-    def get_chat_by_id(self, key):
-        with ChatMapper() as mapper:
-            return mapper.find_by_key(key)
-"""
     def get_profile_by_message(self, profile_id):
         """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
         welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
@@ -352,10 +311,7 @@ class Administration(object):
         print("Profiles:", profiles)
 
         return profiles
-"""
-    def save_chat(self, chat):
-        with ChatMapper() as mapper:
-            mapper.update(chat)
+
 
     """ Suchprofil-spezifische Methoden """
 

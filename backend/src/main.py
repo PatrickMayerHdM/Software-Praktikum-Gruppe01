@@ -281,28 +281,28 @@ class InfoObjectsOperations(Resource):
 """Ab hier FavoriteNote"""
 
 
-@datingapp.route('/FavoriteNote')
+@datingapp.route('/Favoritenote')
 @datingapp.response(500, 'Serverseitiger Fehler')
-class FavoriteNoteListOperations(Resource):
+class FavoritenoteListOperations(Resource):
     @datingapp.doc('Create new FavoriteNote')
-    @datingapp.marshal_with(favoritenote, code=200)
+    # @datingapp.marshal_with(favoritenote, code=200)
     @datingapp.expect(favoritenote)
-    @secured
+    # @secured
     def post(self):
         """Erstellen einer neuen FavoriteNote"""
 
         adm = Administration()
-
         proposal = FavoriteNote.from_dict(api.payload)
+
 
         if proposal is not None:
 
-            added_id = proposal.get_added_id()
             adding_id = proposal.get_adding_id()
-            result = adm.create_favoritenote(added_id, adding_id)
+            added_id = proposal.get_added_id()
+            result = adm.create_favoritenote(adding_id, added_id)
             return result, 200
         else:
-            """Falls was schiefgeht, passiert nicht und Fehlerausgabe"""
+            """Falls was schiefgeht, passiert nichts und Fehlerausgabe"""
             return '', 500
 
 
@@ -325,12 +325,12 @@ class FavoriteNoteOperations(Resource):
             return '', 500
 
     @secured
-    def delete(self, id):
+    def delete(self, favoritenote_id):
         """Löschen eines FavoriteNote-Objekts.
         Das Objekt wird durch die id in dem URL bestimmt"""
 
         adm = Administration()
-        fnote = adm.get_favoritenote_by_favoritenote_id(id)
+        fnote = adm.get_favoritenote_by_favoritenote_id(favoritenote_id)
 
         if fnote is not None:
             adm.delete_favoritenote(fnote)
@@ -359,28 +359,27 @@ class FavoriteNoteOperations(Resource):
 """Ab hier BlockNote"""
 
 
-@datingapp.route('/BlockNote')
+@datingapp.route('/Blocknote')
 @datingapp.response(500, 'Serverseitiger Fehler')
-class BlockNoteListOperations(Resource):
+class BlocknoteListOperations(Resource):
     @datingapp.doc('Create new BlockNote')
-    @datingapp.marshal_with(blocknote, code=201)
+    # @datingapp.marshal_with(blocknote, code=201)
     @datingapp.expect(blocknote)
-    @secured
+    # @secured
     def post(self):
         """Erstellen einer neuen BlockNote"""
 
         adm = Administration()
-
         proposal = BlockNote.from_dict(api.payload)
 
         if proposal is not None:
 
-            blocked_id = proposal.get_blocked_id()
             blocking_id = proposal.get_blocking_id()
-            result = adm.create_blocknote(blocked_id, blocking_id)
+            blocked_id = proposal.get_blocked_id()
+            result = adm.create_blocknote(blocking_id, blocked_id)
             return result, 200
         else:
-            """Falls was schiefgeht, passiert nicht und Fehlerausgabe"""
+            """Falls was schiefgeht, passiert nichts und Fehlerausgabe"""
             return '', 500
 
 
@@ -433,8 +432,6 @@ class BlockNoteOperations(Resource):
         else:
             return '', 500
 
-
-    """Ab hier FavoriteNote"""
 
 @datingapp.route('/Suche/Suchprofil')
 @datingapp.response(500, 'Serverseitiger Fehler')
