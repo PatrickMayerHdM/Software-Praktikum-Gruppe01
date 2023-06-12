@@ -29,31 +29,29 @@ class InfoObjectMapper(mapper):
         return result
 
     def find_by_key(self, key):
-        result = None
+        result = []
 
         """ Auslesen der Info-Objekte nach Key """
 
         cursor = self._connection.cursor()
-        command = f'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id=%s'
-        data = (key, )
-        cursor.execute(command, data)
+        command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}')"
+        cursor.execute(command)
         tuples = cursor.fetchall()
+        print(tuples)
 
-        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (infoobject_id, char_id, char_value, profile_id) = tuples[0]
+        for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
             info_obj = InfoObject()
             info_obj.set_id(infoobject_id)
             info_obj.set_char_fk(char_id)
             info_obj.set_value(char_value)
             info_obj.set_profile_fk(profile_id)
-
-            result = info_obj
-        else:
-            result = None
+            info_obj.set_searchprofile_id(searchprofile_id)
+            result.append(info_obj)
 
         self._connection.commit()
         cursor.close()
 
+        print("result: ", result)
         return result
 
     def insert(self, info_obj):
@@ -120,18 +118,33 @@ class InfoObjectMapper(mapper):
         return info_obj
 
     def update(self, info_obj):
-        cursor = self._connection.cursor()
+        command = 'UPDATE main.InfoObject SET char_value=%s WHERE infoobject_id=%s AND profile_id=%s'
+        data = (info_obj.get_value(), info_obj.get_id(), info_obj.get_profile_fk())
 
-        command = 'UPDATE main.InfoObject SET char_id=%s, profile_id=%s, char_value=%s WHERE infoobject_id=%s'
-        data = (info_obj.get_id(),
-                info_obj.get_char_fk(),
-                info_obj.get_profile_fk(),
-                info_obj.get_value())
-
-        cursor.execute(command, data)
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
 
         self._connection.commit()
-        cursor.close()
+
+    def find_by_id(self, key):
+        command = 'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id = %s'
+        data = (key,)
+
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
+            tuples = cursor.fetchall()
+
+        if tuples and tuples[0]:
+            (infoobject_id, char_id, char_value, profile_id) = tuples[0]
+            info_obj = InfoObject()
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
+
+            return info_obj
+
+        return None
 
     def delete(self, google_id):
         print(type(google_id))

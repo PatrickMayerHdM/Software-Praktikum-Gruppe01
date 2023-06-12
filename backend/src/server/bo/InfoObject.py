@@ -8,6 +8,8 @@ class InfoObject(bo):
         self.char_fk = None
         self.profile_fk = None
         self.value = None
+        # Strato
+        self.searchprofile_id = None
         self.age = ""
         self.firstname = ""
         self.gender = ""
@@ -27,6 +29,12 @@ class InfoObject(bo):
 
     def get_value(self):
         return self.value
+    # Strato
+    def set_searchprofile_id(self, id):
+        self.searchprofile_id = id
+
+    def get_searchprofile_id(self):
+        return self.searchprofile_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
@@ -134,6 +142,7 @@ class InfoObject(bo):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
         obj.set_profile_fk(dictionary.get('profile_fk'))
+        obj.set_searchprofile_id(dictionary.get('searchprofile_id'))
         obj.set_value(dictionary.get('value'))
         obj.set_age(dictionary.get('age'))
         obj.set_first_name(dictionary.get('firstName'))
@@ -151,20 +160,23 @@ class InfoObject(bo):
 
     def to_dict(self):
         info_dict = {
-            '30': self.get_age(),
-            '10': self.get_first_name(),
-            '40': self.get_gender(),
-            '70': self.get_hair(),
-            '50': self.get_height(),
-            '20': self.get_last_name(),
-            '60': self.get_religion(),
-            '80': self.get_smoking_status(),
+            "30": self.get_age(),
+            "10": self.get_first_name(),
+            "40": self.get_gender(),
+            "70": self.get_hair(),
+            "50": self.get_height(),
+            "20": self.get_last_name(),
+            "60": self.get_religion(),
+            "80": self.get_smoking_status(),
             # Ab hier die Änderungen für das SuchProfil
             '90': self.get_minAge(),
             '100': self.get_maxAge(),
         }
         return info_dict
 
+    def dict2class(self, my_dict):
+        for key in my_dict:
+            setattr(self, key, my_dict[key])
 
 """
 x = "Haarfarbe"

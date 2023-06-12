@@ -79,7 +79,8 @@ class BlockNoteMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            blockliste.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                blockliste.set_id(maxid[0] + 1)
 
         command = "Insert INTO main.Blocknote (blocknote_id, blocked_id, blocking_id) Values (%s, %s, %s)"
         data = (blockliste.get_id(),

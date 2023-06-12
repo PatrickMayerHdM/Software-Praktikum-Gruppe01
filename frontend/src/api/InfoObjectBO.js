@@ -12,6 +12,7 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} achar_fk
      * @param {*} aprofile_fk
      * @param {*} avalue
+     * @param {*} asearchprofile_id
      * @param {*} aage
      * @param {*} afirstName
      * @param {*} agender
@@ -24,11 +25,12 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} amaxAge
      * */
 
-    constructor(aprofile_fk, achar_fk, avalue, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge) {
+    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
     this.value = avalue;
+    this.searchprofile_id = asearchprofile_id;
     this.age = aage;
     this.firstName = afirstName;
     this.gender = agender;
@@ -76,11 +78,11 @@ export default class infoobjectBO extends BusinessObject {
     }
     /** Setzen des Firstnames */
     set_first_name(afirstName) {
-        this.firstname = afirstName;
+        this.firstName = afirstName;
     }
     /** Auslesen des Firstnames */
     get_first_name() {
-        return this.firstname;
+        return this.firstName;
     }
     /** Setzen des Genders */
     set_gender(agender) {
@@ -108,11 +110,11 @@ export default class infoobjectBO extends BusinessObject {
     }
     /** Setzen des Lastnames */
     set_last_name(alastName) {
-        this.lastname = alastName;
+        this.lastName = alastName;
     }
     /** Auslesen des Lastnames */
     get_last_name() {
-        return this.lastname;
+        return this.lastName;
     }
     /** Setzen der Religions */
     set_religion(areligion) {
@@ -153,19 +155,28 @@ export default class infoobjectBO extends BusinessObject {
     }
 
       static fromJSON(infoobject) {
+    set_searchprofile_id(asearchprofile_id) {
+        this.searchprofile_id = asearchprofile_id;
+    }
+
+    get_searchprofile_id() {
+        return this.searchprofile_id;
+    }
+
+      static fromJSON(infoobjects) {
             let result = [];
 
-            if (Array.isArray(infoobject)) {
-                infoobject.forEach((i) => {
+            if (Array.isArray(infoobjects)) {
+                infoobjects.forEach((i) => {
                     Object.setPrototypeOf(i, infoobjectBO.prototype);
                     result.push(i);
                 })
             } else {
-                let i = infoobject
+                let i = infoobjects
                 Object.setPrototypeOf(i, infoobjectBO.prototype);
                 result.push(i);
             }
-
+            console.log("Parsed infoobject:", result);
             return result;
     }
 }
