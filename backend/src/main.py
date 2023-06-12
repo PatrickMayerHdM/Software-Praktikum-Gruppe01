@@ -98,6 +98,7 @@ blocknote = api.inherit('BlockNote', bo, {
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
 
+
 @datingapp.route('/profiles')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
@@ -255,11 +256,9 @@ class InfoObjectsOperations(Resource):
         adm = Administration()
         info_objs = adm.get_info_object(profile_id)
 
-        json_str = json.dumps(info_objs, ensure_ascii=False)
-        json_str = json_str.replace("'", '"')
-
-        print(json_str)
-        return json_str
+        print(info_objs)
+        print(type(info_objs))
+        return info_objs
 
     @datingapp.marshal_with(infoobject)
     @secured
