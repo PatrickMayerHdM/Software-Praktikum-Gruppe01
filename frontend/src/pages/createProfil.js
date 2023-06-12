@@ -92,16 +92,15 @@ class CreateProfil extends Component {
 
     getSelectedProperties() {
       DatingSiteAPI.getAPI()
-          .getInfoObjects(this.props.user.uid)
-          .then((infoObjects) => {
+        .getInfoObjects(this.props.user.uid)
+        .then((responseInfoObjects) => {
+          this.setState({
+            infoObjects: responseInfoObjects,
+          });
+        });
+    }
 
-              this.setState({
-                  info_list: infoObjects,
-                }, () => {
-                  console.log(this.state.info_list)
-              })
-              })
-          };
+
 
     /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
@@ -152,6 +151,7 @@ class CreateProfil extends Component {
             this.props.user.uid,
             this.state.char_fk,
             this.state.value,
+            this.state.searchprofile_id,
             this.state.age,
             this.state.firstName,
             this.state.gender,

@@ -1,7 +1,10 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
+import json
+
+
 
 
 from server.Administration import Administration
@@ -47,9 +50,8 @@ account = api.inherit('Account', bo, {
 })
 
 profile = api.inherit('Profile', bo, {
-    'favoritenote_id': fields.Integer(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
-    # 'account_id': fields.Integer(attribute='_account_id', description='Account eines Profils'),
-    'blocknote_id': fields.Integer(attribute='_blockNote_id', description='Blockierliste eines Profils'),
+    'favoriteNote_id': fields.String(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
+    'blockNote_id': fields.String(attribute='_blockNote_id', description='Blockierliste eines Profils'),
     'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
 })
 
@@ -65,13 +67,13 @@ characteristic = api.inherit('Characteristics', bo, {
 })
 
 infoobject = api.inherit('InfoObject', bo, {
-    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
-    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
     'age': fields.DateTime(attribute='_age', description='Geburtsdatum des Profilinhabers'),
+    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
     'gender': fields.String(attribute='_gender', description='Geschlecht'),
-    'height': fields.Integer(attribute='_height', description='Größe'),
-    'religion': fields.String(attribute='_religion', description='Religion'),
     'hair': fields.String(attribute='_hair', description='Haarfarbe'),
+    'height': fields.Integer(attribute='_height', description='Größe'),
+    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
+    'religion': fields.String(attribute='_religion', description='Religion'),
     'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher')
 
 })
@@ -95,6 +97,7 @@ blocknote = api.inherit('BlockNote', bo, {
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
+
 
 @datingapp.route('/profiles')
 @datingapp.response(500, 'Serverseitiger Fehler')
@@ -242,22 +245,20 @@ class InfoObjectListOperations(Resource):
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
 
-@datingapp.route('/infoobjects/<string:googleID>')
+@datingapp.route('/infoobjects/<string:profile_id>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
 @datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
-    # @secured
-    def get(self, googleID):
+    @secured
+    def get(self, profile_id):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
-        info_object = adm.get_info_object(googleID)
+        info_objs = adm.get_info_object(profile_id)
 
-        if info_object is not None:
-            print("main:", info_object)
-            return list(info_object)
-        else:
-            return '', 500
+        print(info_objs)
+        print(type(info_objs))
+        return info_objs
 
     @datingapp.marshal_with(infoobject)
     @secured
