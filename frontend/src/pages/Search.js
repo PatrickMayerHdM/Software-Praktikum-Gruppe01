@@ -80,15 +80,6 @@ class Search extends React.Component{
     // Hier wird erstmal ein console.log ausgeführt, wenn der Such Button gedrückt wird, damit später dann danach gesucht wird.
     Search() {
         console.log("Es wurde eine Suchanfrage mit dem Suchprofil", this.state.selectedProfileIndex,  "gestellt");
-        var selectedSearchprofile = this.state.Searchprofiles[this.state.selectedProfileIndex];
-        var profileslist = [];
-        var liste = DatingSiteAPI.getAPI().getAllProfiles();
-        console.log(liste.then(response => {
-            console.log(response);
-        })
-            .catch( error => {
-                console.log(error);
-            }));
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.

@@ -139,12 +139,6 @@ export default class DatingSiteAPI {
         })
     }
 
-    getAllProfiles(){
-        return new Promise(function (resolve) {
-                resolve('getAllProfiles aufgerufen');
-            })
-    }
-
     /**
      * @param {profileBO} profile object
      * @public
