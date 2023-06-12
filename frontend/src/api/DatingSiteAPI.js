@@ -352,8 +352,7 @@ export default class DatingSiteAPI {
 
     #getFavoritenoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
     #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/Favoritenote`;
-
-    // #removeFavoriteProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfilesIDs/${profile_id}`;
+    #removeFavoriteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
 
 
     getFavoritenoteProfileURL(profile_id){
@@ -384,17 +383,17 @@ export default class DatingSiteAPI {
         })
     }
 
-   // removeFavoritenoteProfileURL(favoritenote_id) {
-   //      return this.#fetchAdvanced(this.#removeFavoriteProfileByIdURL(favoritenote_id), {
-   //          method: 'DELETE'
-   //      })
-   //          .then((responseJSON) => {
-   //              let favorBOs = favoriteNoteBO.fromJSON(responseJSON)[0];
-   //              return new Promise(function (resolve) {
-   //                  resolve(favorBOs);
-   //              })
-   //          })
-   // }
+   removeFavoritenoteProfileURL(favoritenote_id) {
+        return this.#fetchAdvanced(this.#removeFavoriteProfileURL(favoritenote_id), {
+            method: 'DELETE'
+        })
+            .then((responseJSON) => {
+                let favorBOs = favoriteNoteBO.fromJSON(responseJSON)[0];
+                return new Promise(function (resolve) {
+                    resolve(favorBOs);
+                })
+            })
+   }
 
 
     // blockNote related

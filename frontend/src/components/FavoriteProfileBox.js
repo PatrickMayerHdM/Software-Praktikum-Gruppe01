@@ -17,28 +17,40 @@ import favoriteNoteBO from "../api/FavoriteNoteBO";
 
 class FavoriteProfileBox extends React.Component{
 
-    render() {
+    constructor(props) {
+        super(props);
+        this.state = {
+            adding_id: this.props.current_profile,
+            added_id: this.props.other_profile
+        }
+
+        this.FavoriteDelClicked = this.FavoriteDelClicked.bind(this);
+
+    }
 
         /**
          * Funktion welche ausgeführt wird, wenn  "Von Merkzettel Entfernen" gedrückt wird.
          * Zu Testzwecken noch nicht weiter ausgeführt, sondern nur mit einem console.log
          */
-        function FavoriteDelClicked(){
+        FavoriteDelClicked(){
 
-            // const Favnote =
-            // DatingSiteAPI.getAPI()
-            // // Löschen des FavoriteNote-Eintrags
-            // .removeFavoritenoteProfileURL(Favnote)
-            // .catch((e) =>
-            //     this.setState({
-            //         error: e,
-            //     })
-            // );
+            const { adding_id, added_id } = this.state
+
+            const Favnote = new favoriteNoteBO(adding_id, added_id)
+            DatingSiteAPI.getAPI()
+            // Löschen des FavoriteNote-Eintrags
+            .removeFavoritenoteProfileURL(Favnote)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
 
 
             console.log("Von Merkzettel entfernt")
         }
 
+    render() {
 
         /**
          * Die Profilbox an sich speziell angepasst auf die gegebenheiten zur Darstellung auf dem Merkzettel
@@ -61,7 +73,7 @@ class FavoriteProfileBox extends React.Component{
                     </Link>
                 </Grid>
                 <Grid item xs={2} spacing={2}>
-                    <button onClick={FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                    <button onClick={this.FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                         <PersonRemoveIcon/>
                     </button>
 

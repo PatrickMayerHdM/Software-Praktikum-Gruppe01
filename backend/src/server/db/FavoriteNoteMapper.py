@@ -105,7 +105,7 @@ class FavoriteNoteMapper(mapper):
 
     def delete(self, favoritenote):
         cursor = self._connection.cursor()
-        command = f'DELETE FROM main.Favoritenote WHERE favoritenote_id ={favoritenote.get_id()}'
+        command = f'DELETE FROM main.Favoritenote WHERE adding_id ={favoritenote.get_adding_id()} AND added_id={favoritenote.get_added_id()}'
         cursor.execute(command)
 
         self._connection.commit()
