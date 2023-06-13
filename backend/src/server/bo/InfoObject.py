@@ -127,17 +127,20 @@ class InfoObject(bo):
 
     def to_dict(self):
         info_dict = {
-            '30': self.get_age(),
-            '10': self.get_first_name(),
-            '40': self.get_gender(),
-            '70': self.get_hair(),
-            '50': self.get_height(),
-            '20': self.get_last_name(),
-            '60': self.get_religion(),
-            '80': self.get_smoking_status()
+            "30": self.get_age(),
+            "10": self.get_first_name(),
+            "40": self.get_gender(),
+            "70": self.get_hair(),
+            "50": self.get_height(),
+            "20": self.get_last_name(),
+            "60": self.get_religion(),
+            "80": self.get_smoking_status()
         }
         return info_dict
 
+    def dict2class(self, my_dict):
+        for key in my_dict:
+            setattr(self, key, my_dict[key])
 
 """
 x = "Haarfarbe"
