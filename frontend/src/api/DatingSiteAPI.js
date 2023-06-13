@@ -372,9 +372,9 @@ export default class DatingSiteAPI {
             method: 'DELETE'
         })
             .then((responseJSON) => {
-                let favorBOs = favoriteNoteBO.fromJSON(responseJSON)[0];
+                let delBO = favoriteNoteBO.fromJSON(responseJSON[0]);
                 return new Promise(function (resolve) {
-                    resolve(favorBOs);
+                    resolve(delBO);
                 })
             })
    }

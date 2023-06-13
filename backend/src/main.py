@@ -341,6 +341,9 @@ class FavoritenoteListOperations(Resource):
             return '', 500
 
 
+@datingapp.route('/FavoritenoteProfiles/<favoritenote_id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class FavoritenoteDeleteOperations(Resource):
     @secured
     def delete(self, favoritenote_id):
         """Löschen eines FavoriteNote-Objekts.
@@ -374,19 +377,6 @@ class FavoriteNoteOperations(Resource):
         else:
             return '', 500
 
-    @secured
-    def delete(self, favoritenote_id):
-        """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URL bestimmt"""
-
-        adm = Administration()
-        fnote = adm.get_favoritenote_by_favoritenote_id(favoritenote_id)
-
-        if fnote is not None:
-            adm.delete_favoritenote(fnote)
-            return '', 200
-        else:
-            return '', 500
 
     @datingapp.marshal_with(favoritenote)
     @secured
@@ -498,4 +488,4 @@ class SearchprofileListOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=8001)

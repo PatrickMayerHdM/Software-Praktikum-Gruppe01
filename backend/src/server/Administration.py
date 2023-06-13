@@ -171,7 +171,9 @@ class Administration(object):
 
     def delete_favoritenote(self, favoritenote):
         with FavoriteNoteMapper() as mapper:
-            mapper.delete(favoritenote)
+            adding_id = favoritenote.get_adding_id()
+            added_id = favoritenote.get_added_id()
+            mapper.delete(adding_id, added_id)
 
     def get_all_favoritenotes(self):
         with FavoriteNoteMapper() as mapper:

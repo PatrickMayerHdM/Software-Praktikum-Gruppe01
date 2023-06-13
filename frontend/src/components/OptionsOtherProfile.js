@@ -20,6 +20,7 @@ class OptionsOtherProfile extends React.Component{
             added_id: this.props.other_profile,
             blocking_id: this.props.user.uid,
             blocked_id: this.props.other_profile
+
         }
 
         this.PersonSaved = this.PersonSaved.bind(this);
