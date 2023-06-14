@@ -42,3 +42,5 @@ class Matchmaking:
 
         total_percentage = (total_count / total_infoobjects) *100
         return  total_percentage
+
+
