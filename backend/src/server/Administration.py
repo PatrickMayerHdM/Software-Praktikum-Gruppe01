@@ -318,6 +318,14 @@ class Administration(object):
         with ProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
+    "Methoden für das Matchmaking"
+    "find profile id by key holt sich die profilid nach key"
+    def find_profile_id_by_key(self, key):
+        with ProfileMapper() as mapper:
+            return mapper.find_profile_id_by_key(key)
+
+    "Weitere Mehoden, die das Matchmaking benötigt: "
+
     "Chat-spezifische Methoden"
     """
     def create_chat(self, message_id):

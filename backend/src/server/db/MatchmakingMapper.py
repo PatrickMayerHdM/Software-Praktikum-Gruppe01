@@ -1,5 +1,11 @@
 from server.db.mapper import mapper
 from server.bo.Profile import Profile
+
+class MatchmakingMapper(mapper):
+    def __init__(self):
+        super().__init__()
+
+
 def find_info_object_by_profile_id(self, key):
     result = []
 
@@ -47,9 +53,6 @@ def find_info_object_by_profile_id(self, key):
 
         return result
 
+    def fhfhfhfhndhcncdhddcndhcn
 
 
-    "Methoden für das Matchmaking"
-    def find_profile_id_by_key(self, key):
-        with ProfileMapper() as mapper:
-            return mapper.find_profile_id_by_key(key)

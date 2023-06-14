@@ -15,6 +15,7 @@ class Matchmaking:
         self.info_object_id = "" # Id der Info Objekte, die gezogen werden
         self.characteristic_id = "" # Id der Charakteristik
 
+# Hier werden noch set methoden benötigt. Für jede variable, die gezogen wird.
         def find_profile_id_by_key(self):
             """Auslesen der id des betrachteten userprofils"""
             return self.userprofile_id
