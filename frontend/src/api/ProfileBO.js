@@ -12,6 +12,7 @@ export default class profileBO extends BusinessObject {
      * @param {*} aprofile_id
      * @param {*} afavoriteNote_id
      * @param {*} ablockNote_id
+     * @param {*} agoogle_fk
      */
 
 
@@ -100,7 +101,7 @@ export default class profileBO extends BusinessObject {
                 result.push(p);
             })
         } else {
-            let p = profile
+            let p = profile;
             Object.setPrototypeOf(p, profileBO.prototype);
             result.push(p);
         }

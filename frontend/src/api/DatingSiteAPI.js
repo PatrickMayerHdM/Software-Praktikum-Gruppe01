@@ -258,16 +258,17 @@ export default class DatingSiteAPI {
     }
 
     getProfileByID(google_fk) {
+        let profile = this.#fetchAdvanced(this.#getProfileByIdURL(google_fk));
+        console.log("Profile: ", profile);
         return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
             .then((responseJSON) => {
             console.log("Profilid: ", responseJSON)
-            let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
+            let responseProfileBO = profileBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);
             })
         })
     }
-
     /**
      * Bereich für die Suche
      */
