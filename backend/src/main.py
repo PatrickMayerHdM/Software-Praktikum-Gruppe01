@@ -75,11 +75,11 @@ infoobject = api.inherit('InfoObject', bo, {
     'height': fields.Integer(attribute='_height', description='Größe'),
     'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
     'religion': fields.String(attribute='_religion', description='Religion'),
-    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher')
-# Ab hier die fürs SuchProfil
+    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher'),
+    # Ab hier die fürs SuchProfil
     'minAge': fields.String(attribute='_minAge', description='Das minimalalter in einem SuchProfil'),
     'maxAge': fields.String(attribute='_maxAge', description='Das maximalalter in einem SuchProfil'),
-
+    'searchprofile_fk': fields.String(attribute='searchprofile_fk', description='Die fk Verbindung zu SuchProfil'),
 })
 
 chat = api.inherit('Chat', bo, {
@@ -202,6 +202,7 @@ class SearchProfileOpterations(Resource):
         else:
             return "Der Post in SearchProfileOpterations ist fehlgeschlagen ", 500
 
+
 """Da das Suchprofil ein eigenes InfoObjekt Handling besitzt wird dies hier definiert """
 @datingapp.route('/SearchProfiles/infoobjects')
 @datingapp.response(500, 'Serverseitiger Fehler')
@@ -212,7 +213,7 @@ class InfoObjectListOperationsSearch(Resource):
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
-        print(api.payload)
+        print("Das ist die api.payload im main.py der InfoObjectListOperationsSearch", api.payload)
 
         proposal = InfoObject.from_dict(api.payload)
 
@@ -226,6 +227,25 @@ class InfoObjectListOperationsSearch(Resource):
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
+
+"""Handling um alle Suchprofil ID's eines Profils zu bekommen"""
+@datingapp.route('/Search/SearchProfiles/<id>/')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id','GoogleID für welche die Suchprofile gesucht werden')
+class SearchProfilesOperations(Resource):
+
+    #@secured
+    def get(self, id):
+
+        adm = Administration()
+        SearchP = adm.get_searchprofiles_by_google_id(id)
+
+        # Holt sich das result (return) von der get_profile_by_message(id), dies ist dann eine Liste mit Chatpartnern.
+        if SearchP is not None:
+            return SearchP, 200
+        else:
+            return "", 500
+
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
 
@@ -238,7 +258,7 @@ class ChatListOperations(Resource):
     #@datingapp.marshal_with(chatList)
     #@secured
     def get(self, id):
-        # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
+
         adm = Administration()
         x = adm.get_profile_by_message(id)
 

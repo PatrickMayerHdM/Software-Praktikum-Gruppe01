@@ -23,9 +23,10 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} asmoking
      * @param {*} aminAge
      * @param {*} amaxAge
+     * @param {*} asearchprofile_fk
      * */
 
-    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge) {
+    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge, asearchprofile_fk) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
@@ -42,6 +43,7 @@ export default class infoobjectBO extends BusinessObject {
     // Ab hier hinzugefügt für Suchprofil
     this.minAge = aminAge;
     this.maxAge = amaxAge;
+    this.searchprofile_fk = asearchprofile_fk;
     }
 
     /** Setzen des Values */
@@ -154,7 +156,21 @@ export default class infoobjectBO extends BusinessObject {
         return this.maxAge
     }
 
-      static fromJSON(infoobject) {
+    /** Setzen des searchprofile_fk*/
+    set_searchprofile_fk(searchprofile_fk) {
+        this.searchprofile_fk = searchprofile_fk;
+    }
+
+    /** Auslesen des searchprofile_fk*/
+    get_searchprofile_fk(){
+        return this.searchprofile_fk
+    }
+
+    /**
+     * Searchprofile id Funktionen welche aus dem main übernommen wurden, für das Suchprofil an sich jedoch keine
+     * Relevanz darstellen
+     */
+
     set_searchprofile_id(asearchprofile_id) {
         this.searchprofile_id = asearchprofile_id;
     }

@@ -274,7 +274,7 @@ export default class DatingSiteAPI {
      */
 
     #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
-    #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`; // bisher nur FakeBackEnd ausgeführt
+    #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
     #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
@@ -305,8 +305,8 @@ export default class DatingSiteAPI {
      * @param {Number} accountID übergibt die accountID für welche die Profile nicht
     */
 
-    getSearchProfileIDs(){
-        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL())
+    getSearchProfileIDs(profile_id){
+        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL(profile_id))
             .then((responseJSON) => {
                 console.log("Das responseJSON")
                 console.log(responseJSON)

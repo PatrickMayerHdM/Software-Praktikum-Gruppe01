@@ -25,7 +25,7 @@ class SearchProfileMapper(mapper):
         return result
 
     def find_by_key(self, key):
-        result = None
+        results = []
 
         cursor = self._connection.cursor()
         command = f'SELECT searchprofile_id, google_id FROM main.Searchprofile WHERE google_id=%s'
@@ -33,21 +33,15 @@ class SearchProfileMapper(mapper):
         cursor.execute(command, data)
         tuples = cursor.fetchall()
 
-        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (searchprofile_id, google_id) = tuples[0]
-            searchprofile = SearchProfile()
-            searchprofile.set_id(searchprofile_id)
-            searchprofile.set_google_fk(google_id)
-            print("Suchprofil von der Datenbank im Mapper:", searchprofile)
-
-            result = searchprofile
-        else:
-            result = None
+        if tuples is not None:
+            for row in tuples:
+                (searchprofile_id, _) = row
+                results.append(searchprofile_id)
 
         self._connection.commit()
         cursor.close()
 
-        return result
+        return results
 
     def insert(self, searchprofile):
         # Verbindugn zur DB + cursor-objekt erstellt

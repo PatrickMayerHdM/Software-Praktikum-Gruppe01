@@ -92,6 +92,7 @@ class SearchProfile extends React.Component{
                  null,
                  null,
                  null,
+                 null,
                  this.state.gender,
                  this.state.hair,
                  this.state.height,
@@ -100,6 +101,7 @@ class SearchProfile extends React.Component{
                  this.state.smoking,
                  this.state.minAge,
                  this.state.maxAge,
+                 null, // Hier wird die searchprofile_fk übergeben, diese wird jedoch nicht im front-End gesetzt daher null
              )
 
              DatingSiteAPI.getAPI()

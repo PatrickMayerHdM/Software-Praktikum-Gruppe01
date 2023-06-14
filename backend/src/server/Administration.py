@@ -297,7 +297,7 @@ class Administration(object):
     # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
 
     def create_Search_info_object(self, profile_fk, info_dict):
-        print("InfoDict: ", info_dict)
+        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():
@@ -366,6 +366,7 @@ class Administration(object):
 
     """ Suchprofil-spezifische Methoden """
 
+    """Erstellt ein Suchprofil in der Datenbank, erwartet ein Suchprofil BO"""
     def create_searchprofile(self, searchprofile):
         searchprofile.set_id(1)
         with SearchProfileMapper() as mapper:
@@ -383,7 +384,8 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             return mapper.find_all()
 
-    def get_searchprofile_by_google_id(self, key):
+    """Gibt alle suchprofile_id's eines Profils zurück, dies wird mithilfe der google_id gemacht"""
+    def get_searchprofiles_by_google_id(self, key):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
 

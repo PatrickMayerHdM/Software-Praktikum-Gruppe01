@@ -132,8 +132,8 @@ class InfoObject(bo):
             'religion': 60,
             'smoking': 80,
             # Ab hier die Änderungen für das SuchProfil
-            'minAge': 90,
-            'maxAge': 100
+            'minAge': 100,
+            'maxAge': 110
         }
         return char_fk_mapping.get(key, None)
 
@@ -169,8 +169,8 @@ class InfoObject(bo):
             "60": self.get_religion(),
             "80": self.get_smoking_status(),
             # Ab hier die Änderungen für das SuchProfil
-            '90': self.get_minAge(),
-            '100': self.get_maxAge(),
+            '100': self.get_minAge(),
+            '110': self.get_maxAge(),
         }
         return info_dict
 
