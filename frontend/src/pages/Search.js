@@ -35,7 +35,7 @@ class Search extends React.Component{
           profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
           deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
           clickable: false,
-            numProfiles: 0, // Nummer der Profile welche als Antwort kamen
+          numProfiles: 0, // Nummer der Profile welche als Antwort kamen
 
         }
 

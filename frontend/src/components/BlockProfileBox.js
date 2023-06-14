@@ -30,7 +30,7 @@ class BlockProfileBox extends React.Component{
                 direction="row" justifyContent="center" alignItems="stretch" container>
                 <Grid item xs={10} spacing={2} >
                   <Item>
-                      <ProfileBox/>
+                      <ProfileBox other_profile={this.props.other_profile}/>
                   </Item >
                 </Grid >
                 <Grid item item xs={2} >
