@@ -6,6 +6,7 @@ import infoobjectBO from "./InfoObjectBO";
 import favoriteNoteBO from "./FavoriteNoteBO";
 import blockNoteBO from "./BlockNoteBO";
 import searchprofileBO from "./SearchprofileBO";
+import FavoriteNoteBO from '../api/FavoriteNoteBO';
 
 
 export default class DatingSiteAPI {
@@ -380,7 +381,7 @@ export default class DatingSiteAPI {
 
     #getFavoritenoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
     #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/Favoritenote`;
-    #removeFavoriteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+    #removeFavoriteProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}/${other_profile_id}`;
 
 
     getFavoritenoteProfileURL(profile_id){
@@ -411,8 +412,8 @@ export default class DatingSiteAPI {
         })
     }
 
-   removeFavoritenoteProfileURL(favoritenote_id) {
-        return this.#fetchAdvanced(this.#removeFavoriteProfileURL(favoritenote_id), {
+   removeFavoritenoteProfileURL(profile_id, other_profile_id) {
+        return this.#fetchAdvanced(this.#removeFavoriteProfileURL(profile_id, other_profile_id), {
             method: 'DELETE'
         })
             .then((responseJSON) => {
@@ -428,6 +429,8 @@ export default class DatingSiteAPI {
 
     #getBlocknoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}`;
     #addBlockProfile = (profile_id) => `${this.#datingServerBaseURL}/Blocknote`;
+    #removeBlockProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}/${other_profile_id}`;
+
 
     getBlocknoteProfileURL(profile_id){
         return this.#fetchAdvanced(this.#getBlocknoteProfileURL(profile_id))
@@ -454,6 +457,20 @@ export default class DatingSiteAPI {
             })
         })
     }
+
+    removeBlocknoteProfile(profile_id, other_profile_id) {
+        return this.#fetchAdvanced(this.#removeBlockProfileURL(profile_id, other_profile_id), {
+            method: 'DELETE'
+        })
+            .then((responseJSON) => {
+                let delBO = favoriteNoteBO.fromJSON(responseJSON[0]);
+                return new Promise(function (resolve) {
+                    resolve(delBO);
+                })
+            })
+
+    }
+
 
 
 

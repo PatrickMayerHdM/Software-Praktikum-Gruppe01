@@ -129,9 +129,10 @@ class Administration(object):
         with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
-    def delete_blocknote(self, blocklist):
+    def delete_blocknote(self, blocking_id, blocked_id):
         with BlockNoteMapper() as mapper:
-            mapper.delete(blocklist)
+            mapper.delete(blocking_id, blocked_id)
+
 
     def get_all_blocknote(self):
         with BlockNoteMapper() as mapper:
@@ -168,10 +169,8 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             mapper.update(favoritenote)
 
-    def delete_favoritenote(self, favoritenote):
+    def delete_favoritenote(self, adding_id, added_id):
         with FavoriteNoteMapper() as mapper:
-            adding_id = favoritenote.get_adding_id()
-            added_id = favoritenote.get_added_id()
             mapper.delete(adding_id, added_id)
 
     def get_all_favoritenotes(self):

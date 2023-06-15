@@ -6,7 +6,7 @@ import React from "react";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 
 /**
- * Dies ist eine  Seite, zum darstellen mehrerer FavoriteProfileBoxen innerhalb eines weiteren Grids.
+ * Dies ist eine Seite, zum Darstellen mehrerer FavoriteProfileBoxen innerhalb eines weiteren Grids.
  * Damit dies dann nicht mehr innerhalb der App.js geschehen muss und die App.js dadurch übersichtlicher bleibt.
  */
 
@@ -22,7 +22,7 @@ class FavoriteProfileBoxList extends React.Component{
     }
 
 
-    componentDidMount() {
+    getFavoriteProfiles() {
         DatingSiteAPI.getAPI()
         .getFavoritenoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
@@ -37,6 +37,11 @@ class FavoriteProfileBoxList extends React.Component{
         });
     }
 
+
+    componentDidMount() {
+        this.getFavoriteProfiles();
+    }
+
     handleProfileClick = (index) => {
         this.setState({ otherProfileIndex: index});
     };
@@ -45,7 +50,7 @@ class FavoriteProfileBoxList extends React.Component{
 
         // const für die Anzahl der anzuzeigenden Profile innerhalb der Merkliste
         const count = this.state.numProfiles;
-
+        const { profiles } = this.state;
         const current_profile = this.props.user.uid;
 
         // Methode zur Darstellung einer FavoriteProfileBox
@@ -54,7 +59,8 @@ class FavoriteProfileBoxList extends React.Component{
                 <Item>
                     <FavoriteProfileBox current_profile={current_profile}
                                         other_profile={this.state.profiles[index]}
-                                        onClick={() => this.handleProfileClick(index)}/>
+                                        onClick={() => this.handleProfileClick(index)}
+                    />
                 </Item >
             </Grid >
         ));

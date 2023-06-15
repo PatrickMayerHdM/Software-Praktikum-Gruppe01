@@ -422,19 +422,20 @@ class FavoritenoteListOperations(Resource):
             return '', 500
 
 
-@datingapp.route('/FavoritenoteProfiles/<favoritenote_id>')
+@datingapp.route('/FavoritenoteProfiles/<profile_id>/<other_profile_id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class FavoritenoteDeleteOperations(Resource):
     @secured
-    def delete(self, favoritenote_id):
+    def delete(self, profile_id, other_profile_id):
         """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URL bestimmt"""
+        Das Objekt wird durch die ID's in der URL bestimmt"""
 
         adm = Administration()
-        fnote = adm.get_favoritenote_by_favoritenote_id(favoritenote_id)
+        #print("profile_id im main: ", profile_id)
+        #print("other_profile_id im main:  ", other_profile_id)
 
-        if fnote is not None:
-            adm.delete_favoritenote(fnote)
+        if profile_id and other_profile_id is not None:
+            adm.delete_favoritenote(profile_id, other_profile_id)
             return '', 200
         else:
             return '', 500
@@ -508,7 +509,7 @@ class BlocknoteListOperations(Resource):
 @datingapp.response(500, 'Serverseitiger Fehler')
 @datingapp.param('profile_id', 'Die ID des BlockNote-Objekts')
 class BlockNoteOperations(Resource):
-    @secured
+    #@secured
     def get(self, profile_id):
         """Auslesen eines BlockNote-Objekts.
         Das Objekt wird durch die id in dem URI bestimmt"""
@@ -522,19 +523,6 @@ class BlockNoteOperations(Resource):
         else:
             return '', 500
 
-    @secured
-    def delete(self, id):
-        """Löschen eines BlockNote-Objekts.
-        Das Objekt wird durch die id in dem URI bestimmt"""
-
-        adm = Administration()
-        bnote = adm.get_blocknote_by_blocknote_id(id)
-
-        if bnote is not None:
-            adm.delete_favoritenote(bnote)
-            return '', 200
-        else:
-            return '', 500
 
     @datingapp.marshal_with(blocknote)
     @secured
@@ -549,6 +537,24 @@ class BlockNoteOperations(Resource):
             """Hierdurch wird die id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
             bnote.set_id(id)
             adm.save_favoritenote(bnote)
+            return '', 200
+        else:
+            return '', 500
+
+@datingapp.route('/BlocknoteProfiles/<profile_id>/<other_profile_id>')
+@datingapp.response(500, 'Serverseitiger Fehler beim Löschen der Blocknote')
+class BlocknoteDeleteOperations(Resource):
+    #@secured
+    def delete(self, profile_id, other_profile_id):
+        """Löschen eines BlockNote-Objekts in der Datenbank.
+        Das Objekt wird durch die ID's in der URL bestimmt"""
+        print("Test vor adm = Administration()")
+        adm = Administration()
+        print("profile_id im main (BlocknoteDeleteOperations): ", profile_id)
+        print("other_profile_id im main (BlocknoteDeleteOperations):  ", other_profile_id)
+
+        if other_profile_id and profile_id is not None:
+            adm.delete_blocknote(profile_id, other_profile_id)
             return '', 200
         else:
             return '', 500
