@@ -58,4 +58,32 @@ class Matchmaking:
         seperate_list = string.split()
         return seperate_list
 
+    # Methode, die Anzahl der Strings in der liste ausließt
+
+    def total_words(seperate_list):
+        return len(seperate_list)
+
+    #Methode, die Wörter wie und, ein, der, ... löscht.
+
+    unnecessary_words = ["der", "die", "das", "ein", "eine", "und", ""]
+    def delete_unnecessary_words( unnecessary_words, seperate_list):
+        merged_list = unnecessary_words + seperate_list
+        clean_list = list(set(merged_list))
+        return clean_list
+
+    # Methode, die gleiche Wörter in der Liste vergleicht
+
+    def count_same_words(searchlist, userlist):
+        same_words = 0
+        for word1 in searchlist:
+            for word2 in userlist:
+                if word1 == word2:
+                    counter += 1
+        return same_words
+
+    # Methode, die Anzahl der gleichen Wörter mit Anzahl der gesamten Wörter vergliecht
+
+    def percentage_words(same_words, seperate_list):
+        word_percentage = (same_words/ seperate_list)
+        return word_percentage
 
