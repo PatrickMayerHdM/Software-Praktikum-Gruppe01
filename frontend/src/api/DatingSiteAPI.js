@@ -281,6 +281,7 @@ export default class DatingSiteAPI {
     #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
+    #getOneSearchprofileByIdURL = (searchprofile_id, google_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}/${google_id}`;
 
 
 
@@ -375,6 +376,17 @@ export default class DatingSiteAPI {
         })
     }
 
+
+    getOneSearchprofile(searchprofile_id, google_id){
+        return this.#fetchAdvanced(this.#getOneSearchprofileByIdURL(searchprofile_id, google_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON")
+                console.log(responseJSON)
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                })
+            })
+    }
 
 
         // Favoritenote related

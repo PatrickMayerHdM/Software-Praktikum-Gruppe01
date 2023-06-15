@@ -240,11 +240,27 @@ class SearchProfilesOperations(Resource):
         adm = Administration()
         SearchP = adm.get_searchprofiles_by_google_id(id)
 
-        # Holt sich das result (return) von der get_profile_by_message(id), dies ist dann eine Liste mit Chatpartnern.
         if SearchP is not None:
             return SearchP, 200
         else:
             return "", 500
+
+
+"""Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
+@datingapp.route('/Search/SearchProfiles/<searchprofile_id>/<google_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+class SearchOneProfileOperation(Resource):
+
+    def get(self, searchprofile_id, google_id):
+
+        adm = Administration()
+        SearchProf = adm.get_searchprofile_by_key(searchprofile_id, google_id)
+
+        if SearchProf is not None:
+            return SearchProf, 200
+        else:
+            return "", 500
+
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """

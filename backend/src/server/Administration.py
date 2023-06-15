@@ -398,5 +398,8 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
+    def get_searchprofile_by_key(self, searchprofile, google_id):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_by_searchprofile(searchprofile, google_id)
 
 
