@@ -24,7 +24,9 @@ import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
 import profile from "../components/Profile";
-import {json} from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom';
+
 
 
 class CreateProfil extends Component {
@@ -100,8 +102,6 @@ class CreateProfil extends Component {
         });
     }
 
-
-
     /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
         const newName = event.target.value;
@@ -141,6 +141,10 @@ class CreateProfil extends Component {
     handleChangeAge = (date) => {
         const newAge = date.toISOString();
         this.setState({ age: newAge });
+    };
+    /** Handler für Profil Anzeigen Button */
+    handleShow = (event) => {
+
     };
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
@@ -218,6 +222,7 @@ class CreateProfil extends Component {
             this.props.user.uid,
             this.state.char_fk,
             this.state.value,
+            this.state.searchprofile_id,
             this.state.age,
             this.state.firstName,
             this.state.gender,
@@ -236,7 +241,7 @@ class CreateProfil extends Component {
             );
 
         DatingSiteAPI.getAPI()
-            .addInfoObject(newInfoObject)
+            .updateInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -458,6 +463,14 @@ class CreateProfil extends Component {
                         <Button onClick={this.handleSubmit} variant="outlined" startIcon={<AddIcon />}>Profil erstellen</Button>
                     </Item>
                     )}
+                    {profileExists && (
+                    <Item>
+                    {/** Button für das anzeigen seines eigenes Profils */}
+                        <Link to={`/Profile/${this.props.user.uid}`}>
+                            <Button variant="outlined" startIcon={<AccountCircleIcon />}>Profil anzeigen</Button>
+                        </Link>
+                    </Item>
+                     )}
                     </Stack>
                 </Box>
                 <span></span>
