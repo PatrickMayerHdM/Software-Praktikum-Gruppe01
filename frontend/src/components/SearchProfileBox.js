@@ -13,7 +13,7 @@ class SearchProfileBox extends React.Component{
     render() {
 
         return(
-            // Darstellung einer Profilbox beim Chat
+            // Darstellung einer Profilbox
             <Box sx={{ flexGrow: 1 }}>
               <Grid container
                 direction="row" justifyContent="center" alignItems="stretch" container>

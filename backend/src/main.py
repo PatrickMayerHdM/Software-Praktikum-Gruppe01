@@ -16,7 +16,7 @@ from server.bo.Message import Message
 from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
-from server.bo.profilvisits import ProfileVisits
+from server.bo.SearchProfile import SearchProfile
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -85,21 +85,20 @@ chat = api.inherit('Chat', bo, {
 })
 
 favoritenote = api.inherit('FavoriteNote', bo, {
-    'added_id': fields.Integer(attribute='_added_id', description='Id des hinzugefügten Profils'),
-    'adding_id': fields.Integer(attribute='_adding_id', description='Id des hinzufügenden Profils')
+    'added_id': fields.String(attribute='_added_id', description='Id des hinzugefügten Profils'),
+    'adding_id': fields.String(attribute='_adding_id', description='Id des hinzufügenden Profils')
 })
 
 
 blocknote = api.inherit('BlockNote', bo, {
-    'blocked_id': fields.Integer(attribute='_blocked_id', description='Id des geblockten Profils'),
-    'blocking_id': fields.Integer(attribute='_blocking_id', description='Id des blockenden Profils')
+    'blocked_id': fields.String(attribute='_blocked_id', description='Id des geblockten Profils'),
+    'blocking_id': fields.String(attribute='_blocking_id', description='Id des blockenden Profils')
 })
 
-profilevisits = api.inherit('ProfileVisits', bo, {
-    'mainprofile_id': fields.String(attribute='_mainprofile_id', description='Id des eingeloggten Users'),
-    'visitedprofile_id': fields.String(attribute='_visitedprofile_id', description='Id des gesehenen Profils')
-
+searchprofile = api.inherit('Searchprofile', bo, {
+    'google_id': fields.String(attribute='google_id', description='Google_ID des Admin-Kontos')
 })
+
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
@@ -317,62 +316,67 @@ class InfoObjectsOperations(Resource):
 """Ab hier FavoriteNote"""
 
 
-@datingapp.route('/FavoriteNote')
+@datingapp.route('/Favoritenote')
 @datingapp.response(500, 'Serverseitiger Fehler')
-class FavoriteNoteListOperations(Resource):
+class FavoritenoteListOperations(Resource):
     @datingapp.doc('Create new FavoriteNote')
-    @datingapp.marshal_with(favoritenote, code=201)
+    # @datingapp.marshal_with(favoritenote, code=200)
     @datingapp.expect(favoritenote)
-    @secured
+    # @secured
     def post(self):
         """Erstellen einer neuen FavoriteNote"""
 
         adm = Administration()
-
         proposal = FavoriteNote.from_dict(api.payload)
+
 
         if proposal is not None:
 
-            added_id = proposal.get_added_id()
             adding_id = proposal.get_adding_id()
-            result = adm.create_favoritenote(added_id, adding_id)
+            added_id = proposal.get_added_id()
+            result = adm.create_favoritenote(adding_id, added_id)
             return result, 200
         else:
-            """Falls was schiefgeht, passiert nicht und Fehlerausgabe"""
+            """Falls was schiefgeht, passiert nichts und Fehlerausgabe"""
             return '', 500
 
 
-@datingapp.route('/FavoriteNote/<int:id>')
+@datingapp.route('/FavoritenoteProfiles/<favoritenote_id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
-@datingapp.param('id', 'Die ID des FavoriteNote-Objekts')
-class FavoriteNoteOperations(Resource):
-    @datingapp.marshal_with(favoritenote)
+class FavoritenoteDeleteOperations(Resource):
     @secured
-    def get(self, id):
-        """Auslesen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URI bestimmt"""
-
-        adm = Administration()
-        fnote = adm.get_favoritenote_by_favoritenote_id(id)
-
-        if fnote is not None:
-            return fnote
-        else:
-            return '', 500
-
-    @secured
-    def delete(self, id):
+    def delete(self, favoritenote_id):
         """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URI bestimmt"""
+        Das Objekt wird durch die id in dem URL bestimmt"""
 
         adm = Administration()
-        fnote = adm.get_favoritenote_by_favoritenote_id(id)
+        fnote = adm.get_favoritenote_by_favoritenote_id(favoritenote_id)
 
         if fnote is not None:
             adm.delete_favoritenote(fnote)
             return '', 200
         else:
             return '', 500
+
+
+@datingapp.route('/FavoritenoteProfiles/<profile_id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+@datingapp.param('profile_id', 'Die ID des FavoriteNote-Objekts')
+class FavoriteNoteOperations(Resource):
+    @secured
+    def get(self, profile_id):
+        """Auslesen eines FavoriteNote-Objekts.
+        Das Objekt wird durch die id in dem URL bestimmt"""
+
+        adm = Administration()
+        fnotes = adm.get_favoritenote_by_adding_user(profile_id)
+
+        if fnotes is not None:
+            print(fnotes)
+            return fnotes
+        else:
+            return '', 500
+
 
     @datingapp.marshal_with(favoritenote)
     @secured
@@ -395,46 +399,45 @@ class FavoriteNoteOperations(Resource):
 """Ab hier BlockNote"""
 
 
-@datingapp.route('/BlockNote')
+@datingapp.route('/Blocknote')
 @datingapp.response(500, 'Serverseitiger Fehler')
-class BlockNoteListOperations(Resource):
+class BlocknoteListOperations(Resource):
     @datingapp.doc('Create new BlockNote')
-    @datingapp.marshal_with(blocknote, code=201)
+    # @datingapp.marshal_with(blocknote, code=201)
     @datingapp.expect(blocknote)
-    @secured
+    # @secured
     def post(self):
         """Erstellen einer neuen BlockNote"""
 
         adm = Administration()
-
         proposal = BlockNote.from_dict(api.payload)
 
         if proposal is not None:
 
-            blocked_id = proposal.get_blocked_id()
             blocking_id = proposal.get_blocking_id()
-            result = adm.create_blocknote(blocked_id, blocking_id)
+            blocked_id = proposal.get_blocked_id()
+            result = adm.create_blocknote(blocking_id, blocked_id)
             return result, 200
         else:
-            """Falls was schiefgeht, passiert nicht und Fehlerausgabe"""
+            """Falls was schiefgeht, passiert nichts und Fehlerausgabe"""
             return '', 500
 
 
-@datingapp.route('/BlockNote/<int:id>')
+@datingapp.route('/BlocknoteProfiles/<profile_id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
-@datingapp.param('id', 'Die ID des BlockNote-Objekts')
+@datingapp.param('profile_id', 'Die ID des BlockNote-Objekts')
 class BlockNoteOperations(Resource):
-    @datingapp.marshal_with(blocknote)
     @secured
-    def get(self, id):
-        """Auslesen eines FavoriteNote-Objekts.
+    def get(self, profile_id):
+        """Auslesen eines BlockNote-Objekts.
         Das Objekt wird durch die id in dem URI bestimmt"""
 
         adm = Administration()
-        bnote = adm.get_blocknote_by_blocknote_id(id)
+        bnotes = adm.get_blocknote_by_blocking_user(profile_id)
+        print(bnotes)
 
-        if bnote is not None:
-            return bnote
+        if bnotes is not None:
+            return bnotes
         else:
             return '', 500
 
@@ -470,44 +473,19 @@ class BlockNoteOperations(Resource):
             return '', 500
 
 
-    """get für profilevisits"""
-    @datingapp.route('/ProfilesNotVisited/<int:id>')
-    @datingapp.response(500, 'Serverseitiger Fehler')
-    @datingapp.param('id', 'Die ID des nicht gesehenen Profile-Objekts.')
-    class ProfileVisitsOperations(Resource):
-        @datingapp.marshal_with(profilevisits)
-        # @secured
-        def get(self, owner_id):
-            """ Auslesen eines Chat-Verlaufs."""
-            adm = Administration()
-            prof = adm.get_profile_by_visited(owner_id)
+@datingapp.route('/Suche/Suchprofil')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class SearchprofileListOperations(Resource):
+    @datingapp.doc('Create new Searchprofile')
+    @datingapp.marshal_list_with(searchprofile)
+    @secured
+    def get(self):
+        """ Auslesen aller Suchprofil-Objekte. """
+        adm = Administration()
+        searchprofiles = adm.get_all_searchprofile()
+        return searchprofiles
 
-            if prof is not None:
-                return prof
-            else:
-                return '', 500  # Wenn es keine Messages gibt.
-
-    @datingapp.route('/ProfilesNotVisited')
-    @datingapp.response(500, 'Serverseitiger Fehler')
-    class ProfilesNotVisitedListOperations(Resource):
-        @datingapp.marshal_with(profilevisits, code=200)
-        @datingapp.expect(profilevisits)
-        @secured
-        def post(self):
-            """ Anlegen eines neuen profilevisits-Objekts. """
-            adm = Administration()
-            print(api.payload)
-
-            proposal = ProfileVisits.from_dict(api.payload)
-
-            if proposal is not None:
-                main = proposal.get_mainprofile_id()
-                visited = proposal.get_visitedprofile_id()
-                result = adm.create_profilevisits(main, visited)
-                return result, 200
-            else:
-                return '', 500
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=8001)
