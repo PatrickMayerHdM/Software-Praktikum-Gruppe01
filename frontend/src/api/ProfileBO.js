@@ -93,6 +93,7 @@ export default class profileBO extends BusinessObject {
      */
 
     static fromJSON(profile) {
+        console.log("JSON: ", profile)
         let result = [];
 
         if (Array.isArray(profile)) {

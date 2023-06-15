@@ -30,7 +30,7 @@ class ProfileMapper(mapper):
         result = []
 
         cursor = self._connection.cursor()
-        command = f"SELECT profile_id, favoritenote_id, blocknote_id, google_fk FROM main.profile WHERE (google_fk='{key}')"
+        command = f"SELECT profile_id, favoritenote_id, blocknote_id, google_fk FROM main.Profile WHERE google_fk='{key}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -38,15 +38,14 @@ class ProfileMapper(mapper):
             profile = Profile()
             profile.set_id(profile_id)
             profile.set_favorite_note_id(favoritenote_id)
-            # profile.account_id(account_id)
             profile.set_block_note_id(blocknote_id)
             profile.set_google_fk(google_fk)
-            print("Profil von der Datenbank im Mapper:", profile)
             result.append(profile)
 
         self._connection.commit()
         cursor.close()
 
+        print("Profil von der Datenbank im Mapper:", result)
         return result
 
     # def find_by_account_id(self, account_id):
@@ -114,10 +113,9 @@ class ProfileMapper(mapper):
         """ Löschen eines Datensatzes """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.profile WHERE google_fk=%s'
-        data = [google_id.google_fk]
-        print(google_id)
-        cursor.execute(command, data)
+        command = f"DELETE FROM main.profile WHERE google_fk='{google_id[0].get_google_fk()}'"
+        print("Profile Mapper Data: ", google_id)
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()

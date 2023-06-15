@@ -36,7 +36,7 @@ class Profile(bo):
     def from_dict(dictionary=dict()):
         obj = Profile()
         obj.set_id(dictionary['id'])
-        obj.set_favorite_note_id(dictionary['favoritenote_id'])
-        obj.set_block_note_id(dictionary['blocknote_id'])
+        obj.set_favorite_note_id(dictionary['favoriteNote_id'])
+        obj.set_block_note_id(dictionary['blockNote_id'])
         obj.set_google_fk(dictionary['profile_id'])
         return obj

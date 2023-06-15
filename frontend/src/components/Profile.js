@@ -75,7 +75,6 @@ class Profile extends React.Component{
                                 <Grid md={8} xs={7} spacing={3}>
                                     <p>{infos.get_first_name()}</p>
                                 </Grid>
-
                             </Grid >
                         </Item>
                          <Item >

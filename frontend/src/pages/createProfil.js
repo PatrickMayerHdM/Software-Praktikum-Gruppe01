@@ -79,8 +79,8 @@ class CreateProfil extends Component {
     checkProfilExc() {
       DatingSiteAPI.getAPI()
           .getProfileByID(this.props.user.uid)
-          .then((profile) => {
-              if (profile.id === null) {
+          .then((profileBO) => {
+              if (profileBO.length === 0) {
                 this.setState({ profileExists: false });
               } else {
                 this.setState({ profileExists: true });
@@ -97,7 +97,14 @@ class CreateProfil extends Component {
         .getInfoObjects(this.props.user.uid)
         .then((responseInfoObjects) => {
           this.setState({
-            infoObjects: responseInfoObjects,
+              firstName: responseInfoObjects.get_first_name(),
+              lastName: responseInfoObjects.get_last_name(),
+              age: responseInfoObjects.get_age(),
+              gender: responseInfoObjects.get_gender(),
+              hair: responseInfoObjects.get_hair(),
+              height: responseInfoObjects.get_height(),
+              religio: responseInfoObjects.get_religion(),
+              smoking: responseInfoObjects.get_smoking_status(),
           });
         });
     }

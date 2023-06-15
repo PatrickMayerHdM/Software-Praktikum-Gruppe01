@@ -149,13 +149,14 @@ class ProfileOperations(Resource):
         return prof
 
     @secured
-    def delete(self, googleID):
+    def delete(self, google_fk):
         """ Löschen eines besimmten Profil-Objekts. """
 
         adm = Administration()
-        info_obj = adm.get_info_object_by_id(googleID)
+        print("Google ID Main: ", google_fk)
+        info_obj = adm.get_info_object_by_id(google_fk)
         adm.delete_info_object(info_obj)
-        prof = adm.get_profile_by_google_id(googleID)
+        prof = adm.get_profile_by_google_id(google_fk)
         adm.delete_profile(prof)
         return '', 200
 

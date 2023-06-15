@@ -194,6 +194,7 @@ class Administration(object):
 
     def delete_profile(self, profile):
         with ProfileMapper() as mapper:
+            print("Admin: ", profile)
             mapper.delete(profile)
 
     @staticmethod
@@ -203,6 +204,7 @@ class Administration(object):
 
     def get_profile_by_google_id(self, key):
         with ProfileMapper() as mapper:
+            print("Admin FinByKey Profil: ", key)
             return mapper.find_by_key(key)
 
     def get_all_profiles_by_blocknote_id(self):
@@ -246,6 +248,7 @@ class Administration(object):
 
     def get_info_object_by_id(self, key):
         with InfoObjectMapper() as mapper:
+            print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
     def get_info_object(self, key):
