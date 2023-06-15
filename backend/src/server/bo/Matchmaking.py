@@ -44,3 +44,18 @@ class Matchmaking:
         return  total_percentage
 
 
+
+    # Methoden für die SPracherkennung
+
+    # alle Buchstaben zu Kleinbuchstaben machen
+
+    def to_lowercase(string):
+        return string.to_lowercase()
+
+    # gibt eine Liste zurück, die aus den einzelnen Wörten des Strings bestehen
+
+    def to_list(string):
+        seperate_list = string.split()
+        return seperate_list
+
+
