@@ -21,19 +21,7 @@ class ChatProfileBoxList extends React.Component{
         }
     }
 
-    // Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man DummyDaten und das Fake Back-End verwenden will.
-    MountFakeBackEnd() {
-        const dummyChatProfiles = [13, 42, 51, 'H2Qfee67TCh7dbHQz2qafu9Q9XB2']; // Dummy Daten die später ersetzt werden durch einen GET
-
-        this.setState({profiles: dummyChatProfiles}, () => {
-            const lengthProfiles = this.state.profiles.length;
-            this.setState({numProfiles: lengthProfiles})
-            console.log(this.state.profiles, this.state.numProfiles)
-        });
-    }
-
-    //   Funktion, welche man in der componentDidMount() aufrufen sollte, wenn man das richtige Back-End verwenden will.
-    MountBackEnd() {
+    componentDidMount() {
         DatingSiteAPI.getAPI()
         .getChats(this.props.user.uid)
         .then(profilesvar => {
@@ -48,10 +36,6 @@ class ChatProfileBoxList extends React.Component{
         });
     }
 
-    // componentDidMount() welche Ausgeführt wird, wenn der Komponent gelanden wird.
-    componentDidMount() {
-        this.MountBackEnd();
-    }
 
     handleProfileClick = (index) => {
         this.setState({ otherProfileIndex: index});

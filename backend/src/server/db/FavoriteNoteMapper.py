@@ -1,7 +1,7 @@
 from server.bo.favoriteNote import FavoriteNote
 from server.db.mapper import mapper
 
-"""Notiz: in DB wird der Name favoriteNote verwendet"""
+"""Notiz: in DB wird der Name Favoritenote verwendet"""
 
 
 class FavoriteNoteMapper(mapper):
@@ -17,11 +17,11 @@ class FavoriteNoteMapper(mapper):
         cursor.execute('SELECT favoritenote_id, added_id, adding_id FROM main.Favoritenote')
         tuples = cursor.fetchall()
 
-        for (favoritenote_id, added_id, adding_id) in tuples:
+        for (favoritenote_id, adding_id, added_id) in tuples:
             merkliste = FavoriteNote()
             merkliste.set_id(favoritenote_id)
-            merkliste.set_added_id(added_id)
             merkliste.set_adding_id(adding_id)
+            merkliste.set_added_id(added_id)
             result.append(merkliste)
 
         self._connection.commit()
@@ -32,15 +32,15 @@ class FavoriteNoteMapper(mapper):
     def find_by_adding_user(self, adding_id):
         result = []
         cursor = self._connection.cursor()
-        command = f'SELECT favoritenote_id, added_id, adding_id FROM main.Favoritenote WHERE adding_user={adding_id}'
+        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (favoritenote_id, added_id, adding_id) in tuples:
+        for (favoritenote_id, adding_id, added_id) in tuples:
             merkliste = FavoriteNote()
             merkliste.set_id(favoritenote_id)
-            merkliste.set_added_id(added_id)
             merkliste.set_adding_id(adding_id)
+            merkliste.set_added_id(added_id)
             result.append(merkliste)
 
         self._connection.commit()
@@ -73,19 +73,20 @@ class FavoriteNoteMapper(mapper):
 
         return result
 
-    def insert(self, merkliste):
+    def insert(self, favoritenote):
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(favoritenote_id) AS maxid FROM main.Favoritenote")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is not None:
-                merkliste.set_id(maxid[0] + 1)
+                favoritenote.set_id(maxid[0] + 1)
 
-        command = "Insert INTO main.Favoritenote (favoritenote_id, added_id, adding_id) Values (%s, %s, %s)"
-        data = (merkliste.get_id(),
-                merkliste.get_added_id(),
-                merkliste.get_adding_id())
+        command = "INSERT INTO main.Favoritenote (favoritenote_id, adding_id, added_id) VALUES (%s, %s, %s)"
+        data = (favoritenote.get_id(),
+                favoritenote.get_adding_id(),
+                favoritenote.get_added_id())
+
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -102,10 +103,11 @@ class FavoriteNoteMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, merkliste):
+    def delete(self, adding_id, added_id):
         cursor = self._connection.cursor()
-        command = f'DELETE FROM main.Favoritenote WHERE favoritenote_id ={merkliste.get_id()}'
-        cursor.execute(command)
+        command = f'DELETE FROM main.Favoritenote WHERE adding_id=%s AND added_id=%s'
+        data = (adding_id, added_id)
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
