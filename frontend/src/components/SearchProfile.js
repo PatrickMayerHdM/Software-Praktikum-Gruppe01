@@ -129,10 +129,23 @@ class SearchProfile extends React.Component{
 
 
     componentDidMount() {
-         const currentPath = window.location.pathname;
-         // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
-         const lastPartURL = currentPath.split('/').pop();
-         this.setState({lastPartURL: lastPartURL})
+        const currentPath = window.location.pathname;
+        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+        const lastPartURL = currentPath.split('/').pop();
+        this.setState({lastPartURL: lastPartURL})
+
+        if (lastPartURL === "new") {
+            } else {
+            // Der Fall, wenn ein bereits existierendes Suchprofil bearbeitet wird
+            DatingSiteAPI.getAPI()
+                .getInfoObjects(lastPartURL)
+                .then((responseInfoObjects) => {
+                    this.setState({
+                        infoobjects: responseInfoObjects,
+                    });
+                });
+            }
+
     }
 
     render() {

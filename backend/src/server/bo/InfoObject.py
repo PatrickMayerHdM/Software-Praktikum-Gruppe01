@@ -155,7 +155,7 @@ class InfoObject(bo):
         # Ab hier die Änderungen für das SuchProfil
         obj.set_minAge(dictionary.get('minAge'))
         obj.set_maxAge(dictionary.get('maxAge'))
-        obj.set_searchprofile_fk('searchprofile_fk')
+        obj.set_searchprofile_fk(dictionary.get('searchprofile_fk'))
         return obj
 
     def to_dict(self):
@@ -169,8 +169,8 @@ class InfoObject(bo):
             "60": self.get_religion(),
             "80": self.get_smoking_status(),
             # Ab hier die Änderungen für das SuchProfil
-            '100': self.get_minAge(),
-            '110': self.get_maxAge(),
+            "100": self.get_minAge(),
+            "110": self.get_maxAge(),
         }
         return info_dict
 
