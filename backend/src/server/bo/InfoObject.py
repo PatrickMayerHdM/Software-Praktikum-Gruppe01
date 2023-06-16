@@ -1,5 +1,6 @@
 from server.bo.BusinessObject import BusinessObject as bo
 from Characteristic import Characteristics
+from datetime import datetime
 
 
 class InfoObject(bo):
@@ -107,6 +108,16 @@ class InfoObject(bo):
             'smoking': 80
         }
         return char_fk_mapping.get(key, None)
+
+    def calc_age(self):
+        if self.char_id == 30:
+            birthdate = datetime.fromisoformat(self.char_value[:-1])
+            curr_date = datetime.now()
+            age = curr_date.year - birthdate.year
+            return age
+        else:
+            return None
+
 
     @staticmethod
     def from_dict(dictionary=dict()):

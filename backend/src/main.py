@@ -145,8 +145,8 @@ class ProfileOperations(Resource):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
         prof = adm.get_profile_by_google_id(google_fk)
-        print('get-Methode in Profile:', prof)
-        print(type(prof))
+        #print('get-Methode in Profile:', prof)
+        #print(type(prof))
         return prof
 
     @secured
@@ -259,9 +259,12 @@ class InfoObjectsOperations(Resource):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
         info_objs = adm.get_info_object(profile_id)
-
+        adjusted_infoobjs = adm.calculate_age(info_objs)
+        info_objs.append(adjusted_infoobjs[0])
         print('get-method Infoobjects:', info_objs)
         print(type(info_objs))
+        #print('adjusted_infoobs:', adjusted_infoobjs)
+
         return info_objs
 
     @datingapp.marshal_with(infoobject)

@@ -14,6 +14,7 @@ from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
+from datetime import datetime
 
 
 class Administration(object):
@@ -224,7 +225,7 @@ class Administration(object):
 
     def get_profile_by_google_id(self, key):
         with ProfileMapper() as mapper:
-            print("Admin FinByKey Profil: ", key)
+            #print("Admin FinByKey Profil: ", key)
             return mapper.find_by_key(key)
 
     def get_all_profiles_by_blocknote_id(self):
@@ -272,9 +273,7 @@ class Administration(object):
             return mapper.find_by_id(key)
 
     def get_info_object(self, key):
-
         with InfoObjectMapper() as mapper:
-            print("Admin FinByKey infoobj: ", key)
             return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
@@ -356,5 +355,16 @@ class Administration(object):
     def get_searchprofile_by_google_id(self, key):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
+
+    def calculate_age(self, info_objects):
+        processed_tuples = []
+
+        for infoobj in info_objects:
+            age = infoobj.calc_age()
+            if age is not None:
+                processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_id, infoobj.searchprofile_id)
+                processed_tuples.append(processed_infoobj)
+                print('calculate_age Methode in Admin.py:', processed_tuples)
+            return processed_tuples
 
 
