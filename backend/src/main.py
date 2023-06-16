@@ -106,7 +106,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
     @datingapp.marshal_list_with(profile)
-    #@secured
+    @secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -131,6 +131,7 @@ class ProfileListOperations(Resource):
                 proposal.get_block_note_id(),
                 proposal.get_google_fk())
 
+            print("Main Proifle: ", p)
             return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler

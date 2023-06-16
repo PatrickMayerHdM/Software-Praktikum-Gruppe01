@@ -181,10 +181,7 @@ class CreateProfil extends Component {
         const newAge = date.toISOString();
         this.setState({ age: newAge });
     };
-    /** Handler für Profil Anzeigen Button */
-    handleShow = (event) => {
 
-    };
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
         console.log(this.state)
@@ -289,7 +286,17 @@ class CreateProfil extends Component {
     DatingSiteAPI.getAPI()
         .removeProfile(this.props.user.uid)
         .then((profileBOs) => {
-            this.setState({ profileExists: false });
+            this.setState({
+                profileExists: false,
+                firstName: "",
+                lastName: "",
+                age: "",
+                gender: "",
+                height: "",
+                hair: "",
+                religion: "",
+                smoking: "",
+        });
         })
         .catch((e) =>
             this.setState({
@@ -523,10 +530,5 @@ class CreateProfil extends Component {
             );
         }
 }
-
-CreateProfil.propTypes = {
-    currentUser: PropTypes.string.isRequired,
-};
-
 
 export default CreateProfil;
