@@ -51,8 +51,8 @@ account = api.inherit('Account', bo, {
 })
 
 profile = api.inherit('Profile', bo, {
-    'favoriteNote_id': fields.String(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
-    'blockNote_id': fields.String(attribute='_blockNote_id', description='Blockierliste eines Profils'),
+    'favoritenote_id': fields.Integer(attribute='_favoritenote_id', description='Merkliste eines Profils'),
+    'blocknote_id': fields.Integer(attribute='_blocknote_id', description='Blockierliste eines Profils'),
     'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
 })
 
@@ -113,7 +113,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
     @datingapp.marshal_list_with(profile)
-    @secured
+    #@secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -129,7 +129,7 @@ class ProfileListOperations(Resource):
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
-        #print(api.payload)
+        print('post-Method Profile:', api.payload)
 
         if proposal is not None:
 
@@ -143,27 +143,29 @@ class ProfileListOperations(Resource):
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
 
-@datingapp.route('/profiles/<string:googleID>')
+@datingapp.route('/profiles/<string:google_fk>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
+@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class ProfileOperations(Resource):
-    @datingapp.marshal_with(profile)
-    @secured
-    def get(self, googleID):
+    @datingapp.marshal_with(profile) #Datenstruktur des Objektes der Get-Methode
+    #@secured
+    def get(self, google_fk):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
-        prof = adm.get_profile_by_google_id(googleID)
-        print(prof)
+        prof = adm.get_profile_by_google_id(google_fk)
+        print('get-Methode in Profile:', prof)
+        print(type(prof))
         return prof
 
     @secured
-    def delete(self, googleID):
+    def delete(self, google_fk):
         """ Löschen eines besimmten Profil-Objekts. """
 
         adm = Administration()
-        info_obj = adm.get_info_object_by_id(googleID)
+        print("Google ID Main: ", google_fk)
+        info_obj = adm.get_info_object_by_id(google_fk)
         adm.delete_info_object(info_obj)
-        prof = adm.get_profile_by_google_id(googleID)
+        prof = adm.get_profile_by_google_id(google_fk)
         adm.delete_profile(prof)
         return '', 200
 
@@ -319,6 +321,7 @@ class MessageOperations(Resource):
         messages = adm.get_message_by_chat(sender_id, recipient_id)
 
         if messages is not None:
+            print('get Chat', messages)
             return messages
         else:
             return '', 500 # Wenn es keine Messages gibt.
@@ -333,7 +336,7 @@ class InfoObjectListOperations(Resource):
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
-        print(api.payload)
+        print('Post-Method Infoobject:', api.payload)
 
         proposal = InfoObject.from_dict(api.payload)
 
@@ -359,7 +362,7 @@ class InfoObjectsOperations(Resource):
         adm = Administration()
         info_objs = adm.get_info_object(profile_id)
 
-        print(info_objs)
+        print('get-method Infoobjects:', info_objs)
         print(type(info_objs))
         return info_objs
 

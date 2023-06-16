@@ -24,7 +24,9 @@ import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
 import profile from "../components/Profile";
-import {json} from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom';
+
 
 
 class CreateProfil extends Component {
@@ -77,8 +79,8 @@ class CreateProfil extends Component {
     checkProfilExc() {
       DatingSiteAPI.getAPI()
           .getProfileByID(this.props.user.uid)
-          .then((profile) => {
-              if (profile.id === null) {
+          .then((profileBO) => {
+              if (profileBO.length === 0) {
                 this.setState({ profileExists: false });
               } else {
                 this.setState({ profileExists: true });
@@ -95,12 +97,17 @@ class CreateProfil extends Component {
         .getInfoObjects(this.props.user.uid)
         .then((responseInfoObjects) => {
           this.setState({
-            infoObjects: responseInfoObjects,
+              firstName: responseInfoObjects.get_first_name(),
+              lastName: responseInfoObjects.get_last_name(),
+              age: responseInfoObjects.get_age(),
+              gender: responseInfoObjects.get_gender(),
+              hair: responseInfoObjects.get_hair(),
+              height: responseInfoObjects.get_height(),
+              religio: responseInfoObjects.get_religion(),
+              smoking: responseInfoObjects.get_smoking_status(),
           });
         });
     }
-
-
 
     /** Event-Handler für die Änderung des Vornamens */
     handleChangeFirstName(event) {
@@ -141,6 +148,10 @@ class CreateProfil extends Component {
     handleChangeAge = (date) => {
         const newAge = date.toISOString();
         this.setState({ age: newAge });
+    };
+    /** Handler für Profil Anzeigen Button */
+    handleShow = (event) => {
+
     };
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
@@ -218,6 +229,7 @@ class CreateProfil extends Component {
             this.props.user.uid,
             this.state.char_fk,
             this.state.value,
+            this.state.searchprofile_id,
             this.state.age,
             this.state.firstName,
             this.state.gender,
@@ -236,7 +248,7 @@ class CreateProfil extends Component {
             );
 
         DatingSiteAPI.getAPI()
-            .addInfoObject(newInfoObject)
+            .updateInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -458,6 +470,14 @@ class CreateProfil extends Component {
                         <Button onClick={this.handleSubmit} variant="outlined" startIcon={<AddIcon />}>Profil erstellen</Button>
                     </Item>
                     )}
+                    {profileExists && (
+                    <Item>
+                    {/** Button für das anzeigen seines eigenes Profils */}
+                        <Link to={`/Profile/${this.props.user.uid}`}>
+                            <Button variant="outlined" startIcon={<AccountCircleIcon />}>Profil anzeigen</Button>
+                        </Link>
+                    </Item>
+                     )}
                     </Stack>
                 </Box>
                 <span></span>
