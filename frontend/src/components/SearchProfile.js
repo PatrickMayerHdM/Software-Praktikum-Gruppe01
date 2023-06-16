@@ -164,6 +164,12 @@ class SearchProfile extends React.Component{
                             case 80:
                               selectedProperties.smoking = charValue;
                               break;
+                            case 100:
+                              selectedProperties.minAge = charValue;
+                              break;
+                            case 110:
+                              selectedProperties.maxAge = charValue;
+                              break;
 
                             default:
                               break;
