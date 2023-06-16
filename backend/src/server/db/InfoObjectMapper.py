@@ -147,13 +147,14 @@ class InfoObjectMapper(mapper):
 
         return None
 
-    def delete(self, google_id):
-        print(type(google_id))
-        print("Delete Info: ", google_id.profile_id)
+    def delete(self, info_obj):
+        print('InfoObjectMapper "google_id":', info_obj)
+        print(type(info_obj))
+        #print("Delete Info: ", google_id.profile_id)
         cursor = self._connection.cursor()
 
         command = f'DELETE FROM main.InfoObject WHERE profile_id=%s'
-        data = [google_id.profile_id]
+        data = [info_obj.get_profile_fk()]
         cursor.execute(command, data)
 
         self._connection.commit()

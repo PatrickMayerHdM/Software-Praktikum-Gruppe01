@@ -70,7 +70,7 @@ characteristic = api.inherit('Characteristics', bo, {
 infoobject = api.inherit('InfoObject', bo, {
     'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
     'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
-    'profile_id': fields.String(attribute='profile_id', description='Google ID des Users'),
+    'profile_fk': fields.String(attribute='profile_fk', description='Google ID des Users'),
     'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 

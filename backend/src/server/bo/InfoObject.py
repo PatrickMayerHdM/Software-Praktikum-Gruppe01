@@ -7,7 +7,7 @@ class InfoObject(bo):
     def __init__(self):
         super().__init__()
         self.char_id = None
-        self.profile_id = None
+        self.profile_fk = None
         self.char_value = None
         self.searchprofile_id = None
         self.age = ""
@@ -47,10 +47,10 @@ class InfoObject(bo):
     """Fremdschlüsselbeziehung zwischen InfoObject und Profil wird hier gesetzt"""
 
     def set_profile_fk(self, profile):
-        self.profile_id = profile
+        self.profile_fk = profile
 
     def get_profile_fk(self):
-        return self.profile_id
+        return self.profile_fk
 
     def set_age(self, age):
         self.age = age
@@ -156,7 +156,7 @@ class InfoObject(bo):
     def from_dict(dictionary=dict()):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
-        obj.set_profile_fk(dictionary.get('profile_id'))
+        obj.set_profile_fk(dictionary.get('profile_fk'))
         obj.set_searchprofile_id(dictionary.get('searchprofile_id'))
         obj.set_value(dictionary.get('char_value'))
         obj.set_age(dictionary.get('age'))
