@@ -5,9 +5,9 @@ from Characteristic import Characteristics
 class InfoObject(bo):
     def __init__(self):
         super().__init__()
-        self.char_fk = None
-        self.profile_fk = None
-        self.value = None
+        self.char_id = None
+        self.profile_id = None
+        self.char_value = None
         self.searchprofile_id = None
         self.age = ""
         self.firstname = ""
@@ -19,10 +19,10 @@ class InfoObject(bo):
         self.smoking = ""
 
     def set_value(self, value):
-        self.value = value
+        self.char_value = value
 
     def get_value(self):
-        return self.value
+        return self.char_value
 
     def set_searchprofile_id(self, id):
         self.searchprofile_id = id
@@ -33,18 +33,18 @@ class InfoObject(bo):
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
     def set_char_fk(self, char_fk):
-        self.char_fk = char_fk
+        self.char_id = char_fk
 
     def get_char_fk(self):
-        return self.char_fk
+        return self.char_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Profil wird hier gesetzt"""
 
     def set_profile_fk(self, profile):
-        self.profile_fk = profile
+        self.profile_id = profile
 
     def get_profile_fk(self):
-        return self.profile_fk
+        return self.profile_id
 
     def set_age(self, age):
         self.age = age
@@ -112,9 +112,9 @@ class InfoObject(bo):
     def from_dict(dictionary=dict()):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
-        obj.set_profile_fk(dictionary.get('profile_fk'))
+        obj.set_profile_fk(dictionary.get('profile_id'))
         obj.set_searchprofile_id(dictionary.get('searchprofile_id'))
-        obj.set_value(dictionary.get('value'))
+        obj.set_value(dictionary.get('char_value'))
         obj.set_age(dictionary.get('age'))
         obj.set_first_name(dictionary.get('firstName'))
         obj.set_gender(dictionary.get('gender'))

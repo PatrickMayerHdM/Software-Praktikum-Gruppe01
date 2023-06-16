@@ -1,8 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
-import json
+
 
 
 
@@ -68,15 +68,10 @@ characteristic = api.inherit('Characteristics', bo, {
 })
 
 infoobject = api.inherit('InfoObject', bo, {
-    'age': fields.DateTime(attribute='_age', description='Geburtsdatum des Profilinhabers'),
-    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
-    'gender': fields.String(attribute='_gender', description='Geschlecht'),
-    'hair': fields.String(attribute='_hair', description='Haarfarbe'),
-    'height': fields.Integer(attribute='_height', description='Größe'),
-    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
-    'religion': fields.String(attribute='_religion', description='Religion'),
-    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher')
-
+    'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
+    'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
+    'profile_id': fields.String(attribute='profile_id', description='Google ID des Users'),
+    'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 
 chat = api.inherit('Chat', bo, {
@@ -256,10 +251,10 @@ class InfoObjectListOperations(Resource):
 
 @datingapp.route('/infoobjects/<string:profile_id>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
+@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
-    @secured
+    #@secured
     def get(self, profile_id):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
@@ -491,4 +486,4 @@ class SearchprofileListOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8001)
+    app.run(debug=True, port=8000)

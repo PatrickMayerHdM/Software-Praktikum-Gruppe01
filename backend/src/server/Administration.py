@@ -273,17 +273,9 @@ class Administration(object):
 
     def get_info_object(self, key):
 
-        info_obj = []
-
         with InfoObjectMapper() as mapper:
-            info = mapper.find_by_key(key)
-
-            for i in info:
-                char_value = i.get_value()
-                info_obj.append(char_value)
-
-        return info_obj
-
+            print("Admin FinByKey infoobj: ", key)
+            return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
         print("InfoDict: ", info_dict)
