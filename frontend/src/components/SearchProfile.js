@@ -36,14 +36,14 @@ class SearchProfile extends React.Component{
 
             lastPartURL: null,
             char_fk: 0,
-            searchprofile_id: 213,
+            searchprofile_id: null,
             error: null,
         };
 
         this.handleChangeGen = this.handleChangeGen.bind(this);
         this.handleChangeRel = this.handleChangeRel.bind(this);
         this.handleChangeSmo = this.handleChangeSmo.bind(this);
-        this.handleChangeHai = this.handleChangeHai.bind(this);
+        this.handleChangeHair = this.handleChangeHair.bind(this);
         this.handleChangeHeight = this.handleChangeHeight.bind(this);
 
     }
@@ -63,7 +63,7 @@ class SearchProfile extends React.Component{
         this.setState({ smoking: selectedSmoker });
     }
 
-    handleChangeHai = (val) => {
+    handleChangeHair = (val) => {
        const selectedHair = val.target.value;
         this.setState({ hair: selectedHair });
     };
@@ -138,15 +138,49 @@ class SearchProfile extends React.Component{
             } else {
             // Der Fall, wenn ein bereits existierendes Suchprofil bearbeitet wird
             DatingSiteAPI.getAPI()
-                .getInfoObjects(lastPartURL)
+                .getOneSearchprofile(lastPartURL)
                 .then((responseInfoObjects) => {
-                    this.setState({
-                        infoobjects: responseInfoObjects,
-                    });
-                });
-            }
+                    const selectedProperties = {};
 
-    }
+                    for (const key in responseInfoObjects) {
+                        if (responseInfoObjects.hasOwnProperty(key)) {
+                          const infoObject = responseInfoObjects[key];
+                          const charId = infoObject.char_id;
+                          const charValue = infoObject.char_value;
+
+                          switch (charId) {
+                            case 40:
+                              selectedProperties.gender = charValue;
+                              break;
+                            case 70:
+                              selectedProperties.hair = charValue;
+                              break;
+                            case 50:
+                              selectedProperties.height = charValue;
+                              break;
+                            case 60:
+                              selectedProperties.religion = charValue;
+                              break;
+                            case 80:
+                              selectedProperties.smoking = charValue;
+                              break;
+                            case 100:
+                              selectedProperties.minAge = charValue;
+                              break;
+                            case 110:
+                              selectedProperties.maxAge = charValue;
+                              break;
+
+                            default:
+                              break;
+                          }
+                        }
+                      }
+
+                      this.setState(selectedProperties);
+                    });
+
+    }}
 
     render() {
         const {
@@ -220,7 +254,7 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Hier kann die gewünschte Haarfarbe der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Haarfarbe sollte die gesuchte Person haben?</FormLabel>
-                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.hair} onChange={this.handleChangeHai} className={"checkbox_search"}>
+                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.hair} onChange={this.handleChangeHair} className={"checkbox_search"}>
                                 <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />

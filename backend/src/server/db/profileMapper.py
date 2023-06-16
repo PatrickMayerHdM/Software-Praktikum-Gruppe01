@@ -45,7 +45,7 @@ class ProfileMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("Profil von der Datenbank im Mapper:", result)
+        #print("Profil von der Datenbank im Mapper:", result)
         return result
 
     # def find_by_account_id(self, account_id):

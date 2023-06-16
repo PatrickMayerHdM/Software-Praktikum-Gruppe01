@@ -147,8 +147,8 @@ class ProfileOperations(Resource):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
         prof = adm.get_profile_by_google_id(google_fk)
-        print('get-Methode in Profile:', prof)
-        print(type(prof))
+        #print('get-Methode in Profile:', prof)
+        #print(type(prof))
         return prof
 
     @secured
@@ -159,6 +159,7 @@ class ProfileOperations(Resource):
         print("Google ID Main: ", google_fk)
         info_obj = adm.get_info_object_by_id(google_fk)
         adm.delete_info_object(info_obj)
+        adm.delete_message(google_fk)
         prof = adm.get_profile_by_google_id(google_fk)
         adm.delete_profile(prof)
         return '', 200
@@ -243,17 +244,20 @@ class SearchProfilesOperations(Resource):
 
 
 """Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
-@datingapp.route('/Search/SearchProfiles/<searchprofile_id>/<google_id>')
+@datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class SearchOneProfileOperation(Resource):
 
-    def get(self, searchprofile_id, google_id):
+    @datingapp.marshal_with(infoobject)
+    @secured
+    def get(self, searchprofile_id):
 
         adm = Administration()
-        SearchProf = adm.get_searchprofile_by_key(searchprofile_id, google_id)
+        search_info_objs = adm.get_searchprofile_by_key(searchprofile_id)
 
-        if SearchProf is not None:
-            return SearchProf, 200
+        if search_info_objs is not None:
+            return search_info_objs, 200
         else:
             return "", 500
 
@@ -355,9 +359,18 @@ class InfoObjectsOperations(Resource):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
         info_objs = adm.get_info_object(profile_id)
+        """ 
+        adjusted_infoobjs ruft die Methode "calculate_age" auf und liefert ein InfoObject-Objekt zurück.
+        Das InfoObjekt besitzt nun das Alter (z.B. 33) und nicht mehr das Geburtsdatum (TT/MM/YYYY...) 
+        """
+        adjusted_infoobjs = adm.calculate_age(info_objs)
+        #print('adjusted_infoobjs:', adjusted_infoobjs)
+        #print('adjusted_infoobjs:', adjusted_infoobjs.get_value())
+        info_objs.append(adjusted_infoobjs)
+        #print('get-method Infoobjects:', info_objs)
+        #print(type(info_objs))
+        #print('adjusted_infoobs:', adjusted_infoobjs)
 
-        print('get-method Infoobjects:', info_objs)
-        print(type(info_objs))
         return info_objs
 
     @datingapp.marshal_with(infoobject)
