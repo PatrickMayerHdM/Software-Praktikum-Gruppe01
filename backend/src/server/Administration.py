@@ -394,6 +394,13 @@ class Administration(object):
             return mapper.find_by_searchprofile(searchprofile, google_id)
 
     def calculate_age(self, info_objects):
+        """
+        Diese Methode bildet die Applikationslogik ab, um ein Alter anhand des Geburtstages zu berechnen.
+        Die Methode empfängt "info_objects". Dabei handelt es sich um eine Liste, die aus InfoObjects-Objekten besteht.
+        Nachdem das Objekt mit der char_id "30" gefunden wurde, wird das Alter berechnet und anschließend alle Werte
+        des Tupels (processed_infoobj) der processed_tuples Liste übergeben. Aus dieser Liste wird anschließend ein neues
+        InfoObject erstellt, das der main.py übergeben wird.
+        """
         processed_tuples = []
 
         for infoobj in info_objects:
@@ -401,7 +408,14 @@ class Administration(object):
             if age is not None:
                 processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_id, infoobj.searchprofile_id)
                 processed_tuples.append(processed_infoobj)
-                print('calculate_age Methode in Admin.py:', processed_tuples)
-            return processed_tuples
+                #print('calculate_age Methode in Admin.py:', processed_tuples)
+                new_infoobj = InfoObject()
+                new_infoobj.set_id(processed_tuples[0][0])
+                new_infoobj.set_char_fk(processed_tuples[0][1])
+                new_infoobj.set_value(str(processed_tuples[0][2]))
+                new_infoobj.set_profile_fk(processed_tuples[0][3])
+                new_infoobj.set_searchprofile_id(processed_tuples[0][4])
+                #print('Admin.py: New Infoobj', new_infoobj.get_value())
+            return new_infoobj
 
 

@@ -137,6 +137,11 @@ class InfoObject(bo):
         }
         return char_fk_mapping.get(key, None)
 
+    """
+    calc_age Methode: berechnet das aktuelle Alter des Nutzers anhand des Geburtstages. 
+    Dabei wird das ISOFormat umgesetzt und das "Z" aus dem Datum entfernt. 
+    Die Berechnung findet nur statt, wenn die char_id "30" (Alter) in dem Objekt enthalten ist. 
+    """
     def calc_age(self):
         if self.char_id == 30:
             birthdate = datetime.fromisoformat(self.char_value[:-1])
