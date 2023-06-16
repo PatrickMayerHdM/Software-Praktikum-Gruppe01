@@ -27,24 +27,28 @@ class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            own_profil_id: this.props.user.uid,
             error: '',
-            isCurrentUser: false,
+            isCurrentUser: true,
         }
     }
 
     componentDidMount() {
+        const currentUser = this.props.user.uid;
+        let isCurrentUser = false;
+        if (currentUser === this.props.user.uid) {
+            isCurrentUser = true;
+        }
+
         this.getSelectedProperties();
     }
 
-    getSelectedProperties() {
-      const userId = this.props.user.uid;
 
+
+    getSelectedProperties() {
       DatingSiteAPI.getAPI()
-        .getInfoObjects(userId)
+        .getInfoObjects(profile_id)
         .then((responseInfoObjects) => {
           const selectedProperties = {};
-          const ownProfileId = this.state.own_profil_id;
 
           for (const key in responseInfoObjects) {
             if (responseInfoObjects.hasOwnProperty(key)) {
@@ -53,7 +57,7 @@ class Profile extends React.Component{
               const charValue = infoObject.char_value;
 
               switch (charId) {
-                case 30:
+                  case 30:
                   selectedProperties.age = charValue;
                   break;
                 case 10:
@@ -84,8 +88,7 @@ class Profile extends React.Component{
             }
           }
 
-          const isCurrentUser = userId === ownProfileId;
-          this.setState({ ...selectedProperties, isCurrentUser: isCurrentUser });
+          this.setState(selectedProperties);
         });
     }
 
@@ -101,7 +104,7 @@ class Profile extends React.Component{
             height,
             religion,
             smoking,
-            isCurrentUser,
+            currentUser,
         } = this.state
 
         return (
@@ -189,7 +192,7 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
-                        {isCurrentUser ? null : (
+                        {!currentUser && (
                         <Item>
                           <Box sx={{ flexGrow: 1 }}>
                             <Grid
