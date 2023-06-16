@@ -43,7 +43,7 @@ class Search extends React.Component{
         this.AddSearchProfiles = this.AddSearchProfiles.bind(this);
         this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
         this.loadPage = this.loadPage.bind(this);
-        this.loading = this.loading.bind(this);
+        this.loadingPage = this.loadingPage.bind(this);
         this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
     }
 
@@ -109,10 +109,11 @@ class Search extends React.Component{
     }
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage möglich ist
-    loading(){
+    loadingPage(){
         DatingSiteAPI.getAPI()
-        .getSearchProfileIDs()
+        .getSearchProfileIDs(this.props.user.uid)
         .then(Searchprofilesvar => {
+          console.log("Das ist Searchprofilesvar in der loadingPage: ",Searchprofilesvar)
           this.setState(prevState => ({
             Searchprofiles: [...prevState.Searchprofiles, ...Searchprofilesvar]
           }));
@@ -130,7 +131,7 @@ class Search extends React.Component{
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage nicht möglich ist (Development Zwecke)
     loadPage() {
-        const dummySearchProfiles = [12, 56, 34];
+        const dummySearchProfiles = [12, 56];
 
         this.setState({ Searchprofiles: dummySearchProfiles }, () => {
             const lengthSearchprofiles = this.state.Searchprofiles.length;
@@ -145,7 +146,7 @@ class Search extends React.Component{
     // funktion welche funktionen beim Laden der Seite aufruft
 
     componentDidMount() {
-      this.loadPage();
+      this.loadingPage();
     }
 
 

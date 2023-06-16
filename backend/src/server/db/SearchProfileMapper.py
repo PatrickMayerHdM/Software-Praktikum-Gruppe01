@@ -25,7 +25,7 @@ class SearchProfileMapper(mapper):
         return result
 
     def find_by_key(self, key):
-        result = None
+        results = []
 
         cursor = self._connection.cursor()
         command = f'SELECT searchprofile_id, google_id FROM main.Searchprofile WHERE google_id=%s'
@@ -33,21 +33,36 @@ class SearchProfileMapper(mapper):
         cursor.execute(command, data)
         tuples = cursor.fetchall()
 
-        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (searchprofile_id, google_id) = tuples[0]
+        if tuples is not None:
+            for row in tuples:
+                (searchprofile_id, _) = row
+                results.append(searchprofile_id)
+
+        self._connection.commit()
+        cursor.close()
+
+        return results
+
+    def find_by_searchprofile(self, searchprofile, google_id):
+        result = []
+
+        cursor = self._connection.cursor()
+        command = f'SELECT searchprofile_id, google_id FROM main.Searchprofile WHERE searchprofile_id=%s AND google_id=%s'
+        data = (searchprofile, google_id, )
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (searchprofile_id, google_id) in tuples:
             searchprofile = SearchProfile()
             searchprofile.set_id(searchprofile_id)
             searchprofile.set_google_fk(google_id)
-            print("Suchprofil von der Datenbank im Mapper:", searchprofile)
-
-            result = searchprofile
-        else:
-            result = None
+            result.append(searchprofile)
 
         self._connection.commit()
         cursor.close()
 
         return result
+
 
     def insert(self, searchprofile):
         # Verbindugn zur DB + cursor-objekt erstellt
@@ -78,7 +93,7 @@ class SearchProfileMapper(mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE main.Searchprofile SET searchprofile_id=%s, google_id=%s"
-        data = (searchprofile.get_id(), searchprofile.get_google_fk())
+        data = (searchprofile.get_id(), searchprofile.get_google_id())
 
         cursor.execute(command, data)
 

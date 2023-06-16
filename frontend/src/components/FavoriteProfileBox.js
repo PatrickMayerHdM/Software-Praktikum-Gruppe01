@@ -28,18 +28,16 @@ class FavoriteProfileBox extends React.Component{
 
     }
 
-        /** Funktion welche ausgeführt wird, wenn  "Von Merkzettel Entfernen" gedrückt wird. */
+    /** Funktion welche ausgeführt wird, wenn "Von Merkzettel Entfernen" gedrückt wird. */
 
         FavoriteDelClicked(){
 
-            const { favoritenote_id } = this.state
-
             DatingSiteAPI.getAPI()
             // Löschen des FavoriteNote-Eintrags
-            .removeFavoritenoteProfileURL(favoritenote_id)
+            .removeFavoritenoteProfileURL(this.state.adding_id, this.state.added_id)
             .then(() => {
                 console.log("Von Merkzettel entfernt");
-    })
+            })
             .catch((e) =>
                 this.setState({
                     error: e,
@@ -75,7 +73,6 @@ class FavoriteProfileBox extends React.Component{
                     <button onClick={this.FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                         <PersonRemoveIcon/>
                     </button>
-
                 </Grid>
 
               </Grid >

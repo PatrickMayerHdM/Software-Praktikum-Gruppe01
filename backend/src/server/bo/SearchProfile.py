@@ -18,6 +18,6 @@ class SearchProfile(bo):
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = SearchProfile()
-        obj.set_id(dictionary['id'])
-        obj.set_google_fk(dictionary['searchprofile_id'])
+        obj.set_id(dictionary.get('id'))
+        obj.set_google_fk(dictionary.get('google_id'))
         return obj
