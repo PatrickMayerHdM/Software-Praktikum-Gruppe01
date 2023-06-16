@@ -165,6 +165,7 @@ class ProfileOperations(Resource):
         print("Google ID Main: ", google_fk)
         info_obj = adm.get_info_object_by_id(google_fk)
         adm.delete_info_object(info_obj)
+        adm.delete_message(google_fk)
         prof = adm.get_profile_by_google_id(google_fk)
         adm.delete_profile(prof)
         return '', 200
@@ -249,17 +250,20 @@ class SearchProfilesOperations(Resource):
 
 
 """Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
-@datingapp.route('/Search/SearchProfiles/<searchprofile_id>/<google_id>')
+@datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class SearchOneProfileOperation(Resource):
 
-    def get(self, searchprofile_id, google_id):
+    @datingapp.marshal_with(infoobject)
+    @secured
+    def get(self, searchprofile_id):
 
         adm = Administration()
-        SearchProf = adm.get_searchprofile_by_key(searchprofile_id, google_id)
+        search_info_objs = adm.get_searchprofile_by_key(searchprofile_id)
 
-        if SearchProf is not None:
-            return SearchProf, 200
+        if search_info_objs is not None:
+            return search_info_objs, 200
         else:
             return "", 500
 
