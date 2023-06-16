@@ -262,16 +262,17 @@ export default class DatingSiteAPI {
     }
 
     getProfileByID(google_fk) {
+        let profile = this.#fetchAdvanced(this.#getProfileByIdURL(google_fk));
+        console.log("Profile: ", profile);
         return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
             .then((responseJSON) => {
             console.log("Profilid: ", responseJSON)
-            let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
+            let responseProfileBO = profileBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);
             })
         })
     }
-
     /**
      * Bereich für die Suche
      */
@@ -281,6 +282,7 @@ export default class DatingSiteAPI {
     #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
+    #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
 
 
 
@@ -375,6 +377,17 @@ export default class DatingSiteAPI {
         })
     }
 
+
+    getOneSearchprofile(searchprofile_id){
+        return this.#fetchAdvanced(this.#getOneSearchprofileByIdURL(searchprofile_id))
+            .then((responseJSON) => {
+                let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
+                console.log("responseJSON API Infoobjects Suchprofil: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(infoobjectBOs);
+                })
+            })
+    }
 
 
         // Favoritenote related

@@ -14,6 +14,7 @@ from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
+from datetime import datetime
 
 class Administration(object):
     def __init__(self):
@@ -78,10 +79,10 @@ class Administration(object):
         with MessageMapper() as mapper:
             mapper.update(msg)
 
-    def delete_message(self, message):
+    def delete_message(self, google_id):
         """Hier wird "message" mit mapper aus DB gelöscht"""
         with MessageMapper() as mapper:
-            mapper.delete(message)
+            mapper.delete(google_id)
 
     def get_all_messages(self):
         """Alle messages auslesen"""
@@ -212,6 +213,7 @@ class Administration(object):
 
     def delete_profile(self, profile):
         with ProfileMapper() as mapper:
+            print("Admin: ", profile)
             mapper.delete(profile)
 
     @staticmethod
@@ -221,6 +223,7 @@ class Administration(object):
 
     def get_profile_by_google_id(self, key):
         with ProfileMapper() as mapper:
+            #print("Admin FinByKey Profil: ", key)
             return mapper.find_by_key(key)
 
     def get_all_profiles_by_blocknote_id(self):
@@ -264,21 +267,12 @@ class Administration(object):
 
     def get_info_object_by_id(self, key):
         with InfoObjectMapper() as mapper:
+            print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
     def get_info_object(self, key):
-
-        info_obj = []
-
         with InfoObjectMapper() as mapper:
-            info = mapper.find_by_key(key)
-
-            for i in info:
-                char_value = i.get_value()
-                info_obj.append(char_value)
-
-        return info_obj
-
+            return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
         print("InfoDict: ", info_dict)
@@ -296,12 +290,9 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def update_info_object(self, infoobject):
-        with InfoObjectMapper() as mapper:
-            existing_info_object = infoobject.find_info_object_by_id(infoobject.get_id(), infoobject.get_profile_fk())
-            if existing_info_object is None:
-                return None
-            existing_info_object.set_value(infoobject.get_value())
-            return mapper.update(existing_info_object)
+        with InfoObjectMapper as mapper:
+            print("Admin InfoObject: ", infoobject)
+            return mapper.find_by_id(infoobject)
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
         with InfoObjectMapper() as mapper:
@@ -398,5 +389,33 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
+    def get_searchprofile_by_key(self, searchprofile):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_by_searchprofile(searchprofile)
+
+    def calculate_age(self, info_objects):
+        """
+        Diese Methode bildet die Applikationslogik ab, um ein Alter anhand des Geburtstages zu berechnen.
+        Die Methode empfängt "info_objects". Dabei handelt es sich um eine Liste, die aus InfoObjects-Objekten besteht.
+        Nachdem das Objekt mit der char_id "30" gefunden wurde, wird das Alter berechnet und anschließend alle Werte
+        des Tupels (processed_infoobj) der processed_tuples Liste übergeben. Aus dieser Liste wird anschließend ein neues
+        InfoObject erstellt, das der main.py übergeben wird.
+        """
+        processed_tuples = []
+
+        for infoobj in info_objects:
+            age = infoobj.calc_age()
+            if age is not None:
+                processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_id, infoobj.searchprofile_id)
+                processed_tuples.append(processed_infoobj)
+                #print('calculate_age Methode in Admin.py:', processed_tuples)
+                new_infoobj = InfoObject()
+                new_infoobj.set_id(processed_tuples[0][0])
+                new_infoobj.set_char_fk(processed_tuples[0][1])
+                new_infoobj.set_value(str(processed_tuples[0][2]))
+                new_infoobj.set_profile_fk(processed_tuples[0][3])
+                new_infoobj.set_searchprofile_id(processed_tuples[0][4])
+                #print('Admin.py: New Infoobj', new_infoobj.get_value())
+            return new_infoobj
 
 

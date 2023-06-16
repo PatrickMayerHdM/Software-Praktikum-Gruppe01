@@ -149,10 +149,12 @@ class MessageMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, message):
+    def delete(self, google_id):
+        """ Löschen von Nachrichten, wo der Nutzer mit der gegebenen Google_Id
+            der Sender oder Empfänger der Nachrich ist. """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.Message WHERE message_id={message.get_id()}'
+        command = f"DELETE FROM main.Message WHERE sender_id='{google_id}' OR recipient_id='{google_id}'"
         cursor.execute(command)
 
         self._connection.commit()

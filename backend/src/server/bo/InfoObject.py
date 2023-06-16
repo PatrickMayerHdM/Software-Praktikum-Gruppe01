@@ -1,14 +1,14 @@
 from server.bo.BusinessObject import BusinessObject as bo
 from Characteristic import Characteristics
+from datetime import datetime
 
 
 class InfoObject(bo):
     def __init__(self):
         super().__init__()
-        self.char_fk = None
-        self.profile_fk = None
-        self.value = None
-        # Strato
+        self.char_id = None
+        self.profile_id = None
+        self.char_value = None
         self.searchprofile_id = None
         self.age = ""
         self.firstname = ""
@@ -25,11 +25,11 @@ class InfoObject(bo):
 
 
     def set_value(self, value):
-        self.value = value
+        self.char_value = value
 
     def get_value(self):
-        return self.value
-    # Strato
+        return self.char_value
+
     def set_searchprofile_id(self, id):
         self.searchprofile_id = id
 
@@ -39,18 +39,18 @@ class InfoObject(bo):
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
     def set_char_fk(self, char_fk):
-        self.char_fk = char_fk
+        self.char_id = char_fk
 
     def get_char_fk(self):
-        return self.char_fk
+        return self.char_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Profil wird hier gesetzt"""
 
     def set_profile_fk(self, profile):
-        self.profile_fk = profile
+        self.profile_id = profile
 
     def get_profile_fk(self):
-        return self.profile_fk
+        return self.profile_id
 
     def set_age(self, age):
         self.age = age
@@ -137,13 +137,28 @@ class InfoObject(bo):
         }
         return char_fk_mapping.get(key, None)
 
+    """
+    calc_age Methode: berechnet das aktuelle Alter des Nutzers anhand des Geburtstages. 
+    Dabei wird das ISOFormat umgesetzt und das "Z" aus dem Datum entfernt. 
+    Die Berechnung findet nur statt, wenn die char_id "30" (Alter) in dem Objekt enthalten ist. 
+    """
+    def calc_age(self):
+        if self.char_id == 30:
+            birthdate = datetime.fromisoformat(self.char_value[:-1])
+            curr_date = datetime.now()
+            age = curr_date.year - birthdate.year
+            return age
+        else:
+            return None
+
+
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = InfoObject()
         obj.set_id(dictionary.get('id'))
-        obj.set_profile_fk(dictionary.get('profile_fk'))
+        obj.set_profile_fk(dictionary.get('profile_id'))
         obj.set_searchprofile_id(dictionary.get('searchprofile_id'))
-        obj.set_value(dictionary.get('value'))
+        obj.set_value(dictionary.get('char_value'))
         obj.set_age(dictionary.get('age'))
         obj.set_first_name(dictionary.get('firstName'))
         obj.set_gender(dictionary.get('gender'))
@@ -155,7 +170,6 @@ class InfoObject(bo):
         # Ab hier die Änderungen für das SuchProfil
         obj.set_minAge(dictionary.get('minAge'))
         obj.set_maxAge(dictionary.get('maxAge'))
-        obj.set_searchprofile_fk('searchprofile_fk')
         return obj
 
     def to_dict(self):
@@ -169,8 +183,8 @@ class InfoObject(bo):
             "60": self.get_religion(),
             "80": self.get_smoking_status(),
             # Ab hier die Änderungen für das SuchProfil
-            '100': self.get_minAge(),
-            '110': self.get_maxAge(),
+            "100": self.get_minAge(),
+            "110": self.get_maxAge(),
         }
         return info_dict
 

@@ -1,8 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
-import json
+
 
 
 
@@ -51,8 +51,8 @@ account = api.inherit('Account', bo, {
 })
 
 profile = api.inherit('Profile', bo, {
-    'favoriteNote_id': fields.String(attribute='_favoriteNote_id', description='Merkliste eines Profils'),
-    'blockNote_id': fields.String(attribute='_blockNote_id', description='Blockierliste eines Profils'),
+    'favoritenote_id': fields.Integer(attribute='_favoritenote_id', description='Merkliste eines Profils'),
+    'blocknote_id': fields.Integer(attribute='_blocknote_id', description='Blockierliste eines Profils'),
     'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
 })
 
@@ -68,18 +68,10 @@ characteristic = api.inherit('Characteristics', bo, {
 })
 
 infoobject = api.inherit('InfoObject', bo, {
-    'age': fields.DateTime(attribute='_age', description='Geburtsdatum des Profilinhabers'),
-    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
-    'gender': fields.String(attribute='_gender', description='Geschlecht'),
-    'hair': fields.String(attribute='_hair', description='Haarfarbe'),
-    'height': fields.Integer(attribute='_height', description='Größe'),
-    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
-    'religion': fields.String(attribute='_religion', description='Religion'),
-    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher'),
-    # Ab hier die fürs SuchProfil
-    'minAge': fields.String(attribute='_minAge', description='Das minimalalter in einem SuchProfil'),
-    'maxAge': fields.String(attribute='_maxAge', description='Das maximalalter in einem SuchProfil'),
-    'searchprofile_fk': fields.String(attribute='searchprofile_fk', description='Die fk Verbindung zu SuchProfil'),
+    'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
+    'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
+    'profile_id': fields.String(attribute='profile_id', description='Google ID des Users'),
+    'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 
 chat = api.inherit('Chat', bo, {
@@ -103,6 +95,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
     'google_id': fields.String(attribute='_google_id', description='Google_ID eines SuchProfils')
 })
 
+
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
@@ -113,7 +106,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
     @datingapp.marshal_list_with(profile)
-    @secured
+    #@secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -129,7 +122,7 @@ class ProfileListOperations(Resource):
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
-        #print(api.payload)
+        print('post-Method Profile:', api.payload)
 
         if proposal is not None:
 
@@ -143,27 +136,30 @@ class ProfileListOperations(Resource):
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
             return ' ProfileOperations "Post" fehlgeschlagen', 500
 
-@datingapp.route('/profiles/<string:googleID>')
+@datingapp.route('/profiles/<string:google_fk>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
+@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class ProfileOperations(Resource):
-    @datingapp.marshal_with(profile)
-    @secured
-    def get(self, googleID):
+    @datingapp.marshal_with(profile) #Datenstruktur des Objektes der Get-Methode
+    #@secured
+    def get(self, google_fk):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
-        prof = adm.get_profile_by_google_id(googleID)
-        print(prof)
+        prof = adm.get_profile_by_google_id(google_fk)
+        #print('get-Methode in Profile:', prof)
+        #print(type(prof))
         return prof
 
     @secured
-    def delete(self, googleID):
+    def delete(self, google_fk):
         """ Löschen eines besimmten Profil-Objekts. """
 
         adm = Administration()
-        info_obj = adm.get_info_object_by_id(googleID)
+        print("Google ID Main: ", google_fk)
+        info_obj = adm.get_info_object_by_id(google_fk)
         adm.delete_info_object(info_obj)
-        prof = adm.get_profile_by_google_id(googleID)
+        adm.delete_message(google_fk)
+        prof = adm.get_profile_by_google_id(google_fk)
         adm.delete_profile(prof)
         return '', 200
 
@@ -240,11 +236,30 @@ class SearchProfilesOperations(Resource):
         adm = Administration()
         SearchP = adm.get_searchprofiles_by_google_id(id)
 
-        # Holt sich das result (return) von der get_profile_by_message(id), dies ist dann eine Liste mit Chatpartnern.
         if SearchP is not None:
             return SearchP, 200
         else:
             return "", 500
+
+
+"""Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
+@datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+class SearchOneProfileOperation(Resource):
+
+    @datingapp.marshal_with(infoobject)
+    @secured
+    def get(self, searchprofile_id):
+
+        adm = Administration()
+        search_info_objs = adm.get_searchprofile_by_key(searchprofile_id)
+
+        if search_info_objs is not None:
+            return search_info_objs, 200
+        else:
+            return "", 500
+
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
@@ -258,7 +273,7 @@ class ChatListOperations(Resource):
     #@datingapp.marshal_with(chatList)
     #@secured
     def get(self, id):
-
+        # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
         adm = Administration()
         x = adm.get_profile_by_message(id)
 
@@ -303,6 +318,7 @@ class MessageOperations(Resource):
         messages = adm.get_message_by_chat(sender_id, recipient_id)
 
         if messages is not None:
+            print('get Chat', messages)
             return messages
         else:
             return '', 500 # Wenn es keine Messages gibt.
@@ -317,7 +333,7 @@ class InfoObjectListOperations(Resource):
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
-        print(api.payload)
+        print('Post-Method Infoobject:', api.payload)
 
         proposal = InfoObject.from_dict(api.payload)
 
@@ -334,7 +350,7 @@ class InfoObjectListOperations(Resource):
 
 @datingapp.route('/infoobjects/<string:profile_id>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
+@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
     @secured
@@ -342,56 +358,28 @@ class InfoObjectsOperations(Resource):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
         info_objs = adm.get_info_object(profile_id)
+        """ 
+        adjusted_infoobjs ruft die Methode "calculate_age" auf und liefert ein InfoObject-Objekt zurück.
+        Das InfoObjekt besitzt nun das Alter (z.B. 33) und nicht mehr das Geburtsdatum (TT/MM/YYYY...) 
+        """
+        adjusted_infoobjs = adm.calculate_age(info_objs)
+        #print('adjusted_infoobjs:', adjusted_infoobjs)
+        #print('adjusted_infoobjs:', adjusted_infoobjs.get_value())
+        info_objs.append(adjusted_infoobjs)
+        #print('get-method Infoobjects:', info_objs)
+        #print(type(info_objs))
+        #print('adjusted_infoobs:', adjusted_infoobjs)
 
-        print(info_objs)
-        print(type(info_objs))
         return info_objs
 
     @datingapp.marshal_with(infoobject)
     @secured
     def put(self, googleID):
         adm = Administration()
-        proposal = InfoObject.from_dict(api.payload)
+        print("Main PUT InfoObject", infoobject)
+        info_objs = adm.update_info_object()
+        return info_objs
 
-        if proposal is not None:
-            info_obj_id = proposal.get_id()
-            new_value = proposal.get_value()
-
-            # InfoObject in der Datenbank suchen
-            info_obj = adm.get_info_object_by_id(info_obj_id, googleID)
-
-            if info_obj is not None:
-                # Überprüfen, welche Felder aktualisiert werden sollen und die entsprechenden Setter aufrufen
-                if new_value != "":
-                    info_obj.set_value(new_value)
-                if proposal.get_age() != "":
-                    info_obj.set_age(proposal.get_age())
-                if proposal.get_first_name() != "":
-                    info_obj.set_first_name(proposal.get_first_name())
-                if proposal.get_gender() != "":
-                    info_obj.set_gender(proposal.get_gender())
-                if proposal.get_hair() != "":
-                    info_obj.set_hair(proposal.get_hair())
-                if proposal.get_height() != "":
-                    info_obj.set_height(proposal.get_height())
-                if proposal.get_last_name() != "":
-                    info_obj.set_last_name(proposal.get_last_name())
-                if proposal.get_religion() != "":
-                    info_obj.set_religion(proposal.get_religion())
-                if proposal.get_smoking_status() != "":
-                    info_obj.set_smoking_status(proposal.get_smoking_status())
-
-                # InfoObject in der Datenbank aktualisieren
-                affected_rows = adm.update_info_object(info_obj)
-
-                if affected_rows > 0:
-                    return info_obj, 200
-                else:
-                    return 'InfoObject konnte nicht aktualisiert werden', 500
-            else:
-                return 'InfoObject nicht gefunden', 404
-        else:
-            return 'Ungültiges InfoObject', 400
 
 
 """Ab hier FavoriteNote"""
@@ -509,7 +497,7 @@ class BlocknoteListOperations(Resource):
 @datingapp.response(500, 'Serverseitiger Fehler')
 @datingapp.param('profile_id', 'Die ID des BlockNote-Objekts')
 class BlockNoteOperations(Resource):
-    #@secured
+    @secured
     def get(self, profile_id):
         """Auslesen eines BlockNote-Objekts.
         Das Objekt wird durch die id in dem URI bestimmt"""

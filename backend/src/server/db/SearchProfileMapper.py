@@ -1,5 +1,6 @@
 from server.db.mapper import mapper
 from server.bo.SearchProfile import SearchProfile
+from server.bo.InfoObject import InfoObject
 
 class SearchProfileMapper(mapper):
 
@@ -42,6 +43,30 @@ class SearchProfileMapper(mapper):
         cursor.close()
 
         return results
+
+    def find_by_searchprofile(self, searchprofile):
+        result = []
+
+        cursor = self._connection.cursor()
+        command = f'SELECT * FROM main.InfoObject WHERE searchprofile_id=%s'
+        data = (searchprofile, )
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
+            info_obj = InfoObject()
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
+            info_obj.set_searchprofile_id(searchprofile_id)
+            result.append(info_obj)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
 
     def insert(self, searchprofile):
         # Verbindugn zur DB + cursor-objekt erstellt
