@@ -1,8 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
-import json
+
 
 
 
@@ -68,18 +68,10 @@ characteristic = api.inherit('Characteristics', bo, {
 })
 
 infoobject = api.inherit('InfoObject', bo, {
-    'age': fields.DateTime(attribute='_age', description='Geburtsdatum des Profilinhabers'),
-    'firstName': fields.String(attribute='_firstName', description='Vorname des Profilinhabers'),
-    'gender': fields.String(attribute='_gender', description='Geschlecht'),
-    'hair': fields.String(attribute='_hair', description='Haarfarbe'),
-    'height': fields.Integer(attribute='_height', description='Größe'),
-    'lastName': fields.String(attribute='_lastName', description='Nachname des Profilinhabers'),
-    'religion': fields.String(attribute='_religion', description='Religion'),
-    'smoking': fields.String(attribute='_smoking', description='Raucher oder Nichtraucher'),
-    # Ab hier die fürs SuchProfil
-    'minAge': fields.String(attribute='_minAge', description='Das minimalalter in einem SuchProfil'),
-    'maxAge': fields.String(attribute='_maxAge', description='Das maximalalter in einem SuchProfil'),
-    'searchprofile_fk': fields.String(attribute='searchprofile_fk', description='Die fk Verbindung zu SuchProfil'),
+    'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
+    'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
+    'profile_id': fields.String(attribute='profile_id', description='Google ID des Users'),
+    'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 
 chat = api.inherit('Chat', bo, {
@@ -102,6 +94,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
     #'SearchProfile_id': fields.Integer(attribute='_SearchProfile_id', description='SearchProfile_id eines SuchProfils'),
     'google_id': fields.String(attribute='_google_id', description='Google_ID eines SuchProfils')
 })
+
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
@@ -153,8 +146,8 @@ class ProfileOperations(Resource):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
         prof = adm.get_profile_by_google_id(google_fk)
-        print('get-Methode in Profile:', prof)
-        print(type(prof))
+        #print('get-Methode in Profile:', prof)
+        #print(type(prof))
         return prof
 
     @secured
@@ -280,7 +273,7 @@ class ChatListOperations(Resource):
     #@datingapp.marshal_with(chatList)
     #@secured
     def get(self, id):
-
+        # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
         adm = Administration()
         x = adm.get_profile_by_message(id)
 
@@ -357,7 +350,7 @@ class InfoObjectListOperations(Resource):
 
 @datingapp.route('/infoobjects/<string:profile_id>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('google_fk', 'Die Google-ID des Profil-Objekts')
+@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
     @secured
@@ -365,56 +358,22 @@ class InfoObjectsOperations(Resource):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
         info_objs = adm.get_info_object(profile_id)
-
+        adjusted_infoobjs = adm.calculate_age(info_objs)
+        info_objs.append(adjusted_infoobjs[0])
         print('get-method Infoobjects:', info_objs)
         print(type(info_objs))
+        #print('adjusted_infoobs:', adjusted_infoobjs)
+
         return info_objs
 
     @datingapp.marshal_with(infoobject)
     @secured
     def put(self, googleID):
         adm = Administration()
-        proposal = InfoObject.from_dict(api.payload)
+        print("Main PUT InfoObject", infoobject)
+        info_objs = adm.update_info_object()
+        return info_objs
 
-        if proposal is not None:
-            info_obj_id = proposal.get_id()
-            new_value = proposal.get_value()
-
-            # InfoObject in der Datenbank suchen
-            info_obj = adm.get_info_object_by_id(info_obj_id, googleID)
-
-            if info_obj is not None:
-                # Überprüfen, welche Felder aktualisiert werden sollen und die entsprechenden Setter aufrufen
-                if new_value != "":
-                    info_obj.set_value(new_value)
-                if proposal.get_age() != "":
-                    info_obj.set_age(proposal.get_age())
-                if proposal.get_first_name() != "":
-                    info_obj.set_first_name(proposal.get_first_name())
-                if proposal.get_gender() != "":
-                    info_obj.set_gender(proposal.get_gender())
-                if proposal.get_hair() != "":
-                    info_obj.set_hair(proposal.get_hair())
-                if proposal.get_height() != "":
-                    info_obj.set_height(proposal.get_height())
-                if proposal.get_last_name() != "":
-                    info_obj.set_last_name(proposal.get_last_name())
-                if proposal.get_religion() != "":
-                    info_obj.set_religion(proposal.get_religion())
-                if proposal.get_smoking_status() != "":
-                    info_obj.set_smoking_status(proposal.get_smoking_status())
-
-                # InfoObject in der Datenbank aktualisieren
-                affected_rows = adm.update_info_object(info_obj)
-
-                if affected_rows > 0:
-                    return info_obj, 200
-                else:
-                    return 'InfoObject konnte nicht aktualisiert werden', 500
-            else:
-                return 'InfoObject nicht gefunden', 404
-        else:
-            return 'Ungültiges InfoObject', 400
 
 
 """Ab hier FavoriteNote"""
@@ -532,7 +491,7 @@ class BlocknoteListOperations(Resource):
 @datingapp.response(500, 'Serverseitiger Fehler')
 @datingapp.param('profile_id', 'Die ID des BlockNote-Objekts')
 class BlockNoteOperations(Resource):
-    #@secured
+    @secured
     def get(self, profile_id):
         """Auslesen eines BlockNote-Objekts.
         Das Objekt wird durch die id in dem URI bestimmt"""

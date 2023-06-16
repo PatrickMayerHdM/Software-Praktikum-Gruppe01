@@ -25,7 +25,6 @@ class Profile extends React.Component{
         super(props);
         this.state = {
             own_profil_id: this.props.user.uid,
-            profil_info_list: [],
             error: '',
         }
 
@@ -33,38 +32,73 @@ class Profile extends React.Component{
     }
 
     componentDidMount() {
-        this.getAllProfilInfoObjects();
+        this.getSelectedProperties();
     }
 
-    getAllProfilInfoObjects() {
-        const { own_profil_id } = this.state;
-        DatingSiteAPI.getAPI()
-            .getInfoObjects(own_profil_id)
-            .then((infoobjectBOs) =>
-                this.setState({
-                    profil_info_list: infoobjectBOs,
-                }, () => {
-                    console.log(this.state.profil_info_list)
-                }),
-            )
-            .catch((e) =>
-                this.setState({
-                    profil_info_list,
-                    error: e,
-                })
-            );
-    }
+    getSelectedProperties() {
+      DatingSiteAPI.getAPI()
+        .getInfoObjects(this.props.user.uid)
+        .then((responseInfoObjects) => {
+          const selectedProperties = {};
 
+          for (const key in responseInfoObjects) {
+            if (responseInfoObjects.hasOwnProperty(key)) {
+              const infoObject = responseInfoObjects[key];
+              const charId = infoObject.char_id;
+              const charValue = infoObject.char_value;
+
+              switch (charId) {
+                  case 30:
+                  selectedProperties.age = charValue;
+                  break;
+                case 10:
+                  selectedProperties.firstName = charValue;
+                  break;
+                case 40:
+                  selectedProperties.gender = charValue;
+                  break;
+                case 70:
+                  selectedProperties.hair = charValue;
+                  break;
+                case 50:
+                  selectedProperties.height = charValue;
+                  break;
+                case 20:
+                  selectedProperties.lastName = charValue;
+                  break;
+                case 60:
+                  selectedProperties.religion = charValue;
+                  break;
+                case 80:
+                  selectedProperties.smoking = charValue;
+                  break;
+
+                default:
+                  break;
+              }
+            }
+          }
+
+          this.setState(selectedProperties);
+        });
+    }
 
     render() {
 
-        const { profil_info_list } = this.state
+        const {
+            age,
+            lastName,
+            firstName,
+            gender,
+            hair,
+            height,
+            religion,
+            smoking,
+        } = this.state
 
         return (
             <div>
              <p></p>
-                {profil_info_list.map((infos) =>
-
                 <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                         <Item>
@@ -73,7 +107,7 @@ class Profile extends React.Component{
                                     Vorname:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={3}>
-                                    <p>{infos.get_first_name()}</p>
+                                    <p>{firstName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -83,7 +117,7 @@ class Profile extends React.Component{
                                     Nachname:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_last_name()}</p>
+                                    <p>{lastName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -93,7 +127,7 @@ class Profile extends React.Component{
                                     Alter:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_age()}</p>
+                                    <p>{age}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -103,7 +137,7 @@ class Profile extends React.Component{
                                     Geschlecht:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_gender()}</p>
+                                    <p>{gender}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -113,7 +147,7 @@ class Profile extends React.Component{
                                     Körpergröße:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_height()}cm</p>
+                                    <p>{height}cm</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -123,7 +157,7 @@ class Profile extends React.Component{
                                     Religion:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_religion()}</p>
+                                    <p>{religion}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -133,7 +167,7 @@ class Profile extends React.Component{
                                     Haarfarbe:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_hair()}</p>
+                                    <p>{hair}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -143,23 +177,13 @@ class Profile extends React.Component{
                                     Raucher:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{infos.get_smoking_status()}</p>
-                                </Grid>
-                            </Grid >
-                        </Item>
-                        <Item>
-                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
-                                    Freitext:
-                                </Grid>
-                                <Grid md={8} xs={12} spacing={2}>
-                                    {/** Hier kommen dann die dynamsichen Eigenschaften hinzu. */}
+                                    <p>{smoking}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                     </Stack>
                 </Box>
-                )}
+
             </div>
         )
     }
