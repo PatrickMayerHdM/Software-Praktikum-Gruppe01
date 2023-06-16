@@ -103,10 +103,11 @@ class BlockNoteMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, blockliste):
+    def delete(self, blocking_id, blocked_id):
         cursor = self._connection.cursor()
-        command = f'DELETE FROM main.Blocknote WHERE blocknote_id ={blockliste.get_id()}'
-        cursor.execute(command)
+        command = 'DELETE FROM main.Blocknote WHERE blocking_id=%s AND blocked_id=%s'
+        data = (blocking_id, blocked_id)
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()

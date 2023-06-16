@@ -5,6 +5,8 @@ import Characteristic from "./CharacteristicBO";
 import infoobjectBO from "./InfoObjectBO";
 import favoriteNoteBO from "./FavoriteNoteBO";
 import blockNoteBO from "./BlockNoteBO";
+import searchprofileBO from "./SearchprofileBO";
+import FavoriteNoteBO from '../api/FavoriteNoteBO';
 
 
 export default class DatingSiteAPI {
@@ -275,9 +277,13 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`;
-    #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
-    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`;
+    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
+    #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
+    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
+    #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
+    #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
+    #getOneSearchprofileByIdURL = (searchprofile_id, google_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}/${google_id}`;
+
 
 
     /**
@@ -288,7 +294,7 @@ export default class DatingSiteAPI {
     getOnlyNewProfiles(profileID){
         return this.#fetchAdvanced(this.#getNewProfilesByIdURL(profileID))
             .then((responseJSON) => {
-                console.log("Das ist das profile_id Dings im API call: ",profileID )
+                console.log("Das ist das profile_id im API call: ",profileID )
                 console.log("Das responseJSON")
                 console.log(responseJSON)
                 return new Promise(function (resolve) {
@@ -304,8 +310,8 @@ export default class DatingSiteAPI {
      * @param {Number} accountID übergibt die accountID für welche die Profile nicht
     */
 
-    getSearchProfileIDs(){
-        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL())
+    getSearchProfileIDs(profile_id){
+        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL(profile_id))
             .then((responseJSON) => {
                 console.log("Das responseJSON")
                 console.log(responseJSON)
@@ -333,11 +339,62 @@ export default class DatingSiteAPI {
       })
     }
 
+    addSearchInfoObject(infoobject) {
+        console.log("InfoObject: ", infoobject)
+        return this.#fetchAdvanced(this.#addSearchInfoObject(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(infoobject)
+        }).then((responseJSON) => {
+            let newinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newinfoobjectBO);
+            })
+        })
+    }
+
+    /**
+     * @param {searchprofileBO} searchprofileBO object
+     * @public
+     */
+
+    addSearchProfile(searchprofile){
+        return this.#fetchAdvanced(this.#addSearchProfileURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(searchprofile)
+        }).then((responseJSON) => {
+            let oneSearchProfile = searchprofileBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(oneSearchProfile);
+            })
+        })
+    }
+
+
+    getOneSearchprofile(searchprofile_id, google_id){
+        return this.#fetchAdvanced(this.#getOneSearchprofileByIdURL(searchprofile_id, google_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON")
+                console.log(responseJSON)
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                })
+            })
+    }
+
+
         // Favoritenote related
 
     #getFavoritenoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
     #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/Favoritenote`;
-    #removeFavoriteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+    #removeFavoriteProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}/${other_profile_id}`;
 
 
     getFavoritenoteProfileURL(profile_id){
@@ -368,8 +425,8 @@ export default class DatingSiteAPI {
         })
     }
 
-   removeFavoritenoteProfileURL(favoritenote_id) {
-        return this.#fetchAdvanced(this.#removeFavoriteProfileURL(favoritenote_id), {
+   removeFavoritenoteProfileURL(profile_id, other_profile_id) {
+        return this.#fetchAdvanced(this.#removeFavoriteProfileURL(profile_id, other_profile_id), {
             method: 'DELETE'
         })
             .then((responseJSON) => {
@@ -385,6 +442,8 @@ export default class DatingSiteAPI {
 
     #getBlocknoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}`;
     #addBlockProfile = (profile_id) => `${this.#datingServerBaseURL}/Blocknote`;
+    #removeBlockProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}/${other_profile_id}`;
+
 
     getBlocknoteProfileURL(profile_id){
         return this.#fetchAdvanced(this.#getBlocknoteProfileURL(profile_id))
@@ -411,6 +470,20 @@ export default class DatingSiteAPI {
             })
         })
     }
+
+    removeBlocknoteProfile(profile_id, other_profile_id) {
+        return this.#fetchAdvanced(this.#removeBlockProfileURL(profile_id, other_profile_id), {
+            method: 'DELETE'
+        })
+            .then((responseJSON) => {
+                let delBO = favoriteNoteBO.fromJSON(responseJSON[0]);
+                return new Promise(function (resolve) {
+                    resolve(delBO);
+                })
+            })
+
+    }
+
 
 
 

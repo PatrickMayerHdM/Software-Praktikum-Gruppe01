@@ -16,7 +16,6 @@ from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
 
-
 class Administration(object):
     def __init__(self):
         pass
@@ -131,9 +130,10 @@ class Administration(object):
         with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
-    def delete_blocknote(self, blocklist):
+    def delete_blocknote(self, blocking_id, blocked_id):
         with BlockNoteMapper() as mapper:
-            mapper.delete(blocklist)
+            mapper.delete(blocking_id, blocked_id)
+
 
     def get_all_blocknote(self):
         with BlockNoteMapper() as mapper:
@@ -170,10 +170,8 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             mapper.update(favoritenote)
 
-    def delete_favoritenote(self, favoritenote):
+    def delete_favoritenote(self, adding_id, added_id):
         with FavoriteNoteMapper() as mapper:
-            adding_id = favoritenote.get_adding_id()
-            added_id = favoritenote.get_added_id()
             mapper.delete(adding_id, added_id)
 
     def get_all_favoritenotes(self):
@@ -292,12 +290,9 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def update_info_object(self, infoobject):
-        with InfoObjectMapper() as mapper:
-            existing_info_object = infoobject.find_info_object_by_id(infoobject.get_id(), infoobject.get_profile_fk())
-            if existing_info_object is None:
-                return None
-            existing_info_object.set_value(infoobject.get_value())
-            return mapper.update(existing_info_object)
+        with InfoObjectMapper as mapper:
+            print("Admin InfoObject: ", infoobject)
+            return mapper.find_by_id(infoobject)
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
         with InfoObjectMapper() as mapper:
@@ -308,6 +303,43 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
+    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
+
+    def create_Search_info_object(self, profile_fk, info_dict):
+        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    # Hier wird der CharMapper aufgerufen!
+                    char_fk = char_mapper.find_by_key(key).get_id()
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.Searchinsert(info_obj)
+                    else:
+                        print(f'Ungültiger Key im Search Insert: {key}')
+
+    # Logik für Profil, did die Info-Objekte in
+
+    "Chat-spezifische Methoden"
+    """
+    def create_chat(self, message_id):
+        chat = Chat()
+        chat.set_id(1)
+        chat.set_message_id(message_id)
+        with ChatMapper() as mapper:
+            mapper.insert(chat)
+
+    def get_all_chats(self):
+        with ChatMapper() as mapper:
+            return mapper.find_all()
+
+    def get_chat_by_id(self, key):
+        with ChatMapper() as mapper:
+            return mapper.find_by_key(key)
+"""
     def get_profile_by_message(self, profile_id):
         """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
         welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
@@ -334,11 +366,11 @@ class Administration(object):
 
     """ Suchprofil-spezifische Methoden """
 
-    def create_searchprofile(self):
-        searchrpofile = SearchProfile()
-        searchrpofile.set_id(1)
+    """Erstellt ein Suchprofil in der Datenbank, erwartet ein Suchprofil BO"""
+    def create_searchprofile(self, searchprofile):
+        searchprofile.set_id(1)
         with SearchProfileMapper() as mapper:
-            mapper.insert(searchrpofile)
+            mapper.insert(searchprofile)
 
     def save_searchprofile(self, searchprofile):
         with SearchProfileMapper() as mapper:
@@ -352,9 +384,14 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             return mapper.find_all()
 
-    def get_searchprofile_by_google_id(self, key):
+    """Gibt alle suchprofile_id's eines Profils zurück, dies wird mithilfe der google_id gemacht"""
+    def get_searchprofiles_by_google_id(self, key):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
+
+    def get_searchprofile_by_key(self, searchprofile, google_id):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_by_searchprofile(searchprofile, google_id)
 
     def calculate_age(self, info_objects):
         processed_tuples = []

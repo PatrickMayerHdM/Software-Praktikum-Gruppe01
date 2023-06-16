@@ -90,8 +90,9 @@ blocknote = api.inherit('BlockNote', bo, {
     'blocking_id': fields.String(attribute='_blocking_id', description='Id des blockenden Profils')
 })
 
-searchprofile = api.inherit('Searchprofile', bo, {
-    'google_id': fields.String(attribute='google_id', description='Google_ID des Admin-Kontos')
+searchprofile = api.inherit('SearchProfile', bo, {
+    #'SearchProfile_id': fields.Integer(attribute='_SearchProfile_id', description='SearchProfile_id eines SuchProfils'),
+    'google_id': fields.String(attribute='_google_id', description='Google_ID eines SuchProfils')
 })
 
 
@@ -160,6 +161,100 @@ class ProfileOperations(Resource):
         prof = adm.get_profile_by_google_id(google_fk)
         adm.delete_profile(prof)
         return '', 200
+
+"""SuchProfil"""
+@datingapp.route('/SearchProfiles')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt")
+@datingapp.param('id','SearchProfileBO')
+class SearchProfileOpterations(Resource):
+
+    @datingapp.marshal_list_with(SearchProfile)
+    #@secured
+    def get(self):
+        """Auslesen aller Searchprofile-Objekte"""
+        adm = Administration()
+        SearchProfiles = adm.get_all_searchprofile()
+        return SearchProfiles
+
+    #@datingapp.marshal_with(SearchProfile, code=200)
+    @datingapp.expect(searchprofile)
+    #@secured
+    def post(self):
+        adm = Administration()
+        print("Da wir ein Suchprofil erwarten hier der print", SearchProfile)
+        print("Das ist die Payload (Suchprofil)",api.payload)
+        ranvar = SearchProfile.from_dict(api.payload)
+        print("Das ist das proposal (nach form.dict): ", ranvar)
+
+
+        if ranvar is not None:
+
+            adm.create_searchprofile(
+                ranvar
+            )
+
+            return 200
+        else:
+            return "Der Post in SearchProfileOpterations ist fehlgeschlagen ", 500
+
+
+"""Da das Suchprofil ein eigenes InfoObjekt Handling besitzt wird dies hier definiert """
+@datingapp.route('/SearchProfiles/infoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class InfoObjectListOperationsSearch(Resource):
+    @datingapp.marshal_with(infoobject, code=200)
+    @datingapp.expect(infoobject)
+    #@secured
+    def post(self):
+        """ Anlegen eines neuen InfoObject-Objekts. """
+        adm = Administration()
+        print("Das ist die api.payload im main.py der InfoObjectListOperationsSearch", api.payload)
+
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.create_Search_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+
+"""Handling um alle Suchprofil ID's eines Profils zu bekommen"""
+@datingapp.route('/Search/SearchProfiles/<id>/')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id','GoogleID für welche die Suchprofile gesucht werden')
+class SearchProfilesOperations(Resource):
+
+    #@secured
+    def get(self, id):
+
+        adm = Administration()
+        SearchP = adm.get_searchprofiles_by_google_id(id)
+
+        if SearchP is not None:
+            return SearchP, 200
+        else:
+            return "", 500
+
+
+"""Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
+@datingapp.route('/Search/SearchProfiles/<searchprofile_id>/<google_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+class SearchOneProfileOperation(Resource):
+
+    def get(self, searchprofile_id, google_id):
+
+        adm = Administration()
+        SearchProf = adm.get_searchprofile_by_key(searchprofile_id, google_id)
+
+        if SearchProf is not None:
+            return SearchProf, 200
+        else:
+            return "", 500
 
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
@@ -254,7 +349,7 @@ class InfoObjectListOperations(Resource):
 @datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
-    #@secured
+    @secured
     def get(self, profile_id):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
@@ -271,47 +366,10 @@ class InfoObjectsOperations(Resource):
     @secured
     def put(self, googleID):
         adm = Administration()
-        proposal = InfoObject.from_dict(api.payload)
+        print("Main PUT InfoObject", infoobject)
+        info_objs = adm.update_info_object()
+        return info_objs
 
-        if proposal is not None:
-            info_obj_id = proposal.get_id()
-            new_value = proposal.get_value()
-
-            # InfoObject in der Datenbank suchen
-            info_obj = adm.get_info_object_by_id(info_obj_id, googleID)
-
-            if info_obj is not None:
-                # Überprüfen, welche Felder aktualisiert werden sollen und die entsprechenden Setter aufrufen
-                if new_value != "":
-                    info_obj.set_value(new_value)
-                if proposal.get_age() != "":
-                    info_obj.set_age(proposal.get_age())
-                if proposal.get_first_name() != "":
-                    info_obj.set_first_name(proposal.get_first_name())
-                if proposal.get_gender() != "":
-                    info_obj.set_gender(proposal.get_gender())
-                if proposal.get_hair() != "":
-                    info_obj.set_hair(proposal.get_hair())
-                if proposal.get_height() != "":
-                    info_obj.set_height(proposal.get_height())
-                if proposal.get_last_name() != "":
-                    info_obj.set_last_name(proposal.get_last_name())
-                if proposal.get_religion() != "":
-                    info_obj.set_religion(proposal.get_religion())
-                if proposal.get_smoking_status() != "":
-                    info_obj.set_smoking_status(proposal.get_smoking_status())
-
-                # InfoObject in der Datenbank aktualisieren
-                affected_rows = adm.update_info_object(info_obj)
-
-                if affected_rows > 0:
-                    return info_obj, 200
-                else:
-                    return 'InfoObject konnte nicht aktualisiert werden', 500
-            else:
-                return 'InfoObject nicht gefunden', 404
-        else:
-            return 'Ungültiges InfoObject', 400
 
 
 """Ab hier FavoriteNote"""
@@ -342,19 +400,20 @@ class FavoritenoteListOperations(Resource):
             return '', 500
 
 
-@datingapp.route('/FavoritenoteProfiles/<favoritenote_id>')
+@datingapp.route('/FavoritenoteProfiles/<profile_id>/<other_profile_id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class FavoritenoteDeleteOperations(Resource):
     @secured
-    def delete(self, favoritenote_id):
+    def delete(self, profile_id, other_profile_id):
         """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URL bestimmt"""
+        Das Objekt wird durch die ID's in der URL bestimmt"""
 
         adm = Administration()
-        fnote = adm.get_favoritenote_by_favoritenote_id(favoritenote_id)
+        #print("profile_id im main: ", profile_id)
+        #print("other_profile_id im main:  ", other_profile_id)
 
-        if fnote is not None:
-            adm.delete_favoritenote(fnote)
+        if profile_id and other_profile_id is not None:
+            adm.delete_favoritenote(profile_id, other_profile_id)
             return '', 200
         else:
             return '', 500
@@ -442,19 +501,6 @@ class BlockNoteOperations(Resource):
         else:
             return '', 500
 
-    @secured
-    def delete(self, id):
-        """Löschen eines BlockNote-Objekts.
-        Das Objekt wird durch die id in dem URI bestimmt"""
-
-        adm = Administration()
-        bnote = adm.get_blocknote_by_blocknote_id(id)
-
-        if bnote is not None:
-            adm.delete_favoritenote(bnote)
-            return '', 200
-        else:
-            return '', 500
 
     @datingapp.marshal_with(blocknote)
     @secured
@@ -469,6 +515,24 @@ class BlockNoteOperations(Resource):
             """Hierdurch wird die id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
             bnote.set_id(id)
             adm.save_favoritenote(bnote)
+            return '', 200
+        else:
+            return '', 500
+
+@datingapp.route('/BlocknoteProfiles/<profile_id>/<other_profile_id>')
+@datingapp.response(500, 'Serverseitiger Fehler beim Löschen der Blocknote')
+class BlocknoteDeleteOperations(Resource):
+    #@secured
+    def delete(self, profile_id, other_profile_id):
+        """Löschen eines BlockNote-Objekts in der Datenbank.
+        Das Objekt wird durch die ID's in der URL bestimmt"""
+        print("Test vor adm = Administration()")
+        adm = Administration()
+        print("profile_id im main (BlocknoteDeleteOperations): ", profile_id)
+        print("other_profile_id im main (BlocknoteDeleteOperations):  ", other_profile_id)
+
+        if other_profile_id and profile_id is not None:
+            adm.delete_blocknote(profile_id, other_profile_id)
             return '', 200
         else:
             return '', 500
