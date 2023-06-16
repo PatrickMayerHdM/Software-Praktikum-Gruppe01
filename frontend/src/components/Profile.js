@@ -11,6 +11,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 import DatingSiteAPI from "../api/DatingSiteAPI";
+import OptionsOtherProfile from "./OptionsOtherProfile";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import BlockIcon from "@mui/icons-material/Block";
 
 
 //** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
@@ -26,9 +29,8 @@ class Profile extends React.Component{
         this.state = {
             own_profil_id: this.props.user.uid,
             error: '',
+            isCurrentUser: false,
         }
-
-
     }
 
     componentDidMount() {
@@ -36,10 +38,13 @@ class Profile extends React.Component{
     }
 
     getSelectedProperties() {
+      const userId = this.props.user.uid;
+
       DatingSiteAPI.getAPI()
-        .getInfoObjects(this.props.user.uid)
+        .getInfoObjects(userId)
         .then((responseInfoObjects) => {
           const selectedProperties = {};
+          const ownProfileId = this.state.own_profil_id;
 
           for (const key in responseInfoObjects) {
             if (responseInfoObjects.hasOwnProperty(key)) {
@@ -48,7 +53,7 @@ class Profile extends React.Component{
               const charValue = infoObject.char_value;
 
               switch (charId) {
-                  case 30:
+                case 30:
                   selectedProperties.age = charValue;
                   break;
                 case 10:
@@ -79,9 +84,11 @@ class Profile extends React.Component{
             }
           }
 
-          this.setState(selectedProperties);
+          const isCurrentUser = userId === ownProfileId;
+          this.setState({ ...selectedProperties, isCurrentUser: isCurrentUser });
         });
     }
+
 
     render() {
 
@@ -94,6 +101,7 @@ class Profile extends React.Component{
             height,
             religion,
             smoking,
+            isCurrentUser,
         } = this.state
 
         return (
@@ -181,9 +189,59 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        {isCurrentUser ? null : (
+                        <Item>
+                          <Box sx={{ flexGrow: 1 }}>
+                            <Grid
+                              container
+                              direction="row"
+                              justifyContent="center"
+                              alignItems="strech"
+                            >
+                              <Grid item md={2} xs={4} spacing={2}>
+                                <button
+                                  onClick={this.PersonSaved}
+                                  style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "#2ec43d",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                    border: "solid",
+                                    borderColor: "#BDC2BF",
+                                  }}
+                                >
+                                  <BookmarkAddedIcon />
+                                </button>
+                              </Grid>
+                              <Grid item md={2} xs={4} spacing={2}>
+                                <button
+                                  onClick={this.PersonBlocked}
+                                  style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "#e63946",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                    border: "solid",
+                                    borderColor: "#BDC2BF",
+                                  }}
+                                >
+                                  <BlockIcon />
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </Box>
+                        </Item>
+                      )}
                     </Stack>
                 </Box>
-
             </div>
         )
     }
