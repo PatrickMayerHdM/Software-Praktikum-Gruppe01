@@ -79,10 +79,10 @@ class Administration(object):
         with MessageMapper() as mapper:
             mapper.update(msg)
 
-    def delete_message(self, message):
+    def delete_message(self, google_id):
         """Hier wird "message" mit mapper aus DB gelöscht"""
         with MessageMapper() as mapper:
-            mapper.delete(message)
+            mapper.delete(google_id)
 
     def get_all_messages(self):
         """Alle messages auslesen"""
@@ -389,9 +389,9 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def get_searchprofile_by_key(self, searchprofile, google_id):
+    def get_searchprofile_by_key(self, searchprofile):
         with SearchProfileMapper() as mapper:
-            return mapper.find_by_searchprofile(searchprofile, google_id)
+            return mapper.find_by_searchprofile(searchprofile)
 
     def calculate_age(self, info_objects):
         """
