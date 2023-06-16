@@ -272,7 +272,6 @@ class Administration(object):
             return mapper.find_by_id(key)
 
     def get_info_object(self, key):
-
         with InfoObjectMapper() as mapper:
             print("Admin FinByKey infoobj: ", key)
             return mapper.find_by_key(key)
@@ -293,12 +292,9 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def update_info_object(self, infoobject):
-        with InfoObjectMapper() as mapper:
-            existing_info_object = infoobject.find_info_object_by_id(infoobject.get_id(), infoobject.get_profile_fk())
-            if existing_info_object is None:
-                return None
-            existing_info_object.set_value(infoobject.get_value())
-            return mapper.update(existing_info_object)
+        with InfoObjectMapper as mapper:
+            print("Admin InfoObject: ", infoobject)
+            return mapper.find_by_id(infoobject)
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
         with InfoObjectMapper() as mapper:

@@ -92,20 +92,52 @@ class CreateProfil extends Component {
             );
     };
 
+    /** Abfrage der InfoObjekte für das Profil */
     getSelectedProperties() {
       DatingSiteAPI.getAPI()
         .getInfoObjects(this.props.user.uid)
         .then((responseInfoObjects) => {
-          this.setState({
-              firstName: responseInfoObjects.get_first_name(),
-              lastName: responseInfoObjects.get_last_name(),
-              age: responseInfoObjects.get_age(),
-              gender: responseInfoObjects.get_gender(),
-              hair: responseInfoObjects.get_hair(),
-              height: responseInfoObjects.get_height(),
-              religio: responseInfoObjects.get_religion(),
-              smoking: responseInfoObjects.get_smoking_status(),
-          });
+          const selectedProperties = {};
+
+          for (const key in responseInfoObjects) {
+            if (responseInfoObjects.hasOwnProperty(key)) {
+              const infoObject = responseInfoObjects[key];
+              const charId = infoObject.char_id;
+              const charValue = infoObject.char_value;
+
+              switch (charId) {
+                  case 30:
+                  selectedProperties.apiage = charValue;
+                  break;
+                case 10:
+                  selectedProperties.firstName = charValue;
+                  break;
+                case 40:
+                  selectedProperties.gender = charValue;
+                  break;
+                case 70:
+                  selectedProperties.hair = charValue;
+                  break;
+                case 50:
+                  selectedProperties.height = charValue;
+                  break;
+                case 20:
+                  selectedProperties.lastName = charValue;
+                  break;
+                case 60:
+                  selectedProperties.religion = charValue;
+                  break;
+                case 80:
+                  selectedProperties.smoking = charValue;
+                  break;
+
+                default:
+                  break;
+              }
+            }
+          }
+
+          this.setState(selectedProperties);
         });
     }
 
@@ -174,11 +206,14 @@ class CreateProfil extends Component {
 
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
-            .catch((e) =>
+            .then(() => {
+                this.setState({ profileExists: true });
+            })
+            .catch((e) => {
                 this.setState({
                     error: e,
-                })
-            );
+                });
+            });
 
         DatingSiteAPI.getAPI()
             .addInfoObject(newInfoObject)
@@ -224,7 +259,6 @@ class CreateProfil extends Component {
     handleUpdate(event) {
         console.log(this.state)
         event.preventDefault();
-        const updatedProfile = new profileBO(this.state.profile_id, this.state.favoriteNote_id, this.state.blockNote_id,this.props.user.uid);
         const newInfoObject = new infoobjectBO(
             this.props.user.uid,
             this.state.char_fk,
@@ -240,14 +274,6 @@ class CreateProfil extends Component {
             this.state.smoking)
 
         DatingSiteAPI.getAPI()
-            .updateProfile(updatedProfile)
-            .catch((e) =>
-                this.setState({
-                    error: e,
-                })
-            );
-
-        DatingSiteAPI.getAPI()
             .updateInfoObject(newInfoObject)
             .catch((e) =>
                 this.setState({
@@ -256,6 +282,7 @@ class CreateProfil extends Component {
             );
     };
 
+    /** Handler zum löschen seines Profils und die dazugehörigen Daten */
     handleRemove(event) {
     console.log(this.state)
     event.preventDefault();
@@ -286,6 +313,7 @@ class CreateProfil extends Component {
                 char_desc,
                 showTextFields,
                 profileExists,
+                apiage,
             } = this.state;
 
             return (
@@ -324,23 +352,33 @@ class CreateProfil extends Component {
                                 </Box>
                             </FormGroup>
                         </Item>
-                        <Item>
-                            <FormGroup row style={{justifyContent: 'center'}}>
-                            <Box sx={{width: 200, margin: '0 auto'}}>
-                                <FormLabel> Wann wurdest du geboren? </FormLabel>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker']}>
-                                        {/** Datepicker für das Geburtsdatum, ReactMUI der einen Kalender rendert bzw. ausgibt */}
-                                        <DatePicker
-                                            value={age}
-                                            onChange={this.handleChangeAge}
-                                            label="Datum"
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                            </Box>
+                        {profileExists ? (
+                          <Item>
+                            <FormGroup row style={{ justifyContent: 'center' }}>
+                              <Box sx={{ width: 200, margin: '0 auto' }}>
+                                <FormLabel>Dein Alter:</FormLabel>
+                                  {/** Hier wird das Geburstdatum angezeigt */}
+                                <p>{apiage}</p>
+                              </Box>
                             </FormGroup>
-                        </Item>
+                          </Item>
+                        ) : (
+                          <Item>
+                            <FormGroup row style={{ justifyContent: 'center' }}>
+                              <Box sx={{ width: 200, margin: '0 auto' }}>
+                                <FormLabel>Wann wurdest du geboren?</FormLabel>
+                                  {/** Hier kann das Geburtsdatum ausgewählt werden wenn kein Profil exsitiert */}
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                  <DatePicker
+                                    value={age}
+                                    onChange={this.handleChangeAge}
+                                    label="Datum"
+                                  />
+                                </LocalizationProvider>
+                              </Box>
+                            </FormGroup>
+                          </Item>
+                        )}
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                             <Box sx={{width: 400, margin: '0 auto'}}>

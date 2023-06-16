@@ -254,7 +254,7 @@ class InfoObjectListOperations(Resource):
 @datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class InfoObjectsOperations(Resource):
     @datingapp.marshal_with(infoobject)
-    #@secured
+    @secured
     def get(self, profile_id):
         """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
         adm = Administration()
@@ -268,47 +268,10 @@ class InfoObjectsOperations(Resource):
     @secured
     def put(self, googleID):
         adm = Administration()
-        proposal = InfoObject.from_dict(api.payload)
+        print("Main PUT InfoObject", infoobject)
+        info_objs = adm.update_info_object()
+        return info_objs
 
-        if proposal is not None:
-            info_obj_id = proposal.get_id()
-            new_value = proposal.get_value()
-
-            # InfoObject in der Datenbank suchen
-            info_obj = adm.get_info_object_by_id(info_obj_id, googleID)
-
-            if info_obj is not None:
-                # Überprüfen, welche Felder aktualisiert werden sollen und die entsprechenden Setter aufrufen
-                if new_value != "":
-                    info_obj.set_value(new_value)
-                if proposal.get_age() != "":
-                    info_obj.set_age(proposal.get_age())
-                if proposal.get_first_name() != "":
-                    info_obj.set_first_name(proposal.get_first_name())
-                if proposal.get_gender() != "":
-                    info_obj.set_gender(proposal.get_gender())
-                if proposal.get_hair() != "":
-                    info_obj.set_hair(proposal.get_hair())
-                if proposal.get_height() != "":
-                    info_obj.set_height(proposal.get_height())
-                if proposal.get_last_name() != "":
-                    info_obj.set_last_name(proposal.get_last_name())
-                if proposal.get_religion() != "":
-                    info_obj.set_religion(proposal.get_religion())
-                if proposal.get_smoking_status() != "":
-                    info_obj.set_smoking_status(proposal.get_smoking_status())
-
-                # InfoObject in der Datenbank aktualisieren
-                affected_rows = adm.update_info_object(info_obj)
-
-                if affected_rows > 0:
-                    return info_obj, 200
-                else:
-                    return 'InfoObject konnte nicht aktualisiert werden', 500
-            else:
-                return 'InfoObject nicht gefunden', 404
-        else:
-            return 'Ungültiges InfoObject', 400
 
 
 """Ab hier FavoriteNote"""
