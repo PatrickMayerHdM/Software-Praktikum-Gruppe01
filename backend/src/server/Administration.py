@@ -463,7 +463,7 @@ def get_char_values_for_profiles(self, profile_id):
 
 
 def calculate_similarity(self, profile1, profile2):
-    """Diese Methode berechnet die Ähnlichkeit der zwei Profilen"""
+    """Diese Methode berechnet die Ähnlichkeit der zwei Profile"""
     char_values1 = profile1["Char Values"]
     char_values2 = profile2["Char Values"]
 
