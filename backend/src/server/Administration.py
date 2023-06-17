@@ -289,10 +289,31 @@ class Administration(object):
                     else:
                         print(f'Ungültiger Key: {key}')
 
-    def update_info_object(self, infoobject):
-        with InfoObjectMapper as mapper:
-            print("Admin InfoObject: ", infoobject)
-            return mapper.find_by_id(infoobject)
+    def update_info_object(self, profile_fk, info_dict):
+        """
+        In dieser Methode ist die Logik beschrieben, damit ein bestehendes Profil aktualisiert wird.
+        :param profile_fk: google-ID des Users.
+        :param info_dict: Dictionary mit Key-Value paaren. Ein Key repräsentiert eine Eigenschaft.
+        """
+        print("Admin.py InfoDict: ", info_dict)
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    if key == '30': # Das Alter (Geburtsdatum) soll nicht aktualisiert werden.
+                        continue
+
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    char_fk = char_mapper.find_by_key(key).get_id()
+
+                    #print('Admin.py Char-FK:', char_fk)
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        #print('Admin.py: dieses Objekt wird an mapper gegeben:', info_obj.get_value() )
+                        mapper.update(info_obj)
+                    else:
+                        print(f'Ungültiger Key: {key}')
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
         with InfoObjectMapper() as mapper:

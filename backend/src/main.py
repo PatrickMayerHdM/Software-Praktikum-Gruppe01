@@ -91,8 +91,7 @@ blocknote = api.inherit('BlockNote', bo, {
 })
 
 searchprofile = api.inherit('SearchProfile', bo, {
-    #'SearchProfile_id': fields.Integer(attribute='_SearchProfile_id', description='SearchProfile_id eines SuchProfils'),
-    'google_id': fields.String(attribute='_google_id', description='Google_ID eines SuchProfils')
+    'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils')
 })
 
 
@@ -141,7 +140,7 @@ class ProfileListOperations(Resource):
 @datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class ProfileOperations(Resource):
     @datingapp.marshal_with(profile) #Datenstruktur des Objektes der Get-Methode
-    #@secured
+    @secured
     def get(self, google_fk):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
@@ -152,6 +151,7 @@ class ProfileOperations(Resource):
 
     @secured
     def delete(self, google_fk):
+        print('Hier :', google_fk)
         """ Löschen eines besimmten Profil-Objekts. """
 
         adm = Administration()
@@ -166,10 +166,10 @@ class ProfileOperations(Resource):
 """SuchProfil"""
 @datingapp.route('/SearchProfiles')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt")
-@datingapp.param('id','SearchProfileBO')
+@datingapp.param('id','searchprofile')
 class SearchProfileOpterations(Resource):
 
-    @datingapp.marshal_list_with(SearchProfile)
+    @datingapp.marshal_list_with(searchprofile)
     #@secured
     def get(self):
         """Auslesen aller Searchprofile-Objekte"""
@@ -373,14 +373,25 @@ class InfoObjectsOperations(Resource):
         return info_objs
 
     @datingapp.marshal_with(infoobject)
-    @secured
-    def put(self, googleID):
+    @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
+    #@secured
+    def put(self, profile_id):
+        print('Main.py: PUT Befehl: ', profile_id)
+        print('Main.py: Api Payload:', api.payload)
+        """ Update eines bestimmten User-Profils. """
         adm = Administration()
-        print("Main PUT InfoObject", infoobject)
-        info_objs = adm.update_info_object()
-        return info_objs
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.update_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
 
 
+            return infoobj, 200
+        else:
+            return 'Profil konnte nicht aktualisiert werden.', 500
 
 """Ab hier FavoriteNote"""
 

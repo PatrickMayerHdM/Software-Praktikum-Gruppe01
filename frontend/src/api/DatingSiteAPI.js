@@ -193,7 +193,7 @@ export default class DatingSiteAPI {
 
     updateInfoObject(infoobject) {
         console.log("InfoObject: ", infoobject)
-        return this.#fetchAdvanced(this.#updateProfileURL(), {
+        return this.#fetchAdvanced(this.#updateProfileURL(infoobject.get_profile_fk()), {
             method: "PUT",
             headers: {
                 'Accept': 'application/json, text/plain',
