@@ -277,6 +277,11 @@ class Administration(object):
             print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
+    def get_info_object_by_searchid(self, key):
+        with InfoObjectMapper() as mapper:
+            print("Admin Info Findbykey: ", key)
+            return mapper.find_by_searchid(key)
+
     def get_info_object(self, key):
         with InfoObjectMapper() as mapper:
             return mapper.find_by_key(key)
@@ -309,6 +314,10 @@ class Administration(object):
     def delete_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
+
+    def delete_info_object_search(self, infoobject):
+        with InfoObjectMapper() as mapper:
+            return mapper.delete_searchprofile(infoobject)
 
 
     # Logik für Profil, did die Info-Objekte in
@@ -393,9 +402,9 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             mapper.update(searchprofile)
 
-    def delete_searchprofile(self, searchprofile):
+    def delete_searchprofile(self, searchprofile_id):
         with SearchProfileMapper() as mapper:
-            mapper.delete(searchprofile)
+            mapper.delete(searchprofile_id)
 
     def get_all_searchprofile(self):
         with SearchProfileMapper() as mapper:
