@@ -118,10 +118,14 @@ class InfoObjectMapper(mapper):
         return info_obj
 
     def update(self, info_obj):
-        command = 'UPDATE main.InfoObject SET char_value=%s WHERE infoobject_id=%s AND profile_id=%s'
-        data = (info_obj.get_value(), info_obj.get_id(), info_obj.get_profile_fk())
+        #print(type(info_obj))
+        #print('Info Mapper value: ', info_obj.get_value())
+        #print('Info Mapper profile_id:', info_obj.get_profile_fk())
+        command = 'UPDATE main.InfoObject SET char_value=%s WHERE profile_id=%s AND char_id=%s'
+        data = (info_obj.get_value(), info_obj.get_profile_fk(), info_obj.get_char_fk())
 
         with self._connection.cursor() as cursor:
+            #print('Info Mapper command und data:', command, data)
             cursor.execute(command, data)
 
         self._connection.commit()

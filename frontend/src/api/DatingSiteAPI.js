@@ -134,7 +134,7 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(profile)
         }).then((responseJSON) => {
-            console.log(profile)
+            console.log("API Proifle bei der Erstellung: ", profile)
             let prfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(prfileBO);
@@ -192,7 +192,7 @@ export default class DatingSiteAPI {
 
     updateInfoObject(infoobject) {
         console.log("InfoObject: ", infoobject)
-        return this.#fetchAdvanced(this.#updateProfileURL(), {
+        return this.#fetchAdvanced(this.#updateProfileURL(infoobject.get_profile_fk()), {
             method: "PUT",
             headers: {
                 'Accept': 'application/json, text/plain',
