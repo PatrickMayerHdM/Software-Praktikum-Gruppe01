@@ -36,6 +36,7 @@ class OptionsOtherProfile extends React.Component{
 
         const newFavnote = new favoriteNoteBO(adding_id, added_id)
         console.log("die FavNote: ", newFavnote)
+        console.log("IDs: ", added_id, adding_id)
         DatingSiteAPI.getAPI()
             // Hinzufügen des neuen FavoriteNote-Eintrags
             .addFavoritenoteProfileURL(newFavnote)
@@ -74,12 +75,12 @@ class OptionsOtherProfile extends React.Component{
         <Box sx={{ flexGrow: 1 }}>
           <Grid container
             direction="row" justifyContent="center" alignItems="strech" >
-            <Grid item md={2} xs={4} spacing={2} >
+            <Grid item md={4} xs={6} spacing={2} >
                 <button onClick={this.PersonSaved} style={{ height: "200%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2ec43d", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BookmarkAddedIcon/>
                 </button>
             </Grid>
-            <Grid item md={2} xs={4} spacing={2}>
+            <Grid item md={4} xs={6} spacing={2}>
                <button onClick={this.PersonBlocked} style={{ height: "200%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BlockIcon/>
                </button>

@@ -104,8 +104,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    #@datingapp.marshal_list_with(profile)
-    #@secured
+    @secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -135,6 +134,7 @@ class ProfileListOperations(Resource):
                 proposal.get_block_note_id(),
                 proposal.get_google_fk())
 
+            print("Main Proifle: ", p)
             return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
@@ -145,7 +145,7 @@ class ProfileListOperations(Resource):
 @datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class ProfileOperations(Resource):
     @datingapp.marshal_with(profile) #Datenstruktur des Objektes der Get-Methode
-    #@secured
+    @secured
     def get(self, google_fk):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
@@ -156,6 +156,7 @@ class ProfileOperations(Resource):
 
     @secured
     def delete(self, google_fk):
+        print('Hier :', google_fk)
         """ Löschen eines besimmten Profil-Objekts. """
 
         adm = Administration()
@@ -386,14 +387,25 @@ class InfoObjectsOperations(Resource):
         return info_objs
 
     @datingapp.marshal_with(infoobject)
-    @secured
-    def put(self, googleID):
+    @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
+    #@secured
+    def put(self, profile_id):
+        print('Main.py: PUT Befehl: ', profile_id)
+        print('Main.py: Api Payload:', api.payload)
+        """ Update eines bestimmten User-Profils. """
         adm = Administration()
-        print("Main PUT InfoObject", infoobject)
-        info_objs = adm.update_info_object()
-        return info_objs
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.update_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
 
 
+            return infoobj, 200
+        else:
+            return 'Profil konnte nicht aktualisiert werden.', 500
 
 """Ab hier FavoriteNote"""
 
