@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
 import SearchProfileBox from "../components/SearchProfileBox";
+import infoobjectBO from "../api/InfoObjectBO";
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
@@ -71,7 +72,7 @@ class Search extends React.Component{
     // ausgewähle Profil bearbeitet werden kann.
     // Hier soll die URL an welche der User zum bearbeiten weitergeleitet wird, die Suchprofil_ID des zu bearbeitenden
     // Suchprofils beinhalten.
-    EditSearchProfiles() {
+    EditSearchProfiles(event) {
         console.log("Das Suchprofil", this.state.selectedProfileIndex, " wird bearbeitet")
         console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[this.state.selectedProfileIndex], "geändert");
     }

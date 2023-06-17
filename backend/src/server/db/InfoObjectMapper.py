@@ -130,6 +130,19 @@ class InfoObjectMapper(mapper):
 
         self._connection.commit()
 
+    def update_search(self, info_obj):
+        print(type(info_obj))
+        print('Info Mapper value: ', info_obj.get_value())
+        print('Info Mapper searchprofile_id:', info_obj.get_searchprofile_id())
+
+        command = 'UPDATE main.InfoObject SET char_value=%s WHERE searchprofile_id=%s AND char_id=%s'
+        data = (info_obj.get_value(), info_obj.get_searchprofile_id(), info_obj.get_char_fk())
+
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
+
+        self._connection.commit()
+
     def find_by_id(self, key):
         command = 'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id = %s'
         data = (key,)
