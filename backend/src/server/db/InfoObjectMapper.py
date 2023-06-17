@@ -34,7 +34,7 @@ class InfoObjectMapper(mapper):
         """ Auslesen der Info-Objekte nach Key """
 
         cursor = self._connection.cursor()
-        command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}')"
+        command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}') AND (searchprofile_id IS NULL)"
         cursor.execute(command)
         tuples = cursor.fetchall()
         print('InfoObject Tuples aus DB:', tuples)
