@@ -70,7 +70,7 @@ class BlockProfileBoxList extends React.Component{
 
     render() {
 
-        // const für die Anzahl der anzuzeigenden Profile innerhalb der Merkliste
+        // const für die Anzahl der anzuzeigenden Profile innerhalb der Sperrliste
         const count = this.state.numProfiles;
 
         const current_profile = this.props.user.uid;

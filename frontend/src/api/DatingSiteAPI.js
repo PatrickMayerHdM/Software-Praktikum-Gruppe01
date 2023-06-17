@@ -110,7 +110,6 @@ export default class DatingSiteAPI {
 
     // Profile related
 
-    #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #removeProfileURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
@@ -252,14 +251,6 @@ export default class DatingSiteAPI {
     }
 
 
-    getAllProfiles() {
-        return this.#fetchAdvanced(this.#getAllProfilesURL()).then((responseJSON) => {
-            let profileBOs = ProfileBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(profileBOs);
-            })
-        })
-    }
 
     getProfileByID(google_fk) {
         let profile = this.#fetchAdvanced(this.#getProfileByIdURL(google_fk));
@@ -283,6 +274,7 @@ export default class DatingSiteAPI {
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
+    #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
 
 
 
@@ -303,6 +295,20 @@ export default class DatingSiteAPI {
 
             })
 
+    }
+
+    /**
+     * GET um alle möglichen Profile zu bekommen
+     * @returns {Promise<unknown>}
+     */
+
+    getAllProfiles() {
+        return this.#fetchAdvanced(this.#getAllProfilesURL())
+            .then((responseJSON) => {
+                console.log("Das responseJSON:");
+                console.log(responseJSON);
+                return responseJSON;
+            });
     }
 
     /**
