@@ -241,11 +241,10 @@ class SearchProfilesOperations(Resource):
         else:
             return "", 500
 
-
 """Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
 @datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
-@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+@datingapp.param('searchprofile_id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class SearchOneProfileOperation(Resource):
 
     @datingapp.marshal_with(infoobject)
@@ -259,6 +258,16 @@ class SearchOneProfileOperation(Resource):
             return search_info_objs, 200
         else:
             return "", 500
+
+    @secured
+    def delete(self, searchprofile_id):
+        """ Löschen eines besimmten Suchprofil-Objekts. """
+
+        adm = Administration()
+        info_obj = adm.get_info_object_by_searchid(searchprofile_id)
+        adm.delete_info_object_search(info_obj)
+        adm.delete_searchprofile(searchprofile_id)
+        return '', 200
 
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.

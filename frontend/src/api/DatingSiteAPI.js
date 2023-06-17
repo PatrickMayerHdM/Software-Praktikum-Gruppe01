@@ -279,7 +279,7 @@ export default class DatingSiteAPI {
 
     #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
     #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
-    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
+    #removeSearchProfile = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
@@ -322,21 +322,20 @@ export default class DatingSiteAPI {
             })
     }
 
-    /**
-     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
-     * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
-    */
-
-    deleteSearchProfile(profile_id) {
-    return this.#fetchAdvanced(this.#deleteSearchProfile(profile_id), {
-      method: 'DELETE'
-    })
-      .then((responseJSON) => {
-        let profileBOs = ProfileBO.fromJSON(responseJSON)[0];
-        return new Promise(function (resolve) {
-          resolve(profileBOs);
+    removeSearchProfile(searchprofile_id) {
+        return this.#fetchAdvanced(this.#removeSearchProfile(searchprofile_id), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
         })
-      })
+            .then((responseJSON) => {
+                let removedsearchprofBO = searchprofileBO.fromJSON(responseJSON)[0];
+                return new Promise(function (resolve) {
+                    resolve(removedsearchprofBO);
+                })
+            })
     }
 
     addSearchInfoObject(infoobject) {

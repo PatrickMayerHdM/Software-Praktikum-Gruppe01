@@ -147,6 +147,28 @@ class InfoObjectMapper(mapper):
 
         return None
 
+    def find_by_searchid(self, key):
+        command = 'SELECT * FROM main.InfoObject WHERE searchprofile_id = %s'
+        data = (key,)
+
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
+            tuples = cursor.fetchall()
+
+        if tuples and tuples[0]:
+            (infoobject_id, char_id, char_value, profile_id, searchprofile_id) = tuples[0]
+            info_obj = InfoObject()
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
+            info_obj.set_searchprofile_id(searchprofile_id)
+            print("DAS INFO OBJECTTTTTTTT", info_obj)
+
+            return info_obj
+
+        return None
+
     def delete(self, google_id):
         print(type(google_id))
         print("Delete Info: ", google_id.profile_id)
@@ -155,6 +177,16 @@ class InfoObjectMapper(mapper):
         command = f'DELETE FROM main.InfoObject WHERE profile_id=%s'
         data = [google_id.profile_id]
         cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete_searchprofile(self, searchprofile_id):
+
+        cursor = self._connection.cursor()
+
+        command = f"DELETE FROM main.InfoObject WHERE searchprofile_id='{searchprofile_id.searchprofile_id}'"
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()
