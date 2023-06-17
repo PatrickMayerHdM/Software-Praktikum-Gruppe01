@@ -14,7 +14,7 @@ from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
-
+from datetime import datetime
 
 class Administration(object):
     def __init__(self):
@@ -79,10 +79,10 @@ class Administration(object):
         with MessageMapper() as mapper:
             mapper.update(msg)
 
-    def delete_message(self, message):
+    def delete_message(self, google_id):
         """Hier wird "message" mit mapper aus DB gelöscht"""
         with MessageMapper() as mapper:
-            mapper.delete(message)
+            mapper.delete(google_id)
 
     def get_all_messages(self):
         """Alle messages auslesen"""
@@ -130,9 +130,10 @@ class Administration(object):
         with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
-    def delete_blocknote(self, blocklist):
+    def delete_blocknote(self, blocking_id, blocked_id):
         with BlockNoteMapper() as mapper:
-            mapper.delete(blocklist)
+            mapper.delete(blocking_id, blocked_id)
+
 
     def get_all_blocknote(self):
         with BlockNoteMapper() as mapper:
@@ -169,10 +170,8 @@ class Administration(object):
         with FavoriteNoteMapper() as mapper:
             mapper.update(favoritenote)
 
-    def delete_favoritenote(self, favoritenote):
+    def delete_favoritenote(self, adding_id, added_id):
         with FavoriteNoteMapper() as mapper:
-            adding_id = favoritenote.get_adding_id()
-            added_id = favoritenote.get_added_id()
             mapper.delete(adding_id, added_id)
 
     def get_all_favoritenotes(self):
@@ -214,15 +213,24 @@ class Administration(object):
 
     def delete_profile(self, profile):
         with ProfileMapper() as mapper:
+            print("Admin: ", profile)
             mapper.delete(profile)
 
-    @staticmethod
     def get_all_profiles(self):
+        profiles = []
         with ProfileMapper() as mapper:
-            return mapper.find_all()
+            found_profiles = mapper.find_all()
+
+            for found_profile in found_profiles:
+                found_user = found_profile.get_google_fk()
+                profiles.append(found_user)
+
+        print(profiles)
+        return profiles
 
     def get_profile_by_google_id(self, key):
         with ProfileMapper() as mapper:
+            #print("Admin FinByKey Profil: ", key)
             return mapper.find_by_key(key)
 
     def get_all_profiles_by_blocknote_id(self):
@@ -266,21 +274,17 @@ class Administration(object):
 
     def get_info_object_by_id(self, key):
         with InfoObjectMapper() as mapper:
+            print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
-    def get_info_object(self, key):
-
-        info_obj = []
-
+    def get_info_object_by_searchid(self, key):
         with InfoObjectMapper() as mapper:
-            info = mapper.find_by_key(key)
+            print("Admin Info Findbykey: ", key)
+            return mapper.find_by_searchid(key)
 
-            for i in info:
-                char_value = i.get_value()
-                info_obj.append(char_value)
-
-        return info_obj
-
+    def get_info_object(self, key):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
         print("InfoDict: ", info_dict)
@@ -298,12 +302,9 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def update_info_object(self, infoobject):
-        with InfoObjectMapper() as mapper:
-            existing_info_object = infoobject.find_info_object_by_id(infoobject.get_id(), infoobject.get_profile_fk())
-            if existing_info_object is None:
-                return None
-            existing_info_object.set_value(infoobject.get_value())
-            return mapper.update(existing_info_object)
+        with InfoObjectMapper as mapper:
+            print("Admin InfoObject: ", infoobject)
+            return mapper.find_by_id(infoobject)
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
         with InfoObjectMapper() as mapper:
@@ -314,6 +315,47 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
+    def delete_info_object_search(self, infoobject):
+        with InfoObjectMapper() as mapper:
+            return mapper.delete_searchprofile(infoobject)
+
+    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
+
+    def create_Search_info_object(self, profile_fk, info_dict):
+        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    # Hier wird der CharMapper aufgerufen!
+                    char_fk = char_mapper.find_by_key(key).get_id()
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.Searchinsert(info_obj)
+                    else:
+                        print(f'Ungültiger Key im Search Insert: {key}')
+
+    # Logik für Profil, did die Info-Objekte in
+
+    "Chat-spezifische Methoden"
+    """
+    def create_chat(self, message_id):
+        chat = Chat()
+        chat.set_id(1)
+        chat.set_message_id(message_id)
+        with ChatMapper() as mapper:
+            mapper.insert(chat)
+
+    def get_all_chats(self):
+        with ChatMapper() as mapper:
+            return mapper.find_all()
+
+    def get_chat_by_id(self, key):
+        with ChatMapper() as mapper:
+            return mapper.find_by_key(key)
+"""
     def get_profile_by_message(self, profile_id):
         """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
         welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
@@ -340,26 +382,56 @@ class Administration(object):
 
     """ Suchprofil-spezifische Methoden """
 
-    def create_searchprofile(self):
-        searchrpofile = SearchProfile()
-        searchrpofile.set_id(1)
+    """Erstellt ein Suchprofil in der Datenbank, erwartet ein Suchprofil BO"""
+    def create_searchprofile(self, searchprofile):
+        searchprofile.set_id(1)
         with SearchProfileMapper() as mapper:
-            mapper.insert(searchrpofile)
+            mapper.insert(searchprofile)
 
     def save_searchprofile(self, searchprofile):
         with SearchProfileMapper() as mapper:
             mapper.update(searchprofile)
 
-    def delete_searchprofile(self, searchprofile):
+    def delete_searchprofile(self, searchprofile_id):
         with SearchProfileMapper() as mapper:
-            mapper.delete(searchprofile)
+            mapper.delete(searchprofile_id)
 
     def get_all_searchprofile(self):
         with SearchProfileMapper() as mapper:
             return mapper.find_all()
 
-    def get_searchprofile_by_google_id(self, key):
+    """Gibt alle suchprofile_id's eines Profils zurück, dies wird mithilfe der google_id gemacht"""
+    def get_searchprofiles_by_google_id(self, key):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
+
+    def get_searchprofile_by_key(self, searchprofile):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_by_searchprofile(searchprofile)
+
+    def calculate_age(self, info_objects):
+        """
+        Diese Methode bildet die Applikationslogik ab, um ein Alter anhand des Geburtstages zu berechnen.
+        Die Methode empfängt "info_objects". Dabei handelt es sich um eine Liste, die aus InfoObjects-Objekten besteht.
+        Nachdem das Objekt mit der char_id "30" gefunden wurde, wird das Alter berechnet und anschließend alle Werte
+        des Tupels (processed_infoobj) der processed_tuples Liste übergeben. Aus dieser Liste wird anschließend ein neues
+        InfoObject erstellt, das der main.py übergeben wird.
+        """
+        processed_tuples = []
+
+        for infoobj in info_objects:
+            age = infoobj.calc_age()
+            if age is not None:
+                processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_fk, infoobj.searchprofile_id)
+                processed_tuples.append(processed_infoobj)
+                #print('calculate_age Methode in Admin.py:', processed_tuples)
+                new_infoobj = InfoObject()
+                new_infoobj.set_id(processed_tuples[0][0])
+                new_infoobj.set_char_fk(processed_tuples[0][1])
+                new_infoobj.set_value(str(processed_tuples[0][2]))
+                new_infoobj.set_profile_fk(processed_tuples[0][3])
+                new_infoobj.set_searchprofile_id(processed_tuples[0][4])
+                #print('Admin.py: New Infoobj', new_infoobj.get_value())
+            return new_infoobj
 
 

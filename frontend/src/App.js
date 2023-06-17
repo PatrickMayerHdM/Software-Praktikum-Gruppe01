@@ -197,10 +197,12 @@ class App extends Component {
               <Header user={currentUser}/>
                 <Routes>
                     <Route path="/" element={<Outlet />}>
-                      <Route path="/" element={<Profile />}></Route>
-                      <Route path="/Profile/:andereID" element={<Profile user={currentUser}/>}></Route>
+                      <Route path="/" element={<CreateProfil user={currentUser}/>}></Route>
                       <Route path="/Profil/:eigeneID" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
-                      <Route path="/Suche" element={<OptionsOtherProfile user={currentUser}/>}></Route>
+                      <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
+                      <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile user={currentUser}/>}></Route>
+                      <Route path="/Profile/:eigeneID" element={<Profile user={currentUser}/>}></Route>
+                      <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
                       <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList user={currentUser}/>}></Route>
                       <Route path="/Sperrliste" element={<BlockProfileBoxList user={currentUser}/>}></Route>

@@ -1,5 +1,6 @@
 from server.db.mapper import mapper
 from server.bo.SearchProfile import SearchProfile
+from server.bo.InfoObject import InfoObject
 
 class SearchProfileMapper(mapper):
 
@@ -25,7 +26,7 @@ class SearchProfileMapper(mapper):
         return result
 
     def find_by_key(self, key):
-        result = None
+        results = []
 
         cursor = self._connection.cursor()
         command = f'SELECT searchprofile_id, google_id FROM main.Searchprofile WHERE google_id=%s'
@@ -33,21 +34,39 @@ class SearchProfileMapper(mapper):
         cursor.execute(command, data)
         tuples = cursor.fetchall()
 
-        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            (searchprofile_id, google_id) = tuples[0]
-            searchprofile = SearchProfile()
-            searchprofile.set_id(searchprofile_id)
-            searchprofile.set_google_fk(google_id)
-            print("Suchprofil von der Datenbank im Mapper:", searchprofile)
+        if tuples is not None:
+            for row in tuples:
+                (searchprofile_id, _) = row
+                results.append(searchprofile_id)
 
-            result = searchprofile
-        else:
-            result = None
+        self._connection.commit()
+        cursor.close()
+
+        return results
+
+    def find_by_searchprofile(self, searchprofile):
+        result = []
+
+        cursor = self._connection.cursor()
+        command = f'SELECT * FROM main.InfoObject WHERE searchprofile_id=%s'
+        data = (searchprofile, )
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
+            info_obj = InfoObject()
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
+            info_obj.set_searchprofile_id(searchprofile_id)
+            result.append(info_obj)
 
         self._connection.commit()
         cursor.close()
 
         return result
+
 
     def insert(self, searchprofile):
         # Verbindugn zur DB + cursor-objekt erstellt
@@ -78,21 +97,19 @@ class SearchProfileMapper(mapper):
         cursor = self._connection.cursor()
 
         command = "UPDATE main.Searchprofile SET searchprofile_id=%s, google_id=%s"
-        data = (searchprofile.get_id(), searchprofile.get_google_fk())
+        data = (searchprofile.get_id(), searchprofile.get_google_id())
 
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-    def delete(self, google_id):
-        """ Löschen eines Datensatzes """
+    def delete(self, searchprofile_id):
+        """ Löschen eines Suchprofils """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.Searchprofile WHERE google_id=%s'
-        data = [google_id.google_id]
-        print(google_id)
-        cursor.execute(command, data)
+        command = f"DELETE FROM main.Searchprofile WHERE searchprofile_id='{searchprofile_id}'"
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()

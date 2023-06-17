@@ -7,14 +7,14 @@ import BusinessObject from "./BusinessObject";
 export default class searchprofileBO extends BusinessObject {
 
     /**
-     * Baut die searchprofileBO mit searchprofile_id
+     * Baut die searchprofileBO mit searchprofile_id asearchprofile_id,
      *
      * @param {*} aprofile_id
      */
 
-    constructor(asearchprofile_id, agoogle_id) {
+    constructor(agoogle_id) {
         super();
-        this.searchprofile_id = asearchprofile_id;
+        //this.searchprofile_id = asearchprofile_id;
         this.google_id = agoogle_id;
     }
 

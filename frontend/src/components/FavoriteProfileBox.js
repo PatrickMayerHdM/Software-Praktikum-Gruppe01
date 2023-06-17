@@ -8,6 +8,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {Link} from "react-router-dom";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import favoriteNoteBO from "../api/FavoriteNoteBO";
+import PropTypes from 'prop-types';
 
 /**
  * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -28,26 +29,28 @@ class FavoriteProfileBox extends React.Component{
 
     }
 
-        /** Funktion welche ausgeführt wird, wenn  "Von Merkzettel Entfernen" gedrückt wird. */
+    static propTypes = {
+        onRemoveProfile: PropTypes.func.isRequired,
+    };
 
-        FavoriteDelClicked(){
+    /** Funktion welche ausgeführt wird, wenn "Von Merkzettel Entfernen" gedrückt wird. */
 
-            const { favoritenote_id } = this.state
+    FavoriteDelClicked(){
 
-            DatingSiteAPI.getAPI()
-            // Löschen des FavoriteNote-Eintrags
-            .removeFavoritenoteProfileURL(favoritenote_id)
-            .then(() => {
-                console.log("Von Merkzettel entfernt");
-    })
-            .catch((e) =>
-                this.setState({
-                    error: e,
-                })
-            );
+        DatingSiteAPI.getAPI()
+        // Löschen des FavoriteNote-Eintrags
+        .removeFavoritenoteProfileURL(this.state.adding_id, this.state.added_id)
+        .then(() => {
+            //console.log("Von Merkzettel entfernt");
+        })
+        .catch((e) =>
+            this.setState({
+                error: e,
+            })
+        );
 
-            console.log("Von Merkzettel entfernt")
-        }
+        //console.log("Von Merkzettel entfernt")
+    }
 
     render() {
 
@@ -72,10 +75,13 @@ class FavoriteProfileBox extends React.Component{
                     </Link>
                 </Grid>
                 <Grid item xs={2} spacing={2}>
-                    <button onClick={this.FavoriteDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                    <button onClick={() => {
+                        this.FavoriteDelClicked();
+                        this.props.onRemoveProfile(this.props.other_profile);
+                    }} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}
+                    >
                         <PersonRemoveIcon/>
                     </button>
-
                 </Grid>
 
               </Grid >

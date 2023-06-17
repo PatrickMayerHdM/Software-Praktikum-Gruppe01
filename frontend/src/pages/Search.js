@@ -27,23 +27,22 @@ class Search extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          numSearchProfiles: 0,
-          selectedProfileIndex: null,
-          selectedProfile: null,
-          Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
-          profiles: [ ], // Die Profile die wir als Antwort bekommen.
-          profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
-          deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
-          clickable: false,
-          numProfiles: 0, // Nummer der Profile welche als Antwort kamen
-
-        }
+            numSearchProfiles: 0,
+            selectedProfileIndex: null,
+            selectedProfile: null,
+            Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
+            profiles: [ ], // Die Profile die wir als Antwort bekommen.
+            profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
+            deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
+            clickable: false,
+            numProfiles: 0, // Nummer der Profile welche als Antwort kamen
+        };
 
         this.NewProfiles = this.NewProfiles.bind(this);
         this.AddSearchProfiles = this.AddSearchProfiles.bind(this);
         this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
         this.loadPage = this.loadPage.bind(this);
-        this.loading = this.loading.bind(this);
+        this.loadingPage = this.loadingPage.bind(this);
         this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
     }
 
@@ -79,7 +78,18 @@ class Search extends React.Component{
 
     // Hier wird erstmal ein console.log ausgeführt, wenn der Such Button gedrückt wird, damit später dann danach gesucht wird.
     Search() {
-        console.log("Es wurde eine Suchanfrage mit dem Suchprofil", this.state.selectedProfileIndex,  "gestellt");
+        DatingSiteAPI.getAPI()
+        .getAllProfiles()
+        .then(profilesvar => {
+            const lengthProfiles = this.state.profiles.length;
+            this.setState(prevState => ({
+                profiles: profilesvar,
+                numProfiles: lengthProfiles
+            }));
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
@@ -102,17 +112,23 @@ class Search extends React.Component{
 
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier gelöscht wird.
     DeleteSearchProfile(){
         console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
-        console.log(this.state.profiles[[2]])
-    }
+        DatingSiteAPI.getAPI()
+            .removeSearchProfile(this.state.selectedProfile)
+            .catch((e) =>
+                this.setState({
+                error: e,
+                })
+            );
+    };
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage möglich ist
-    loading(){
+    loadingPage(){
         DatingSiteAPI.getAPI()
-        .getSearchProfileIDs()
+        .getSearchProfileIDs(this.props.user.uid)
         .then(Searchprofilesvar => {
+          console.log("Das ist Searchprofilesvar in der loadingPage: ",Searchprofilesvar)
           this.setState(prevState => ({
             Searchprofiles: [...prevState.Searchprofiles, ...Searchprofilesvar]
           }));
@@ -130,7 +146,7 @@ class Search extends React.Component{
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage nicht möglich ist (Development Zwecke)
     loadPage() {
-        const dummySearchProfiles = [12, 56, 34];
+        const dummySearchProfiles = [12, 56];
 
         this.setState({ Searchprofiles: dummySearchProfiles }, () => {
             const lengthSearchprofiles = this.state.Searchprofiles.length;
@@ -145,7 +161,7 @@ class Search extends React.Component{
     // funktion welche funktionen beim Laden der Seite aufruft
 
     componentDidMount() {
-      this.loadPage();
+      this.loadingPage();
     }
 
 
@@ -156,6 +172,8 @@ class Search extends React.Component{
 
         // const für den Status, ob die buttons (Suche, edit, delete ausführbar sind)
         const { clickable } = this.state
+
+        const count = this.state.numProfiles;
 
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
         const SearchProfileListing = Array(this.state.numSearchProfiles)
@@ -180,6 +198,13 @@ class Search extends React.Component{
               </button>
             </Grid>
           ));
+
+        // Methode zur Darstellung einer SearchProfileBox
+        const SearchListing = Array(count).fill(null).map((item, index) => (
+            <Grid item xs={12} key={index} >
+                <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} other_profile={this.state.profiles[index]}/>
+            </Grid>
+        ));
 
     return (
 
@@ -303,10 +328,15 @@ class Search extends React.Component{
                         </Item>
                      </Stack>
                  </Item>
-
-                 <Item>
-                     <SearchProfileBox/>
-                 </Item>
+                     {SearchListing.length > 0 ? (
+                        <Box sx={{ width: '100%',margin: '0 auto'}} >
+                            <Grid item container spacing={2} justifyContent="center">
+                                {SearchListing}
+                            </Grid>
+                        </Box>
+                    ) : (
+                        <p>Suche um Profile zu sehen...</p>
+                    )}
              </Stack>
         </Box>
       </div>
