@@ -25,6 +25,14 @@ class SearchProfileMapper(mapper):
 
         return result
 
+    def find_new(self):
+
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")
+        searchprofile_id = cursor.fetchone()[0]
+
+        return searchprofile_id
+
     def find_by_key(self, key):
         results = []
 

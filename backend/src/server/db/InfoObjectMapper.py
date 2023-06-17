@@ -95,12 +95,6 @@ class InfoObjectMapper(mapper):
                 info_obj.set_id(1)
 
 
-        # Abrufen der searchprofile_id
-        cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")
-        searchprofile_id = cursor.fetchone()[0]
-
-        if searchprofile_id is not None:
-            info_obj.set_searchprofile_fk(searchprofile_id)
 
         command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id, searchprofile_id) VALUES (%s, %s, %s, %s, %s)"
         data = (info_obj.get_id(),
