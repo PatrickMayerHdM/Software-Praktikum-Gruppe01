@@ -413,7 +413,7 @@ class Administration(object):
         for infoobj in info_objects:
             age = infoobj.calc_age()
             if age is not None:
-                processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_id, infoobj.searchprofile_id)
+                processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_fk, infoobj.searchprofile_id)
                 processed_tuples.append(processed_infoobj)
                 #print('calculate_age Methode in Admin.py:', processed_tuples)
                 new_infoobj = InfoObject()
