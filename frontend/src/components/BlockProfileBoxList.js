@@ -21,14 +21,13 @@ class BlockProfileBoxList extends React.Component{
         }
     }
 
-
-    componentDidMount() {
+    getBlockProfiles() {
         DatingSiteAPI.getAPI()
         .getBlocknoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
             const lengthProfiles = this.state.profiles.length;
             this.setState(prevState => ({
-                profiles: [...prevState.profiles, ...profilesvar],
+                profiles: profilesvar,
                 numProfiles: lengthProfiles
             }));
         })
@@ -37,13 +36,41 @@ class BlockProfileBoxList extends React.Component{
         });
     }
 
+
+    componentDidMount() {
+        this.getBlockProfiles(() => {
+            console.log('profiles im componentDidMount:', this.state.profiles);
+        });
+    }
+
+    handleRemoveProfile = (removedProfileId) => {
+        console.log('handleRemoveProfile und profiles vor der Aktualisierung:', this.state.profiles);
+        console.log('handleRemoveProfile und die removedProfileId:', removedProfileId);
+        const updatedProfiles = this.state.profiles.filter(profileId => profileId !== removedProfileId);
+        const lengthupdatedProfiles = updatedProfiles.length;
+        this.setState({
+            profiles: updatedProfiles,
+            numProfiles: lengthupdatedProfiles
+        }, () => {
+            console.log('handleRemoveProfile und profiles nach der Aktualisierung:', this.state.profiles);
+        });
+    };
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.other_profile !== this.props.other_profile) {
+            this.setState({
+                added_id: this.props.other_profile
+            });
+        }
+    }
+
     handleProfileClick = (index) => {
         this.setState({ otherProfileIndex: index});
     };
 
     render() {
 
-        // const für die Anzahl der anzuzeigenden Profile innerhalb der Merkliste
+        // const für die Anzahl der anzuzeigenden Profile innerhalb der Sperrliste
         const count = this.state.numProfiles;
 
         const current_profile = this.props.user.uid;
@@ -51,12 +78,8 @@ class BlockProfileBoxList extends React.Component{
         // Methode zur Darstellung einer FavoriteProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
-                <Item>
-                    <BlockProfileBox current_profile={current_profile}
-                                     other_profile={this.state.profiles[index]}
-                                     onClick={() => this.handleProfileClick(index)}/>
-                </Item >
-            </Grid >
+                <BlockProfileBox key={this.state.profiles[index]} current_profile={current_profile} other_profile={this.state.profiles[index]} onRemoveProfile={this.handleRemoveProfile} />
+            </Grid>
         ));
 
 
