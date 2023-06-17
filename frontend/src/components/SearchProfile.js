@@ -87,7 +87,7 @@ class SearchProfile extends React.Component{
              event.preventDefault();
              const newSearchprofile = new searchprofileBO( this.props.user.uid);
              const newInfoObject = new infoobjectBO(
-                 this.props.user.uid,
+                 null,
                  this.state.char_fk,
                  null,
                  null,

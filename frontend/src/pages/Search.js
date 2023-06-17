@@ -121,7 +121,27 @@ class Search extends React.Component{
                 error: e,
                 })
             );
+        const updatedSearchProfiles = this.state.Searchprofiles.filter(searchprofileId => searchprofileId !== this.state.selectedProfile);
+        const lengthupdatedSearchProfiles = updatedSearchProfiles.length;
+        this.setState({
+            Searchprofiles: updatedSearchProfiles,
+            numSearchProfiles: lengthupdatedSearchProfiles
+        }, () => {
+            console.log('handleRemoveProfile und profiles nach der Aktualisierung:', this.state.Searchprofiles);
+        });
     };
+
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.Searchprofiles !== this.state.Searchprofiles) {
+        const numSearchProfiles = this.state.Searchprofiles.length;
+        this.setState({ numSearchProfiles });
+
+        if (this.state.selectedProfile && !this.state.Searchprofiles.includes(this.state.selectedProfile)) {
+          this.setState({ selectedProfileIndex: null, selectedProfile: null });
+        }
+      }
+    }
+
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage möglich ist
     loadingPage(){
@@ -130,7 +150,7 @@ class Search extends React.Component{
         .then(Searchprofilesvar => {
           console.log("Das ist Searchprofilesvar in der loadingPage: ",Searchprofilesvar)
           this.setState(prevState => ({
-            Searchprofiles: [...prevState.Searchprofiles, ...Searchprofilesvar]
+            Searchprofiles: Searchprofilesvar,
           }));
 
           const lengthSearchprofiles = this.state.Searchprofiles.length;
@@ -228,7 +248,8 @@ class Search extends React.Component{
                                       justifyContent: "center",
                                       backgroundColor: "#587D71",
                                       color: "#fff",
-                                      cursor: "pointer"
+                                      cursor: "pointer",
+                                      pointerEvents: clickable ? '' : 'none',
                                     }}
                                   >
                                     <UpdateIcon/>

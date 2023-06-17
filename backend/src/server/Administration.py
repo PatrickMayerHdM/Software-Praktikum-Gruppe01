@@ -381,7 +381,7 @@ class Administration(object):
         print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
 
         searchp = Administration.get_new_searchprofile(self)
-        print(searchp)
+        #print("Die ID des suchprofils, für das die Daten erstellt werden ist: ",searchp)
 
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
