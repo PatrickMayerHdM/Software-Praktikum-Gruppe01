@@ -36,7 +36,6 @@ class Search extends React.Component{
           deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
           clickable: false,
           numProfiles: 0, // Nummer der Profile welche als Antwort kamen
-
         }
 
         this.NewProfiles = this.NewProfiles.bind(this);
@@ -79,7 +78,18 @@ class Search extends React.Component{
 
     // Hier wird erstmal ein console.log ausgeführt, wenn der Such Button gedrückt wird, damit später dann danach gesucht wird.
     Search() {
-        console.log("Es wurde eine Suchanfrage mit dem Suchprofil", this.state.selectedProfileIndex,  "gestellt");
+        DatingSiteAPI.getAPI()
+        .getAllProfiles()
+        .then(profilesvar => {
+            const lengthProfiles = this.state.profiles.length;
+            this.setState(prevState => ({
+                profiles: profilesvar,
+                numProfiles: lengthProfiles
+            }));
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
@@ -158,6 +168,8 @@ class Search extends React.Component{
         // const für den Status, ob die buttons (Suche, edit, delete ausführbar sind)
         const { clickable } = this.state
 
+        const count = this.state.numProfiles;
+
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
         const SearchProfileListing = Array(this.state.numSearchProfiles)
           .fill(null)
@@ -181,6 +193,13 @@ class Search extends React.Component{
               </button>
             </Grid>
           ));
+
+        // Methode zur Darstellung einer FavoriteProfileBox
+        const SearchListing = Array(count).fill(null).map((item, index) => (
+            <Grid item xs={12} key={index} >
+                <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} other_profile={this.state.profiles[index]}/>
+            </Grid>
+        ));
 
     return (
 
@@ -304,10 +323,15 @@ class Search extends React.Component{
                         </Item>
                      </Stack>
                  </Item>
-
-                 <Item>
-                     <SearchProfileBox/>
-                 </Item>
+                     {SearchListing.length > 0 ? (
+                        <Box sx={{ width: '100%',margin: '0 auto'}} >
+                            <Grid item container spacing={2} justifyContent="center">
+                                {SearchListing}
+                            </Grid>
+                        </Box>
+                    ) : (
+                        <p>Suche um Profile zu sehen...</p>
+                    )}
              </Stack>
         </Box>
       </div>

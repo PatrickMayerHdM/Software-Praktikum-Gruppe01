@@ -216,10 +216,17 @@ class Administration(object):
             print("Admin: ", profile)
             mapper.delete(profile)
 
-    @staticmethod
     def get_all_profiles(self):
+        profiles = []
         with ProfileMapper() as mapper:
-            return mapper.find_all()
+            found_profiles = mapper.find_all()
+
+            for found_profile in found_profiles:
+                found_user = found_profile.get_google_fk()
+                profiles.append(found_user)
+
+        print(profiles)
+        return profiles
 
     def get_profile_by_google_id(self, key):
         with ProfileMapper() as mapper:
