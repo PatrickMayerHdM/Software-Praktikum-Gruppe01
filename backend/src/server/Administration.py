@@ -1,4 +1,5 @@
 from server.bo.Message import Message
+from server.db.MatchmakingMapper import MatchmakingMapper
 from server.db.MessageMapper import MessageMapper
 from server.bo.blockNote import BlockNote
 from server.db.blockNoteMapper import BlockNoteMapper
@@ -324,7 +325,6 @@ class Administration(object):
         with ProfileMapper() as mapper:
             return mapper.find_profile_id_by_key(key)
 
-    "Weitere Mehoden, die das Matchmaking benötigt: "
 
     "Chat-spezifische Methoden"
     """
@@ -376,4 +376,47 @@ class Administration(object):
 
 """
 
+"""Mehoden für das Matchmaking"""
 
+
+def get_char_values(self, profile_id):
+    """Diese Methode holt sich die char_value je profil und speichert diese in einem Dictionary"""
+
+    with MatchmakingMapper() as mapper:
+        info_objects = mapper.find_info_by_profile(profile_id)
+        char_values = {}
+
+    for info_obj in info_objects:
+        char_id = info_obj.get_char_fk()
+        char_value = info_obj.get_value()
+        char_values[char_id] = char_value
+
+    return char_values
+
+
+def get_char_values_for_profiles(self, profile_id):
+    """Diese Methode gibt ein Dictionary mit einer gegebenen Profile ID und deren Char Values zurück"""
+    char_values = self.get_char_values(profile_id)
+
+    profile = {
+        "Profile ID": profile_id,
+        "Char Values": char_values
+    }
+    return profile
+
+
+def calculate_similarity(self, profile1, profile2):
+    """Diese Methode berechnet die Ähnlichkeit der zwei Profilen"""
+    char_values1 = profile1["Char Values"]
+    char_values2 = profile2["Char Values"]
+
+    total_keys = set(char_values1.keys()).union(char_values2.keys())
+    matching_count = 0
+
+    for key in total_keys:
+        if key in char_values1 and key in char_values2:
+            if char_values1[key] == char_values2[key]:
+                matching_count += 1
+
+    similarity = matching_count / len(total_keys)
+    return similarity
