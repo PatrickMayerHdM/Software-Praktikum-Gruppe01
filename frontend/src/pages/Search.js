@@ -27,16 +27,16 @@ class Search extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          numSearchProfiles: 0,
-          selectedProfileIndex: null,
-          selectedProfile: null,
-          Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
-          profiles: [ ], // Die Profile die wir als Antwort bekommen.
-          profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
-          deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
-          clickable: false,
-          numProfiles: 0, // Nummer der Profile welche als Antwort kamen
-        }
+            numSearchProfiles: 0,
+            selectedProfileIndex: null,
+            selectedProfile: null,
+            Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
+            profiles: [ ], // Die Profile die wir als Antwort bekommen.
+            profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
+            deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
+            clickable: false,
+            numProfiles: 0, // Nummer der Profile welche als Antwort kamen
+        };
 
         this.NewProfiles = this.NewProfiles.bind(this);
         this.AddSearchProfiles = this.AddSearchProfiles.bind(this);
@@ -112,11 +112,16 @@ class Search extends React.Component{
 
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier gelöscht wird.
     DeleteSearchProfile(){
         console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
-        console.log(this.state.profiles[[2]])
-    }
+        DatingSiteAPI.getAPI()
+            .removeSearchProfile(this.state.selectedProfile)
+            .catch((e) =>
+                this.setState({
+                error: e,
+                })
+            );
+    };
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage möglich ist
     loadingPage(){
@@ -194,7 +199,7 @@ class Search extends React.Component{
             </Grid>
           ));
 
-        // Methode zur Darstellung einer FavoriteProfileBox
+        // Methode zur Darstellung einer SearchProfileBox
         const SearchListing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
                 <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} other_profile={this.state.profiles[index]}/>
