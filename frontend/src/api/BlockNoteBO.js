@@ -7,29 +7,36 @@ import BusinessObject from "./BusinessObject";
 export default class blockNoteBO extends BusinessObject {
 
     /**
-     * Baut eine blockNoteBO mit blockNote_list
+     * Baut eine blockNoteBO mit blocking_id und blocked_id
      *
-     * @param {*} ablockNote_list
+     * @param {*} ablocking_id
+     * @param {*} ablocked_id
      */
 
 
 
-    constructor() {
+    constructor(ablocking_id, ablocked_id) {
         super();
-        this.ablockNote_list = [];
+        this.blocking_id = ablocking_id
+        this.blocked_id = ablocked_id
     }
 
-    /**
-     * Fügt ein Profil der Liste hinzu
-     *
-     * @param {*} profil_id - die id des Profils
-     */
-
-    add_user(profil_id) {
-        if (!this.ablockNote_list.includes(profil_id)) {
-            this.ablockNote_list.push(profil_id);
-        }
+    get blockingId() {
+        return this.blocking_id;
     }
+
+    set blockingId(ablocking_id) {
+        this.blocking_id = ablocking_id;
+    }
+
+    get blockedId() {
+        return this.blocked_id;
+    }
+
+    set blockedId(ablocked_id) {
+        this.blocked_id = ablocked_id;
+    }
+
 
     /**
      * Entfernt ein Profil aus der Liste
@@ -42,14 +49,6 @@ export default class blockNoteBO extends BusinessObject {
         if (index !== -1) {
             this.ablockNote_list.splice(index, 1);
         }
-    }
-
-    /**
-     * Holt sich alle Profile aus der Liste
-     */
-
-    get_all_users() {
-        return this.ablockNote_list;
     }
 
     /**

@@ -1,5 +1,3 @@
-from abc import ABC
-
 from relationship import relationship
 from BusinessObject import BusinessObject as bo
 
@@ -7,8 +5,8 @@ from BusinessObject import BusinessObject as bo
 class BlockNote(bo):
     def __init__(self):
         super().__init__()
-        self.blocked_id = None
         self.blocking_id = None
+        self.blocked_id = None
 
     def set_blocked_id(self, blocked_id):
         self.blocked_id = blocked_id
@@ -24,13 +22,12 @@ class BlockNote(bo):
 
     def __str__(self):
         # str Methode gibt das erstellte profil in Form eines String zurück
-        return "blocknote ID: {}, blocked ID: {}, blocking ID: {}".format(self.get_id(), self.blocked_id,
-                                              self.blocking_id)
+        return "blocknote: {}, {}, {}".format(self.get_id(), self.blocking_id, self.blocked_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         bn = BlockNote()
         bn.set_id(dictionary['id'])
-        bn.set_blocked_id(dictionary['blocked_id'])
         bn.set_blocking_id(dictionary['blocking_id'])
+        bn.set_blocked_id(dictionary['blocked_id'])
         return bn

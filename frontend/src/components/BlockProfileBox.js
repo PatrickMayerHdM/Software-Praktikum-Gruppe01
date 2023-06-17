@@ -4,6 +4,8 @@ import Grid from "@mui/material/Grid";
 import React from "react";
 import ProfileBox from "./ProfileBox";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import DatingSiteAPI from "../api/DatingSiteAPI";
+import PropTypes from 'prop-types';
 
 
 /**
@@ -14,33 +16,63 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 class BlockProfileBox extends React.Component{
 
-    render() {
-            /** Funktion welche ausgeführt wird, wenn der Button "Von Kontaktsperre Entfernen" gedrückt wird.
-         * Bisher zu Testzwecken noch nicht weiter ausgeführt */
-        function BlockDelClicked(){
-            console.log("Von Kontaktsperre entfernt")
+    constructor(props) {
+        super(props);
+        this.state = {
+            blocking_id: this.props.current_profile,
+            blocked_id: this.props.other_profile
         }
+        this.BlockDelClicked = this.BlockDelClicked.bind(this);
+    }
 
-        /** Die Profilbox an sich, speziell angepasst auf die gegebenheiten zur Darstellung der mit einer
+    static propTypes = {
+        onRemoveProfile: PropTypes.func.isRequired,
+    };
+
+    /** Funktion welche ausgeführt wird, wenn der Button "Von Kontaktsperre Entfernen" gedrückt wird.
+         * Bisher zu Testzwecken noch nicht weiter ausgeführt */
+    BlockDelClicked(){
+        DatingSiteAPI.getAPI()
+            // Löschen des BlockNote-Eintrags
+            .removeBlocknoteProfile(this.state.blocking_id, this.state.blocked_id)
+            .then(() => {
+                //console.log("Von Merkzettel entfernt");
+            })
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+        //console.log("Von Kontaktsperre entfernt")
+    }
+
+
+
+    render() {
+
+
+        /** Die Profilbox an sich, extra angepasst auf die gegebenheiten zur Darstellung der mit einer
          * Kontaktsperre belegten Profile */
 
         return(
             <Box sx={{ flexGrow: 1 }}>
-              <Grid container
-                direction="row" justifyContent="center" alignItems="stretch" container>
+              <Grid container direction="row" justifyContent="center" alignItems="stretch" container>
                 <Grid item xs={10} spacing={2} >
                   <Item>
-                      <ProfileBox/>
+                      <ProfileBox other_profile={this.props.other_profile}/>
                   </Item >
                 </Grid >
                 <Grid item item xs={2} >
-                    <button onClick={BlockDelClicked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                    <button onClick={() => {
+                        this.BlockDelClicked();
+                        this.props.onRemoveProfile(this.props.other_profile);
+                    }} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}
+                    >
                         <PersonRemoveIcon/>
                     </button>
                 </Grid>
-
-              </Grid >
-            </Box >
+              </Grid>
+            </Box>
             )
     }
 }

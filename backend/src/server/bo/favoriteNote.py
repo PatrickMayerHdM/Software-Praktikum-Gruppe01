@@ -5,8 +5,9 @@ from BusinessObject import BusinessObject as bo
 class FavoriteNote(bo):
     def __init__(self):
         super().__init__()
-        self.added_id = None
         self.adding_id = None
+        self.added_id = None
+
 
     def set_added_id(self, added_id):
         self.added_id = added_id
@@ -22,13 +23,12 @@ class FavoriteNote(bo):
 
     def __str__(self):
         # str Methode gibt das erstellte profil in Form eines String zurück
-        return "favoritenote: {}, {}, {}".format(self.get_id(), self.added_id,
-                                                 self.adding_id)
+        return "favoritenote: {}, {}, {}".format(self.get_id(), self.adding_id, self.added_id)
 
     @staticmethod
     def from_dict(dictionary=dict()):
         fn = FavoriteNote()
         fn.set_id(dictionary['id'])
-        fn.set_added_id(dictionary['added_id'])
         fn.set_adding_id(dictionary['adding_id'])
+        fn.set_added_id(dictionary['added_id'])
         return fn

@@ -3,6 +3,10 @@ import profileBO from "./ProfileBO";
 import ProfileBO from "./ProfileBO";
 import Characteristic from "./CharacteristicBO";
 import infoobjectBO from "./InfoObjectBO";
+import favoriteNoteBO from "./FavoriteNoteBO";
+import blockNoteBO from "./BlockNoteBO";
+import searchprofileBO from "./SearchprofileBO";
+import FavoriteNoteBO from '../api/FavoriteNoteBO';
 
 
 export default class DatingSiteAPI {
@@ -48,7 +52,7 @@ export default class DatingSiteAPI {
 
     getAllMessages(profileID, otherprofileID) {
         return this.#fetchAdvanced(this.#getAllMessagesURL(profileID, otherprofileID)).then((responseJSON) => {
-            console.log("Innerhalb der Daiting API: ", profileID, otherprofileID )
+            console.log("Innerhalb der Dating API: ", responseJSON )
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -106,7 +110,6 @@ export default class DatingSiteAPI {
 
     // Profile related
 
-    #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #removeProfileURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
@@ -248,33 +251,31 @@ export default class DatingSiteAPI {
     }
 
 
-    getAllProfiles() {
-        return this.#fetchAdvanced(this.#getAllProfilesURL()).then((responseJSON) => {
-            let profileBOs = ProfileBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(profileBOs);
-            })
-        })
-    }
 
     getProfileByID(google_fk) {
+        let profile = this.#fetchAdvanced(this.#getProfileByIdURL(google_fk));
+        console.log("Profile: ", profile);
         return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
             .then((responseJSON) => {
             console.log("Profilid: ", responseJSON)
-            let responseProfileBO = ProfileBO.fromJSON(responseJSON)[0];
+            let responseProfileBO = profileBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);
             })
         })
     }
-
     /**
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`;
-    #getSearchProfilesByIdURL = (id) => `${this.#datingServerBaseURL}/SearchProfileIDs`;
-    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`;
+    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
+    #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
+    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
+    #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
+    #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
+    #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
+    #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
+
 
 
     /**
@@ -285,7 +286,7 @@ export default class DatingSiteAPI {
     getOnlyNewProfiles(profileID){
         return this.#fetchAdvanced(this.#getNewProfilesByIdURL(profileID))
             .then((responseJSON) => {
-                console.log("Das ist das profile_id Dings im API call: ",profileID )
+                console.log("Das ist das profile_id im API call: ",profileID )
                 console.log("Das responseJSON")
                 console.log(responseJSON)
                 return new Promise(function (resolve) {
@@ -297,12 +298,26 @@ export default class DatingSiteAPI {
     }
 
     /**
+     * GET um alle möglichen Profile zu bekommen
+     * @returns {Promise<unknown>}
+     */
+
+    getAllProfiles() {
+        return this.#fetchAdvanced(this.#getAllProfilesURL())
+            .then((responseJSON) => {
+                console.log("Das responseJSON:");
+                console.log(responseJSON);
+                return responseJSON;
+            });
+    }
+
+    /**
      * Gibt ein Promise zurück, welches dann ein Array mit den verschiedenen ProfilIDs für Suchprofile
      * @param {Number} accountID übergibt die accountID für welche die Profile nicht
     */
 
-    getSearchProfileIDs(){
-        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL())
+    getSearchProfileIDs(profile_id){
+        return this.#fetchAdvanced(this.#getSearchProfilesByIdURL(profile_id))
             .then((responseJSON) => {
                 console.log("Das responseJSON")
                 console.log(responseJSON)
@@ -328,7 +343,155 @@ export default class DatingSiteAPI {
           resolve(profileBOs);
         })
       })
-  }
+    }
+
+    addSearchInfoObject(infoobject) {
+        console.log("InfoObject: ", infoobject)
+        return this.#fetchAdvanced(this.#addSearchInfoObject(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(infoobject)
+        }).then((responseJSON) => {
+            let newinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newinfoobjectBO);
+            })
+        })
+    }
+
+    /**
+     * @param {searchprofileBO} searchprofileBO object
+     * @public
+     */
+
+    addSearchProfile(searchprofile){
+        return this.#fetchAdvanced(this.#addSearchProfileURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(searchprofile)
+        }).then((responseJSON) => {
+            let oneSearchProfile = searchprofileBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(oneSearchProfile);
+            })
+        })
+    }
+
+
+    getOneSearchprofile(searchprofile_id){
+        return this.#fetchAdvanced(this.#getOneSearchprofileByIdURL(searchprofile_id))
+            .then((responseJSON) => {
+                let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
+                console.log("responseJSON API Infoobjects Suchprofil: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(infoobjectBOs);
+                })
+            })
+    }
+
+
+        // Favoritenote related
+
+    #getFavoritenoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}`;
+    #addFavoriteProfile = (profile_id) => `${this.#datingServerBaseURL}/Favoritenote`;
+    #removeFavoriteProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}/${other_profile_id}`;
+
+
+    getFavoritenoteProfileURL(profile_id){
+        return this.#fetchAdvanced(this.#getFavoritenoteProfileURL(profile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                });
+            });
+    }
+
+
+
+   addFavoritenoteProfileURL(profile_id) {
+        return this.#fetchAdvanced(this.#addFavoriteProfile(profile_id), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile_id)
+        }).then((responseJSON) => {
+            let favorBO = favoriteNoteBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(favorBO);
+            })
+        })
+    }
+
+   removeFavoritenoteProfileURL(profile_id, other_profile_id) {
+        return this.#fetchAdvanced(this.#removeFavoriteProfileURL(profile_id, other_profile_id), {
+            method: 'DELETE'
+        })
+            .then((responseJSON) => {
+                let delBO = favoriteNoteBO.fromJSON(responseJSON[0]);
+                return new Promise(function (resolve) {
+                    resolve(delBO);
+                })
+            })
+   }
+
+
+    // blockNote related
+
+    #getBlocknoteProfileURL = (profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}`;
+    #addBlockProfile = (profile_id) => `${this.#datingServerBaseURL}/Blocknote`;
+    #removeBlockProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}/${other_profile_id}`;
+
+
+    getBlocknoteProfileURL(profile_id){
+        return this.#fetchAdvanced(this.#getBlocknoteProfileURL(profile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON: ", responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(responseJSON);
+                });
+            });
+    }
+
+    addBlocknoteProfileURL(profile_id) {
+        return this.#fetchAdvanced(this.#addBlockProfile(profile_id), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profile_id)
+        }).then((responseJSON) => {
+            let blockBO = blockNoteBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(blockBO);
+            })
+        })
+    }
+
+    removeBlocknoteProfile(profile_id, other_profile_id) {
+        return this.#fetchAdvanced(this.#removeBlockProfileURL(profile_id, other_profile_id), {
+            method: 'DELETE'
+        })
+            .then((responseJSON) => {
+                let delBO = favoriteNoteBO.fromJSON(responseJSON[0]);
+                return new Promise(function (resolve) {
+                    resolve(delBO);
+                })
+            })
+
+    }
+
+
+
 
 }
 

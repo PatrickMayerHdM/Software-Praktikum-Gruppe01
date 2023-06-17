@@ -10,8 +10,6 @@ import LogIn from "./pages/LogIn";
 import BlockProfileBox from "./components/BlockProfileBox";
 import FavoriteProfileBox from "./components/FavoriteProfileBox";
 import ChatProfileBox from "./components/ChatProfileBox";
-import Merkliste from "./pages/Merkliste";
-import Sperrliste from "./pages/Sperrliste";
 import Profile from "./components/Profile";
 import OptionsOtherProfile from "./components/OptionsOtherProfile";
 import OptionsOwnProfile from "./components/OptionsOwnProfile";
@@ -199,12 +197,15 @@ class App extends Component {
               <Header user={currentUser}/>
                 <Routes>
                     <Route path="/" element={<Outlet />}>
-                      <Route path="/" element={<Profile />}></Route>
+                      <Route path="/" element={<CreateProfil user={currentUser}/>}></Route>
                       <Route path="/Profil/:eigeneID" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
                       <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
+                      <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile user={currentUser}/>}></Route>
+                      <Route path="/Profile/:eigeneID" element={<Profile user={currentUser}/>}></Route>
+                      <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
                       <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile/>}></Route>
-                      <Route path="/Merkliste" element={<FavoriteProfileBoxList/>}></Route>
-                      <Route path="/Sperrliste" element={<BlockProfileBoxList/>}></Route>
+                      <Route path="/Merkliste" element={<FavoriteProfileBoxList user={currentUser}/>}></Route>
+                      <Route path="/Sperrliste" element={<BlockProfileBoxList user={currentUser}/>}></Route>
                       <Route element={<ChatProfileBox user={currentUser}/>}></Route>
                       <Route path="/Chats" element={<ChatProfileBoxList user={currentUser}/>}></Route>
                       <Route path="/ChatWindow/:eigeneID/:andereID" element={<ChatWindow user={currentUser}/>}></Route>

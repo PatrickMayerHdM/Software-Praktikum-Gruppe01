@@ -3,15 +3,16 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import FormLabel from "@mui/material/FormLabel";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import "./Profile.css";
 import SaveIcon from '@mui/icons-material/Save';
+import searchprofileBO from '../api/SearchprofileBO';
+import infoobjectBO from "../api/InfoObjectBO";
+import DatingSiteAPI from "../api/DatingSiteAPI";
 
 
 /**
@@ -27,20 +28,23 @@ class SearchProfile extends React.Component{
         this.state = {
             minAge: '',
             maxAge: '',
-            minHeight: '',
-            maxHeight: '',
+            height: '',
             gender: '',
             religion: '',
             hair: '',
             smoking: '',
+
+            lastPartURL: null,
+            char_fk: 0,
+            searchprofile_id: null,
+            error: null,
         };
 
         this.handleChangeGen = this.handleChangeGen.bind(this);
         this.handleChangeRel = this.handleChangeRel.bind(this);
         this.handleChangeSmo = this.handleChangeSmo.bind(this);
-        this.handleChangeHai = this.handleChangeHai.bind(this);
-
-
+        this.handleChangeHair = this.handleChangeHair.bind(this);
+        this.handleChangeHeight = this.handleChangeHeight.bind(this);
 
     }
 
@@ -59,9 +63,14 @@ class SearchProfile extends React.Component{
         this.setState({ smoking: selectedSmoker });
     }
 
-    handleChangeHai = (val) => {
+    handleChangeHair = (val) => {
        const selectedHair = val.target.value;
         this.setState({ hair: selectedHair });
+    };
+
+    handleChangeHeight = (val) => {
+        const selectedHeight = val.target.value;
+        this.setState({ height: selectedHeight });
     };
 
      handleChangeAge = (event, value) => {
@@ -69,27 +78,114 @@ class SearchProfile extends React.Component{
       this.setState({ minAge: minAge, maxAge: maxAge });
     }
 
-    handleChangeHeight = (event, value) => {
-      const [minHeight, maxHeight] = value;
-      this.setState({minHeight: minHeight, maxHeight: maxHeight})
-    }
 
-    submit = () => {
-        console.log(this.state )
-    }
+    submit = (event) => {
+         if (this.state.lastPartURL === "new") {
+             console.log("POST");
+             // console.log(this.state);
+             // HIER KOMMT DER CODE ZUM ERSTMALIGEN ANLEGEN
+             event.preventDefault();
+             const newSearchprofile = new searchprofileBO( this.props.user.uid);
+             const newInfoObject = new infoobjectBO(
+                 this.props.user.uid,
+                 this.state.char_fk,
+                 null,
+                 null,
+                 null,
+                 null,
+                 this.state.gender,
+                 this.state.hair,
+                 this.state.height,
+                 null,
+                 this.state.religion,
+                 this.state.smoking,
+                 this.state.minAge,
+                 this.state.maxAge,
+                 null, // Hier wird die searchprofile_fk übergeben, diese wird jedoch nicht im front-End gesetzt daher null
+             )
+
+             DatingSiteAPI.getAPI()
+                 .addSearchProfile(newSearchprofile)
+                 .catch((e) =>
+                     this.setState({error: e,})
+                 )
+
+             DatingSiteAPI.getAPI()
+                 .addSearchInfoObject(newInfoObject)
+                 .catch((e) =>
+                     this.setState({
+                         error: e,
+                     })
+                 );
+
+             console.log(newInfoObject)
+             console.log("FrontEnd Payload",newSearchprofile)
+         } else {
+             console.log("UPDATE");
+             // HIER KOMMT DER CODE ZUM ÄNDERN EINES VORHANDENEN SUCHPROFILS
+         }
+         //console.log(this.state);
+    };
 
 
+    componentDidMount() {
+        const currentPath = window.location.pathname;
+        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+        const lastPartURL = currentPath.split('/').pop();
+        this.setState({lastPartURL: lastPartURL})
+
+        if (lastPartURL === "new") {
+            } else {
+            // Der Fall, wenn ein bereits existierendes Suchprofil bearbeitet wird
+            DatingSiteAPI.getAPI()
+                .getOneSearchprofile(lastPartURL)
+                .then((responseInfoObjects) => {
+                    const selectedProperties = {};
+
+                    for (const key in responseInfoObjects) {
+                        if (responseInfoObjects.hasOwnProperty(key)) {
+                          const infoObject = responseInfoObjects[key];
+                          const charId = infoObject.char_id;
+                          const charValue = infoObject.char_value;
+
+                          switch (charId) {
+                            case 40:
+                              selectedProperties.gender = charValue;
+                              break;
+                            case 70:
+                              selectedProperties.hair = charValue;
+                              break;
+                            case 50:
+                              selectedProperties.height = charValue;
+                              break;
+                            case 60:
+                              selectedProperties.religion = charValue;
+                              break;
+                            case 80:
+                              selectedProperties.smoking = charValue;
+                              break;
+                            case 100:
+                              selectedProperties.minAge = charValue;
+                              break;
+                            case 110:
+                              selectedProperties.maxAge = charValue;
+                              break;
+
+                            default:
+                              break;
+                          }
+                        }
+                      }
+
+                      this.setState(selectedProperties);
+                    });
+
+    }}
 
     render() {
         const {
           minAge,
           maxAge,
-          minHeight,
-          maxHeight,
-          gender,
-          religion,
-          hair,
-          smoking
         } = this.state;
 
 
@@ -135,19 +231,14 @@ class SearchProfile extends React.Component{
                             </RadioGroup>
                         </Item>
 
-                        <Item >
+                        <Item>
                             {/** Hier kann die gewünschte Höhe einer Person ausgewählt werden */}
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel>Welche Körpergröße sollte die Person haben?</FormLabel>
-                                <Slider
-                                    value={[minHeight, maxHeight]}
-                                    onChange={this.handleChangeHeight}
-                                    valueLabelDisplay="auto"
-                                    min={140}
-                                    max={220}
-                                    className="slider"
-                                />
-                            </Box>
+                            <FormLabel> Wie groß soll die gesuchte Person sein?</FormLabel>
+                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.height} onChange={this.handleChangeHeight} className={"checkbox_search"}>
+                                <FormControlLabel sx={{ width: '16%' }} value="small" control={<Radio />} label="Klein" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '16%' }} value="mean" control={<Radio />} label="Mittel" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '16%' }} value="large" control={<Radio />} label="Groß" labelPlacement="bottom" />
+                            </RadioGroup>
                         </Item>
 
                         <Item>
@@ -163,7 +254,7 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Hier kann die gewünschte Haarfarbe der mit diesem Suchprofil gesuchten Person ausgewählt werden */}
                             <FormLabel> Welche Haarfarbe sollte die gesuchte Person haben?</FormLabel>
-                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.hair} onChange={this.handleChangeHai} className={"checkbox_search"}>
+                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.hair} onChange={this.handleChangeHair} className={"checkbox_search"}>
                                 <FormControlLabel sx={{ width: '10%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />

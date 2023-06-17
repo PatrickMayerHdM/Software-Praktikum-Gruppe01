@@ -37,7 +37,7 @@ class InfoObjectMapper(mapper):
         command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}')"
         cursor.execute(command)
         tuples = cursor.fetchall()
-        print(tuples)
+        print('InfoObject Tuples aus DB:', tuples)
 
         for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
             info_obj = InfoObject()
@@ -51,7 +51,7 @@ class InfoObjectMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("result: ", result)
+        print("Erzeugte Objekte aus Tuples: ", result)
         return result
 
     def insert(self, info_obj):
@@ -73,6 +73,42 @@ class InfoObjectMapper(mapper):
                 info_obj.get_char_fk(),
                 info_obj.get_value(),
                 info_obj.get_profile_fk())
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return info_obj
+
+    def Searchinsert(self, info_obj):
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
+        tuples = cursor.fetchall()
+
+
+        for (maxid) in tuples:
+            if maxid[0] is not None:
+                info_obj.set_id(maxid[0] + 1)
+
+            else:
+                info_obj.set_id(1)
+
+
+        # Abrufen der searchprofile_id
+        cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")
+        searchprofile_id = cursor.fetchone()[0]
+
+        if searchprofile_id is not None:
+            info_obj.set_searchprofile_fk(searchprofile_id)
+
+        command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id, searchprofile_id) VALUES (%s, %s, %s, %s, %s)"
+        data = (info_obj.get_id(),
+                info_obj.get_char_fk(),
+                info_obj.get_value(),
+                info_obj.get_profile_fk(),
+                info_obj.get_searchprofile_fk(),
+                )
 
         cursor.execute(command, data)
 
@@ -106,16 +142,19 @@ class InfoObjectMapper(mapper):
             info_obj.set_value(char_value)
             info_obj.set_profile_fk(profile_id)
 
+            print("InfoObject Mapper: ", info_obj.get_profile_fk())
             return info_obj
 
         return None
 
-    def delete(self, google_id):
-        print(type(google_id))
+    def delete(self, info_obj):
+        print('InfoObjectMapper "google_id":', info_obj)
+        print(type(info_obj))
+        #print("Delete Info: ", google_id.profile_id)
         cursor = self._connection.cursor()
 
         command = f'DELETE FROM main.InfoObject WHERE profile_id=%s'
-        data = [google_id.profile_fk]
+        data = [info_obj.get_profile_fk()]
         cursor.execute(command, data)
 
         self._connection.commit()
