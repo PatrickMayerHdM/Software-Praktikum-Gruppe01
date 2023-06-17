@@ -53,7 +53,7 @@ account = api.inherit('Account', bo, {
 profile = api.inherit('Profile', bo, {
     'favoritenote_id': fields.Integer(attribute='_favoritenote_id', description='Merkliste eines Profils'),
     'blocknote_id': fields.Integer(attribute='_blocknote_id', description='Blockierliste eines Profils'),
-    'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
+    'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos'),
 })
 
 message = api.inherit('Message', bo, {
@@ -94,7 +94,11 @@ searchprofile = api.inherit('SearchProfile', bo, {
     'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils')
 })
 
-
+matchmaking = api.inherit('Matchmaking', bo, {
+    'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils'),
+    'score': fields.Integer(attribute='score', description='Prozentwert des Matchmakings'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Die Id des Suchprofils')
+})
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
@@ -109,7 +113,7 @@ class ProfileListOperations(Resource):
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
-        profiles = adm.get_all_profiles() #Admin.py noch nicht angelegt
+        profiles = adm.get_all_profiles() #in Admin.py noch nicht angelegt
         print(profiles)
 
         if profiles is not None:
@@ -563,6 +567,27 @@ class SearchprofileListOperations(Resource):
         adm = Administration()
         searchprofiles = adm.get_all_searchprofile()
         return searchprofiles
+
+    """Methode für das Matchmaking"""
+@datingapp.route('/Search/Matchmaking/<int:searchprofile_id>')
+@datingapp.response(500, 'Serverseitiger-Fehler')
+@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
+class MatchingOperation(Resource):
+    #@datingapp.marshal_with(matchmaking)
+    @secured
+    def get(self, searchprofile_id):
+        """ Auslesen der similarity list"""
+        adm = Administration
+        similarity_list = adm.execute_matchmaking(searchprofile_id)
+
+        """ 
+        adjusted_infoobjs ruft die Methode "calculate_age" auf und liefert ein InfoObject-Objekt zurück.
+        Das InfoObjekt besitzt nun das Alter (z.B. 33) und nicht mehr das Geburtsdatum (TT/MM/YYYY...) 
+        """
+        if similarity_list is not None:
+            return similarity_list
+        else:
+            return 500
 
 
 

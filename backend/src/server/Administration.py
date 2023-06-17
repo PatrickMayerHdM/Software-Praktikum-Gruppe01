@@ -16,6 +16,7 @@ from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
+from server.bo.Matchmaking import Matchmaking
 
 class Administration(object):
     def __init__(self):
@@ -433,47 +434,18 @@ class Administration(object):
                 #print('Admin.py: New Infoobj', new_infoobj.get_value())
             return new_infoobj
 
-"""Mehoden für das Matchmaking"""
+    """Methode, die den Matchmakting ALgorithmus aufruft"""
 
+    def execute_matchmaking(self, searchprofile_id):
 
-def get_char_values(self, profile_id):
-    """Diese Methode holt sich die char_value je profil und speichert diese in einem Dictionary"""
-
-    with MatchmakingMapper() as mapper:
-        info_objects = mapper.find_info_by_profile(profile_id)
-        char_values = {}
-
-    for info_obj in info_objects:
-        char_id = info_obj.get_char_fk()
-        char_value = info_obj.get_value()
-        char_values[char_id] = char_value
-
-    return char_values
-
-
-def get_char_values_for_profiles(self, profile_id):
-    """Diese Methode gibt ein Dictionary mit einer gegebenen Profile ID und deren Char Values zurück"""
-    char_values = self.get_char_values(profile_id)
-
-    profile = {
-        "Profile ID": profile_id,
-        "Char Values": char_values
-    }
-    return profile
-
-
-def calculate_similarity(self, profile1, profile2):
-    """Diese Methode berechnet die Ähnlichkeit der zwei Profile"""
-    char_values1 = profile1["Char Values"]
-    char_values2 = profile2["Char Values"]
-
-    total_keys = set(char_values1.keys()).union(char_values2.keys())
-    matching_count = 0
-
-    for key in total_keys:
-        if key in char_values1 and key in char_values2:
-            if char_values1[key] == char_values2[key]:
-                matching_count += 1
-
-    similarity = matching_count / len(total_keys)
-    return similarity
+        m = Matchmaking()
+        m.searchprofile_id(searchprofile_id)
+        m.set_searchprofile_id(),
+        m.get_all_profiles(),
+        m.genderfilter(),
+        m.agefilter(),
+        m.get_char_values(),
+        m.get_char_values_for_profiles(),
+        m.compare_text(),
+        m.calculate_similarity()
+        return m
