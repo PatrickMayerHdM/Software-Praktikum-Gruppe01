@@ -216,10 +216,17 @@ class Administration(object):
             print("Admin: ", profile)
             mapper.delete(profile)
 
-    @staticmethod
     def get_all_profiles(self):
+        profiles = []
         with ProfileMapper() as mapper:
-            return mapper.find_all()
+            found_profiles = mapper.find_all()
+
+            for found_profile in found_profiles:
+                found_user = found_profile.get_google_fk()
+                profiles.append(found_user)
+
+        print(profiles)
+        return profiles
 
     def get_profile_by_google_id(self, key):
         with ProfileMapper() as mapper:
@@ -269,6 +276,11 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
+
+    def get_info_object_by_searchid(self, key):
+        with InfoObjectMapper() as mapper:
+            print("Admin Info Findbykey: ", key)
+            return mapper.find_by_searchid(key)
 
     def get_info_object(self, key):
         with InfoObjectMapper() as mapper:
@@ -323,6 +335,10 @@ class Administration(object):
     def delete_info_object(self, infoobject):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
+
+    def delete_info_object_search(self, infoobject):
+        with InfoObjectMapper() as mapper:
+            return mapper.delete_searchprofile(infoobject)
 
     # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
 
@@ -397,9 +413,9 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             mapper.update(searchprofile)
 
-    def delete_searchprofile(self, searchprofile):
+    def delete_searchprofile(self, searchprofile_id):
         with SearchProfileMapper() as mapper:
-            mapper.delete(searchprofile)
+            mapper.delete(searchprofile_id)
 
     def get_all_searchprofile(self):
         with SearchProfileMapper() as mapper:

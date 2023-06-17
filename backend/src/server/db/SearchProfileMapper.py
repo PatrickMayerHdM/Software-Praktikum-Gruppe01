@@ -104,14 +104,12 @@ class SearchProfileMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, google_id):
-        """ Löschen eines Datensatzes """
+    def delete(self, searchprofile_id):
+        """ Löschen eines Suchprofils """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.Searchprofile WHERE google_id=%s'
-        data = [google_id.google_id]
-        print(google_id)
-        cursor.execute(command, data)
+        command = f"DELETE FROM main.Searchprofile WHERE searchprofile_id='{searchprofile_id}'"
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()

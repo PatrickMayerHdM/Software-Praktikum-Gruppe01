@@ -11,6 +11,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 import DatingSiteAPI from "../api/DatingSiteAPI";
+import OptionsOtherProfile from "./OptionsOtherProfile";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import BlockIcon from "@mui/icons-material/Block";
 
 
 //** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
@@ -24,20 +27,26 @@ class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            own_profil_id: this.props.user.uid,
             error: '',
+            isCurrentUser: true,
         }
-
-
     }
 
     componentDidMount() {
+        const currentUser = this.props.user.uid;
+        let isCurrentUser = false;
+        if (currentUser === this.props.user.uid) {
+            isCurrentUser = true;
+        }
+
         this.getSelectedProperties();
     }
 
+
+
     getSelectedProperties() {
       DatingSiteAPI.getAPI()
-        .getInfoObjects(this.props.user.uid)
+        .getInfoObjects(profile_id)
         .then((responseInfoObjects) => {
           const selectedProperties = {};
 
@@ -83,6 +92,7 @@ class Profile extends React.Component{
         });
     }
 
+
     render() {
 
         const {
@@ -94,6 +104,7 @@ class Profile extends React.Component{
             height,
             religion,
             smoking,
+            currentUser,
         } = this.state
 
         return (
@@ -181,9 +192,59 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        {!currentUser && (
+                        <Item>
+                          <Box sx={{ flexGrow: 1 }}>
+                            <Grid
+                              container
+                              direction="row"
+                              justifyContent="center"
+                              alignItems="strech"
+                            >
+                              <Grid item md={2} xs={4} spacing={2}>
+                                <button
+                                  onClick={this.PersonSaved}
+                                  style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "#2ec43d",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                    border: "solid",
+                                    borderColor: "#BDC2BF",
+                                  }}
+                                >
+                                  <BookmarkAddedIcon />
+                                </button>
+                              </Grid>
+                              <Grid item md={2} xs={4} spacing={2}>
+                                <button
+                                  onClick={this.PersonBlocked}
+                                  style={{
+                                    height: "100%",
+                                    width: "100%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    backgroundColor: "#e63946",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                    border: "solid",
+                                    borderColor: "#BDC2BF",
+                                  }}
+                                >
+                                  <BlockIcon />
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </Box>
+                        </Item>
+                      )}
                     </Stack>
                 </Box>
-
             </div>
         )
     }

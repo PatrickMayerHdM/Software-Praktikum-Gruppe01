@@ -28,7 +28,7 @@ class FavoriteProfileBoxList extends React.Component{
         .then(profilesvar => {
             const lengthProfiles = this.state.profiles.length;
             this.setState(prevState => ({
-                profiles: [...prevState.profiles, ...profilesvar],
+                profiles: profilesvar,
                 numProfiles: lengthProfiles
             }));
         })
@@ -37,9 +37,31 @@ class FavoriteProfileBoxList extends React.Component{
         });
     }
 
-
     componentDidMount() {
-        this.getFavoriteProfiles();
+      this.getFavoriteProfiles(() => {
+        console.log('profiles im componentDidMount:', this.state.profiles);
+      });
+    }
+
+    handleRemoveProfile = (removedProfileId) => {
+        console.log('handleRemoveProfile und profiles vor der Aktualisierung:', this.state.profiles);
+        console.log('handleRemoveProfile und die removedProfileId:', removedProfileId);
+        const updatedProfiles = this.state.profiles.filter(profileId => profileId !== removedProfileId);
+        const lengthupdatedProfiles = updatedProfiles.length;
+        this.setState({
+            profiles: updatedProfiles,
+            numProfiles: lengthupdatedProfiles
+        }, () => {
+            console.log('handleRemoveProfile und profiles nach der Aktualisierung:', this.state.profiles);
+        });
+    };
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.other_profile !== this.props.other_profile) {
+            this.setState({
+                added_id: this.props.other_profile
+            });
+        }
     }
 
     handleProfileClick = (index) => {
@@ -55,14 +77,16 @@ class FavoriteProfileBoxList extends React.Component{
 
         // Methode zur Darstellung einer FavoriteProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
-            <Grid item xs={12} key={index}>
+            <Grid item xs={12} key={this.state.profiles[index]}>
                 <Item>
-                    <FavoriteProfileBox current_profile={current_profile}
-                                        other_profile={this.state.profiles[index]}
-                                        onClick={() => this.handleProfileClick(index)}
+                    <FavoriteProfileBox
+                        key={this.state.profiles[index]}
+                        current_profile={current_profile}
+                        other_profile={this.state.profiles[index]}
+                        onRemoveProfile={this.handleRemoveProfile}
                     />
-                </Item >
-            </Grid >
+                </Item>
+            </Grid>
         ));
 
 

@@ -104,13 +104,17 @@ searchprofile = api.inherit('SearchProfile', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    @datingapp.marshal_list_with(profile)
-    #@secured
+    @secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
         profiles = adm.get_all_profiles() #Admin.py noch nicht angelegt
-        return profiles
+        print(profiles)
+
+        if profiles is not None:
+            return profiles, 200
+        else:
+            return "", 500
 
     @datingapp.marshal_with(profile, code=200)
     # Wir erwarten ein Profile-Objekt von Client-Seite.
@@ -130,6 +134,7 @@ class ProfileListOperations(Resource):
                 proposal.get_block_note_id(),
                 proposal.get_google_fk())
 
+            print("Main Proifle: ", p)
             return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
@@ -241,11 +246,10 @@ class SearchProfilesOperations(Resource):
         else:
             return "", 500
 
-
 """Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
 @datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
-@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+@datingapp.param('searchprofile_id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class SearchOneProfileOperation(Resource):
 
     @datingapp.marshal_with(infoobject)
@@ -259,6 +263,16 @@ class SearchOneProfileOperation(Resource):
             return search_info_objs, 200
         else:
             return "", 500
+
+    @secured
+    def delete(self, searchprofile_id):
+        """ Löschen eines besimmten Suchprofil-Objekts. """
+
+        adm = Administration()
+        info_obj = adm.get_info_object_by_searchid(searchprofile_id)
+        adm.delete_info_object_search(info_obj)
+        adm.delete_searchprofile(searchprofile_id)
+        return '', 200
 
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
