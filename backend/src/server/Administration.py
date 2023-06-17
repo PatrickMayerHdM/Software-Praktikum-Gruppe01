@@ -287,14 +287,19 @@ class Administration(object):
             return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
+        """
+        Erstellt Info Objekte basierend aus einem übergebenen Dictionary.
+        :param profile_fk: Die GoogleID eines Users.
+        :param info_dict: Ein Dictionary, dass alle Informationen enthält.
+        """
         print("InfoDict: ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():
                     info_obj = InfoObject()
-                    info_obj.set_profile_fk(profile_fk)
-                    info_obj.set_value(value)
-                    char_fk = char_mapper.find_by_key(key).get_id()
+                    info_obj.set_profile_fk(profile_fk) # Setzt den Fremdschlüssel des Profils.
+                    info_obj.set_value(value) # Setzt dem Value aus dem Dict-Eintrag.
+                    char_fk = char_mapper.find_by_key(key).get_id() # char_fk anhand des keys finden.
                     if char_fk is not None:
                         info_obj.set_char_fk(char_fk)
                         mapper.insert(info_obj)
