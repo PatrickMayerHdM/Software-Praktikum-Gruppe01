@@ -29,6 +29,23 @@ class MatchmakingMapper(mapper):
 
         return result
 
+    def find_freetext(self):
+        """ Auslesen der Freitexte von zwei Profilen """
+        result = []
+        cursor = self._connection.cursor()
+        command = f"SELECT char_value FROM main.infoobject WHERE char_id=90"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (char_value) in tuples:
+            inf = InfoObject()
+            inf.set_value(char_value)
+            result.append(inf)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def compare_info_objects(self, profile_id1, profile_id2):
         info_objects1 = self.find_info_by_profile(profile_id1)
