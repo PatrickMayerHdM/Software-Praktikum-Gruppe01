@@ -45,7 +45,7 @@ class CreateProfil extends Component {
             profile_fk: 0,
             firstName: null,
             lastName: null,
-            age: null,
+            age: "",
             gender: null,
             height: null,
             religion: null,
@@ -56,9 +56,12 @@ class CreateProfil extends Component {
             showTextFields: false,
             profileExists: false,
             selectedOption: null,
+            minAge: null,
+            maxAge: null,
+            searchprofile_fk: null,
             income: null,
             favclub: null,
-            educationalstatus: null,
+            educationalstatuts: null,
             hobby: null,
             politicaltendency: null,
             aboutme: null,
@@ -199,7 +202,7 @@ class CreateProfil extends Component {
     /** Event-Handler für die Änderung des Bildungsstatus */
     handleChangeEducation(event) {
       const newEdu = event.target.value;
-      this.setState({educationalstatus: newEdu})
+      this.setState({educationalstatuts: newEdu})
     };
     /** Event-Handler für die Änderung den Lieblingsverein */
     handleChangeClub(event) {
@@ -261,12 +264,16 @@ class CreateProfil extends Component {
             this.state.lastName,
             this.state.religion,
             this.state.smoking,
+            this.state.minAge,
+            this.state.maxAge,
+            this.state.searchprofile_fk,
             this.state.income,
             this.state.favclub,
             this.state.educationalstatuts,
             this.state.hobby,
             this.state.politicaltendency,
-            this.state.aboutme)
+            this.state.aboutme
+            )
 
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
@@ -531,7 +538,6 @@ class CreateProfil extends Component {
                                     {/** Textfeld für den Vornamen */}
                                     <TextField
                                         type={"text"}
-                                        label={"Vorname"}
                                         value={firstName}
                                         onChange={this.handleChangeFirstName}
                                         inputProps={{
@@ -543,7 +549,6 @@ class CreateProfil extends Component {
                                     {/** Textfeld für den Nachnamen */}
                                     <TextField
                                         type="text"
-                                        label="Nachname"
                                         value={lastName}
                                         onChange={this.handleChangeLastName}
                                         inputProps={{
@@ -602,7 +607,6 @@ class CreateProfil extends Component {
                                     type={"number"}
                                     value={height}
                                     onChange={this.handleChangeHeight}
-                                    label={'cm'}
                                     inputProps={{
                                         min: 100,
                                         max: 999,
@@ -645,13 +649,11 @@ class CreateProfil extends Component {
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
-                                    {/** Liste die für jede Eigenschaft erstellt werden kann */}
-                                    {this.state.properties && this.state.properties.map((property, index) => (
-                                        <Item key={index}>
-                                            <h3>{property.name}</h3>
-                                            <p>{property.description}</p>
-                                        </Item>
-                                    ))}
+                                    {/**
+
+                                     Liste die für jede Eigenschaft erstellt werden kann
+
+                                     */}
                                 </Box>
                             </FormGroup>
                         </Item>
@@ -663,15 +665,15 @@ class CreateProfil extends Component {
                                     <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
                                     {showTextFields && (
                                     <>
-                                    <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
-                                    </Box>
-                                    <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
-                                    </Box>
-                                    <Box sx={{ marginBottom: '10px' }}>
+                                      <Box sx={{ marginBottom: '10px' }}>
+                                        <TextField label="Eigenschaftsname" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                      </Box>
+                                      <Box sx={{ marginBottom: '10px' }}>
+                                        <TextField label="Beschreibung" value={this.state.char_value} onChange={(event) => this.handleInputChange(event, 'char_value')} />
+                                      </Box>
+                                      <Box sx={{ marginBottom: '10px' }}>
                                         <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
-                                    </Box>
+                                      </Box>
                                     </>
                                     )}
                                 </Box>

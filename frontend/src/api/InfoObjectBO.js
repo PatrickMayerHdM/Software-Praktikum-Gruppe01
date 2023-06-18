@@ -49,12 +49,12 @@ export default class infoobjectBO extends BusinessObject {
     this.minAge = aminAge;
     this.maxAge = amaxAge;
     this.searchprofile_fk = asearchprofile_fk;
-    this.state.income = aincome;
-    this.state.favclub = afavclub;
-    this.state.educationalstatuts = aeducationalstatus;
-    this.state.hobby = ahobby;
-    this.state.politicaltendency = apoliticaltendency;
-    this.state.aboutme = aaboutme;
+    this.income = aincome;
+    this.favclub = afavclub;
+    this.educationalstatuts = aeducationalstatus;
+    this.hobby = ahobby;
+    this.politicaltendency = apoliticaltendency;
+    this.aboutme = aaboutme;
     }
 
     /** Setzen des Values */
