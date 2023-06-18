@@ -445,6 +445,30 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_searchprofile(searchprofile)
 
+    def update_search_info_object(self, searchprofile_id, info_dict):
+
+        """
+        In dieser Methode ist die Logik beschrieben, damit ein bestehendes Suchprofil aktualisiert wird.
+        :param searchprofile_id: searchprofile_id des Users.
+        :param info_dict: Dictionary mit Key-Value paaren. Ein Key repräsentiert eine Eigenschaft.
+        """
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    if key == '30': # Das Alter (Geburtsdatum) soll nicht aktualisiert werden.
+                        continue
+
+                    info_obj = InfoObject()
+                    info_obj.set_searchprofile_id(searchprofile_id)
+                    info_obj.set_value(value)
+                    char_fk = char_mapper.find_by_key(key).get_id()
+
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.update_search(info_obj)
+                    else:
+                        print(f'Ungültiger Key: {key}')
+
     def calculate_age(self, info_objects):
         """
         Diese Methode bildet die Applikationslogik ab, um ein Alter anhand des Geburtstages zu berechnen.

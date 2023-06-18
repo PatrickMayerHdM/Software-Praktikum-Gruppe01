@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
 import SearchProfileBox from "../components/SearchProfileBox";
+import infoobjectBO from "../api/InfoObjectBO";
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
@@ -76,7 +77,7 @@ class Search extends React.Component{
      * Der User wird dann auf die Seite zum Bearbeiten/Erstellen eines Suchprofils weitergeleitet.
      */
 
-    EditSearchProfiles() {
+    EditSearchProfiles(event) {
         console.log("Das Suchprofil", this.state.selectedProfileIndex, " wird bearbeitet")
         console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[this.state.selectedProfileIndex], "geändert");
     }
@@ -107,6 +108,7 @@ class Search extends React.Component{
      * Suchprofil der Ähnlichkeitsmaß berechnet werden kann.
      * @constructor
      */
+
     Search() {
         console.log("Mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
         DatingSiteAPI.getAPI()
@@ -159,6 +161,7 @@ class Search extends React.Component{
     /**
      * Der componentDidUpdate wird beim Laden der Komponente Ausgeführt
      */
+
     componentDidUpdate(prevProps, prevState) {
       if (prevState.Searchprofiles !== this.state.Searchprofiles) {
         const numSearchProfiles = this.state.Searchprofiles.length;
