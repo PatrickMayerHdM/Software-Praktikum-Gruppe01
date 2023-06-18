@@ -243,7 +243,6 @@ export default class DatingSiteAPI {
         return this.#fetchAdvanced(this.#getInfoObjectsURL(googleID))
             .then((responseJSON) => {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
-                console.log("responseJSON API Infoobjects Profil: ", responseJSON);
                 return new Promise(function (resolve) {
                     resolve(infoobjectBOs);
                 });

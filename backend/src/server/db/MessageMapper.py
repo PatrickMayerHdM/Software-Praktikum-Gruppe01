@@ -33,6 +33,8 @@ class MessageMapper(mapper):
         result = []
         cursor = self._connection.cursor()
         command = f"SELECT * FROM main.Message WHERE (sender_id='{sender_profile}' AND recipient_id='{recipient_profile}') OR (sender_id='{recipient_profile}' AND recipient_id='{sender_profile}') ORDER BY message_id"
+        # block_command = f"SELECT blocked_id FROM main.Blocknote WHERE blocking_id='{sender_profile}' OR blocked_id='{sender_profile}'"
+        # command = f"SELECT * FROM main.Message WHERE ((sender_id='{sender_profile}' AND recipient_id='{recipient_profile}') OR (sender_id='{recipient_profile}' AND recipient_id='{sender_profile}')) AND sender_id NOT IN ({block_command}) ORDER BY message_id"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
