@@ -299,9 +299,19 @@ class CreateProfil extends Component {
         this.setState({showTextFields: true});
     };
 
-    handleInputChange = (event, field, index) => {
+    handleInputChange = (event, field) => {
+        this.setState({ [field]: event.target.value });
     };
     handleSaveInputs = () => {
+        const { char_name, char_desc } = this.state;
+
+        DatingSiteAPI.getAPI()
+            .createCharForProfile(this.props.user.uid)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
     };
 
     handleUpdate(event) {
@@ -320,6 +330,9 @@ class CreateProfil extends Component {
             this.state.lastName,
             this.state.religion,
             this.state.smoking,
+            this.state.minAge,
+            this.state.maxAge,
+            this.state.searchprofile_fk,
             this.state.income,
             this.state.favclub,
             this.state.educationalstatuts,
@@ -669,7 +682,7 @@ class CreateProfil extends Component {
                                         <TextField label="Eigenschaftsname" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Beschreibung" value={this.state.char_value} onChange={(event) => this.handleInputChange(event, 'char_value')} />
+                                        <TextField label="Beschreibung" value={this.state.char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
                                         <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
