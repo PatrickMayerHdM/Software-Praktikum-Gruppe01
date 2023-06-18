@@ -30,6 +30,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import NamedCharacteristicBO from "../api/NamedCharacteristicBO";
+import NamedInfoObjectBO from "../api/NamedInfoObjectBO";
 
 
 
@@ -304,9 +306,18 @@ class CreateProfil extends Component {
     };
     handleSaveInputs = () => {
         const { char_name, char_desc } = this.state;
+        const newChar = new NamedCharacteristicBO(this.state.id, this.state.char_name)
+        const newInfoBO = new NamedInfoObjectBO(this.state.id, this.props.user.uid, this.state.searchprofile_id, this.state.char_desc)
+        DatingSiteAPI.getAPI()
+            .createCharForProfile(newChar)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
 
         DatingSiteAPI.getAPI()
-            .createCharForProfile(this.props.user.uid)
+            .createCharDescForProfile(newInfoBO)
             .catch((e) =>
                 this.setState({
                     error: e,
