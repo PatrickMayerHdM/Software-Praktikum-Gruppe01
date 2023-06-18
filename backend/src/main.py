@@ -71,7 +71,7 @@ infoobject = api.inherit('InfoObject', bo, {
     'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
     'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
     'profile_fk': fields.String(attribute='profile_fk', description='Google ID des Users'),
-    'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 
 chat = api.inherit('Chat', bo, {
@@ -110,7 +110,7 @@ matchmaking = api.inherit('Matchmaking', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    @secured
+    #@secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -216,7 +216,7 @@ class SearchProfileOpterations(Resource):
 class InfoObjectListOperationsSearch(Resource):
     @datingapp.marshal_with(infoobject, code=200)
     @datingapp.expect(infoobject)
-    #@secured
+    @secured
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
@@ -233,6 +233,30 @@ class InfoObjectListOperationsSearch(Resource):
             return infoobj, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/SearchProfiles/infoobjects/<searchprofile_id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class SearchInfoObjectUpdateOperations(Resource):
+    @datingapp.marshal_with(infoobject)
+    @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
+    #@secured
+    def put(self, searchprofile_id):
+        print("Main.py: PUT-Befehl: ", searchprofile_id)
+        print("API.payload SUCHPROFIL", api.payload)
+
+        """ Update eines bestimmten Such-Profils. """
+        adm = Administration()
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.update_search_info_object(
+                proposal.get_searchprofile_id(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'Suchprofil konnte nicht aktualisiert werden.', 500
 
 
 """Handling um alle Suchprofil ID's eines Profils zu bekommen"""

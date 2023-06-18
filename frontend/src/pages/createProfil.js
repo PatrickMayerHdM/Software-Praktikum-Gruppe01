@@ -26,6 +26,10 @@ import AddIcon from "@mui/icons-material/Add";
 import profile from "../components/Profile";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 
@@ -39,18 +43,28 @@ class CreateProfil extends Component {
             blockNote_id: 0,
             char_fk: 0,
             profile_fk: 0,
-            firstName: '',
-            lastName: '',
-            age: '',
-            gender: '',
-            height: '',
-            religion: '',
-            hair: '',
-            smoking: '',
+            firstName: null,
+            lastName: null,
+            age: "",
+            gender: null,
+            height: null,
+            religion: null,
+            hair: null,
+            smoking: null,
             char_name: '',
             char_desc: '',
             showTextFields: false,
             profileExists: false,
+            selectedOption: null,
+            minAge: null,
+            maxAge: null,
+            searchprofile_fk: null,
+            income: null,
+            favclub: null,
+            educationalstatuts: null,
+            hobby: null,
+            politicaltendency: null,
+            aboutme: null,
         };
 
         /** Bindung der Handler an die Komponente */
@@ -61,6 +75,12 @@ class CreateProfil extends Component {
         this.handleChangeReligion = this.handleChangeReligion.bind(this);
         this.handleChangeSmoking = this.handleChangeSmoking.bind(this);
         this.handleChangeAge = this.handleChangeAge.bind(this);
+        this.handleChangeSelectedOption = this.handleChangeSelectedOption.bind(this);
+        this.handleChangeSalary = this.handleChangeSalary.bind(this);
+        this.handleChangeClub = this.handleChangeClub.bind(this);
+        this.handleChangeEducation = this.handleChangeEducation.bind(this);
+        this.handleChangeHobbys = this.handleChangeHobbys.bind(this);
+        this.handleChangePolitical = this.handleChangePolitical.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -130,6 +150,24 @@ class CreateProfil extends Component {
                 case 80:
                   selectedProperties.smoking = charValue;
                   break;
+                case 90:
+                  selectedProperties.aboutme = charValue;
+                  break;
+                case 120:
+                  selectedProperties.income = charValue;
+                  break;
+                case 130:
+                  selectedProperties.educationalstatuts = charValue;
+                  break;
+                case 140:
+                  selectedProperties.favclub = charValue;
+                  break;
+                case 150:
+                  selectedProperties.hobby = charValue;
+                  break;
+                case 160:
+                  selectedProperties.politicaltendency = charValue;
+                  break;
 
                 default:
                   break;
@@ -151,6 +189,32 @@ class CreateProfil extends Component {
         const newName = event.target.value;
         this.setState({lastName: newName});
     };
+    /** Event-Handler für die Änderung der politischen Ausrichtung */
+    handleChangePolitical(event) {
+        const newPolitical = event.target.value;
+        this.setState({politicaltendency: newPolitical})
+    };
+    /** Event-Handler für die Änderung des Hobbys */
+    handleChangeHobbys(event) {
+      const newHobbys = event.target.value;
+      this.setState({hobby: newHobbys})
+    };
+    /** Event-Handler für die Änderung des Bildungsstatus */
+    handleChangeEducation(event) {
+      const newEdu = event.target.value;
+      this.setState({educationalstatuts: newEdu})
+    };
+    /** Event-Handler für die Änderung den Lieblingsverein */
+    handleChangeClub(event) {
+      const newClub = event.target.value;
+      this.setState({favclub: newClub})
+    };
+    /** Event-Handler für die Änderung des Einkommens */
+    handleChangeSalary(event) {
+        const newSalary = event.target.value;
+        this.setState({income: newSalary})
+    };
+
     /** Event-Handler für die Änderung des Geschlechts */
     handleChangeGender = (event) => {
         const selectedGender = event.target.value;
@@ -199,7 +263,17 @@ class CreateProfil extends Component {
             this.state.height,
             this.state.lastName,
             this.state.religion,
-            this.state.smoking)
+            this.state.smoking,
+            this.state.minAge,
+            this.state.maxAge,
+            this.state.searchprofile_fk,
+            this.state.income,
+            this.state.favclub,
+            this.state.educationalstatuts,
+            this.state.hobby,
+            this.state.politicaltendency,
+            this.state.aboutme
+            )
 
         DatingSiteAPI.getAPI()
             .addProfile(newProfile)
@@ -226,31 +300,8 @@ class CreateProfil extends Component {
     };
 
     handleInputChange = (event, field, index) => {
-        const { properties } = this.state;
-        properties[index][field] = event.target.value;
-        this.setState({ properties });
     };
-
     handleSaveInputs = () => {
-        console.log(this.state)
-        const { properties } = this.state;
-        const { char_name, char_desc } = this.state;
-        const newProperty = {
-            name: char_name,
-            description: char_desc
-        };
-        const updatedProperties = [...properties, newProperty];
-
-        this.setState({ properties: updatedProperties, char_name: '', char_desc: ''})
-        this.setState({ char_name: char_name, char_desc: char_desc})
-        const createdCharForProfile = new Characteristic(this.state._aid ,this.state._name);
-        DatingSiteAPI.getAPI()
-            .createCharForProfile(createdCharForProfile)
-            .catch((e) => {
-                this.setState({
-                    error: e,
-                });
-            });
     };
 
     handleUpdate(event) {
@@ -268,7 +319,13 @@ class CreateProfil extends Component {
             this.state.height,
             this.state.lastName,
             this.state.religion,
-            this.state.smoking)
+            this.state.smoking,
+            this.state.income,
+            this.state.favclub,
+            this.state.educationalstatuts,
+            this.state.hobby,
+            this.state.politicaltendency,
+            this.state.aboutme)
 
         DatingSiteAPI.getAPI()
             .updateInfoObject(newInfoObject)
@@ -296,6 +353,12 @@ class CreateProfil extends Component {
                 hair: "",
                 religion: "",
                 smoking: "",
+                income: "",
+                favclub: "",
+                educationalstatuts: "",
+                hobby: "",
+                politicaltendency: "",
+                aboutme: "",
         });
         })
         .catch((e) =>
@@ -305,23 +368,161 @@ class CreateProfil extends Component {
         );
     };
 
+    handleChangeSelectedOption = event => {
+      this.setState({ selectedOption: event.target.value });
+    };
+    renderContent() {
+      const { selectedOption } = this.state;
+
+      if (selectedOption === "selectReligion") {
+        return (
+          <FormGroup>
+            <FormLabel>Welcher Religion gehörst du an?</FormLabel>
+            <RadioGroup row value={this.state.religion} onChange={this.handleChangeReligion}>
+              <FormControlLabel sx={{ width: '35%' }} value="Atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
+              <FormControlLabel sx={{ width: '35%' }} value="Christlich" control={<Radio />} label="Christlich" labelPlacement="bottom" />
+              <FormControlLabel sx={{ width: '35%' }} value="Muslimisch" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
+              <FormControlLabel sx={{ width: '35%' }} value="Andere" control={<Radio />} label="Andere" labelPlacement="bottom" />
+              <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+            </RadioGroup>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectHaarfarbe") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Welche Haarfarbe hast du?</FormLabel>
+              {/** Auswahlbuttons für die Haarfarbe */}
+              <RadioGroup row value={this.state.hair} onChange={this.handleChangeHair}>
+                <FormControlLabel sx={{ width: '35%' }} value="Schwarz" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Braun" control={<Radio />} label="Braun" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Andere" control={<Radio />} label="Andere" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+              </RadioGroup>
+            </Box>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectRaucherstatuts") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Rauchst du?</FormLabel>
+              {/** Buttons für die Auswahl als Raucher */}
+              <RadioGroup row value={this.state.smoking} onChange={this.handleChangeSmoking}>
+                <FormControlLabel sx={{ width: '35%' }} value="Nicht-Raucher" control={<Radio />} label="Nicht-Raucher" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Raucher" control={<Radio />} label="Raucher" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+              </RadioGroup>
+            </Box>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectGehalt") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Wie viel verdienst du?</FormLabel>
+              {/** Buttons für die Auswahl des Gehalts */}
+              <RadioGroup row value={this.state.income} onChange={this.handleChangeSalary}>
+                <FormControlLabel sx={{ width: '35%' }} value="1000" control={<Radio />} label="1000€" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="1500" control={<Radio />} label="1500€" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="2000" control={<Radio />} label="2000€" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="3500" control={<Radio />} label="3500€" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value=">5000" control={<Radio />} label=">5000€" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+              </RadioGroup>
+            </Box>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectLieblingsverein") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Was ist dein Lieblingsverein?</FormLabel>
+              {/** Textfeld für deinen Lieblingsverein */}
+              <TextField
+                type={"text"}
+                label={"Name des Vereins"}
+                value={this.state.favclub}
+                onChange={this.handleChangeClub}
+                inputProps={{
+                  maxLength: 17,
+                }}
+              />
+            </Box>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectBildungsstatus") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Was für einen Bildungsabschluss hast du?</FormLabel>
+              {/** Buttons für die Auswahl des Bildungsstatus */}
+              <RadioGroup row value={this.state.educationalstatuts} onChange={this.handleChangeEducation}>
+                <FormControlLabel sx={{ width: '35%' }} value="Hauptschule" control={<Radio />} label="Hauptschule" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Realschule" control={<Radio />} label="Realschule" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Abitur" control={<Radio />} label="Abitur" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Hochschulabschluss" control={<Radio />} label="Hochschulabschluss" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+              </RadioGroup>
+            </Box>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectHobbys") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Welche Hobbys hast du?</FormLabel>
+              {/** Textfeld für die Hobbys */}
+              <TextField
+                type={"text"}
+                label={"Hobbyname"}
+                value={this.state.hobby}
+                onChange={this.handleChangeHobbys}
+                inputProps={{
+                  maxLength: 17,
+                }}
+              />
+            </Box>
+          </FormGroup>
+        );
+      } else if (selectedOption === "selectPolitischeAusrichtung") {
+        return (
+          <FormGroup row style={{ justifyContent: 'center' }}>
+            <Box sx={{ width: 400, margin: '0 auto' }}>
+              <FormLabel>Was ist deine politische Ausrichtung?</FormLabel>
+              {/** Buttons für die Auswahl der politischen Ausrichtung */}
+              <RadioGroup row value={this.state.politicaltendency} onChange={this.handleChangePolitical}>
+                <FormControlLabel sx={{ width: '35%' }} value="Pazifismus" control={<Radio />} label="Pazifismus" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Libertarianismus" control={<Radio />} label="Libertarianismus" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Kommunitarismus" control={<Radio />} label="Kommunitarismus" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="Sozialkonservatismus" control={<Radio />} label="Sozialkonservatismus" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+              </RadioGroup>
+            </Box>
+          </FormGroup>
+        );
+      }
+      return null;
+    }
+
     /** render() gibt das HTML zurück, das gerendert werden soll */
     render() {
             const {
                 age,
                 firstName,
                 gender,
-                hair,
                 height,
                 lastName,
-                religion,
-                smoking,
                 char_name,
                 char_desc,
                 showTextFields,
                 profileExists,
                 apiage,
+                selectedOption,
             } = this.state;
+
+            const defaultValue = selectedOption || '';
 
             return (
             <div>
@@ -337,7 +538,6 @@ class CreateProfil extends Component {
                                     {/** Textfeld für den Vornamen */}
                                     <TextField
                                         type={"text"}
-                                        label={"Vorname"}
                                         value={firstName}
                                         onChange={this.handleChangeFirstName}
                                         inputProps={{
@@ -349,7 +549,6 @@ class CreateProfil extends Component {
                                     {/** Textfeld für den Nachnamen */}
                                     <TextField
                                         type="text"
-                                        label="Nachname"
                                         value={lastName}
                                         onChange={this.handleChangeLastName}
                                         inputProps={{
@@ -392,9 +591,9 @@ class CreateProfil extends Component {
                                 <FormLabel> Was für ein Geschlecht hast du ? </FormLabel>
                                 {/** Auswahlbuttons für das Geschlecht */}
                                 <RadioGroup row value={gender} onChange={this.handleChangeGender}>
-                                    <FormControlLabel sx={{ width: '25%' }} value="male" control={<Radio/>} label="Mann" labelPlacement="bottom"/>
-                                    <FormControlLabel sx={{ width: '25%' }} value="female" control={<Radio/>} label="Frau" labelPlacement="bottom"/>
-                                    <FormControlLabel sx={{ width: '25%' }} value="various" control={<Radio/>} label="Divers" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '25%' }} value="männlich" control={<Radio/>} label="Mann" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '25%' }} value="weiblich" control={<Radio/>} label="Frau" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '25%' }} value="divers" control={<Radio/>} label="Divers" labelPlacement="bottom"/>
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
@@ -408,7 +607,6 @@ class CreateProfil extends Component {
                                     type={"number"}
                                     value={height}
                                     onChange={this.handleChangeHeight}
-                                    label={'cm'}
                                     inputProps={{
                                         min: 100,
                                         max: 999,
@@ -418,56 +616,44 @@ class CreateProfil extends Component {
                             </Box>
                             </FormGroup>
                         </Item>
+                        {/** Ab hier ein DropdownMenü das Religio, Smoker, Haarfarbe, Gehaltvorstellung, Lieblingsverein, Bildungsstatus, Hobbys, Politik, Über Mich*/}
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel> Welcher Religion gehörst du an? </FormLabel>
-                                {/** Auswahlbuttons für die Religion */}
-                                <RadioGroup row value={religion} onChange={this.handleChangeReligion}>
-                                    <FormControlLabel sx={{ width: '16%' }} value="atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '16%' }} value="christianity" control={<Radio />} label="Christlich" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '16%' }} value="islam" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '16%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
-                                </RadioGroup>
+                            <Box sx={{width: 450, margin: '0 auto'}}>
+                                <FormControl fullWidth>
+                                  <InputLabel>Auswahleigenschaften</InputLabel>
+                                  <Select
+                                    value={defaultValue}
+                                    label="Auswahleigenschaften"
+                                    onChange={this.handleChangeSelectedOption}
+                                  >
+                                      <MenuItem value="selectReligion">Religion</MenuItem>
+                                      <MenuItem value="selectRaucherstatuts">Raucherstatus</MenuItem>
+                                      <MenuItem value="selectHaarfarbe">Haarfarbe</MenuItem>
+                                      <MenuItem value="selectGehalt">Gehalt</MenuItem>
+                                      <MenuItem value="selectLieblingsverein">Lieblingsverein</MenuItem>
+                                      <MenuItem value="selectBildungsstatus">Bildungsstatus</MenuItem>
+                                      <MenuItem value="selectHobbys">Hobbys</MenuItem>
+                                      <MenuItem value="selectPolitischeAusrichtung">Politische Ausrichtung</MenuItem>
+                                  </Select>
+                                </FormControl>
+                                {this.renderContent()}
                             </Box>
                             </FormGroup>
                         </Item>
-                        <Item>
-                            <FormGroup row style={{justifyContent: 'center'}}>
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel> Welche Haarfarbe du? </FormLabel>
-                                {/** Auswahlbuttons für die Haarfarbe */}
-                                <RadioGroup row value={hair} onChange={this.handleChangeHair}>
-                                    <FormControlLabel sx={{ width: '16%' }} value="black" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '16%' }} value="brown" control={<Radio />} label="Braun" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '16%' }} value="blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '16%' }} value="different" control={<Radio />} label="Andere" labelPlacement="bottom" />
-                                </RadioGroup>
-                            </Box>
-                            </FormGroup>
-                        </Item>
-                        <Item>
-                            <FormGroup row style={{justifyContent: 'center'}}>
-                            <Box sx={{width: 400, margin: '0 auto'}}>
-                                <FormLabel> Rauchst du ? </FormLabel>
-                                {/** Buttons für die Auswahl als Raucher */}
-                                <RadioGroup row value={smoking} onChange={this.handleChangeSmoking}>
-                                    <FormControlLabel sx={{ width: '50%' }} value="nonSmoker" control={<Radio />} label="Nicht-Raucher" labelPlacement="bottom" />
-                                    <FormControlLabel sx={{ width: '15%' }} value="smoker" control={<Radio />} label="Raucher" labelPlacement="bottom" />
-                                </RadioGroup>
-                            </Box>
-                            </FormGroup>
-                        </Item>
+                        {/**
+
+                         Mögliche Änderung durch "Über Mich Feld"
+
+                         */}
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
-                                    {/** Liste die für jede Eigenschaft erstellt werden kann */}
-                                    {this.state.properties && this.state.properties.map((property, index) => (
-                                        <Item key={index}>
-                                            <h3>{property.name}</h3>
-                                            <p>{property.description}</p>
-                                        </Item>
-                                    ))}
+                                    {/**
+
+                                     Liste die für jede Eigenschaft erstellt werden kann
+
+                                     */}
                                 </Box>
                             </FormGroup>
                         </Item>
@@ -479,15 +665,15 @@ class CreateProfil extends Component {
                                     <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
                                     {showTextFields && (
                                     <>
-                                    <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Eigenschaftsname" value={char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
-                                    </Box>
-                                    <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Beschreibung" value={char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
-                                    </Box>
-                                    <Box sx={{ marginBottom: '10px' }}>
+                                      <Box sx={{ marginBottom: '10px' }}>
+                                        <TextField label="Eigenschaftsname" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                      </Box>
+                                      <Box sx={{ marginBottom: '10px' }}>
+                                        <TextField label="Beschreibung" value={this.state.char_value} onChange={(event) => this.handleInputChange(event, 'char_value')} />
+                                      </Box>
+                                      <Box sx={{ marginBottom: '10px' }}>
                                         <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
-                                    </Box>
+                                      </Box>
                                     </>
                                     )}
                                 </Box>
