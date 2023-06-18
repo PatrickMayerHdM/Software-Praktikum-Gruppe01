@@ -439,8 +439,8 @@ class Administration(object):
     def execute_matchmaking(self, searchprofile_id):
 
         m = Matchmaking()
-        m.searchprofile_id(searchprofile_id)
-        m.set_searchprofile_id(),
+        m.get_searchprofile_id()
+        m.set_searchprofile_id(searchprofile_id),
         m.get_all_profiles(),
         m.genderfilter(),
         m.agefilter(),

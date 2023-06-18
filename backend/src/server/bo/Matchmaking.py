@@ -15,12 +15,10 @@ class Matchmaking(bo):
 
     """Zuerst soll eine Liste mit allen Profilen in die Klasse gezogen werden"""
     def get_all_profiles(self):
-        profile_list = []
-        for # Profile aus der Datenbank holen:
-            profile_list.append(#die Profile)
+       pass
 
     """Anschließend sollen die Userprofile in der liste mit einem Suchprofil verglichen werden."""
-    def genderfilter(self):
+    def genderfilter(self, ):
         pass
 
     """Dann wird getestet, ob das UserProfil in der Altersspanne des Suchprofils ist."""
@@ -53,9 +51,9 @@ class Matchmaking(bo):
         return profile
 
 
-    """ Hier fehlt noch der Mapper aufruf. (Wie wird genau der text ausgegeben? """
-
-
+    """  """
+    def get_freetext(self, ):
+        pass
     def compare_text(self, text1, text2):
         """Diese Methode soll den Freitext der Profile miteinander vergleichen. Dabei wird der
         Jaccard Koeffizient angewendet. """
@@ -73,10 +71,10 @@ class Matchmaking(bo):
         join = len(words1) + len(words2) - intersection
 
         """Anschließend soll der Jaccard Koeffizient berechnet werden"""
-        comparation = intersection / join
+        comparation = round(intersection / join, 2)
         return comparation
 
-    def calculate_similarity(self, profile1, profile2, comparation):
+    def calculate_similarity(self, profile1, profile2):
         """Diese Methode berechnet die Ähnlichkeit der zwei Profile"""
         char_values1 = profile1["Char Values"]
         char_values2 = profile2["Char Values"]
@@ -93,9 +91,9 @@ class Matchmaking(bo):
 
         """Die Anzahl der gleichen Info Objekte wird durch die gesamtanzahl der InfoObjekte geteilt.
         mit dem Ähnlichkeitsmaß wird auch das verglichene Userprofil zurückgegeben."""
-        similarity = int(matching_count + comparation / len(total_keys)) *100  # muss die länge der keys + 1 werden?
+        similarity = matching_count / len(total_keys)
 
         similarity_list = []
-        similarity_list.append([profile1["google_id"], similarity])
+        # similarity_list.append([profile1["google_id"], similarity])
 
-        return similarity_list
+        return similarity
