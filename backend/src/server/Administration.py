@@ -345,23 +345,6 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete_searchprofile(infoobject)
 
-    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
-
-    def create_Search_info_object(self, profile_fk, info_dict):
-        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
-        with InfoObjectMapper() as mapper:
-            with CharMapper() as char_mapper:
-                for key, value in info_dict.items():
-                    info_obj = InfoObject()
-                    info_obj.set_profile_fk(profile_fk)
-                    info_obj.set_value(value)
-                    # Hier wird der CharMapper aufgerufen!
-                    char_fk = char_mapper.find_by_key(key).get_id()
-                    if char_fk is not None:
-                        info_obj.set_char_fk(char_fk)
-                        mapper.Searchinsert(info_obj)
-                    else:
-                        print(f'Ungültiger Key im Search Insert: {key}')
 
     # Logik für Profil, did die Info-Objekte in
 
@@ -413,6 +396,33 @@ class Administration(object):
         searchprofile.set_id(1)
         with SearchProfileMapper() as mapper:
             mapper.insert(searchprofile)
+
+    def get_new_searchprofile(self):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_new()
+
+    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
+
+    def create_Search_info_object(self, profile_fk, info_dict):
+        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
+
+        searchp = Administration.get_new_searchprofile(self)
+        #print("Die ID des suchprofils, für das die Daten erstellt werden ist: ",searchp)
+
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    info_obj.set_searchprofile_fk(searchp)
+                    # Hier wird der CharMapper aufgerufen!
+                    char_fk = char_mapper.find_by_key(key).get_id()
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.Searchinsert(info_obj)
+                    else:
+                        print(f'Ungültiger Key im Search Insert: {key}')
 
     def save_searchprofile(self, searchprofile):
         with SearchProfileMapper() as mapper:
