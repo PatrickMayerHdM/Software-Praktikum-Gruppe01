@@ -411,15 +411,20 @@ export default class DatingSiteAPI {
     }
 
     /**
+     * Hier werden mehrere matchmaking BOs erwartet, jedes dieser BO soll mindestens, eine Profil_ID und ein
+     * Ähnlichkeitsmaß enthalten.
+     *
      * @param searchprofile_id
      * @returns {Promise<any>}
      */
     getSearchResults(searchprofile_id){
         return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
             .then((responseJSON) => {
-                console.log("Das responseJSON:");
-                console.log(responseJSON);
-                return responseJSON;
+                console.log("Das responseJSON: ", responseJSON);
+                let matchmakingBOs = matchmakingBO.fromJSON(responseJSON)
+                return new Promise(function (resolve){
+                    resolve(matchmakingBOs)
+                })
             });
     }
 
