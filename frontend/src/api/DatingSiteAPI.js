@@ -275,6 +275,9 @@ export default class DatingSiteAPI {
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #updateSearchProfileURL = (searchprofile_id) => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects/${searchprofile_id}`;
+    #getSearchResultsURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/Matchmaking/${searchprofile_id}`;
+
 
 
 
@@ -393,6 +396,38 @@ export default class DatingSiteAPI {
                 })
             })
     }
+
+    /**
+     * @param searchprofile_id
+     * @returns {Promise<any>}
+     */
+    getSearchResults(searchprofile_id){
+        return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON:");
+                console.log(responseJSON);
+                return responseJSON;
+            });
+    }
+
+
+    updateSearchInfoObject(infoobject) {
+        console.log("InfoObject: ", infoobject)
+        return this.#fetchAdvanced(this.#updateSearchProfileURL(infoobject.get_searchprofile_id()), {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(infoobject)
+        }).then((responseJSON) => {
+            let newsearchinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newsearchinfoobjectBO);
+            })
+        })
+    }
+
 
 
         // Favoritenote related

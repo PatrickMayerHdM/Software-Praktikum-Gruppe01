@@ -81,13 +81,11 @@ class SearchProfile extends React.Component{
 
     submit = (event) => {
          if (this.state.lastPartURL === "new") {
-             console.log("POST");
-             // console.log(this.state);
-             // HIER KOMMT DER CODE ZUM ERSTMALIGEN ANLEGEN
+             // Erstmaliges Anlegen eines Suchprofils
              event.preventDefault();
              const newSearchprofile = new searchprofileBO( this.props.user.uid);
              const newInfoObject = new infoobjectBO(
-                 this.props.user.uid,
+                 null,
                  this.state.char_fk,
                  null,
                  null,
@@ -119,13 +117,37 @@ class SearchProfile extends React.Component{
                  );
 
              console.log(newInfoObject)
-             console.log("FrontEnd Payload",newSearchprofile)
+             console.log("FrontEnd Payload", newSearchprofile)
          } else {
-             console.log("UPDATE");
-             // HIER KOMMT DER CODE ZUM ÄNDERN EINES VORHANDENEN SUCHPROFILS
+             // Der Code zum Ändern eines Suchprofils
+             event.preventDefault();
+             const newSearchInfoObject = new infoobjectBO(
+                 this.props.user.uid,
+                 this.state.char_fk,
+                 null,
+                 parseInt(this.state.lastPartURL),
+                 null,
+                 null,
+                 this.state.gender,
+                 this.state.hair,
+                 this.state.height,
+                 null,
+                 this.state.religion,
+                 this.state.smoking,
+                 this.state.minAge,
+                 this.state.maxAge,
+                 parseInt(this.state.lastPartURL),
+                 )
+
+             DatingSiteAPI.getAPI()
+                 .updateSearchInfoObject(newSearchInfoObject)
+                 .catch((e) =>
+                     this.setState({
+                         error: e,
+                     })
+                 );
          }
-         //console.log(this.state);
-    };
+     };
 
 
     componentDidMount() {
