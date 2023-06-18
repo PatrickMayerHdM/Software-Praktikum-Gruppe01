@@ -275,6 +275,8 @@ export default class DatingSiteAPI {
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #getSearchResultsURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/Matchmaking/${searchprofile_id}`;
+
 
 
 
@@ -392,6 +394,19 @@ export default class DatingSiteAPI {
                     resolve(infoobjectBOs);
                 })
             })
+    }
+
+    /**
+     * @param searchprofile_id
+     * @returns {Promise<any>}
+     */
+    getSearchResults(searchprofile_id){
+        return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON:");
+                console.log(responseJSON);
+                return responseJSON;
+            });
     }
 
 

@@ -104,7 +104,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    @secured
+    #@secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
