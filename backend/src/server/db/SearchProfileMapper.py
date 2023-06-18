@@ -25,6 +25,14 @@ class SearchProfileMapper(mapper):
 
         return result
 
+    def find_new(self):
+
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")
+        searchprofile_id = cursor.fetchone()[0]
+
+        return searchprofile_id
+
     def find_by_key(self, key):
         results = []
 
@@ -104,14 +112,12 @@ class SearchProfileMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete(self, google_id):
-        """ Löschen eines Datensatzes """
+    def delete(self, searchprofile_id):
+        """ Löschen eines Suchprofils """
         cursor = self._connection.cursor()
 
-        command = f'DELETE FROM main.Searchprofile WHERE google_id=%s'
-        data = [google_id.google_id]
-        print(google_id)
-        cursor.execute(command, data)
+        command = f"DELETE FROM main.Searchprofile WHERE searchprofile_id='{searchprofile_id}'"
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()

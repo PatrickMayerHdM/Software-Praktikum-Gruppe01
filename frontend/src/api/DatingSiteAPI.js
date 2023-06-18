@@ -134,7 +134,7 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(profile)
         }).then((responseJSON) => {
-            console.log(profile)
+            console.log("API Proifle bei der Erstellung: ", profile)
             let prfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(prfileBO);
@@ -192,7 +192,7 @@ export default class DatingSiteAPI {
 
     updateInfoObject(infoobject) {
         console.log("InfoObject: ", infoobject)
-        return this.#fetchAdvanced(this.#updateProfileURL(), {
+        return this.#fetchAdvanced(this.#updateProfileURL(infoobject.get_profile_fk()), {
             method: "PUT",
             headers: {
                 'Accept': 'application/json, text/plain',
@@ -270,11 +270,14 @@ export default class DatingSiteAPI {
 
     #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
     #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
-    #deleteSearchProfile = (id) => `${this.#datingServerBaseURL}/Profiles`; // bisher nur FakeBackEnd ausgeführt + funktioniert noch nicht
+    #removeSearchProfile = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
+    #updateSearchProfileURL = (searchprofile_id) => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects/${searchprofile_id}`;
+    #getSearchResultsURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/Matchmaking/${searchprofile_id}`;
+
 
 
 
@@ -328,21 +331,20 @@ export default class DatingSiteAPI {
             })
     }
 
-    /**
-     * Gibt ein Promise zurück, welches dann nur die neuen Profile anzeigt
-     * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
-    */
-
-    deleteSearchProfile(profile_id) {
-    return this.#fetchAdvanced(this.#deleteSearchProfile(profile_id), {
-      method: 'DELETE'
-    })
-      .then((responseJSON) => {
-        let profileBOs = ProfileBO.fromJSON(responseJSON)[0];
-        return new Promise(function (resolve) {
-          resolve(profileBOs);
+    removeSearchProfile(searchprofile_id) {
+        return this.#fetchAdvanced(this.#removeSearchProfile(searchprofile_id), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
         })
-      })
+            .then((responseJSON) => {
+                let removedsearchprofBO = searchprofileBO.fromJSON(responseJSON)[0];
+                return new Promise(function (resolve) {
+                    resolve(removedsearchprofBO);
+                })
+            })
     }
 
     addSearchInfoObject(infoobject) {
@@ -394,6 +396,38 @@ export default class DatingSiteAPI {
                 })
             })
     }
+
+    /**
+     * @param searchprofile_id
+     * @returns {Promise<any>}
+     */
+    getSearchResults(searchprofile_id){
+        return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
+            .then((responseJSON) => {
+                console.log("Das responseJSON:");
+                console.log(responseJSON);
+                return responseJSON;
+            });
+    }
+
+
+    updateSearchInfoObject(infoobject) {
+        console.log("InfoObject: ", infoobject)
+        return this.#fetchAdvanced(this.#updateSearchProfileURL(infoobject.get_searchprofile_id()), {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(infoobject)
+        }).then((responseJSON) => {
+            let newsearchinfoobjectBO = infoobjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newsearchinfoobjectBO);
+            })
+        })
+    }
+
 
 
         // Favoritenote related

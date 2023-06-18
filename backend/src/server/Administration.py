@@ -279,29 +279,60 @@ class Administration(object):
             print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
+    def get_info_object_by_searchid(self, key):
+        with InfoObjectMapper() as mapper:
+            print("Admin Info Findbykey: ", key)
+            return mapper.find_by_searchid(key)
+
     def get_info_object(self, key):
         with InfoObjectMapper() as mapper:
             return mapper.find_by_key(key)
 
     def create_info_object(self, profile_fk, info_dict):
+        """
+        Erstellt Info Objekte basierend aus einem übergebenen Dictionary.
+        :param profile_fk: Die GoogleID eines Users.
+        :param info_dict: Ein Dictionary, dass alle Informationen enthält.
+        """
         print("InfoDict: ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():
                     info_obj = InfoObject()
-                    info_obj.set_profile_fk(profile_fk)
-                    info_obj.set_value(value)
-                    char_fk = char_mapper.find_by_key(key).get_id()
+                    info_obj.set_profile_fk(profile_fk) # Setzt den Fremdschlüssel des Profils.
+                    info_obj.set_value(value) # Setzt dem Value aus dem Dict-Eintrag.
+                    char_fk = char_mapper.find_by_key(key).get_id() # char_fk anhand des keys finden.
                     if char_fk is not None:
                         info_obj.set_char_fk(char_fk)
                         mapper.insert(info_obj)
                     else:
                         print(f'Ungültiger Key: {key}')
 
-    def update_info_object(self, infoobject):
-        with InfoObjectMapper as mapper:
-            print("Admin InfoObject: ", infoobject)
-            return mapper.find_by_id(infoobject)
+    def update_info_object(self, profile_fk, info_dict):
+        """
+        In dieser Methode ist die Logik beschrieben, damit ein bestehendes Profil aktualisiert wird.
+        :param profile_fk: google-ID des Users.
+        :param info_dict: Dictionary mit Key-Value paaren. Ein Key repräsentiert eine Eigenschaft.
+        """
+        print("Admin.py InfoDict: ", info_dict)
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    if key == '30': # Das Alter (Geburtsdatum) soll nicht aktualisiert werden.
+                        continue
+
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    char_fk = char_mapper.find_by_key(key).get_id()
+
+                    #print('Admin.py Char-FK:', char_fk)
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        #print('Admin.py: dieses Objekt wird an mapper gegeben:', info_obj.get_value() )
+                        mapper.update(info_obj)
+                    else:
+                        print(f'Ungültiger Key: {key}')
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
         with InfoObjectMapper() as mapper:
@@ -312,23 +343,10 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
-    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
-
-    def create_Search_info_object(self, profile_fk, info_dict):
-        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
+    def delete_info_object_search(self, infoobject):
         with InfoObjectMapper() as mapper:
-            with CharMapper() as char_mapper:
-                for key, value in info_dict.items():
-                    info_obj = InfoObject()
-                    info_obj.set_profile_fk(profile_fk)
-                    info_obj.set_value(value)
-                    # Hier wird der CharMapper aufgerufen!
-                    char_fk = char_mapper.find_by_key(key).get_id()
-                    if char_fk is not None:
-                        info_obj.set_char_fk(char_fk)
-                        mapper.Searchinsert(info_obj)
-                    else:
-                        print(f'Ungültiger Key im Search Insert: {key}')
+            return mapper.delete_searchprofile(infoobject)
+
 
     # Logik für Profil, did die Info-Objekte in
 
@@ -388,13 +406,40 @@ class Administration(object):
         with SearchProfileMapper() as mapper:
             mapper.insert(searchprofile)
 
+    def get_new_searchprofile(self):
+        with SearchProfileMapper() as mapper:
+            return mapper.find_new()
+
+    # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
+
+    def create_Search_info_object(self, profile_fk, info_dict):
+        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
+
+        searchp = Administration.get_new_searchprofile(self)
+        #print("Die ID des suchprofils, für das die Daten erstellt werden ist: ",searchp)
+
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    info_obj = InfoObject()
+                    info_obj.set_profile_fk(profile_fk)
+                    info_obj.set_value(value)
+                    info_obj.set_searchprofile_fk(searchp)
+                    # Hier wird der CharMapper aufgerufen!
+                    char_fk = char_mapper.find_by_key(key).get_id()
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.Searchinsert(info_obj)
+                    else:
+                        print(f'Ungültiger Key im Search Insert: {key}')
+
     def save_searchprofile(self, searchprofile):
         with SearchProfileMapper() as mapper:
             mapper.update(searchprofile)
 
-    def delete_searchprofile(self, searchprofile):
+    def delete_searchprofile(self, searchprofile_id):
         with SearchProfileMapper() as mapper:
-            mapper.delete(searchprofile)
+            mapper.delete(searchprofile_id)
 
     def get_all_searchprofile(self):
         with SearchProfileMapper() as mapper:
@@ -408,6 +453,30 @@ class Administration(object):
     def get_searchprofile_by_key(self, searchprofile):
         with SearchProfileMapper() as mapper:
             return mapper.find_by_searchprofile(searchprofile)
+
+    def update_search_info_object(self, searchprofile_id, info_dict):
+
+        """
+        In dieser Methode ist die Logik beschrieben, damit ein bestehendes Suchprofil aktualisiert wird.
+        :param searchprofile_id: searchprofile_id des Users.
+        :param info_dict: Dictionary mit Key-Value paaren. Ein Key repräsentiert eine Eigenschaft.
+        """
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                for key, value in info_dict.items():
+                    if key == '30': # Das Alter (Geburtsdatum) soll nicht aktualisiert werden.
+                        continue
+
+                    info_obj = InfoObject()
+                    info_obj.set_searchprofile_id(searchprofile_id)
+                    info_obj.set_value(value)
+                    char_fk = char_mapper.find_by_key(key).get_id()
+
+                    if char_fk is not None:
+                        info_obj.set_char_fk(char_fk)
+                        mapper.update_search(info_obj)
+                    else:
+                        print(f'Ungültiger Key: {key}')
 
     def calculate_age(self, info_objects):
         """

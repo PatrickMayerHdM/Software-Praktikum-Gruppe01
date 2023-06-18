@@ -11,6 +11,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
 import DatingSiteAPI from "../api/DatingSiteAPI";
+import OptionsOtherProfile from "./OptionsOtherProfile";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import BlockIcon from "@mui/icons-material/Block";
 
 
 //** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
@@ -24,20 +27,25 @@ class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            own_profil_id: this.props.user.uid,
             error: '',
+            lastPartURL: null,
         }
-
-
     }
 
     componentDidMount() {
-        this.getSelectedProperties();
+        const currentPath = window.location.pathname;
+        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+        const lastPartURL = currentPath.split('/').pop();
+        this.setState({lastPartURL: lastPartURL}, () => {
+            this.getSelectedProperties();
+        })
     }
 
+
+
     getSelectedProperties() {
-      DatingSiteAPI.getAPI()
-        .getInfoObjects(this.props.user.uid)
+            DatingSiteAPI.getAPI()
+        .getInfoObjects(this.state.lastPartURL)
         .then((responseInfoObjects) => {
           const selectedProperties = {};
 
@@ -78,10 +86,10 @@ class Profile extends React.Component{
               }
             }
           }
-
           this.setState(selectedProperties);
         });
     }
+
 
     render() {
 
@@ -94,7 +102,9 @@ class Profile extends React.Component{
             height,
             religion,
             smoking,
-        } = this.state
+        } = this.state;
+
+        const isOwnProfile = this.state.lastPartURL === this.props.user.uid;
 
         return (
             <div>
@@ -181,9 +191,11 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        {!isOwnProfile && (
+                        <OptionsOtherProfile other_profile={this.state.lastPartURL} user={this.props.user}/>
+                        )}
                     </Stack>
                 </Box>
-
             </div>
         )
     }

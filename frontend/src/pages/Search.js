@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
 import SearchProfileBox from "../components/SearchProfileBox";
+import infoobjectBO from "../api/InfoObjectBO";
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
@@ -27,23 +28,24 @@ class Search extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-          numSearchProfiles: 0,
-          selectedProfileIndex: 0,
-          selectedProfile: null,
-          Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim laden der Seite geladen und besteht aus den ID's der Suchprofile
-          profiles: [ ], // Die Profile die wir als Antwort bekommen.
-          profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
-          deletingError: null, // Bool ob es einen Fehler beim entfernen eines Suchprofils gibt.
-          clickable: false,
-          numProfiles: 0, // Nummer der Profile welche als Antwort kamen
-        }
+            numSearchProfiles: 0, // Die Anzahl der Suchprofile
+            selectedProfileIndex: null, // Der Index des aktuell Ausgewählten Suchprofils
+            selectedProfile: null, // Das aktuell Ausgewählte Suchprofil.
+            Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim Laden der Seite geladen und besteht aus den ID's der Suchprofile
+            profiles: [ ], // Die Profile die wir als Antwort bekommen.
+            profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
+            clickable: false, // Boolean, ob ein User ein Suchprofil ausgewählt hat und dann suchen kann, da ein User dies ohne ein Auasgewähltes Suchprofil nicht kann.
+            numProfiles: 0, // Nummer der Profile welche als Antwort kamen
+        };
 
         this.NewProfiles = this.NewProfiles.bind(this);
-        this.AddSearchProfiles = this.AddSearchProfiles.bind(this);
         this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
         this.loadPage = this.loadPage.bind(this);
         this.loadingPage = this.loadingPage.bind(this);
         this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
+        this.SearchallProfiles = this.SearchallProfiles.bind(this);
+        this.Search = this.Search.bind(this);
+
     }
 
 
@@ -54,7 +56,8 @@ class Search extends React.Component{
         console.log("Button nur noch neue Profile gedrückt")
         const { profile_id } = this.state; // Zugriff auf profile_id aus dem state
         console.log(profile_id)
-        DatingSiteAPI.getAPI().getOnlyNewProfiles(profile_id).then(newprofiles =>
+        DatingSiteAPI.getAPI()
+            .getOnlyNewProfiles(profile_id).then(newprofiles =>
             this.setState(prevState => ({
                 profiles: [...prevState.profiles, ...newprofiles]
             }), () => {
@@ -67,19 +70,49 @@ class Search extends React.Component{
         console.log(this.state.profiles[0])
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das aktuell
-    // ausgewähle Profil bearbeitet werden kann.
-    // Hier soll die URL an welche der User zum bearbeiten weitergeleitet wird, die Suchprofil_ID des zu bearbeitenden
-    // Suchprofils beinhalten.
-    EditSearchProfiles() {
+    /**
+     * Diese Funktion wird bei einem onClick() auf das Suchprofil bearbeiten ausgeführt.
+     * Es beinhaltet einen Console.log zum debug, da das eigentliche Weiterleiten über den Link gemacht wird,
+     * ist hier kein weiterer Code notwendig.
+     * Der User wird dann auf die Seite zum Bearbeiten/Erstellen eines Suchprofils weitergeleitet.
+     */
+
+    EditSearchProfiles(event) {
         console.log("Das Suchprofil", this.state.selectedProfileIndex, " wird bearbeitet")
         console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[this.state.selectedProfileIndex], "geändert");
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn der Such Button gedrückt wird, damit später dann danach gesucht wird.
-    Search() {
+    /**
+     * Eine Funktion, welche eine Liste von allen Profilen zurückgibt, dabei werden keine Filter oder Suchprofile
+     * beachtet.
+     */
+    SearchallProfiles() {
         DatingSiteAPI.getAPI()
         .getAllProfiles()
+        .then(profilesvar => {
+            const lengthProfiles = this.state.profiles.length;
+            this.setState(prevState => ({
+                profiles: profilesvar,
+                numProfiles: lengthProfiles
+            }));
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+        });
+    }
+
+
+    /**
+     * Hier wird die eigentliche Suche ausgeführt, der User kann diese Funktion durch das Drücken eines Buttons
+     * ausführen. Dabei wird dann die gerade ausgewählte SuchprofilID eines Users Weitergeleitet, damit mit diesem
+     * Suchprofil der Ähnlichkeitsmaß berechnet werden kann.
+     * @constructor
+     */
+
+    Search() {
+        console.log("Mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
+        DatingSiteAPI.getAPI()
+        .getSearchResults(this.state.selectedProfile)
         .then(profilesvar => {
             const lengthProfiles = this.state.profiles.length;
             this.setState(prevState => ({
@@ -105,18 +138,41 @@ class Search extends React.Component{
 
     }
 
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier angelegt wird.
-    AddSearchProfiles() {
-        this.setState(prevState => ({ numSearchProfiles: prevState.numSearchProfiles + 1 }), () => {
-        });
 
-    }
-
-    // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier gelöscht wird.
     DeleteSearchProfile(){
         console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
-        console.log(this.state.profiles[[2]])
+        DatingSiteAPI.getAPI()
+            .removeSearchProfile(this.state.selectedProfile)
+            .catch((e) =>
+                this.setState({
+                error: e,
+                })
+            );
+        const updatedSearchProfiles = this.state.Searchprofiles.filter(searchprofileId => searchprofileId !== this.state.selectedProfile);
+        const lengthupdatedSearchProfiles = updatedSearchProfiles.length;
+        this.setState({
+            Searchprofiles: updatedSearchProfiles,
+            numSearchProfiles: lengthupdatedSearchProfiles
+        }, () => {
+            console.log('handleRemoveProfile und profiles nach der Aktualisierung:', this.state.Searchprofiles);
+        });
+    };
+
+    /**
+     * Der componentDidUpdate wird beim Laden der Komponente Ausgeführt
+     */
+
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.Searchprofiles !== this.state.Searchprofiles) {
+        const numSearchProfiles = this.state.Searchprofiles.length;
+        this.setState({ numSearchProfiles });
+
+        if (this.state.selectedProfile && !this.state.Searchprofiles.includes(this.state.selectedProfile)) {
+          this.setState({ selectedProfileIndex: null, selectedProfile: null });
+        }
+      }
     }
+
 
     // Funktion für das Laden der Seite, wenn die Fetch Anfrage möglich ist
     loadingPage(){
@@ -125,7 +181,7 @@ class Search extends React.Component{
         .then(Searchprofilesvar => {
           console.log("Das ist Searchprofilesvar in der loadingPage: ",Searchprofilesvar)
           this.setState(prevState => ({
-            Searchprofiles: [...prevState.Searchprofiles, ...Searchprofilesvar]
+            Searchprofiles: Searchprofilesvar,
           }));
 
           const lengthSearchprofiles = this.state.Searchprofiles.length;
@@ -194,7 +250,7 @@ class Search extends React.Component{
             </Grid>
           ));
 
-        // Methode zur Darstellung einer FavoriteProfileBox
+        // Methode zur Darstellung einer SearchProfileBox
         const SearchListing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
                 <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} other_profile={this.state.profiles[index]}/>
@@ -223,7 +279,8 @@ class Search extends React.Component{
                                       justifyContent: "center",
                                       backgroundColor: "#587D71",
                                       color: "#fff",
-                                      cursor: "pointer"
+                                      cursor: "pointer",
+                                      pointerEvents: clickable ? '' : 'none',
                                     }}
                                   >
                                     <UpdateIcon/>
@@ -235,7 +292,7 @@ class Search extends React.Component{
                                 <Grid item md={2} xs={2} >
                                     <Link to="/Suche/Suchprofil/new">
                                         <button
-                                        onClick={this.AddSearchProfiles} style={{
+                                            style={{
                                           height: "120%",
                                           width: "100%",
                                           display: "flex",

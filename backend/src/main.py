@@ -71,7 +71,7 @@ infoobject = api.inherit('InfoObject', bo, {
     'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
     'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
     'profile_fk': fields.String(attribute='profile_fk', description='Google ID des Users'),
-    'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 
 chat = api.inherit('Chat', bo, {
@@ -108,7 +108,6 @@ matchmaking = api.inherit('Matchmaking', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    #@datingapp.marshal_list_with(profile)
     #@secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
@@ -139,6 +138,7 @@ class ProfileListOperations(Resource):
                 proposal.get_block_note_id(),
                 proposal.get_google_fk())
 
+            print("Main Proifle: ", p)
             return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
@@ -149,7 +149,7 @@ class ProfileListOperations(Resource):
 @datingapp.param('id', 'Die Google-ID des Profil-Objekts')
 class ProfileOperations(Resource):
     @datingapp.marshal_with(profile) #Datenstruktur des Objektes der Get-Methode
-    #@secured
+    @secured
     def get(self, google_fk):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
@@ -160,6 +160,7 @@ class ProfileOperations(Resource):
 
     @secured
     def delete(self, google_fk):
+        print('Hier :', google_fk)
         """ Löschen eines besimmten Profil-Objekts. """
 
         adm = Administration()
@@ -213,7 +214,7 @@ class SearchProfileOpterations(Resource):
 class InfoObjectListOperationsSearch(Resource):
     @datingapp.marshal_with(infoobject, code=200)
     @datingapp.expect(infoobject)
-    #@secured
+    @secured
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
@@ -230,6 +231,30 @@ class InfoObjectListOperationsSearch(Resource):
             return infoobj, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/SearchProfiles/infoobjects/<searchprofile_id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class SearchInfoObjectUpdateOperations(Resource):
+    @datingapp.marshal_with(infoobject)
+    @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
+    #@secured
+    def put(self, searchprofile_id):
+        print("Main.py: PUT-Befehl: ", searchprofile_id)
+        print("API.payload SUCHPROFIL", api.payload)
+
+        """ Update eines bestimmten Such-Profils. """
+        adm = Administration()
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.update_search_info_object(
+                proposal.get_searchprofile_id(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'Suchprofil konnte nicht aktualisiert werden.', 500
 
 
 """Handling um alle Suchprofil ID's eines Profils zu bekommen"""
@@ -249,11 +274,10 @@ class SearchProfilesOperations(Resource):
         else:
             return "", 500
 
-
 """Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
 @datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
-@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+@datingapp.param('searchprofile_id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class SearchOneProfileOperation(Resource):
 
     @datingapp.marshal_with(infoobject)
@@ -267,6 +291,16 @@ class SearchOneProfileOperation(Resource):
             return search_info_objs, 200
         else:
             return "", 500
+
+    @secured
+    def delete(self, searchprofile_id):
+        """ Löschen eines besimmten Suchprofil-Objekts. """
+
+        adm = Administration()
+        info_obj = adm.get_info_object_by_searchid(searchprofile_id)
+        adm.delete_info_object_search(info_obj)
+        adm.delete_searchprofile(searchprofile_id)
+        return '', 200
 
 
 """Handling im main, für den getChats() in der DaitingSiteAPI.
@@ -381,14 +415,25 @@ class InfoObjectsOperations(Resource):
         return info_objs
 
     @datingapp.marshal_with(infoobject)
-    @secured
-    def put(self, googleID):
+    @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
+    #@secured
+    def put(self, profile_id):
+        print('Main.py: PUT Befehl: ', profile_id)
+        print('Main.py: Api Payload:', api.payload)
+        """ Update eines bestimmten User-Profils. """
         adm = Administration()
-        print("Main PUT InfoObject", infoobject)
-        info_objs = adm.update_info_object()
-        return info_objs
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.update_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
 
 
+            return infoobj, 200
+        else:
+            return 'Profil konnte nicht aktualisiert werden.', 500
 
 """Ab hier FavoriteNote"""
 
