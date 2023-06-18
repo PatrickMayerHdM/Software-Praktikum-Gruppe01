@@ -7,7 +7,7 @@ import favoriteNoteBO from "./FavoriteNoteBO";
 import blockNoteBO from "./BlockNoteBO";
 import searchprofileBO from "./SearchprofileBO";
 import FavoriteNoteBO from '../api/FavoriteNoteBO';
-
+import matchmakingBO from "./MatchmakingBO";
 
 export default class DatingSiteAPI {
 
@@ -364,6 +364,19 @@ export default class DatingSiteAPI {
         })
     }
 
+    getSearchMMpercentage(google_fk) {
+        return this.#fetchAdvanced(this.#getMMpercentageByIdURL(google_fk))
+            .then((responseJSON) => {
+                console.log("Das responseJSON")
+                console.log(responseJSON)
+                let newMMBO = matchmakingBO.fromJSON(responseJSON)[0];
+                return new Promise(function (resolve) {
+                    resolve(newMMBO);
+                })
+
+            })
+    }
+
     /**
      * @param {searchprofileBO} searchprofileBO object
      * @public
@@ -523,7 +536,7 @@ export default class DatingSiteAPI {
             })
 
     }
-
+    #getMMpercentageByIdURL = () => `${this.#datingServerBaseURL}//$`
 
 
 
