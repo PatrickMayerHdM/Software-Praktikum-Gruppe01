@@ -15,6 +15,8 @@ from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
+from server.bo.Matchmaking import Matchmaking
+from server.db.MatchmakingMapper import MatchmakingMapper
 
 class Administration(object):
     def __init__(self):
@@ -459,5 +461,21 @@ class Administration(object):
                 new_infoobj.set_searchprofile_id(processed_tuples[0][4])
                 #print('Admin.py: New Infoobj', new_infoobj.get_value())
             return new_infoobj
+
+        """Methode, die den Matchmakting Algorithmus aufruft"""
+
+    def execute_matchmaking(self, searchprofile_id):
+
+        m = Matchmaking()
+        m.get_searchprofile_id()
+        m.set_searchprofile_id(searchprofile_id),
+        m.get_all_profiles(),
+        m.genderfilter(),
+        m.agefilter(),
+        m.get_char_values(),
+        m.get_char_values_for_profiles(),
+        m.compare_text(),
+        m.calculate_similarity()
+        return m
 
 

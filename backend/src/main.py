@@ -94,6 +94,12 @@ searchprofile = api.inherit('SearchProfile', bo, {
     'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils')
 })
 
+matchmaking = api.inherit('Matchmaking', bo, {
+    'google_fk': fields.String(attribute='google_id', description='GoogleID eines Matches'),
+    'percentage': fields.Integer(attribute='percentage', description='Ganzzahl des Matchmakings'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil ID eines Users')
+})
+
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
@@ -584,6 +590,25 @@ class SearchprofileListOperations(Resource):
         adm = Administration()
         searchprofiles = adm.get_all_searchprofile()
         return searchprofiles
+
+""" Handling, um das Matchmaking aufzurufen. """
+
+@datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('searchprofile_id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+class MatchingOperations(Resource):
+
+    @datingapp.marshal_with(matchmaking)
+    @secured
+    def get(self, searchprofile_id):
+
+        adm = Administration()
+        match = adm.execute_matchmaking(searchprofile_id)
+
+        if match is not None:
+            return match
+        else:
+            return 500
 
 
 
