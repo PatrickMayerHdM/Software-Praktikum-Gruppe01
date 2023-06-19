@@ -59,7 +59,7 @@ class BlockProfileBox extends React.Component{
               <Grid container direction="row" justifyContent="center" alignItems="stretch" container>
                 <Grid item xs={10} spacing={2} >
                   <Item>
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.state.blocking_id}/>
                   </Item >
                 </Grid >
                 <Grid item item xs={2} >

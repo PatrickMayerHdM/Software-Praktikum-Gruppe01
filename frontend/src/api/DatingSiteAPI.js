@@ -10,6 +10,7 @@ import FavoriteNoteBO from '../api/FavoriteNoteBO';
 import matchmakingBO from "./MatchmakingBO";
 import NamedInfoObjectBO from "./NamedInfoObjectBO";
 import CharacteristicBO from "./CharacteristicBO";
+import profilevisitsBO from "./ProfilevisitsBO";
 
 export default class DatingSiteAPI {
 
@@ -280,7 +281,7 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
+    #getNewProfilesByIdURL = (google_id) => `${this.#datingServerBaseURL}/search/newprofiles/${google_id}`;
     #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
     #removeSearchProfile = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
@@ -374,19 +375,6 @@ export default class DatingSiteAPI {
                 resolve(newinfoobjectBO);
             })
         })
-    }
-
-    getSearchMMpercentage(google_fk) {
-        return this.#fetchAdvanced(this.#getMMpercentageByIdURL(google_fk))
-            .then((responseJSON) => {
-                console.log("Das responseJSON")
-                console.log(responseJSON)
-                let newMMBO = matchmakingBO.fromJSON(responseJSON)[0];
-                return new Promise(function (resolve) {
-                    resolve(newMMBO);
-                })
-
-            })
     }
 
     /**
@@ -553,9 +541,22 @@ export default class DatingSiteAPI {
             })
 
     }
-    #getMMpercentageByIdURL = () => `${this.#datingServerBaseURL}//$`
+    #addprofilevisitsURL = () => `${this.#datingServerBaseURL}/visit`
 
-
-
+    addprofilevisits(profilevisits) {
+        return this.#fetchAdvanced(this.#addprofilevisitsURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profilevisits)
+        }).then((responseJSON) => {
+            let newprofilevisitsBO = profilevisitsBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newprofilevisitsBO);
+            })
+        })
+    }
 }
 

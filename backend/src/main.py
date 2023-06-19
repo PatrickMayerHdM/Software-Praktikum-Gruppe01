@@ -18,6 +18,7 @@ from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
 from server.bo.SearchProfile import SearchProfile
 from server.bo.namedInfoObject import NamedInfoObject
+from server.bo.Profilevisits import Profilevisits
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -102,6 +103,11 @@ blocknote = api.inherit('BlockNote', bo, {
 
 searchprofile = api.inherit('SearchProfile', bo, {
     'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils')
+})
+
+profilevisits = api.inherit('Profilevisits', bo, {
+    'mainprofile_id': fields.String(attribute='mainprofile_id', description='Das Profil der Person, welche jemanden besucht'),
+    'visitedprofile_id': fields.String(attribute='visitedprofile_id', description='Das Profil der besuchten Person'),
 })
 
 
@@ -674,6 +680,22 @@ class NamedCharacteristicsOperations(Resource):
         else:
             return 'CharObj_Operations "POST" fehlgeschlagen', 500
 
+@datingapp.route('/visit')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+class ProfileVisitsOperations(Resource):
+    @datingapp.doc("Create new visit")
+    @datingapp.expect(profilevisits)
+    # @secured
+
+    def post(self):
+        adm = Administration()
+        proposal = Profilevisits.from_dict(api.payload)
+
+        if proposal is not None:
+            result = adm.create_profilevisits(proposal)
+            return result, 200
+        else:
+            return '', 500
 
 
 if __name__ == '__main__':
