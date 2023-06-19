@@ -1,10 +1,10 @@
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import ProfileBox from "./ProfileBox";
+import ProfileBox from "../Profile/ProfileBox";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import DatingSiteAPI from "../api/DatingSiteAPI";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
 import PropTypes from 'prop-types';
 
 
@@ -59,7 +59,7 @@ class BlockProfileBox extends React.Component{
               <Grid container direction="row" justifyContent="center" alignItems="stretch" container>
                 <Grid item xs={10} spacing={2} >
                   <Item>
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.state.blocking_id}/>
                   </Item >
                 </Grid >
                 <Grid item item xs={2} >

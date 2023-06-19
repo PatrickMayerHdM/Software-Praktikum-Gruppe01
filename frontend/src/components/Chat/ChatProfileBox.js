@@ -1,11 +1,11 @@
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import ProfileBox from "./ProfileBox";
+import ProfileBox from "../Profile/ProfileBox";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import {Link} from "react-router-dom";
-import ChatWindow from "./ChatWindow";
+import ChatWindow from "../../pages/ChatWindow";
 
 class ChatProfileBox extends React.Component{
 
@@ -24,7 +24,7 @@ class ChatProfileBox extends React.Component{
                 <Grid item xs={10} spacing={2} >
                   <Item>
                       {/*Profilbox der anderen Person*/}
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.props.current_profile}/>
                   </Item >
                 </Grid >
                     <Grid item item xs={2} >
