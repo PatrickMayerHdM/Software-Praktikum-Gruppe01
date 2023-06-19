@@ -44,7 +44,7 @@ class Profile extends React.Component{
 
 
     getSelectedProperties() {
-            DatingSiteAPI.getAPI()
+        DatingSiteAPI.getAPI()
         .getInfoObjects(this.state.lastPartURL)
         .then((responseInfoObjects) => {
           const selectedProperties = {};

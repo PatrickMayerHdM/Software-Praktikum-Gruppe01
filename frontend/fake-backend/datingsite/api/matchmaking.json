@@ -1,0 +1,10 @@
+{
+  "matchmaking": [
+    {
+      "google_fk": "str",
+      "percentage": 55,
+      "searchprofile_id": 170
+    }
+
+  ]
+}

@@ -7,7 +7,7 @@ import favoriteNoteBO from "./FavoriteNoteBO";
 import blockNoteBO from "./BlockNoteBO";
 import searchprofileBO from "./SearchprofileBO";
 import FavoriteNoteBO from '../api/FavoriteNoteBO';
-
+import matchmakingBO from "./MatchmakingBO";
 
 export default class DatingSiteAPI {
 
@@ -243,7 +243,6 @@ export default class DatingSiteAPI {
         return this.#fetchAdvanced(this.#getInfoObjectsURL(googleID))
             .then((responseJSON) => {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
-                console.log("responseJSON API Infoobjects Profil: ", responseJSON);
                 return new Promise(function (resolve) {
                     resolve(infoobjectBOs);
                 });
@@ -364,6 +363,19 @@ export default class DatingSiteAPI {
         })
     }
 
+    getSearchMMpercentage(google_fk) {
+        return this.#fetchAdvanced(this.#getMMpercentageByIdURL(google_fk))
+            .then((responseJSON) => {
+                console.log("Das responseJSON")
+                console.log(responseJSON)
+                let newMMBO = matchmakingBO.fromJSON(responseJSON)[0];
+                return new Promise(function (resolve) {
+                    resolve(newMMBO);
+                })
+
+            })
+    }
+
     /**
      * @param {searchprofileBO} searchprofileBO object
      * @public
@@ -398,15 +410,20 @@ export default class DatingSiteAPI {
     }
 
     /**
+     * Hier werden mehrere matchmaking BOs erwartet, jedes dieser BO soll mindestens, eine Profil_ID und ein
+     * Ähnlichkeitsmaß enthalten.
+     *
      * @param searchprofile_id
      * @returns {Promise<any>}
      */
     getSearchResults(searchprofile_id){
         return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
             .then((responseJSON) => {
-                console.log("Das responseJSON:");
-                console.log(responseJSON);
-                return responseJSON;
+                console.log("Das responseJSON: ", responseJSON);
+                let matchmakingBOs = matchmakingBO.fromJSON(responseJSON)
+                return new Promise(function (resolve){
+                    resolve(matchmakingBOs)
+                })
             });
     }
 
@@ -523,7 +540,7 @@ export default class DatingSiteAPI {
             })
 
     }
-
+    #getMMpercentageByIdURL = () => `${this.#datingServerBaseURL}//$`
 
 
 

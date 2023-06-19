@@ -23,10 +23,15 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} asmoking
      * @param {*} aminAge
      * @param {*} amaxAge
-     * @param {*} asearchprofile_fk
+     * @param {*} aincome
+     * @param {*} afavclub
+     * @param {*} aeducationalstatus
+     * @param {*} ahobby
+     * @param {*} apoliticaltendency
+     * @param {*} aaboutme
      * */
 
-    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge, asearchprofile_fk) {
+    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge, asearchprofile_fk, aincome, afavclub, aeducationalstatus, ahobby, apoliticaltendency, aaboutme) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
@@ -44,6 +49,12 @@ export default class infoobjectBO extends BusinessObject {
     this.minAge = aminAge;
     this.maxAge = amaxAge;
     this.searchprofile_fk = asearchprofile_fk;
+    this.income = aincome;
+    this.favclub = afavclub;
+    this.educationalstatuts = aeducationalstatus;
+    this.hobby = ahobby;
+    this.politicaltendency = apoliticaltendency;
+    this.aboutme = aaboutme;
     }
 
     /** Setzen des Values */
@@ -179,6 +190,53 @@ export default class infoobjectBO extends BusinessObject {
         return this.searchprofile_id;
     }
 
+    set_income(aincome) {
+        this.income = aincome;
+    }
+
+    get_income() {
+        return this.income;
+    }
+    set_favclub(afavclub) {
+        this.favclub = afavclub;
+    }
+
+    get_favclub() {
+        return this.favclub;
+    }
+
+    set_educationalstatuts(aeducationalstatus) {
+        this.educationalstatuts = aeducationalstatus;
+    }
+
+    get_educationalstatuts() {
+        return this.educationalstatuts;
+    }
+
+    set_hobby(ahobby) {
+        this.hobby = ahobby;
+    }
+
+    get_hobby() {
+        return this.hobby;
+    }
+
+    set_politicaltendency(apoliticaltendency) {
+        this.politicaltendency = apoliticaltendency ;
+    }
+
+    get_politicaltendency() {
+        return this.politicaltendency;
+    }
+
+    set_aboutme(aaboutme) {
+        this.aboutme = aaboutme
+    }
+
+    get_aboutme() {
+        return this.aboutme;
+    }
+
       static fromJSON(infoobjects) {
             let result = [];
 
@@ -192,7 +250,6 @@ export default class infoobjectBO extends BusinessObject {
                 Object.setPrototypeOf(i, infoobjectBO.prototype);
                 result.push(i);
             }
-            console.log("Parsed infoobject:", result);
             return result;
     }
 }
