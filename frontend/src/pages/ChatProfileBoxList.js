@@ -1,7 +1,7 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import ChatProfileBox from "./ChatProfileBox";
+import ChatProfileBox from "../components/Chat/ChatProfileBox";
 import React from "react";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 

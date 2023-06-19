@@ -1,12 +1,12 @@
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import ProfileBox from "./ProfileBox";
+import ProfileBox from "../Profile/ProfileBox";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import {Link} from "react-router-dom";
-import ChatWindow from "./ChatWindow";
-import DatingSiteAPI from "../api/DatingSiteAPI";
+import ChatWindow from "../../pages/ChatWindow";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
 
 class SearchProfileBox extends React.Component{
 

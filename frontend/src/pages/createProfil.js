@@ -23,7 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
-import profile from "../components/Profile";
+import profile from "../components/Profile/Profile";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
 import InputLabel from '@mui/material/InputLabel';

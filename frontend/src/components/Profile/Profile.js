@@ -1,7 +1,7 @@
 /** Die verschiedenen für Profile.js benötigten Imports*/
 import * as React from 'react';
 import Grid from '@mui/material/Grid'; // Grid version 1
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import FormLabel from "@mui/material/FormLabel";
@@ -10,7 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import {Button} from "@mui/material";
-import DatingSiteAPI from "../api/DatingSiteAPI";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
 import OptionsOtherProfile from "./OptionsOtherProfile";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BlockIcon from "@mui/icons-material/Block";

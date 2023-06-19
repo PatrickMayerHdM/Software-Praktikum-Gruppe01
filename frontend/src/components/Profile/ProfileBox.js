@@ -1,12 +1,12 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Item from "../theme";
+import Item from "../../theme";
 import {Link} from "react-router-dom";
 import Profile from "./Profile";
-import DatingSiteAPI from "../api/DatingSiteAPI";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
 import {Button} from "@mui/material";
-import profilevisitsBO from "../api/ProfilevisitsBO";
+import profilevisitsBO from "../../api/ProfilevisitsBO";
 
 /**
  * Dies stellt einen React Klassenkomponenten dar, welcher eine Kurzansicht eines Profils einer anderen Person ist.

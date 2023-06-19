@@ -1,10 +1,10 @@
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import ProfileBox from "./ProfileBox";
+import ProfileBox from "../Profile/ProfileBox";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import DatingSiteAPI from "../api/DatingSiteAPI";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
 import PropTypes from 'prop-types';
 
 
