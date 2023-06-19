@@ -250,7 +250,6 @@ export default class infoobjectBO extends BusinessObject {
                 Object.setPrototypeOf(i, infoobjectBO.prototype);
                 result.push(i);
             }
-            console.log("Parsed infoobject:", result);
             return result;
     }
 }

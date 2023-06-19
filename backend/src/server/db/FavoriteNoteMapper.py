@@ -32,7 +32,7 @@ class FavoriteNoteMapper(mapper):
     def find_by_adding_user(self, adding_id):
         result = []
         cursor = self._connection.cursor()
-        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}'"
+        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}' AND added_id NOT IN (SELECT blocked_id FROM main.Blocknote WHERE blocking_id='{adding_id}') AND added_id NOT IN (SELECT blocking_id FROM main.Blocknote WHERE blocked_id='{adding_id}')"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
