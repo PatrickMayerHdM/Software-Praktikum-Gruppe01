@@ -52,7 +52,7 @@ export default class matchmakingBO extends BusinessObject {
                     result.push(mm);
                 })
             } else {
-                let i = matchmaking
+                let mm = matchmaking
                 Object.setPrototypeOf(mm, matchmakingBO.prototype);
                 result.push(mm);
             }
