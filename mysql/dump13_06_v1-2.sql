@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for macos13.0 (x86_64)
 --
--- Host: 127.0.0.1    Database: 
+-- Host: 127.0.0.1    Database:
 -- ------------------------------------------------------
 -- Server version	8.0.32
 
@@ -1014,6 +1014,12 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('localhost','mysql.infoschema','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'caching_sha2_password','$A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED','N','2023-05-03 05:18:26',NULL,'Y','N','N',NULL,NULL,NULL,NULL),('localhost','mysql.session','N','N','N','N','N','N','N','Y','N','N','N','N','N','N','N','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'caching_sha2_password','$A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED','N','2023-05-03 05:18:26',NULL,'Y','N','N',NULL,NULL,NULL,NULL),('localhost','mysql.sys','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'caching_sha2_password','$A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED','N','2023-05-03 05:18:26',NULL,'Y','N','N',NULL,NULL,NULL,NULL),('localhost','root','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','','','','',0,0,0,0,'caching_sha2_password','$A$005$\n;4EH1\'U4:l7%6D4\"0Hk2aTrZrSjYaejhf.CjRcmLYXGeLVM/Q8qmkJhW3voNn6','N','2023-05-03 05:18:28',NULL,'N','Y','Y',NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Table structure for table `general_log`
 --
@@ -1060,6 +1066,7 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `main` /*!40100 DEFAULT CHARACTER SET u
 
 USE `main`;
 
+
 --
 -- Table structure for table `Account`
 --
@@ -1072,11 +1079,7 @@ CREATE TABLE `Account` (
   `google_id` varchar(128) DEFAULT NULL,
   `profile_id` int DEFAULT NULL,
   `name` varchar(128) NOT NULL,
-  `email` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`account_id`),
-  KEY `Account_google_idx` (`google_id`),
-  KEY `Account_Profile_profile_id_fk` (`profile_id`),
-  CONSTRAINT `Account_Profile_profile_id_fk` FOREIGN KEY (`profile_id`) REFERENCES `Profile` (`profile_id`)
+  `email` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1086,37 +1089,32 @@ CREATE TABLE `Account` (
 
 LOCK TABLES `Account` WRITE;
 /*!40000 ALTER TABLE `Account` DISABLE KEYS */;
-INSERT INTO `Account` VALUES (1,'zQokAwj2tchqk4dkovLVvqCmzWp2',NULL,'Dominik Wunderlich','dominik.privatacc@gmail.com'),(2,'H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL,'Konstantin Fischer','jodoko.ecom@gmail.com');
+INSERT INTO `Account` VALUES (1,'zQokAwj2tchqk4dkovLVvqCmzWp2',26,'Dominik Wunderlich','dominik.privatacc@gmail.com'),(2,'H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL,'Konstantin Fischer','jodoko.ecom@gmail.com');
 /*!40000 ALTER TABLE `Account` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
 --
--- Table structure for table `BlockNote`
+-- Table structure for table `Blocknote`
 --
 
-DROP TABLE IF EXISTS `BlockNote`;
+DROP TABLE IF EXISTS `Blocknote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `BlockNote` (
-  `blocknote_id` int NOT NULL,
-  `blocked_id` int DEFAULT NULL,
-  `blocking_id` int DEFAULT NULL,
-  PRIMARY KEY (`blocknote_id`),
-  KEY `BlockNote_Profile_blocked_id_fk` (`blocked_id`),
-  KEY `BlockNote_Profile_blocking_id_fk` (`blocking_id`),
-  CONSTRAINT `BlockNote_Profile_blocked_id_fk` FOREIGN KEY (`blocked_id`) REFERENCES `Profile` (`profile_id`),
-  CONSTRAINT `BlockNote_Profile_blocking_id_fk` FOREIGN KEY (`blocking_id`) REFERENCES `Profile` (`profile_id`)
+CREATE TABLE `Blocknote` (
+  `blocknote_id` varchar(128) NOT NULL,
+  `blocking_id` varchar(128) NOT NULL,
+  `blocked_id` varchar(128) NOT NULL,
+  PRIMARY KEY (`blocknote_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `BlockNote`
+-- Dumping data for table `Blocknote`
 --
 
-LOCK TABLES `BlockNote` WRITE;
-/*!40000 ALTER TABLE `BlockNote` DISABLE KEYS */;
-/*!40000 ALTER TABLE `BlockNote` ENABLE KEYS */;
+LOCK TABLES `Blocknote` WRITE;
+/*!40000 ALTER TABLE `Blocknote` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Blocknote` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1128,8 +1126,7 @@ DROP TABLE IF EXISTS `Characteristic`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Characteristic` (
   `char_id` int NOT NULL,
-  `char_name` varchar(128) NOT NULL,
-  PRIMARY KEY (`char_id`)
+  `char_name` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1139,36 +1136,32 @@ CREATE TABLE `Characteristic` (
 
 LOCK TABLES `Characteristic` WRITE;
 /*!40000 ALTER TABLE `Characteristic` DISABLE KEYS */;
-INSERT INTO `Characteristic` VALUES (10,'Vorname'),(20,'Nachname'),(30,'Alter'),(40,'Geschlecht'),(50,'Körpergröße'),(60,'Religion'),(70,'Haarfarbe'),(80,'Raucher'),(90,'Über Mich');
+INSERT INTO `Characteristic` VALUES (10,'firstName'),(20,'lastName'),(30,'age'),(40,'gender'),(50,'height'),(60,'religion'),(70,'hair'),(80,'smoking'),(90,'Über Mich');
 /*!40000 ALTER TABLE `Characteristic` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `FavoriteNoteContainsProfile`
+-- Table structure for table `Favoritenote`
 --
 
-DROP TABLE IF EXISTS `FavoriteNote`;
+DROP TABLE IF EXISTS `Favoritenote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `FavoriteNote` (
+CREATE TABLE `Favoritenote` (
   `favoritenote_id` int NOT NULL,
-  `added_id` int DEFAULT NULL,
-  `adding_id` int DEFAULT NULL,
-  PRIMARY KEY (`favoritenote_id`),
-  KEY `FavoriteNote_Profile_added_id_fk` (`added_id`),
-  KEY `FavoriteNote_Profile_adding_id_fk` (`adding_id`),
-  CONSTRAINT `FavoriteNote_Profile_added_id_fk` FOREIGN KEY (`added_id`) REFERENCES `Profile` (`profile_id`),
-  CONSTRAINT `FavoriteNote_Profile_adding_id_fk` FOREIGN KEY (`adding_id`) REFERENCES `Profile` (`profile_id`)
+  `adding_id` varchar(128) NOT NULL,
+  `added_id` varchar(128) NOT NULL,
+  PRIMARY KEY (`favoritenote_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `FavoriteNoteContainsProfile`
+-- Dumping data for table `Favoritenote`
 --
 
-LOCK TABLES `FavoriteNote` WRITE;
-/*!40000 ALTER TABLE `FavoriteNote` DISABLE KEYS */;
-/*!40000 ALTER TABLE `FavoriteNote` ENABLE KEYS */;
+LOCK TABLES `Favoritenote` WRITE;
+/*!40000 ALTER TABLE `Favoritenote` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Favoritenote` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1180,14 +1173,13 @@ DROP TABLE IF EXISTS `InfoObject`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `InfoObject` (
   `infoobject_id` int NOT NULL,
-  `char_id` int NOT NULL,
-  `value` varchar(128) DEFAULT NULL,
-  `profile_id` int DEFAULT NULL,
+  `char_id` int DEFAULT NULL,
+  `char_value` varchar(128) DEFAULT NULL,
+  `profile_id` varchar(128) DEFAULT NULL,
+  `searchprofile_id` int DEFAULT NULL,
   PRIMARY KEY (`infoobject_id`),
   KEY `InfoObject_Characteristic_char_id_fk` (`char_id`),
-  KEY `InfoObject_Profile_profile_id_fk` (`profile_id`),
-  CONSTRAINT `InfoObject_Characteristic_char_id_fk` FOREIGN KEY (`char_id`) REFERENCES `Characteristic` (`char_id`),
-  CONSTRAINT `InfoObject_Profile_profile_id_fk` FOREIGN KEY (`profile_id`) REFERENCES `Profile` (`profile_id`)
+  KEY `InfoObject_Profile_profile_id_fk` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1197,24 +1189,24 @@ CREATE TABLE `InfoObject` (
 
 LOCK TABLES `InfoObject` WRITE;
 /*!40000 ALTER TABLE `InfoObject` DISABLE KEYS */;
+INSERT INTO `InfoObject` VALUES (1,30,'1100-10-09T23:06:32.000Z','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(2,10,'Dominik','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(3,40,'female','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(4,70,'blond','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(5,50,'100','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(6,20,'Wunderlich','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(7,60,'islam','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL),(8,80,'smoker','zQokAwj2tchqk4dkovLVvqCmzWp2',NULL);
+INSERT INTO `InfoObject` VALUES (9,30,'1202-11-09T23:06:32.000Z','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(10,10,'Konstantin','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(11,40,'male','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(12,70,'braun','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(13,50,'100','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(14,20,'Fischer','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(15,60,'christlich','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL),(16,80,'smoker','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL), (17,90,'Ich mag Züge','H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL);
+INSERT INTO `InfoObject` VALUES (18,30,'1205-11-09T23:06:32.000Z','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(19,10,'Michael','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(20,40,'male','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(21,70,'braun','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(22,50,'100','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(23,20,'Fezer','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(24,60,'christlich','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL),(25,80,NULL,'H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL), (26,90,'Ich mag Züge','H3wfee67TCh7dbHQz2qafu9Q9XB2',NULL);
 /*!40000 ALTER TABLE `InfoObject` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
 -- Table structure for table `Message`
 --
-
+DROP TABLE IF EXISTS `ProfileContainsMessage`;
 DROP TABLE IF EXISTS `Message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Message` (
   `message_id` int NOT NULL,
-  `sender_id` int DEFAULT NULL,
-  `recipient_id` int DEFAULT NULL,
-  `content` varchar(256) NOT NULL,
-  PRIMARY KEY (`message_id`),
-  KEY `Message_Profile_profile_id_fk` (`sender_id`),
-  KEY `Message_Profile_profile_id_fk2` (`recipient_id`)
+  `sender_id` varchar(128) NOT NULL,
+  `recipient_id` varchar(128) NOT NULL,
+  `content` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1224,7 +1216,7 @@ CREATE TABLE `Message` (
 
 LOCK TABLES `Message` WRITE;
 /*!40000 ALTER TABLE `Message` DISABLE KEYS */;
-INSERT INTO `Message` VALUES (10,2,3,'Hello World'),(11,2,3,'Hallo'),(12,2,3,'Hallo'),(13,2,3,'Hallo'),(14,2,3,'Hallo'),(15,2,3,'Hallo'),(16,2,3,'Hallo'),(17,2,3,'Hallo'),(18,2,3,'Hallo'),(19,2,3,'Hallo'),(20,2,3,'Hallo'),(21,2,3,'Hallo'),(22,2,3,'Hallo'),(23,3,2,'Na du'),(24,3,2,'Na du'),(25,2,3,'Das ist ein test'),(26,2,3,'Das ist ein test'),(27,2,3,'Das ist ein test'),(28,2,3,'Das ist ein test'),(29,1,2,'test'),(30,1,2,'test'),(31,1,2,'test'),(32,1,2,'Hallo Taro mich siehst du 3x aber keine Ahnung wieso'),(33,1,2,'Strato und ich haben eine Idee'),(34,1,2,'test'),(35,1,2,'gdx'),(36,1,2,'test 5'),(37,1,2,'patrick'),(38,1,2,'patrick 2'),(39,1,2,'patrick 4'),(40,1,2,'patrick 5'),(41,1,2,'patrick 6'),(42,1,2,'test'),(43,1,2,'tsdf'),(44,1,2,'fds'),(45,1,2,'test'),(46,1,2,'test'),(47,1,2,'test2'),(48,1,2,'test'),(49,1,2,'Neue Nachricht'),(50,1,2,'und eine weitere');
+INSERT INTO `Message` VALUES (10,'2','3','Hello World'),(11,'2','3','Hallo'),(12,'2','3','Hallo'),(13,'2','3','Hallo'),(14,'2','3','Hallo'),(15,'2','3','Hallo'),(16,'2','3','Hallo'),(17,'2','3','Hallo'),(18,'2','3','Hallo'),(19,'2','3','Hallo'),(20,'2','3','Hallo'),(21,'2','3','Hallo'),(22,'2','3','Hallo'),(23,'3','2','Na du'),(24,'3','2','Na du'),(25,'2','3','Das ist ein test'),(26,'2','3','Das ist ein test'),(27,'2','3','Das ist ein test'),(28,'2','3','Das ist ein test'),(29,'1','2','test'),(30,'1','2','test'),(31,'1','2','test'),(32,'1','2','Hallo Taro mich siehst du 3x aber keine Ahnung wieso'),(33,'1','2','Strato und ich haben eine Idee'),(34,'1','2','test'),(35,'1','2','gdx'),(36,'1','2','test 5'),(37,'1','2','patrick'),(38,'1','2','patrick 2'),(39,'1','2','patrick 4'),(40,'1','2','patrick 5'),(41,'1','2','patrick 6'),(42,'1','2','test'),(43,'1','2','tsdf'),(44,'1','2','fds'),(45,'1','2','test'),(46,'1','2','test'),(47,'1','2','test2'),(48,'1','2','test'),(49,'1','2','Neue Nachricht'),(50,'1','2','und eine weitere');
 /*!40000 ALTER TABLE `Message` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1239,9 +1231,7 @@ CREATE TABLE `Profile` (
   `profile_id` int NOT NULL,
   `favoritenote_id` int DEFAULT NULL,
   `blocknote_id` int DEFAULT NULL,
-  PRIMARY KEY (`profile_id`),
-  FOREIGN KEY (`favoritenote_id`) REFERENCES `FavoriteNote` (`favoritenote_id`),
-  FOREIGN KEY (`blocknote_id`) REFERENCES `BlockNote` (`blocknote_id`)
+  `google_fk` varchar(128) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1251,69 +1241,73 @@ CREATE TABLE `Profile` (
 
 LOCK TABLES `Profile` WRITE;
 /*!40000 ALTER TABLE `Profile` DISABLE KEYS */;
-INSERT INTO `Profile` VALUES (1,0,0),(2,0,0);
+INSERT INTO `Profile` VALUES (1,0,0,'zQokAwj2tchqk4dkovLVvqCmzWp2');
 /*!40000 ALTER TABLE `Profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `ProfileContainsMessage`
+-- Table structure for table `Profilevisits`
 --
 
-DROP TABLE IF EXISTS `ProfileContainsMessage`;
+DROP TABLE IF EXISTS `Profilevisits`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ProfileContainsMessage` (
-  `Chat_id` int NOT NULL,
-  `message_id` int NOT NULL,
-  PRIMARY KEY (`Chat_id`,`message_id`),
-  KEY `ProfileContainsMessage_Message_message_id_fk` (`message_id`),
-  CONSTRAINT `ProfileContainsMessage_Message_message_id_fk` FOREIGN KEY (`message_id`) REFERENCES `Message` (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
-/*SearchProfile*/
-
-DROP TABLE IF EXISTS `SearchProfile`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `SearchProfile` (
-  `searchprofile_id` int NOT NULL,
-  `google_id_fk` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`searchprofile_id`),
-  KEY `SearchProfile_Account_google_id_fk` (`google_id_fk`),
-  CONSTRAINT `SearchProfile_Account_google_id_fk` FOREIGN KEY (`google_id_fk`) REFERENCES `Account` (`google_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*ProfileVisits*/
-
-DROP TABLE IF EXISTS `ProfileVisits`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ProfileVisits` (
+CREATE TABLE `Profilevisits` (
   `profilevisits_id` int NOT NULL,
-  `mainprofile_id` varchar(128) DEFAULT NULL,
-  `visitedprofile_id` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`profilevisits_id`),
-  KEY `ProfileVisits_Account_mainprofile_id` (`mainprofile_id`),
-  KEY `ProfileVisits_Account_visitedprofile_id` (`visitedprofile_id`),
-  CONSTRAINT `ProfileVisits_Account_mainprofile_id` FOREIGN KEY (`mainprofile_id`) REFERENCES `Account` (`google_id`),
-  CONSTRAINT `ProfileVisits_Account_visitedprofile_id` FOREIGN KEY (`visitedprofile_id`) REFERENCES `Account` (`google_id`)
+  `mainprofile_id` varchar(128) NOT NULL,
+  `visitedprofile_id` varchar(128) NOT NULL,
+  PRIMARY KEY (`profilevisits_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
 --
--- Dumping data for table `ProfileContainsMessage`
+-- Dumping data for table `Matchmaking`
+--
+DROP TABLE IF EXISTS `Matchmaking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Matchmaking` (
+  `matchmaking_id` int NOT NULL,
+  `searchprofile_id` INT NOT NULL ,
+  `userprofile_id` int NOT NULL,
+  `info_object_id` INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Dumping data for table `Profilevisits`
 --
 
-LOCK TABLES `ProfileContainsMessage` WRITE;
-/*!40000 ALTER TABLE `ProfileContainsMessage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ProfileContainsMessage` ENABLE KEYS */;
+LOCK TABLES `Profilevisits` WRITE;
+/*!40000 ALTER TABLE `Profilevisits` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Profilevisits` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Searchprofile`
+--
+
+DROP TABLE IF EXISTS `Searchprofile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Searchprofile` (
+  `searchprofile_id` int NOT NULL,
+  `google_id` varchar(128) NOT NULL,
+  PRIMARY KEY (`searchprofile_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Searchprofile`
+--
+
+LOCK TABLES `Searchprofile` WRITE;
+/*!40000 ALTER TABLE `Searchprofile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Searchprofile` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-/*!50606 SET GLOBAL INNODB_STATS_AUTO_RECALC=@OLD_INNODB_STATS_AUTO_RECALC */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -1323,4 +1317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-26 15:48:37
+-- Dump completed on 2023-06-13 10:36:40
