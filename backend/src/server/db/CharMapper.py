@@ -94,26 +94,35 @@ class CharMapper(mapper):
         print("CharMapper: ", char)
         return char
 
-    def insert_named_char(self, char):
+    def insert_named_char(self, key):
         cursor = self._connection.cursor()
+
+        select_query = 'SELECT char_id FROM main.Characteristic WHERE char_name = %s'
+        cursor.execute(select_query, (key.get_named_char_name(),))
+        result = cursor.fetchone()
+
+        if result:
+            cursor.close()
+            return key
+
         cursor.execute('SELECT MAX(char_id) AS maxid FROM main.Characteristic')
         tuples = cursor.fetchall()
 
-        for (maxid) in tuples:
-            char.set_id(maxid[0] + 1)
+        for (maxid,) in tuples:
+            key.set_id(maxid + 1)
 
         command = 'INSERT INTO main.Characteristic (char_id, char_name) VALUES (%s, %s)'
 
-        data = (char.get_id(),
-                char.get_named_char_name())
+        data = (key.get_id(),
+                key.get_named_char_name())
 
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-        print("CharMapper: ", char)
-        return char
+        print("CharMapper: ", key)
+        return key
 
     def update(self, char):
         cursor = self._connection.cursor()
