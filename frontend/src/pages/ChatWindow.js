@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "./Chat.css";
+import "../components/Chat/Chat.css";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import messageBO from "../api/MessageBO";
 

@@ -9,12 +9,16 @@ export default class NamedInfoObjectBO extends BusinessObject {
      * @param {*} aprofile_fk
      * @param {*} asearchprofile_id
      * @param {*} achar_desc
+     * @param {*} achar_name
+     * @param {*} achar_id
      */
-    constructor(aid, aprofile_fk, asearchprofile_id, achar_desc) {
+    constructor(aid, aprofile_fk, asearchprofile_id, achar_desc, achar_name, achar_id) {
         super();
         this.id = aid;
         this.profile_fk = aprofile_fk;
         this.searchprofile_id = asearchprofile_id;
+        this.char_id = achar_id;
+        this.char_name = achar_name;
         this.char_desc = achar_desc;
     }
 
@@ -47,6 +51,20 @@ export default class NamedInfoObjectBO extends BusinessObject {
     }
     get_info_profile_fk() {
         return this.profile_fk;
+    }
+
+    set_char_name(achar_name) {
+        this.char_name = achar_name;
+    }
+    get_char_name() {
+        return this.char_name;
+    }
+
+    set_char_id(achar_id) {
+        this.char_id = achar_id;
+    }
+    get_char_id() {
+        return this.char_id;
     }
 
     static fromJSON(namedinfoobject) {

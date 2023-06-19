@@ -1,16 +1,16 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import BlockProfileBox from "./BlockProfileBox";
+import FavoriteProfileBox from "../components/Favoritenote/FavoriteProfileBox";
 import React from "react";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 
 /**
- * Dies ist eine  Seite, zum darstellen mehrerer BlockProfileBox innerhalb eines weiteren Grids.
+ * Dies ist eine Seite, zum Darstellen mehrerer FavoriteProfileBoxen innerhalb eines weiteren Grids.
  * Damit dies dann nicht mehr innerhalb der App.js geschehen muss und die App.js dadurch übersichtlicher bleibt.
  */
 
-class BlockProfileBoxList extends React.Component{
+class FavoriteProfileBoxList extends React.Component{
 
     constructor(props) {
         super(props);
@@ -21,9 +21,10 @@ class BlockProfileBoxList extends React.Component{
         }
     }
 
-    getBlockProfiles() {
+
+    getFavoriteProfiles() {
         DatingSiteAPI.getAPI()
-        .getBlocknoteProfileURL(this.props.user.uid)
+        .getFavoritenoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
             const lengthProfiles = this.state.profiles.length;
             this.setState(prevState => ({
@@ -36,11 +37,10 @@ class BlockProfileBoxList extends React.Component{
         });
     }
 
-
     componentDidMount() {
-        this.getBlockProfiles(() => {
-            console.log('profiles im componentDidMount:', this.state.profiles);
-        });
+      this.getFavoriteProfiles(() => {
+        console.log('profiles im componentDidMount:', this.state.profiles);
+      });
     }
 
     handleRemoveProfile = (removedProfileId) => {
@@ -70,22 +70,29 @@ class BlockProfileBoxList extends React.Component{
 
     render() {
 
-        // const für die Anzahl der anzuzeigenden Profile innerhalb der Sperrliste
+        // const für die Anzahl der anzuzeigenden Profile innerhalb der Merkliste
         const count = this.state.numProfiles;
-
+        const { profiles } = this.state;
         const current_profile = this.props.user.uid;
 
         // Methode zur Darstellung einer FavoriteProfileBox
         const Listing = Array(count).fill(null).map((item, index) => (
-            <Grid item xs={12} key={index} >
-                <BlockProfileBox key={this.state.profiles[index]} current_profile={current_profile} other_profile={this.state.profiles[index]} onRemoveProfile={this.handleRemoveProfile} />
+            <Grid item xs={12} key={this.state.profiles[index]}>
+                <Item>
+                    <FavoriteProfileBox
+                        key={this.state.profiles[index]}
+                        current_profile={current_profile}
+                        other_profile={this.state.profiles[index]}
+                        onRemoveProfile={this.handleRemoveProfile}
+                    />
+                </Item>
             </Grid>
         ));
 
 
         return (
             <div>
-                <h2>Deine Sperrliste:</h2>
+                <h2>Dein Merkzettel:</h2>
 
                 {Listing.length > 0 ? (
                     <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'}, margin: '0 auto'}} >
@@ -94,7 +101,7 @@ class BlockProfileBoxList extends React.Component{
                         </Grid>
                     </Box>
                 ) : (
-                    <p>Du hast keine Profile gesperrt...</p>
+                    <p>Du hast keine Profile gemerkt...</p>
                 )}
             </div>
         )
@@ -102,4 +109,4 @@ class BlockProfileBoxList extends React.Component{
 
 }
 
-export default BlockProfileBoxList
+export default FavoriteProfileBoxList
