@@ -64,10 +64,9 @@ class Search extends React.Component{
             console.log(this.state.profiles[0]);
             })
         ).catch(error => {
-          console.error('Error fetching data from API:', error);
+          console.error('Error fetching data in NewProfiles():', error);
         });
-
-        console.log(this.state.profiles[0])
+        //console.log(this.state.profiles[0])
     }
 
     /**
@@ -97,15 +96,15 @@ class Search extends React.Component{
             }));
         })
         .catch(error => {
-          console.error('Error fetching data from API:', error);
+          console.error('Error fetching data in SearchallProfiles():', error);
         });
     }
 
 
     /**
      * Hier wird die eigentliche Suche ausgeführt, der User kann diese Funktion durch das Drücken eines Buttons
-     * ausführen. Dabei wird dann die gerade ausgewählte SuchprofilID eines Users Weitergeleitet, damit mit diesem
-     * Suchprofil der Ähnlichkeitsmaß berechnet werden kann.
+     * ausführen. Hier kommen dann Business Objects an, diese werden dann zur Zuordnung für die SearchProfileBox
+     * in das Array profiles übergeben und dann jeweils in eine eigene SearchProfileBox übergeben.
      * @constructor
      */
 
@@ -118,10 +117,12 @@ class Search extends React.Component{
             this.setState(prevState => ({
                 profiles: profilesvar,
                 numProfiles: lengthProfiles
-            }));
+            }), () => {
+                console.log("In Search.js in Search(), sieht so profiles aus: ", this.state.profiles);
+            });
         })
         .catch(error => {
-          console.error('Error fetching data from API:', error);
+          console.error('Error fetching in Search() :', error);
         });
     }
 
@@ -253,7 +254,7 @@ class Search extends React.Component{
         // Methode zur Darstellung einer SearchProfileBox
         const SearchListing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
-                <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} other_profile={this.state.profiles[index]}/>
+                <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} ProfilematchmakingBO={this.state.profiles[index]}/>
             </Grid>
         ));
 
@@ -376,7 +377,6 @@ class Search extends React.Component{
                         <Item sx={{ width: "100%"}}>
                             {/** Hier werden die Buttons für die Anzahl der Suchprofile eingetragen */}
                                 {SearchProfileListing}
-
                         </Item>
                      </Stack>
                  </Item>

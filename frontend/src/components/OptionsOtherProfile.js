@@ -19,12 +19,22 @@ class OptionsOtherProfile extends React.Component{
             adding_id: this.props.user.uid,
             added_id: this.props.other_profile,
             blocking_id: this.props.user.uid,
-            blocked_id: this.props.other_profile
+            blocked_id: this.props.other_profile,
+            lastPartURL: null
 
         }
 
         this.PersonSaved = this.PersonSaved.bind(this);
         this.PersonBlocked = this.PersonBlocked.bind(this);
+    }
+
+    componentDidMount() {
+        const currentPath = window.location.pathname;
+        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+        const lastPartURL = currentPath.split('/').pop();
+        this.setState({lastPartURL: lastPartURL})
+        this.setState({added_id: lastPartURL})
+        this.setState({blocked_id: lastPartURL})
     }
 
     /** Die Funktionen die Ausgeführt werden, wenn auf einen Button gedrückt wird. */
