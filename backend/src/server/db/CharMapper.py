@@ -1,5 +1,6 @@
 from server.bo.Characteristic import Characteristics
 from server.db.mapper import mapper
+from server.bo.namedInfoObject import NamedInfoObject
 
 """ Eigenschafts-Klasse die Merkmale eines Profils widerspiegeln. """
 
@@ -49,6 +50,29 @@ class CharMapper(mapper):
 
         return result
 
+    def find_key_by_char_name(self, key):
+        print("Key aus CharMapper: ", key)
+        cursor = self._connection.cursor()
+        command = f"SELECT char_id, char_name FROM main.Characteristic WHERE char_name='{key}'"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
+            print("Tuples aus CharMapper: ", tuples[0])
+            (char_id) = tuples[0]
+            print("Char ID im Mapper: ", char_id[0])
+            char = NamedInfoObject()
+            char.set_named_char_id(char_id[0])
+            result = char
+        else:
+            raise ValueError(f"Schlüssel {key} nicht gefunden.")
+
+        self._connection.commit()
+        cursor.close()
+
+        print("Char ID by Name: ", result.get_named_char_id())
+        return result.get_named_char_id()
+
     def insert(self, char):
         cursor = self._connection.cursor()
         cursor.execute('SELECT MAX(char_id) AS maxid FROM main.Characteristic')
@@ -67,7 +91,38 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
+        print("CharMapper: ", char)
         return char
+
+    def insert_named_char(self, key):
+        cursor = self._connection.cursor()
+
+        select_query = 'SELECT char_id FROM main.Characteristic WHERE char_name = %s'
+        cursor.execute(select_query, (key.get_named_char_name(),))
+        result = cursor.fetchone()
+
+        if result:
+            cursor.close()
+            return key
+
+        cursor.execute('SELECT MAX(char_id) AS maxid FROM main.Characteristic')
+        tuples = cursor.fetchall()
+
+        for (maxid,) in tuples:
+            key.set_id(maxid + 1)
+
+        command = 'INSERT INTO main.Characteristic (char_id, char_name) VALUES (%s, %s)'
+
+        data = (key.get_id(),
+                key.get_named_char_name())
+
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        print("CharMapper: ", key)
+        return key
 
     def update(self, char):
         cursor = self._connection.cursor()

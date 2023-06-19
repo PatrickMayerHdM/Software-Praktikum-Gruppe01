@@ -30,6 +30,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import NamedInfoObjectBO from "../api/NamedInfoObjectBO";
 
 
 
@@ -42,6 +43,7 @@ class CreateProfil extends Component {
             favoriteNote_id: 0,
             blockNote_id: 0,
             char_fk: 0,
+            char_id: 0,
             profile_fk: 0,
             firstName: null,
             lastName: null,
@@ -299,9 +301,26 @@ class CreateProfil extends Component {
         this.setState({showTextFields: true});
     };
 
-    handleInputChange = (event, field, index) => {
+    handleInputChange = (event, field) => {
+        this.setState({ [field]: event.target.value });
     };
     handleSaveInputs = () => {
+        const { char_name, char_desc, char_id } = this.state;
+        const newInfoBO = new NamedInfoObjectBO(
+            this.state.id,
+            this.props.user.uid,
+            this.state.searchprofile_id,
+            this.state.char_desc,
+            this.state.char_name,
+            this.state.char_id)
+
+        DatingSiteAPI.getAPI()
+            .createCharDescForProfile(newInfoBO)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
     };
 
     handleUpdate(event) {
@@ -320,6 +339,9 @@ class CreateProfil extends Component {
             this.state.lastName,
             this.state.religion,
             this.state.smoking,
+            this.state.minAge,
+            this.state.maxAge,
+            this.state.searchprofile_fk,
             this.state.income,
             this.state.favclub,
             this.state.educationalstatuts,
@@ -669,7 +691,7 @@ class CreateProfil extends Component {
                                         <TextField label="Eigenschaftsname" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Beschreibung" value={this.state.char_value} onChange={(event) => this.handleInputChange(event, 'char_value')} />
+                                        <TextField label="Beschreibung" value={this.state.char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
                                         <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>

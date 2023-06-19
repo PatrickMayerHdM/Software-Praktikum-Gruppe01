@@ -1,5 +1,6 @@
 from server.bo.InfoObject import InfoObject
 from server.db.mapper import mapper
+from server.bo.namedInfoObject import NamedInfoObject
 
 """ Mapper-Klasse des BOs Info-Objekt."""
 
@@ -80,6 +81,38 @@ class InfoObjectMapper(mapper):
         cursor.close()
 
         return info_obj
+
+    def insert_named_info(self, named_info_obj):
+        print("Bevor Info: ", named_info_obj)
+        print("Bevor Info: ", named_info_obj.get_named_char_id())
+        print("Bevor Info: ", named_info_obj.get_named_char_name())
+
+        cursor = self._connection.cursor()
+        cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
+        tuples = cursor.fetchall()
+
+        for (maxid) in tuples:
+            if maxid[0] is not None:
+                named_info_obj.set_id(maxid[0] + 1)
+
+            else:
+                named_info_obj.set_id(1)
+
+
+
+        command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id) VALUES (%s, %s, %s, %s)"
+        data = (named_info_obj.get_id(),
+                named_info_obj.get_named_char_id(),
+                named_info_obj.get_named_info_name(),
+                named_info_obj.get_named_profile_fk())
+
+        print("Mapper: ", data)
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return named_info_obj
 
     def Searchinsert(self, info_obj):
         cursor = self._connection.cursor()
