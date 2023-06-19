@@ -22,6 +22,12 @@ class InfoObject(bo):
         self.minAge = ""
         self.maxAge = ""
         self.searchprofile_fk = None
+        self.aboutme = ""
+        self.income = ""
+        self.educationalstatus = ""
+        self.favclub = ""
+        self.hobby = ""
+        self.politicaltendency = ""
 
 
     def set_value(self, value):
@@ -120,8 +126,56 @@ class InfoObject(bo):
     def set_searchprofile_fk(self, searchprofile_fk):
         self.searchprofile_fk = searchprofile_fk
 
+    def get_aboutme(self):
+        """ Auslesen des Textfeldes. """
+        return self.aboutme
+
+    def set_aboutme(self, text):
+        """ Setzen des Textfeldes. """
+        self.aboutme = text
+
+    def get_income(self):
+        """ Auslesen der Gehaltsangabe. """
+        return self.income
+
+    def set_income(self, income):
+        """ Setzen des Nettogehalts. """
+        self.income = income
+
+    def get_education(self):
+        """ Auslesen des Bildungsstandes. """
+        return self.educationalstatus
+
+    def set_education(self, edu):
+        """ Setzen des Bildungsstandes. """
+        self.educationalstatus = edu
+
+    def get_favclub(self):
+        """ Auslesen des Lieblingsvereins. """
+        return self.favclub
+
+    def set_favclub(self, club):
+        """ Setzen des Lieblingsverins. """
+        self.favclub = club
+
+    def get_hobby(self):
+        """ Auslesen des Hobbys. """
+        return self.hobby
+
+    def set_hobby(self, hobby):
+        """ Setzen des Hobbys. """
+        self.hobby = hobby
+
+    def get_politicalstat(self):
+        """ Auslesen der politischen Einstellung. """
+        return self.politicaltendency
+
+    def set_politicalstat(self, stat):
+        """ Setzen der politischen Einstellung. """
+        self.politicaltendency = stat
+
     def get_char_by_key(self, key):
-        # Mapping der Schlüssel zu char_fk
+        """ Mapping der Schlüssel zu char_fk """
         char_fk_mapping = {
             'age': 30,
             'firstName': 10,
@@ -131,18 +185,24 @@ class InfoObject(bo):
             'lastName': 20,
             'religion': 60,
             'smoking': 80,
-            # Ab hier die Änderungen für das SuchProfil
+            'aboutme': 90,
             'minAge': 100,
-            'maxAge': 110
+            'maxAge': 110,
+            'income': 120,
+            'educationalstatus': 130,
+            'favclub': 140,
+            'hobby': 150,
+            'politicaltendency': 160
         }
         return char_fk_mapping.get(key, None)
 
-    """
-    calc_age Methode: berechnet das aktuelle Alter des Nutzers anhand des Geburtstages. 
-    Dabei wird das ISOFormat umgesetzt und das "Z" aus dem Datum entfernt. 
-    Die Berechnung findet nur statt, wenn die char_id "30" (Alter) in dem Objekt enthalten ist. 
-    """
     def calc_age(self):
+        """
+        Die Methode berechnet das aktuelle Alter des Nutzers anhand des Geburtstages.
+        Dabei wird das ISOFormat umgesetzt und das "Z" aus dem Datum entfernt.
+        Die Berechnung findet nur statt, wenn die char_id "30" (Alter) in dem Objekt enthalten ist.
+        :return: Ganzzahl der Berechnung
+        """
         if self.char_id == 30:
             birthdate = datetime.fromisoformat(self.char_value[:-1])
             curr_date = datetime.now()
@@ -167,12 +227,23 @@ class InfoObject(bo):
         obj.set_last_name(dictionary.get('lastName'))
         obj.set_religion(dictionary.get('religion'))
         obj.set_smoking_status(dictionary.get('smoking'))
-        # Ab hier die Änderungen für das SuchProfil
         obj.set_minAge(dictionary.get('minAge'))
         obj.set_maxAge(dictionary.get('maxAge'))
+        obj.set_aboutme(dictionary.get('aboutme'))
+        obj.set_income(dictionary.get('income'))
+        obj.set_education((dictionary.get('educationalstatus')))
+        obj.set_favclub(dictionary.get('favclub'))
+        obj.set_hobby(dictionary.get('hobby'))
+        obj.set_politicalstat(dictionary.get('politicaltendency'))
         return obj
 
     def to_dict(self):
+        """
+        Konvertiert ein übergebenes Objekt in ein Dictionary. Jeder Schlüssel repräsentiert eine
+        bestimmte Eigenschaft.
+
+        :return: Ein Dict, das die Eigenschaften eines Objetks enthält.
+        """
         info_dict = {
             "30": self.get_age(),
             "10": self.get_first_name(),
@@ -182,27 +253,17 @@ class InfoObject(bo):
             "20": self.get_last_name(),
             "60": self.get_religion(),
             "80": self.get_smoking_status(),
-            # Ab hier die Änderungen für das SuchProfil
+            "90": self.get_aboutme(),
             "100": self.get_minAge(),
             "110": self.get_maxAge(),
+            "120": self.get_income(),
+            "130": self.get_education(),
+            "140": self.get_favclub(),
+            "150": self.get_hobby(),
+            "160": self.get_politicalstat()
         }
         return info_dict
 
     def dict2class(self, my_dict):
         for key in my_dict:
             setattr(self, key, my_dict[key])
-
-"""
-x = "Haarfarbe"
-
-diction = {"id": 1, "char_name": x}
-char = Characteristics()
-Characteristics.from_dict(diction)
-
-
-info = InfoObject()
-info.set_char_fk(char)
-print(info.get_char_fk())
-"""
-# In diesem Beispiel wird immer die Ausgabe 0 folgen, da wir die set_id() Methode erst in den
-# Mapper-Klassen automatisch hochzählen lassen

@@ -17,6 +17,8 @@ from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
 from server.bo.SearchProfile import SearchProfile
+from server.bo.namedCharacteristic import NamedCharacteristics
+from server.bo.namedInfoObject import NamedInfoObject
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -67,11 +69,23 @@ characteristic = api.inherit('Characteristics', bo, {
     'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname')
 })
 
+namedcharacteristic = api.inherit('NamedCharacteristics', bo, {
+    'char_id': fields.Integer(attribute='char_id', description='ID einer eigenen Eigenschaft'),
+    'char_name': fields.String(attribute='named_char_name', description='eigener Eigenschaftsname')
+})
+
 infoobject = api.inherit('InfoObject', bo, {
     'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
     'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
     'profile_fk': fields.String(attribute='profile_fk', description='Google ID des Users'),
-    'searchprofile_id': fields.String(attribute='searchprofile_id', description='Suchprofil eines Users'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil eines Users'),
+})
+
+namedinfoobject = api.inherit('NamedInfoObjects', bo, {
+    'char_id': fields.Integer(attribute='char_id', description='ID eines eigenen InfoObjects'),
+    'profile_fk': fields.String(attribute='profile_fk', description=' Google ID des Users'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description=' Suchprofil ID eines Users'),
+    'char_desc': fields.String(attribute='named_char_desc', description='eigener InfoObjectvalue')
 })
 
 chat = api.inherit('Chat', bo, {
@@ -104,7 +118,7 @@ searchprofile = api.inherit('SearchProfile', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    @secured
+    #@secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -210,7 +224,7 @@ class SearchProfileOpterations(Resource):
 class InfoObjectListOperationsSearch(Resource):
     @datingapp.marshal_with(infoobject, code=200)
     @datingapp.expect(infoobject)
-    #@secured
+    @secured
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
@@ -227,6 +241,30 @@ class InfoObjectListOperationsSearch(Resource):
             return infoobj, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/SearchProfiles/infoobjects/<searchprofile_id>')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class SearchInfoObjectUpdateOperations(Resource):
+    @datingapp.marshal_with(infoobject)
+    @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
+    #@secured
+    def put(self, searchprofile_id):
+        print("Main.py: PUT-Befehl: ", searchprofile_id)
+        print("API.payload SUCHPROFIL", api.payload)
+
+        """ Update eines bestimmten Such-Profils. """
+        adm = Administration()
+        proposal = InfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.update_search_info_object(
+                proposal.get_searchprofile_id(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'Suchprofil konnte nicht aktualisiert werden.', 500
 
 
 """Handling um alle Suchprofil ID's eines Profils zu bekommen"""
@@ -584,6 +622,52 @@ class SearchprofileListOperations(Resource):
         adm = Administration()
         searchprofiles = adm.get_all_searchprofile()
         return searchprofiles
+
+@datingapp.route('/infoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedInfoObjectListOperations(Resource):
+    @datingapp.marshal_with(namedinfoobject, code=200)
+    @datingapp.expect(namedinfoobject)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+        adm = Administration()
+        print('Post-Method Infoobject:', api.payload)
+
+        proposal = NamedInfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            infoobj = adm.create_info_object(
+                proposal.get_profile_fk(),
+                proposal.to_dict()
+            )
+
+            return infoobj, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/characteristics')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedInfoObjectListOperations(Resource):
+    @datingapp.marshal_with(namedcharacteristic, code=200)
+    @datingapp.expect(namedcharacteristic)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+        adm = Administration()
+        print('Post-Method Char:', api.payload)
+
+        proposal = NamedCharacteristics.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.create_char(
+                proposal.get_named_characteristic_name(),
+                proposal.to_dict()
+            )
+
+            return charobj, 200
+        else:
+            return 'CharObj_Operations "POST" fehlgeschlagen', 500
 
 
 

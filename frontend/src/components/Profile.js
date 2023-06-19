@@ -28,25 +28,24 @@ class Profile extends React.Component{
         super(props);
         this.state = {
             error: '',
-            isCurrentUser: true,
+            lastPartURL: null,
         }
     }
 
     componentDidMount() {
-        const currentUser = this.props.user.uid;
-        let isCurrentUser = false;
-        if (currentUser === this.props.user.uid) {
-            isCurrentUser = true;
-        }
-
-        this.getSelectedProperties();
+        const currentPath = window.location.pathname;
+        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
+        const lastPartURL = currentPath.split('/').pop();
+        this.setState({lastPartURL: lastPartURL}, () => {
+            this.getSelectedProperties();
+        })
     }
 
 
 
     getSelectedProperties() {
-      DatingSiteAPI.getAPI()
-        .getInfoObjects(profile_id)
+        DatingSiteAPI.getAPI()
+        .getInfoObjects(this.state.lastPartURL)
         .then((responseInfoObjects) => {
           const selectedProperties = {};
 
@@ -81,13 +80,30 @@ class Profile extends React.Component{
                 case 80:
                   selectedProperties.smoking = charValue;
                   break;
+                case 90:
+                  selectedProperties.aboutme = charValue;
+                  break;
+                case 120:
+                  selectedProperties.income = charValue;
+                  break;
+                case 130:
+                  selectedProperties.educationalstatuts = charValue;
+                  break;
+                case 140:
+                  selectedProperties.favclub = charValue;
+                  break;
+                case 150:
+                  selectedProperties.hobby = charValue;
+                  break;
+                case 160:
+                  selectedProperties.politicaltendency = charValue;
+                  break;
 
                 default:
                   break;
               }
             }
           }
-
           this.setState(selectedProperties);
         });
     }
@@ -104,8 +120,15 @@ class Profile extends React.Component{
             height,
             religion,
             smoking,
-            currentUser,
-        } = this.state
+            income,
+            favclub,
+            hobby,
+            politicaltendency,
+            educationalstatus,
+
+        } = this.state;
+
+        const isOwnProfile = this.state.lastPartURL === this.props.user.uid;
 
         return (
             <div>
@@ -152,6 +175,7 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        {height &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -162,6 +186,8 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        )}
+                        {religion && (
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -172,6 +198,8 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        )}
+                        {hair && (
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -182,6 +210,8 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
+                        )}
+                        {smoking &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -192,57 +222,70 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
-                        {!currentUser && (
+                        )}
+                        {income &&(
                         <Item>
-                          <Box sx={{ flexGrow: 1 }}>
-                            <Grid
-                              container
-                              direction="row"
-                              justifyContent="center"
-                              alignItems="strech"
-                            >
-                              <Grid item md={2} xs={4} spacing={2}>
-                                <button
-                                  onClick={this.PersonSaved}
-                                  style={{
-                                    height: "100%",
-                                    width: "100%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    backgroundColor: "#2ec43d",
-                                    color: "#fff",
-                                    cursor: "pointer",
-                                    border: "solid",
-                                    borderColor: "#BDC2BF",
-                                  }}
-                                >
-                                  <BookmarkAddedIcon />
-                                </button>
-                              </Grid>
-                              <Grid item md={2} xs={4} spacing={2}>
-                                <button
-                                  onClick={this.PersonBlocked}
-                                  style={{
-                                    height: "100%",
-                                    width: "100%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    backgroundColor: "#e63946",
-                                    color: "#fff",
-                                    cursor: "pointer",
-                                    border: "solid",
-                                    borderColor: "#BDC2BF",
-                                  }}
-                                >
-                                  <BlockIcon />
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </Box>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid md={4} xs={7} spacing={2}>
+                                    Gehalt:
+                                </Grid>
+                                <Grid md={8} xs={7} spacing={2}>
+                                    <p>{income}</p>
+                                </Grid>
+                            </Grid >
                         </Item>
-                      )}
+                        )}
+                        {educationalstatus &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid md={4} xs={7} spacing={2}>
+                                    Bildungsstatus:
+                                </Grid>
+                                <Grid md={8} xs={7} spacing={2}>
+                                    <p>{educationalstatus}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
+                        {favclub &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid md={4} xs={7} spacing={2}>
+                                    Lieblingsverein:
+                                </Grid>
+                                <Grid md={8} xs={7} spacing={2}>
+                                    <p>{favclub}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
+                        {hobby &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid md={4} xs={7} spacing={2}>
+                                    Hobbys:
+                                </Grid>
+                                <Grid md={8} xs={7} spacing={2}>
+                                    <p>{hobby}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
+                        {politicaltendency &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid md={4} xs={7} spacing={2}>
+                                    Politische Ausrichtung:
+                                </Grid>
+                                <Grid md={8} xs={7} spacing={2}>
+                                    <p>{politicaltendency}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
+                        {!isOwnProfile && (
+                        <OptionsOtherProfile other_profile={this.state.lastPartURL} user={this.props.user}/>
+                        )}
                     </Stack>
                 </Box>
             </div>
