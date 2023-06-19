@@ -8,7 +8,6 @@ import blockNoteBO from "./BlockNoteBO";
 import searchprofileBO from "./SearchprofileBO";
 import FavoriteNoteBO from '../api/FavoriteNoteBO';
 import matchmakingBO from "./MatchmakingBO";
-import NamedCharacteristicBO from "./NamedCharacteristicBO";
 import NamedInfoObjectBO from "./NamedInfoObjectBO";
 
 export default class DatingSiteAPI {
@@ -118,8 +117,7 @@ export default class DatingSiteAPI {
     #updateProfileURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
-    #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
-    #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/infoobjects`;
+    #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
 
@@ -226,34 +224,18 @@ export default class DatingSiteAPI {
         });
     }
 
-    createCharDescForProfile(characteristic_desc) {
+    createCharDescForProfile(characteristic_desc_name) {
         return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {
             method: "POST",
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': "application/json",
             },
-            body: JSON.stringify(characteristic_desc)
+            body: JSON.stringify(characteristic_desc_name)
         }).then((responseJSON) => {
             let createdCharDescForProfile = NamedInfoObjectBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(createdCharDescForProfile);
-            })
-        })
-    }
-
-    createCharForProfile(characteristic) {
-        return this.#fetchAdvanced(this.#createCharForProfileURL(), {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json, text/plain',
-                'Content-type': "application/json",
-            },
-            body: JSON.stringify(characteristic)
-        }).then((responseJSON) => {
-            let createdCharForProfile = NamedCharacteristicBO.fromJSON(responseJSON)[0];
-            return new Promise(function (resolve) {
-                resolve(createdCharForProfile);
             })
         })
     }
