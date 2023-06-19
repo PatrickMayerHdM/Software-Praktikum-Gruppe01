@@ -9,6 +9,7 @@ import searchprofileBO from "./SearchprofileBO";
 import FavoriteNoteBO from '../api/FavoriteNoteBO';
 import matchmakingBO from "./MatchmakingBO";
 import NamedInfoObjectBO from "./NamedInfoObjectBO";
+import CharacteristicBO from "./CharacteristicBO";
 import profilevisitsBO from "./ProfilevisitsBO";
 
 export default class DatingSiteAPI {
@@ -118,6 +119,7 @@ export default class DatingSiteAPI {
     #updateProfileURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
+    #getCharNameURL = () => `${this.#datingServerBaseURL}/characteristic`;
     #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
@@ -247,6 +249,16 @@ export default class DatingSiteAPI {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
                 return new Promise(function (resolve) {
                     resolve(infoobjectBOs);
+                });
+            });
+    }
+
+    getPropertyNames(charID) {
+        return this.#fetchAdvanced(this.#getCharNameURL(charID))
+            .then((responseJSON) => {
+                let namedCharName = CharacteristicBO.fromJSON(responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(namedCharName);
                 });
             });
     }

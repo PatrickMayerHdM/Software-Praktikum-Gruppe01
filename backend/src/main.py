@@ -655,28 +655,30 @@ class NamedInfoObjectListOperations(Resource):
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
-# @datingapp.route('/namedinfoobjects')
-# @datingapp.response(500, 'Serverseitiger Fehler')
-# class NamedCharacteristicsOperations(Resource):
-#     @datingapp.marshal_with(namedinfoobject, code=200)
-#     @datingapp.expect(namedinfoobject)
-#     @secured
-#     def post(self):
-#         """ Anlegen eines neuen NamedInfoObject-Objekts. """
-#         adm = Administration()
-#         print('Post-Method Char:', api.payload)
-#
-#         proposal = NamedInfoObject.from_dict(api.payload)
-#
-#         if proposal is not None:
-#             charobj = adm.create_char(
-#                 proposal.get_named_char_name(),
-#             )
-#
-#             print("CharObj in der Main: ", charobj)
-#             return charobj, 200
-#         else:
-#             return 'CharObj_Operations "POST" fehlgeschlagen', 500
+@datingapp.route('/characteristic')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedCharacteristicsOperations(Resource):
+    @datingapp.marshal_with(characteristic, code=200)
+    @datingapp.expect(characteristic)
+    @secured
+    def get(self):
+
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+
+        adm = Administration()
+        print('GET-Method Char:', api.payload)
+
+        proposal = Characteristics.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.get_char_by_key(
+                proposal.get_characteristic_name(),
+            )
+
+            print("Char ID Main: ", charobj)
+            return charobj, 200
+        else:
+            return 'CharObj_Operations "POST" fehlgeschlagen', 500
 
 @datingapp.route('/visit')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
