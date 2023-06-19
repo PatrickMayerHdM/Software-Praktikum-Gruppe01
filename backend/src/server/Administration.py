@@ -15,6 +15,8 @@ from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
+from server.bo.Profilevisits import Profilevisits
+from server.db.ProfilevisitsMapper import ProfilevisitsMapper
 
 class Administration(object):
     def __init__(self):
@@ -493,5 +495,18 @@ class Administration(object):
                 new_infoobj.set_searchprofile_id(processed_tuples[0][4])
                 #print('Admin.py: New Infoobj', new_infoobj.get_value())
             return new_infoobj
+
+    """Spezifische Methoden für Profilevisits"""
+
+    def get_profilevisits(self, key):
+        with ProfilevisitsMapper() as mapper:
+            return mapper.find_by_key(key)
+
+    def create_profilevisits(self, visitedprofile):
+        visitedprofile.set_id(1)
+
+        with ProfilevisitsMapper() as mapper:
+            mapper.insert(visitedprofile)
+
 
 

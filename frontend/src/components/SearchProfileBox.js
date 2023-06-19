@@ -44,7 +44,7 @@ class SearchProfileBox extends React.Component{
                   <Grid item xs={10} spacing={2} >
                   <Item>
                       {/*Profilbox des anderen Profils*/}
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.props.current_profile} />
                   </Item >
                   </Grid >
 

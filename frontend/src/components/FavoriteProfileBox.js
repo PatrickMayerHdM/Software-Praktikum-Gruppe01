@@ -64,7 +64,7 @@ class FavoriteProfileBox extends React.Component{
                 direction="row" justifyContent="center" alignItems="strech" >
                 <Grid item xs={8} spacing={2}>
                   <Item>
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.state.adding_id}/>
                   </Item >
                 </Grid >
                 <Grid item xs={2} spacing={2} >

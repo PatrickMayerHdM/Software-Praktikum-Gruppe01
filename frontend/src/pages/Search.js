@@ -51,7 +51,7 @@ class Search extends React.Component{
 
 
 
-    // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
+    // Hier sollen später dann nur noch nicht bereits angesehen Profile nach Änhlichkeitsmaß angezeigt werden.
     NewProfiles(){
         console.log("Button nur noch neue Profile gedrückt")
         const { profile_id } = this.state; // Zugriff auf profile_id aus dem state
