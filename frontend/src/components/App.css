@@ -1,0 +1,36 @@
+.content {
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #F3F3F3;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+}
+
+.header_icon {
+    padding: 20px;
+}
+
+.footer {
+    margin-top: auto;
+    height: 10px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #C4C4C4;
+    text-align: center;
+}
+
+.footer_text {
+    text-decoration: none;
+    color: gray;
+}
+
+.button_container {
+    margin-bottom: 20px;
+}
