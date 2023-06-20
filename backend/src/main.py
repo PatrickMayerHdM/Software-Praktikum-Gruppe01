@@ -110,6 +110,12 @@ profilevisits = api.inherit('Profilevisits', bo, {
     'visitedprofile_id': fields.String(attribute='visitedprofile_id', description='Das Profil der besuchten Person'),
 })
 
+matchmaking = api.inherit('Matchmaking', bo, {
+    'google_fk': fields.String(attribute='google_id', description='GoogleID eines Matches'),
+    'percentage': fields.Integer(attribute='percentage', description='Ganzzahl des Matchmakings'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil ID eines Users')
+})
+
 
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
@@ -697,6 +703,27 @@ class ProfileVisitsOperations(Resource):
         else:
             return '', 500
 
+""" Handling, um das Matchmaking aufzurufen. """
+
+@datingapp.route('/Search/Search/Matchmaking/<int:searchprofile_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+class MatchingOperations(Resource):
+
+    @datingapp.marshal_with(matchmaking)
+    @secured
+    def get(self, searchprofile_id):
+        print('Main.Py übergebene Searchprofile_id:', searchprofile_id)
+
+        adm = Administration()
+        searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
+
+        profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
+
+        if profiles is not None:
+            return profiles
+        else:
+            return 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
