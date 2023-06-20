@@ -17,6 +17,8 @@ from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
 from server.bo.SearchProfile import SearchProfile
+from server.bo.namedInfoObject import NamedInfoObject
+from server.bo.Profilevisits import Profilevisits
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -53,7 +55,7 @@ account = api.inherit('Account', bo, {
 profile = api.inherit('Profile', bo, {
     'favoritenote_id': fields.Integer(attribute='_favoritenote_id', description='Merkliste eines Profils'),
     'blocknote_id': fields.Integer(attribute='_blocknote_id', description='Blockierliste eines Profils'),
-    'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos'),
+    'google_fk': fields.String(attribute='_google_fk', description='Google_ID des Admin-Kontos')
 })
 
 message = api.inherit('Message', bo, {
@@ -67,11 +69,20 @@ characteristic = api.inherit('Characteristics', bo, {
     'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname')
 })
 
+
 infoobject = api.inherit('InfoObject', bo, {
     'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
     'char_value': fields.String(attribute='char_value', description='Inhalt des Infoobjekts'),
     'profile_fk': fields.String(attribute='profile_fk', description='Google ID des Users'),
     'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil eines Users'),
+})
+
+namedinfoobject = api.inherit('NamedInfoObjects', bo, {
+    'profile_fk': fields.String(attribute='profile_fk', description=' Google ID des Users'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description=' Suchprofil ID eines Users'),
+    'char_id': fields.String(attribute='char_id', description='Char ID '),
+    'char_name': fields.Integer(attribute='named_char_name', description=' Char_Name eines Users'),
+    'char_desc': fields.Integer(attribute='named_char_desc', description=' Char Desc eines Users')
 })
 
 chat = api.inherit('Chat', bo, {
@@ -94,11 +105,12 @@ searchprofile = api.inherit('SearchProfile', bo, {
     'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils')
 })
 
-matchmaking = api.inherit('Matchmaking', bo, {
-    'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils'),
-    'score': fields.Integer(attribute='score', description='Prozentwert des Matchmakings'),
-    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Die Id des Suchprofils')
+profilevisits = api.inherit('Profilevisits', bo, {
+    'mainprofile_id': fields.String(attribute='mainprofile_id', description='Das Profil der Person, welche jemanden besucht'),
+    'visitedprofile_id': fields.String(attribute='visitedprofile_id', description='Das Profil der besuchten Person'),
 })
+
+
 "get- liest alles Projekte aus der DB und gibt diese als JSON ans Frontend weiter"
 "post- greift auf ein JSON, welches aus dem Frontend kommt, zu und transformiert dies zu einem Projekt Objekt und"
 "schreibt es in die DB"
@@ -112,7 +124,7 @@ class ProfileListOperations(Resource):
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
-        profiles = adm.get_all_profiles() #in Admin.py noch nicht angelegt
+        profiles = adm.get_all_profiles() #Admin.py noch nicht angelegt
         print(profiles)
 
         if profiles is not None:
@@ -613,26 +625,78 @@ class SearchprofileListOperations(Resource):
         searchprofiles = adm.get_all_searchprofile()
         return searchprofiles
 
-    """Methode für das Matchmaking"""
-@datingapp.route('/Search/Matchmaking/<int:searchprofile_id>')
-@datingapp.response(500, 'Serverseitiger-Fehler')
-@datingapp.param('id', 'Die Google-ID des Profil-Objekts')
-class MatchingOperation(Resource):
-    #@datingapp.marshal_with(matchmaking)
+@datingapp.route('/namedinfoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedInfoObjectListOperations(Resource):
+    @datingapp.marshal_with(namedinfoobject, code=200)
+    @datingapp.expect(namedinfoobject)
     @secured
-    def get(self, searchprofile_id):
-        """ Auslesen der similarity list"""
-        adm = Administration
-        similarity_list = adm.execute_matchmaking(searchprofile_id)
+    def post(self):
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+        adm = Administration()
+        print('Post-Method Infoobject:', api.payload)
 
-        """ 
-        adjusted_infoobjs ruft die Methode "calculate_age" auf und liefert ein InfoObject-Objekt zurück.
-        Das InfoObjekt besitzt nun das Alter (z.B. 33) und nicht mehr das Geburtsdatum (TT/MM/YYYY...) 
-        """
-        if similarity_list is not None:
-            return similarity_list
+        proposal = NamedInfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.create_char(
+                proposal.get_named_char_name()
+            )
+
+            infoobj = adm.create_named_info_object(
+                proposal.get_named_profile_fk(),
+                proposal.get_named_info_name(),
+                proposal.get_named_char_name()
+            )
+
+            respone = {charobj, infoobj}
+            print("Post NamednfoBO: ", respone)
+            return respone, 200
         else:
-            return 500
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/characteristic')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedCharacteristicsOperations(Resource):
+    @datingapp.marshal_with(characteristic, code=200)
+    @datingapp.expect(characteristic)
+    @secured
+    def get(self):
+
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+
+        adm = Administration()
+        print('GET-Method Char:', api.payload)
+
+        proposal = Characteristics.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.get_char_by_key(
+                proposal.get_characteristic_name(),
+            )
+
+            print("Char ID Main: ", charobj)
+            return charobj, 200
+        else:
+            return 'CharObj_Operations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/visit')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+class ProfileVisitsOperations(Resource):
+    @datingapp.doc("Create new visit")
+    @datingapp.expect(profilevisits)
+    # @secured
+
+    def post(self):
+        adm = Administration()
+        proposal = Profilevisits.from_dict(api.payload)
+
+        if proposal is not None:
+            result = adm.create_profilevisits(proposal)
+            return result, 200
+        else:
+            return '', 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

@@ -23,7 +23,7 @@ class mapper(AbstractContextManager, ABC):
         else:
             """Kommen wir hier an, läuft der Code auf einem lokalen Development Server. Es wird eine Verbindung zu 
             einer lokal installierten MySQL Datenbank hergestellt."""
-            self._connection = connector.connect(user='root', password='123Sokal123', host='127.0.0.1', database='main')
+            self._connection = connector.connect(user='root', password='password', host='127.0.0.1', database='main')
 
         return self
 

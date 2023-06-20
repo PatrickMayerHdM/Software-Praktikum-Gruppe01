@@ -1,5 +1,4 @@
 from server.bo.Message import Message
-from server.db.MatchmakingMapper import MatchmakingMapper
 from server.db.MessageMapper import MessageMapper
 from server.bo.blockNote import BlockNote
 from server.db.blockNoteMapper import BlockNoteMapper
@@ -16,7 +15,9 @@ from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
-from server.bo.Matchmaking import Matchmaking
+from server.bo.namedInfoObject import NamedInfoObject
+from server.bo.Profilevisits import Profilevisits
+from server.db.ProfilevisitsMapper import ProfilevisitsMapper
 
 class Administration(object):
     def __init__(self):
@@ -252,13 +253,12 @@ class Administration(object):
         with CharMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def create_char(self, char_name, char_typ):
-        c = Characteristics()
-        c.set_characteristic(char_name)
-        c.set_characteristic_typ(char_typ)
+    def create_char(self, named_char_name):
+        c = NamedInfoObject()
+        c.set_named_char(named_char_name)
         c.set_id(1)
         with CharMapper() as mapper:
-            return mapper.insert(c)
+            return mapper.insert_named_char(c)
 
     def save_char(self, char):
         with CharMapper() as mapper:
@@ -308,6 +308,21 @@ class Administration(object):
                     else:
                         print(f'Ungültiger Key: {key}')
 
+    def create_named_info_object(self, profile_fk, infoobj, char_name):
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                print("Create Named Info Object: ", profile_fk, infoobj, char_name)
+                info_obj = NamedInfoObject()
+                info_obj.set_id(1)
+                info_obj.set_named_char_id(char_mapper.find_key_by_char_name(char_name))
+                info_obj.set_named_info(infoobj)
+                info_obj.set_named_profile_fk(profile_fk)
+                print("Vor Insert Admin: ", info_obj)
+                mapper.insert_named_info(info_obj)
+
+        print("Named Info Object aus Admin: ", info_obj)
+        return info_obj
+
     def update_info_object(self, profile_fk, info_dict):
         """
         In dieser Methode ist die Logik beschrieben, damit ein bestehendes Profil aktualisiert wird.
@@ -349,13 +364,6 @@ class Administration(object):
 
 
     # Logik für Profil, did die Info-Objekte in
-
-    "Methoden für das Matchmaking"
-    "find profile id by key holt sich die profilid nach key"
-    def find_profile_id_by_key(self, key):
-        with ProfileMapper() as mapper:
-            return mapper.find_profile_id_by_key(key)
-
 
     "Chat-spezifische Methoden"
     """
@@ -503,18 +511,17 @@ class Administration(object):
                 #print('Admin.py: New Infoobj', new_infoobj.get_value())
             return new_infoobj
 
-    """Methode, die den Matchmakting ALgorithmus aufruft"""
+    """Spezifische Methoden für Profilevisits"""
 
-    def execute_matchmaking(self, searchprofile_id):
+    def get_profilevisits(self, key):
+        with ProfilevisitsMapper() as mapper:
+            return mapper.find_by_key(key)
 
-        m = Matchmaking()
-        m.get_searchprofile_id()
-        m.set_searchprofile_id(searchprofile_id),
-        m.get_all_profiles(),
-        m.genderfilter(),
-        m.agefilter(),
-        m.get_char_values(),
-        m.get_char_values_for_profiles(),
-        m.compare_text(),
-        m.calculate_similarity()
-        return m
+    def create_profilevisits(self, visitedprofile):
+        visitedprofile.set_id(1)
+
+        with ProfilevisitsMapper() as mapper:
+            mapper.insert(visitedprofile)
+
+
+

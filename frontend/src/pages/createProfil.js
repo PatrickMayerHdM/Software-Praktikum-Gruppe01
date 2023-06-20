@@ -23,13 +23,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
 import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
-import profile from "../components/Profile";
+import profile from "../components/Profile/Profile";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import NamedInfoObjectBO from "../api/NamedInfoObjectBO";
 
 
 
@@ -42,6 +43,7 @@ class CreateProfil extends Component {
             favoriteNote_id: 0,
             blockNote_id: 0,
             char_fk: 0,
+            char_id: 0,
             profile_fk: 0,
             firstName: null,
             lastName: null,
@@ -61,7 +63,6 @@ class CreateProfil extends Component {
             searchprofile_fk: null,
             income: null,
             favclub: null,
-            educationalstatuts: null,
             hobby: null,
             politicaltendency: null,
             aboutme: null,
@@ -78,7 +79,6 @@ class CreateProfil extends Component {
         this.handleChangeSelectedOption = this.handleChangeSelectedOption.bind(this);
         this.handleChangeSalary = this.handleChangeSalary.bind(this);
         this.handleChangeClub = this.handleChangeClub.bind(this);
-        this.handleChangeEducation = this.handleChangeEducation.bind(this);
         this.handleChangeHobbys = this.handleChangeHobbys.bind(this);
         this.handleChangePolitical = this.handleChangePolitical.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -156,9 +156,6 @@ class CreateProfil extends Component {
                 case 120:
                   selectedProperties.income = charValue;
                   break;
-                case 130:
-                  selectedProperties.educationalstatuts = charValue;
-                  break;
                 case 140:
                   selectedProperties.favclub = charValue;
                   break;
@@ -199,11 +196,7 @@ class CreateProfil extends Component {
       const newHobbys = event.target.value;
       this.setState({hobby: newHobbys})
     };
-    /** Event-Handler für die Änderung des Bildungsstatus */
-    handleChangeEducation(event) {
-      const newEdu = event.target.value;
-      this.setState({educationalstatuts: newEdu})
-    };
+
     /** Event-Handler für die Änderung den Lieblingsverein */
     handleChangeClub(event) {
       const newClub = event.target.value;
@@ -269,7 +262,6 @@ class CreateProfil extends Component {
             this.state.searchprofile_fk,
             this.state.income,
             this.state.favclub,
-            this.state.educationalstatuts,
             this.state.hobby,
             this.state.politicaltendency,
             this.state.aboutme
@@ -299,9 +291,26 @@ class CreateProfil extends Component {
         this.setState({showTextFields: true});
     };
 
-    handleInputChange = (event, field, index) => {
+    handleInputChange = (event, field) => {
+        this.setState({ [field]: event.target.value });
     };
     handleSaveInputs = () => {
+        const { char_name, char_desc, char_id } = this.state;
+        const newInfoBO = new NamedInfoObjectBO(
+            this.state.id,
+            this.props.user.uid,
+            this.state.searchprofile_id,
+            this.state.char_desc,
+            this.state.char_name,
+            this.state.char_id)
+
+        DatingSiteAPI.getAPI()
+            .createCharDescForProfile(newInfoBO)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
     };
 
     handleUpdate(event) {
@@ -320,9 +329,11 @@ class CreateProfil extends Component {
             this.state.lastName,
             this.state.religion,
             this.state.smoking,
+            this.state.minAge,
+            this.state.maxAge,
+            this.state.searchprofile_fk,
             this.state.income,
             this.state.favclub,
-            this.state.educationalstatuts,
             this.state.hobby,
             this.state.politicaltendency,
             this.state.aboutme)
@@ -355,7 +366,6 @@ class CreateProfil extends Component {
                 smoking: "",
                 income: "",
                 favclub: "",
-                educationalstatuts: "",
                 hobby: "",
                 politicaltendency: "",
                 aboutme: "",
@@ -428,7 +438,7 @@ class CreateProfil extends Component {
                 <FormControlLabel sx={{ width: '35%' }} value="1500" control={<Radio />} label="1500€" labelPlacement="bottom" />
                 <FormControlLabel sx={{ width: '35%' }} value="2000" control={<Radio />} label="2000€" labelPlacement="bottom" />
                 <FormControlLabel sx={{ width: '35%' }} value="3500" control={<Radio />} label="3500€" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value=">5000" control={<Radio />} label=">5000€" labelPlacement="bottom" />
+                <FormControlLabel sx={{ width: '35%' }} value="5000" control={<Radio />} label=">5000€" labelPlacement="bottom" />
                 <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
               </RadioGroup>
             </Box>
@@ -449,22 +459,6 @@ class CreateProfil extends Component {
                   maxLength: 17,
                 }}
               />
-            </Box>
-          </FormGroup>
-        );
-      } else if (selectedOption === "selectBildungsstatus") {
-        return (
-          <FormGroup row style={{ justifyContent: 'center' }}>
-            <Box sx={{ width: 400, margin: '0 auto' }}>
-              <FormLabel>Was für einen Bildungsabschluss hast du?</FormLabel>
-              {/** Buttons für die Auswahl des Bildungsstatus */}
-              <RadioGroup row value={this.state.educationalstatuts} onChange={this.handleChangeEducation}>
-                <FormControlLabel sx={{ width: '35%' }} value="Hauptschule" control={<Radio />} label="Hauptschule" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="Realschule" control={<Radio />} label="Realschule" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="Abitur" control={<Radio />} label="Abitur" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="Hochschulabschluss" control={<Radio />} label="Hochschulabschluss" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
-              </RadioGroup>
             </Box>
           </FormGroup>
         );
@@ -669,7 +663,7 @@ class CreateProfil extends Component {
                                         <TextField label="Eigenschaftsname" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Beschreibung" value={this.state.char_value} onChange={(event) => this.handleInputChange(event, 'char_value')} />
+                                        <TextField label="Beschreibung" value={this.state.char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
                                         <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
