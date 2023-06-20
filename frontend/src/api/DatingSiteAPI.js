@@ -8,6 +8,9 @@ import blockNoteBO from "./BlockNoteBO";
 import searchprofileBO from "./SearchprofileBO";
 import FavoriteNoteBO from '../api/FavoriteNoteBO';
 import matchmakingBO from "./MatchmakingBO";
+import NamedInfoObjectBO from "./NamedInfoObjectBO";
+import CharacteristicBO from "./CharacteristicBO";
+import profilevisitsBO from "./ProfilevisitsBO";
 
 export default class DatingSiteAPI {
 
@@ -116,7 +119,8 @@ export default class DatingSiteAPI {
     #updateProfileURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
-    #createCharForProfileURL = () => `${this.#datingServerBaseURL}/characteristics`;
+    #getCharNameURL = () => `${this.#datingServerBaseURL}/characteristic`;
+    #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
 
@@ -223,18 +227,18 @@ export default class DatingSiteAPI {
         });
     }
 
-    createCharForProfile(characteristic) {
-        return this.#fetchAdvanced(this.#createCharForProfileURL(), {
+    createCharDescForProfile(characteristic_desc_name) {
+        return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {
             method: "POST",
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': "application/json",
             },
-            body: JSON.stringify(characteristic)
+            body: JSON.stringify(characteristic_desc_name)
         }).then((responseJSON) => {
-            let createdCharForProfile = profileBO.fromJSON(responseJSON)[0];
+            let createdCharDescForProfile = NamedInfoObjectBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(createdCharForProfile);
+                resolve(createdCharDescForProfile);
             })
         })
     }
@@ -243,9 +247,18 @@ export default class DatingSiteAPI {
         return this.#fetchAdvanced(this.#getInfoObjectsURL(googleID))
             .then((responseJSON) => {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
-                console.log("responseJSON API Infoobjects Profil: ", responseJSON);
                 return new Promise(function (resolve) {
                     resolve(infoobjectBOs);
+                });
+            });
+    }
+
+    getPropertyNames(charID) {
+        return this.#fetchAdvanced(this.#getCharNameURL(charID))
+            .then((responseJSON) => {
+                let namedCharName = CharacteristicBO.fromJSON(responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(namedCharName);
                 });
             });
     }
@@ -268,7 +281,7 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (profileID) => `${this.#datingServerBaseURL}/${profileID}/newprofiles`; // bisher nur FakeBackEnd ausgeführt
+    #getNewProfilesByIdURL = (google_id) => `${this.#datingServerBaseURL}/search/newprofiles/${google_id}`;
     #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
     #removeSearchProfile = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
@@ -362,19 +375,6 @@ export default class DatingSiteAPI {
                 resolve(newinfoobjectBO);
             })
         })
-    }
-
-    getSearchMMpercentage(google_fk) {
-        return this.#fetchAdvanced(this.#getMMpercentageByIdURL(google_fk))
-            .then((responseJSON) => {
-                console.log("Das responseJSON")
-                console.log(responseJSON)
-                let newMMBO = matchmakingBO.fromJSON(responseJSON)[0];
-                return new Promise(function (resolve) {
-                    resolve(newMMBO);
-                })
-
-            })
     }
 
     /**
@@ -541,9 +541,22 @@ export default class DatingSiteAPI {
             })
 
     }
-    #getMMpercentageByIdURL = () => `${this.#datingServerBaseURL}//$`
+    #addprofilevisitsURL = () => `${this.#datingServerBaseURL}/visit`
 
-
-
+    addprofilevisits(profilevisits) {
+        return this.#fetchAdvanced(this.#addprofilevisitsURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(profilevisits)
+        }).then((responseJSON) => {
+            let newprofilevisitsBO = profilevisitsBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newprofilevisitsBO);
+            })
+        })
+    }
 }
 

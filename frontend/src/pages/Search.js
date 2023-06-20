@@ -2,9 +2,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import "../components/Profile.css";
+import "../components/Profile/Profile.css";
 import SearchIcon from '@mui/icons-material/Search';
-import ProfileBoxList from "../components/ProfileBoxList";
+import ProfileBoxList from "../components/Profile/ProfileBoxList";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import { Link } from "react-router-dom"
@@ -12,7 +12,7 @@ import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
-import SearchProfileBox from "../components/SearchProfileBox";
+import SearchProfileBox from "../components/Search/SearchProfileBox";
 import infoobjectBO from "../api/InfoObjectBO";
 
 /**
@@ -51,7 +51,7 @@ class Search extends React.Component{
 
 
 
-    // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
+    // Hier sollen später dann nur noch nicht bereits angesehen Profile nach Änhlichkeitsmaß angezeigt werden.
     NewProfiles(){
         console.log("Button nur noch neue Profile gedrückt")
         const { profile_id } = this.state; // Zugriff auf profile_id aus dem state
@@ -241,7 +241,7 @@ class Search extends React.Component{
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor:
-                    this.state.selectedProfileIndex === index ? "#8F3985" : "#30638E",
+                    this.state.selectedProfileIndex === index ? "#8F3985" : "#6A7285",
                   color: "#fff",
                   cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
                 }}
@@ -261,7 +261,6 @@ class Search extends React.Component{
     return (
 
       <div>
-        <h2> Suche Jetzt: </h2>
         <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
              <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={3} >
                  <Item sx={{ width: "100%"}}>
@@ -278,7 +277,7 @@ class Search extends React.Component{
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "center",
-                                      backgroundColor: "#587D71",
+                                      backgroundColor: "#374258",
                                       color: "#fff",
                                       cursor: "pointer",
                                       pointerEvents: clickable ? '' : 'none',
@@ -299,7 +298,7 @@ class Search extends React.Component{
                                           display: "flex",
                                           alignItems: "center",
                                           justifyContent: "center",
-                                          backgroundColor: "#6665DD",
+                                          backgroundColor: "#374258",
                                           color: "#fff",
                                           cursor: "pointer"}}>
                                             <AddIcon/>
@@ -318,7 +317,7 @@ class Search extends React.Component{
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "center",
-                                      backgroundColor: "#8F3985",
+                                      backgroundColor: "#374258",
                                       color: "#fff",
                                       cursor: "pointer",
                                       margin: "auto",
@@ -340,7 +339,7 @@ class Search extends React.Component{
                                           display: "flex",
                                           alignItems: "center",
                                           justifyContent: "center",
-                                          backgroundColor: "#ef7714",
+                                          backgroundColor: "#374258",
                                           color: "#fff",
                                           cursor: "pointer"
                                         }}
@@ -361,7 +360,7 @@ class Search extends React.Component{
                                           display: "flex",
                                           alignItems: "center",
                                           justifyContent: "center",
-                                          backgroundColor: "#d00000",
+                                          backgroundColor: "#374258",
                                           color: "#fff",
                                           cursor: "pointer",
                                           pointerEvents: clickable ? '' : 'none',

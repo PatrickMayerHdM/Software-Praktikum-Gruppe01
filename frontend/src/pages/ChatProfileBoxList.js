@@ -1,7 +1,7 @@
 import Item from "../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import ChatProfileBox from "./ChatProfileBox";
+import ChatProfileBox from "../components/Chat/ChatProfileBox";
 import React from "react";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 
@@ -61,7 +61,7 @@ class ChatProfileBoxList extends React.Component{
 
         return (
             <div>
-                <h2>Liste der Chats:</h2>
+                <h2>Deine Chats:</h2>
 
                 {Listing.length > 0 ? (
                     <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'}, margin: '0 auto'}} >

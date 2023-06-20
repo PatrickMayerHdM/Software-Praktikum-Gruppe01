@@ -15,7 +15,9 @@ from server.bo.Characteristic import Characteristics
 from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
-from server.bo.Matchmaking import Matchmaking
+from server.bo.namedInfoObject import NamedInfoObject
+from server.bo.Profilevisits import Profilevisits
+from server.db.ProfilevisitsMapper import ProfilevisitsMapper
 from server.db.MatchmakingMapper import MatchmakingMapper
 
 class Administration(object):
@@ -252,13 +254,12 @@ class Administration(object):
         with CharMapper() as mapper:
             return mapper.find_by_key(key)
 
-    def create_char(self, char_name, char_typ):
-        c = Characteristics()
-        c.set_characteristic(char_name)
-        c.set_characteristic_typ(char_typ)
+    def create_char(self, named_char_name):
+        c = NamedInfoObject()
+        c.set_named_char(named_char_name)
         c.set_id(1)
         with CharMapper() as mapper:
-            return mapper.insert(c)
+            return mapper.insert_named_char(c)
 
     def save_char(self, char):
         with CharMapper() as mapper:
@@ -307,6 +308,21 @@ class Administration(object):
                         mapper.insert(info_obj)
                     else:
                         print(f'Ungültiger Key: {key}')
+
+    def create_named_info_object(self, profile_fk, infoobj, char_name):
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                print("Create Named Info Object: ", profile_fk, infoobj, char_name)
+                info_obj = NamedInfoObject()
+                info_obj.set_id(1)
+                info_obj.set_named_char_id(char_mapper.find_key_by_char_name(char_name))
+                info_obj.set_named_info(infoobj)
+                info_obj.set_named_profile_fk(profile_fk)
+                print("Vor Insert Admin: ", info_obj)
+                mapper.insert_named_info(info_obj)
+
+        print("Named Info Object aus Admin: ", info_obj)
+        return info_obj
 
     def update_info_object(self, profile_fk, info_dict):
         """
@@ -496,20 +512,305 @@ class Administration(object):
                 #print('Admin.py: New Infoobj', new_infoobj.get_value())
             return new_infoobj
 
-        """Methode, die den Matchmakting Algorithmus aufruft"""
+    """Spezifische Methoden für Profilevisits"""
 
-    def execute_matchmaking(self, searchprofile_id):
+    def get_profilevisits(self, key):
+        with ProfilevisitsMapper() as mapper:
+            return mapper.find_by_key(key)
 
-        m = Matchmaking()
-        m.get_searchprofile_id()
-        m.set_searchprofile_id(searchprofile_id),
-        m.get_all_profiles(),
-        m.genderfilter(),
-        m.agefilter(),
-        m.get_char_values(),
-        m.get_char_values_for_profiles(),
-        m.compare_text(),
-        m.calculate_similarity()
-        return m
+    def create_profilevisits(self, visitedprofile):
+        visitedprofile.set_id(1)
 
+        with ProfilevisitsMapper() as mapper:
+            mapper.insert(visitedprofile)
+
+    """ Matching Methode """
+
+    def execute_matchmaking(self, searchprof):
+        """ Diese Methode stellt die Ausführung des Algorithmus dar, um potenzielle Partner auf der Plattform zu finden. """
+
+        searchprofile = searchprof  # Searchprofile ist das Dict mit ID und Char-Values
+        print('Suchprofil: ', searchprofile)
+        result = []  # Ergebnisliste, die später übergeben werden soll. Ähnlichkeit: [['zQokAwj2tchqk4dkovLVvqCmzWp2', 11]]
+        gid_list = []  # Alle Google IDs der Plattform
+        gender_filtered_list = []
+        age_filtered_list = []
+        similarity_list = []
+
+        print('Hier in der Methode Matchmaking angekommen')
+
+        with ProfileMapper() as prof_mapper:
+            profiles = prof_mapper.find_all()  # Hole alle Profile aus der Datenbank
+            for gid in profiles:
+                # print('GID:', gid)
+                # print('GID GoogleID:', gid.get_google_fk())
+                gid_list.append(gid.get_google_fk())  # Füge der gid_list alle google_fk´s zu.
+
+        for elem in gid_list:
+            with InfoObjectMapper() as info_mapper:
+                info_obj = info_mapper.find_by_key(elem)  # Findet alle Infoobjekte eines Profils
+                # print('InfoObj einer Google ID aus der gid_list:', info_obj)
+                char_values = {}  # Erzeuge ein leeres Dict
+                # print('Char_values dict:', char_values)
+
+            for i in info_obj:
+                char_id = i.get_char_fk()  # Setzt den Eigenschafts-Foreign Key eines Infoobjektes
+                # print('Char ForeignKey:', char_id)
+                char_value = i.get_value()  # Setzt den "Value" einer Eigenschaft.
+                # print('das ist der Value:', char_value)
+                char_values[char_id] = char_value  # fügt dem char_values Dict das Element hinzu. (z.B. 20:'Wunderlich')
+                # print('Das Dict:', char_values)
+
+            # Gender Filter: Überprüft ob das Geschlecht dem gesuchten Geschlecht entspricht
+            if 40 in char_values:
+                search_gender = searchprofile['Char Values'].get(40)  # Gesuchte Geschlecht des Suchprofils
+                # print('searchgender:', search_gender)
+                profile_gender = char_values[40]  # Geschlecht des Profils
+                # print('profile gender:', profile_gender)
+
+                if search_gender is not None and profile_gender is not None and search_gender == profile_gender:
+                    profile = {
+                        'Profile ID': elem,
+                        'Char Values': char_values,
+                    }
+                    gender_filtered_list.append(
+                        profile)  # Füge das Profil inkl. Infoobjekte der ersten "filter-list" hinzu.
+                    # print('Profil hinzugefügt', char_values)
+        # print('Gender_Filtered list: Anzahl sollte 2 betragen:', gender_filtered_list)
+
+        # Age Filter: Soll das gewünschte Alter der gesuchten Person ermitteln und nur Kandidaten in dieser Spanne zur Suche hinzufügen
+        if 110 in searchprofile['Char Values'] and 120 in searchprofile['Char Values']:
+            min_age = searchprofile['Char Values'][110]
+            # print('searchprofile min_age',min_age)
+            max_age = searchprofile['Char Values'][120]
+            # print('searchprofile max_age', max_age)
+
+            for profile in gender_filtered_list:  # jedes Profil aus der Liste holen
+                # print('Das iteriende Profil:', profile)
+                if 'Char Values' in profile:
+                    char_values = profile['Char Values']
+                    if 30 in char_values:  # Prüfe den Value mit dem Key 30
+                        age = char_values[30]
+                        # print(type(age))
+                        # print('age', age)
+                        calculated_age = self.agefilter(age)  # Berechne das Alter anhand des Geburtstages
+                        # print('berechnetes Alter', calculated_age)
+
+                        if calculated_age is not None:
+                            if min_age <= calculated_age <= max_age:  # Abfrage ob das berechnete Alter in der Suchrange liegt
+                                # print('Dieses Profil wird der Liste hinzugefügt:', profile)
+                                age_filtered_list.append(profile)
+                                print('age_filtered_list sollte nur 1 profil haben', len(age_filtered_list))
+                                print('age_filtered_list: ', age_filtered_list)
+
+        # Jetzt finden die Berechnungen statt. Dabei wird das Suchprofil mit den Profilen in der age-filtered-list abgeglichen
+        # Zuerst wird der Text bzw. der Wert verglichen dafür wird die Methode compare text aufgerufen
+        for prof in age_filtered_list:
+            score = 0  # Anfangswert des Scores. Der Score wird bei Compare Text genutzt
+            total_checked_elem = 0
+            # Vergleich der Religion zwischen Such- und Userprofil
+            if 60 in searchprofile['Char Values'] and 60 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][60], prof['Char Values'][60])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Religion', compare_text)
+                print('Gesamtscore', score)
+
+            # Vergleich der Haarfarbe
+            if 70 in searchprofile['Char Values'] and 70 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][70], prof['Char Values'][70])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Haarfarbe', compare_text)
+                print('Gesamtscore nach Durchlauf 2:', score)
+
+            # Vergleich des Raucherstatus zwischen Such- und Userprofil
+            if 80 in searchprofile['Char Values'] and 80 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][80], prof['Char Values'][80])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Raucherstatus', compare_text)
+                print('Gesamtscore:', score)
+
+            # Vergleich der Interessen zwischen Such- und Userprofil
+            if 90 in searchprofile['Char Values'] and 90 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][90])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Interessen', compare_text)
+                print('Gesamtscore:', score)
+
+            # Vergleich des höchsten Bildungsabschlusses zwischen Such- und Userprofil
+            if 130 in searchprofile['Char Values'] and 130 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][130], prof['Char Values'][130])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Bildung', compare_text)
+                print('Gesamtscore:', score)
+
+            # Vergleich des lieblings Sportvereins zwischen Such- und Userprofil
+            if 140 in searchprofile['Char Values'] and 140 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][140], prof['Char Values'][140])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Sportverein', compare_text)
+                print('Gesamtscore:', score)
+
+            # Vergleich des Hobby´s zwischen Such- und Userprofil
+            if 150 in searchprofile['Char Values'] and 150 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][150], prof['Char Values'][150])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Hobby', compare_text)
+                print('Gesamtscore:', score)
+
+            # Vergleich der politischen Einstellung zwischen Such- und Userprofil
+            if 160 in searchprofile['Char Values'] and 160 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                compare_text = self.compare_text(searchprofile['Char Values'][160], prof['Char Values'][160])
+                if compare_text == 1:
+                    score += 1
+                print('Compared Text: Politik', compare_text)
+                print('Gesamtscore:', score)
+
+            # Hier fehlt noch der Scorewert vergleich von der Körpergörße
+            if 50 in searchprofile['Char Values'] and 50 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                print('Check Height')
+                search_value = searchprofile['Char Values'][50]  # small, mean, large
+                print('gesuchte größe', search_value)
+                userprof = int(prof['Char Values'][50])  # integer 190 für 190cm
+                print('Userprofil height', userprof)
+
+                if search_value == 'small':
+                    if userprof < 160:
+                        score += 1
+                        print('Small Match:', score)
+                    else:
+                        continue
+
+                elif search_value == 'mean':
+                    if userprof >= 160 and userprof <= 180:
+                        score += 1
+                        print('mean Match:', score)
+                    else:
+                        continue
+
+                elif search_value == 'large':
+                    if userprof > 180:
+                        score += 1
+                        print('large Match:', score)
+                    else:
+                        continue
+                else:
+                    pass
+
+            # Scorewert Berechnung des Einkommens
+            if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
+                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                print('Income Block')
+                search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
+                print('gesuchtes Einkommen', search_value)
+                userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
+                print('Einkommen des Userprofils:', userprof)
+
+                if userprof >= search_value:
+                    score += 1
+                    print('Einkommen Match +1:', score)
+
+                else:
+                    continue
+
+            # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
+            # Noch nicht getestet
+            for key in prof['Char Values']:
+                if key >= 161:
+                    compare_text = self.compare_text(searchprofile['Char Values'][key], prof['Char Values'][key])
+                    if compare_text == 1:
+                        score += 1
+                        total_checked_elem += 1
+
+            # Berechnung des Match-Wertes in Prozent
+            print('Total_checked_elem:', total_checked_elem)
+            matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
+            print('Matching Instanz:', matching_value)
+            result.append([prof['Profile ID'], matching_value])
+
+        print('Ergebnisliste (Result):', result)
+        return result
+
+    def get_char_values(self, profile_id):
+        # Methode sollte gelöscht werden können
+        """Diese Methode holt sich die char_values je profil und speichert diese in einem Dictionary"""
+
+        with MatchmakingMapper() as mapper:
+            info_objects = mapper.find_info_by_profile(profile_id)
+            char_values = {}
+
+        for info_obj in info_objects:
+            char_id = info_obj.get_char_fk()
+            char_value = info_obj.get_value()
+            char_values[char_id] = char_value
+
+        return char_values
+
+    def get_char_values_for_profiles(self, profile_id):
+        """Diese Methode gibt ein Dictionary mit einer gegebenen Profile ID und deren Char Values zurück"""
+        char_values = self.get_char_values(profile_id)
+
+        profile = {
+            "Profile ID": profile_id,
+            "Char Values": char_values
+        }
+        return profile
+
+    def get_char_values_for_searchprofile(self, searchprofile):
+        """ Diese Methode gibt ein Dictionary mit einer gegebenen Suchprofil ID und deren Char Values zurück """
+        with SearchProfileMapper as mapper:
+            char_values = mapper.find_by_searchprofile(searchprofile)
+
+        searchprof = {
+            "Searchprofile ID": searchprofile,
+            "Char Values": char_values
+        }
+        return searchprof
+
+    def compare_text(self, text1, text2):
+        """Diese Methode vergleicht den Freitext zweier InfoObjects miteinander."""
+
+        # Um zu verhindern, dass das Programm abstürzt wenn bei der Prüfung ein "None"-Wet übergeben wird.
+        if text1 is None or text2 is None:
+            return 0  # Dann wird kein "Score" vergeben
+
+        """Trennen der Freitexte in kleingeschriebene, einzelne Wörter."""
+        words1 = set(text1.lower().split())
+        words2 = set(text2.lower().split())
+
+        """Anzahl der gemeinsamen Wörter berechnen."""
+        num_words = len(words1.intersection(words2))
+
+        """Anzahl der Wörter, die nicht gemeinsam sind berechnen."""
+        opp_num_words = len(words1) + len(words2) - num_words
+
+        """Der Vergleich der gemeinsamen und nicht gemeinsamen Wörter wird in der Variablen comparation gespeichert."""
+        comparation = round(num_words / opp_num_words, 2)
+        return comparation
+
+    def agefilter(self, age_str):
+        """
+        Diese Methode berechnet das Alters eines Userprofils. Die Eingabe age_str ist dabei nur das Datum eines Profils.
+        Diese Methode ist die abgewandelte Version der "calculate_age" Methode für Infoobjekte und soll ausschließlich
+        für den Algorithmus (Matchmaking) genutzt werden.
+        """
+        birthdate = datetime.fromisoformat(age_str[:-1])  # das "z" entfernen
+        curr_date = datetime.now()
+        age = curr_date.year - birthdate.year
+        return age
 

@@ -32,7 +32,7 @@ class FavoriteNoteMapper(mapper):
     def find_by_adding_user(self, adding_id):
         result = []
         cursor = self._connection.cursor()
-        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}'"
+        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}' AND added_id NOT IN (SELECT blocked_id FROM main.Blocknote WHERE blocking_id='{adding_id}') AND added_id NOT IN (SELECT blocking_id FROM main.Blocknote WHERE blocked_id='{adding_id}')"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -75,19 +75,24 @@ class FavoriteNoteMapper(mapper):
 
     def insert(self, favoritenote):
         cursor = self._connection.cursor()
-        cursor.execute("SELECT MAX(favoritenote_id) AS maxid FROM main.Favoritenote")
-        tuples = cursor.fetchall()
-
-        for (maxid) in tuples:
-            if maxid[0] is not None:
-                favoritenote.set_id(maxid[0] + 1)
-
-        command = "INSERT INTO main.Favoritenote (favoritenote_id, adding_id, added_id) VALUES (%s, %s, %s)"
-        data = (favoritenote.get_id(),
-                favoritenote.get_adding_id(),
-                favoritenote.get_added_id())
-
+        command = "SELECT favoritenote_id FROM main.Favoritenote WHERE adding_id = %s AND added_id = %s"
+        data = (favoritenote.get_adding_id(), favoritenote.get_added_id())
         cursor.execute(command, data)
+        """ Abfrage, ob bereits ein Eintrag für genau diese adding_id und added_id existiert. """
+        existing_id = cursor.fetchone()
+
+        if existing_id is None:
+            """ Falls ein Profil noch nicht zum Merkzettel hinzugefügt wurde. """
+            cursor.execute("SELECT MAX(favoritenote_id) AS maxid FROM main.Favoritenote")
+            tuples = cursor.fetchall()
+
+            for (maxid,) in tuples:
+                if maxid is not None:
+                    favoritenote.set_id(maxid + 1)
+
+            insert_command = "INSERT INTO main.Favoritenote (favoritenote_id, adding_id, added_id) VALUES (%s, %s, %s)"
+            insert_data = (favoritenote.get_id(), favoritenote.get_adding_id(), favoritenote.get_added_id())
+            cursor.execute(insert_command, insert_data)
 
         self._connection.commit()
         cursor.close()

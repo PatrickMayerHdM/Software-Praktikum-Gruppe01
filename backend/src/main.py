@@ -17,6 +17,8 @@ from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
 from server.bo.BusinessObject import BusinessObject
 from server.bo.SearchProfile import SearchProfile
+from server.bo.namedInfoObject import NamedInfoObject
+from server.bo.Profilevisits import Profilevisits
 
 #SecurityDecorator übernimmt die Authentifikation
 from SecurityDecorator import secured
@@ -74,6 +76,14 @@ infoobject = api.inherit('InfoObject', bo, {
     'searchprofile_id': fields.Integer(attribute='searchprofile_id', description='Suchprofil eines Users'),
 })
 
+namedinfoobject = api.inherit('NamedInfoObjects', bo, {
+    'profile_fk': fields.String(attribute='profile_fk', description=' Google ID des Users'),
+    'searchprofile_id': fields.Integer(attribute='searchprofile_id', description=' Suchprofil ID eines Users'),
+    'char_id': fields.String(attribute='char_id', description='Char ID '),
+    'char_name': fields.Integer(attribute='named_char_name', description=' Char_Name eines Users'),
+    'char_desc': fields.Integer(attribute='named_char_desc', description=' Char Desc eines Users')
+})
+
 chat = api.inherit('Chat', bo, {
     'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht'),
     'profile_id': fields.Integer(attribute='_profile_id', description='Unique Id eines Profils')
@@ -92,6 +102,11 @@ blocknote = api.inherit('BlockNote', bo, {
 
 searchprofile = api.inherit('SearchProfile', bo, {
     'google_id': fields.String(attribute='google_id', description='Google_ID eines SuchProfils')
+})
+
+profilevisits = api.inherit('Profilevisits', bo, {
+    'mainprofile_id': fields.String(attribute='mainprofile_id', description='Das Profil der Person, welche jemanden besucht'),
+    'visitedprofile_id': fields.String(attribute='visitedprofile_id', description='Das Profil der besuchten Person'),
 })
 
 matchmaking = api.inherit('Matchmaking', bo, {
@@ -615,26 +630,99 @@ class SearchprofileListOperations(Resource):
         searchprofiles = adm.get_all_searchprofile()
         return searchprofiles
 
+@datingapp.route('/namedinfoobjects')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedInfoObjectListOperations(Resource):
+    @datingapp.marshal_with(namedinfoobject, code=200)
+    @datingapp.expect(namedinfoobject)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+        adm = Administration()
+        print('Post-Method Infoobject:', api.payload)
+
+        proposal = NamedInfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.create_char(
+                proposal.get_named_char_name()
+            )
+
+            infoobj = adm.create_named_info_object(
+                proposal.get_named_profile_fk(),
+                proposal.get_named_info_name(),
+                proposal.get_named_char_name()
+            )
+
+            respone = {charobj, infoobj}
+            print("Post NamednfoBO: ", respone)
+            return respone, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/characteristic')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedCharacteristicsOperations(Resource):
+    @datingapp.marshal_with(characteristic, code=200)
+    @datingapp.expect(characteristic)
+    @secured
+    def get(self):
+
+        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+
+        adm = Administration()
+        print('GET-Method Char:', api.payload)
+
+        proposal = Characteristics.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.get_char_by_key(
+                proposal.get_characteristic_name(),
+            )
+
+            print("Char ID Main: ", charobj)
+            return charobj, 200
+        else:
+            return 'CharObj_Operations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/visit')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+class ProfileVisitsOperations(Resource):
+    @datingapp.doc("Create new visit")
+    @datingapp.expect(profilevisits)
+    # @secured
+
+    def post(self):
+        adm = Administration()
+        proposal = Profilevisits.from_dict(api.payload)
+
+        if proposal is not None:
+            result = adm.create_profilevisits(proposal)
+            return result, 200
+        else:
+            return '', 500
+
 """ Handling, um das Matchmaking aufzurufen. """
 
-@datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
+@datingapp.route('/Search/Search/Matchmaking/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
-@datingapp.param('searchprofile_id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class MatchingOperations(Resource):
 
     @datingapp.marshal_with(matchmaking)
     @secured
     def get(self, searchprofile_id):
+        print('Main.Py übergebene Searchprofile_id:', searchprofile_id)
 
         adm = Administration()
-        match = adm.execute_matchmaking(searchprofile_id)
+        searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
 
-        if match is not None:
-            return match
+        profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
+
+        if profiles is not None:
+            return profiles
         else:
             return 500
-
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

@@ -2,31 +2,33 @@ import { Component } from "react";
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
-import {Avatar, Container, Menu, MenuItem} from '@mui/material';
+import {Avatar, Container, css, Menu, MenuItem} from '@mui/material';
 import Item from "./theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LogIn from "./pages/LogIn";
-import BlockProfileBox from "./components/BlockProfileBox";
-import FavoriteProfileBox from "./components/FavoriteProfileBox";
-import ChatProfileBox from "./components/ChatProfileBox";
-import Profile from "./components/Profile";
-import OptionsOtherProfile from "./components/OptionsOtherProfile";
-import OptionsOwnProfile from "./components/OptionsOwnProfile";
-import ChatWindow from "./components/ChatWindow";
-import ProfileBox from "./components/ProfileBox";
-import ProfileBoxList from "./components/ProfileBoxList";
+import BlockProfileBox from "./components/Blocknote/BlockProfileBox";
+import FavoriteProfileBox from "./components/Favoritenote/FavoriteProfileBox";
+import ChatProfileBox from "./components/Chat/ChatProfileBox";
+import Profile from "./components/Profile/Profile";
+import OptionsOtherProfile from "./components/Profile/OptionsOtherProfile";
+import OptionsOwnProfile from "./components/Profile/OptionsOwnProfile";
+import ChatWindow from "./pages/ChatWindow";
+import ProfileBox from "./components/Profile/ProfileBox";
+import ProfileBoxList from "./components/Profile/ProfileBoxList";
 import CreateProfil, { checkProfilExc } from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import "./components/App.css"
 import * as React from "react";
 import {BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import FavoriteProfileBoxList from "./components/FavoriteProfileBoxList";
-import BlockProfileBoxList from "./components/BlockProfileBoxList";
-import ChatProfileBoxList from "./components/ChatProfileBoxList";
-import SearchProfile from "./components/SearchProfile";
+import FavoriteProfileBoxList from "./pages/FavoriteProfileBoxList";
+import BlockProfileBoxList from "./pages/BlockProfileBoxList";
+import ChatProfileBoxList from "./pages/ChatProfileBoxList";
+import SearchProfile from "./components/Search/SearchProfile";
 import Search from "./pages/Search";
 /** Definition der App-Komponente */
 
@@ -171,7 +173,8 @@ class App extends Component {
     }
 
     return (
-        <div>
+        <div className="app">
+          <div className="content">
             {this.state.currentUser && /** Wenn der Benutzer angemeldet ist */
                 <div>
                   <div style={{display: 'flex', alignItems: 'center'}} className="avatarNavbarContainer">
@@ -212,6 +215,8 @@ class App extends Component {
                     </Route>
                 </Routes>
             </Router>
+          </div>
+          <Footer/>
         </div>
     );
   }

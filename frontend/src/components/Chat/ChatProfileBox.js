@@ -1,11 +1,11 @@
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import ProfileBox from "./ProfileBox";
+import ProfileBox from "../Profile/ProfileBox";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import {Link} from "react-router-dom";
-import ChatWindow from "./ChatWindow";
+import ChatWindow from "../../pages/ChatWindow";
 
 class ChatProfileBox extends React.Component{
 
@@ -24,13 +24,13 @@ class ChatProfileBox extends React.Component{
                 <Grid item xs={10} spacing={2} >
                   <Item>
                       {/*Profilbox der anderen Person*/}
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.props.current_profile}/>
                   </Item >
                 </Grid >
                     <Grid item item xs={2} >
                     {/*Verlinkung zum ChatWindow mit der anderen Person    */}
                     <Link to={`/ChatWindow/${this.props.current_profile}/${this.props.other_profile}`}>
-                        <button onClick={this.newChat} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2A9D8F", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                        <button onClick={this.newChat} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#6A7285", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                             <ChatBubbleIcon/>
                         </button>
                     </Link>

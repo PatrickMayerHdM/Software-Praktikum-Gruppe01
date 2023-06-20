@@ -25,13 +25,12 @@ export default class infoobjectBO extends BusinessObject {
      * @param {*} amaxAge
      * @param {*} aincome
      * @param {*} afavclub
-     * @param {*} aeducationalstatus
      * @param {*} ahobby
      * @param {*} apoliticaltendency
      * @param {*} aaboutme
      * */
 
-    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge, asearchprofile_fk, aincome, afavclub, aeducationalstatus, ahobby, apoliticaltendency, aaboutme) {
+    constructor(aprofile_fk, achar_fk, avalue,asearchprofile_id, aage, afirstName, agender, ahair,aheight, alastName, areligion, asmoking, aminAge, amaxAge, asearchprofile_fk, aincome, afavclub, ahobby, apoliticaltendency, aaboutme) {
     super();
     this.profile_fk = aprofile_fk;
     this.char_fk = achar_fk;
@@ -51,7 +50,6 @@ export default class infoobjectBO extends BusinessObject {
     this.searchprofile_fk = asearchprofile_fk;
     this.income = aincome;
     this.favclub = afavclub;
-    this.educationalstatuts = aeducationalstatus;
     this.hobby = ahobby;
     this.politicaltendency = apoliticaltendency;
     this.aboutme = aaboutme;
@@ -205,14 +203,6 @@ export default class infoobjectBO extends BusinessObject {
         return this.favclub;
     }
 
-    set_educationalstatuts(aeducationalstatus) {
-        this.educationalstatuts = aeducationalstatus;
-    }
-
-    get_educationalstatuts() {
-        return this.educationalstatuts;
-    }
-
     set_hobby(ahobby) {
         this.hobby = ahobby;
     }
@@ -250,7 +240,6 @@ export default class infoobjectBO extends BusinessObject {
                 Object.setPrototypeOf(i, infoobjectBO.prototype);
                 result.push(i);
             }
-            console.log("Parsed infoobject:", result);
             return result;
     }
 }
