@@ -533,9 +533,8 @@ class Administration(object):
         print('Suchprofil: ', searchprofile)
         result = []  # Ergebnisliste, die später übergeben werden soll. Ähnlichkeit: [['zQokAwj2tchqk4dkovLVvqCmzWp2', 11]]
         gid_list = []  # Alle Google IDs der Plattform
-        gender_filtered_list = []
-        age_filtered_list = []
-        similarity_list = []
+        gender_filtered_list = [] # Alle Profile, die dem gesuchten Geschlecht entsprechen
+        age_filtered_list = [] # Alle Profile, die in der gesuchten Altersrange liegen
 
         print('Hier in der Methode Matchmaking angekommen')
 
@@ -545,6 +544,23 @@ class Administration(object):
                 # print('GID:', gid)
                 # print('GID GoogleID:', gid.get_google_fk())
                 gid_list.append(gid.get_google_fk())  # Füge der gid_list alle google_fk´s zu.
+
+        # Überprüfung, ob sich eine gefundene Google-ID in der Blockierliste befindet.
+        with SearchProfileMapper() as searchprof_mapper:
+            search_google_id = searchprof_mapper.find_gid_by_searchid(searchprofile['Profile ID'])
+            print('Google ID des Searchprofiles:' ,search_google_id)
+            with BlockNoteMapper() as block_mapper:
+                blocked_profiles = block_mapper.find_by_blocking_user(search_google_id) #finde alle blockierten profile
+                for googleid in blocked_profiles: # suche nach den googleid´s
+                    print('Das ist id die blocked_id:', googleid.get_blocked_id())
+                    blocked_id = googleid.get_blocked_id()
+                    if blocked_id in gid_list:
+                        print('Entferntes Profil aus GID_List', blocked_id)
+                        print('Das ist die GID List bevor die Blockierten Profile weg fallen:', gid_list)
+                        gid_list.remove(blocked_id) # entferne alle blockierten profile
+                        print('Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
+
+
 
         for elem in gid_list:
             with InfoObjectMapper() as info_mapper:
