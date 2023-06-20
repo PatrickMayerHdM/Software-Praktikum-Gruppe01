@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
@@ -394,6 +396,7 @@ class InfoObjectListOperations(Resource):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
         print('Post-Method Infoobject:', api.payload)
+        time.sleep(3)
 
         proposal = InfoObject.from_dict(api.payload)
 

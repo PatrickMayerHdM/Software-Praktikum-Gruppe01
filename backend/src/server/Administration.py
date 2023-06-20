@@ -202,6 +202,7 @@ class Administration(object):
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
     def create_profile(self, favoritenote_id, blocknote_id, google_fk):
+        self.create_char_list()
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
@@ -245,7 +246,37 @@ class Administration(object):
     #         return mapper.find_by_account_id(account_id)
 
     # Hier wird die Logik für das Characteristic auf Basis der Mapper realisiert
+    def create_char_list(self):
+        with CharMapper() as mapper:
+            chars = mapper.find_all()
+            if chars:
+                return chars
 
+            characteristics_list = [
+                (10, "firstName"),
+                (20, "lastName"),
+                (30, "age"),
+                (40, "gender"),
+                (50, "height"),
+                (60, "religion"),
+                (70, "hair"),
+                (80, "smoking"),
+                (90, "Über Mich"),
+                (100, "minAge"),
+                (110, "maxAge"),
+                (120, "income"),
+                (130, "educationalstatus"),
+                (140, "favclub"),
+                (150, "hobby"),
+                (160, "politicaltendency")
+            ]
+
+            for char_id, char_name in characteristics_list:
+                char = Characteristics()
+                char.set_id(char_id)
+                char.set_characteristic(char_name)
+                with CharMapper() as mapper:
+                    mapper.insert(char)
     def get_all_char(self):
         with CharMapper() as mapper:
             return mapper.find_all()

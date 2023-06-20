@@ -79,7 +79,10 @@ class CharMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            char.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                char.set_id(maxid[0] + 10)
+            else:
+                char.set_id(10)
 
         command = 'INSERT INTO main.Characteristic (char_id, char_name) VALUES (%s, %s)'
 
