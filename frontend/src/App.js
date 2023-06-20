@@ -2,7 +2,7 @@ import { Component } from "react";
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
-import {Avatar, Container, Menu, MenuItem} from '@mui/material';
+import {Avatar, Container, css, Menu, MenuItem} from '@mui/material';
 import Item from "./theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -19,6 +19,8 @@ import ProfileBoxList from "./components/Profile/ProfileBoxList";
 import CreateProfil, { checkProfilExc } from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
+import Footer from "./components/Footer";
+import "./components/App.css"
 import * as React from "react";
 import {BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
@@ -171,7 +173,8 @@ class App extends Component {
     }
 
     return (
-        <div>
+        <div className="app">
+          <div className="content">
             {this.state.currentUser && /** Wenn der Benutzer angemeldet ist */
                 <div>
                   <div style={{display: 'flex', alignItems: 'center'}} className="avatarNavbarContainer">
@@ -212,6 +215,8 @@ class App extends Component {
                     </Route>
                 </Routes>
             </Router>
+          </div>
+          <Footer/>
         </div>
     );
   }

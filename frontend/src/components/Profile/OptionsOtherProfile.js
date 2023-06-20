@@ -6,6 +6,7 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import favoriteNoteBO from "../../api/FavoriteNoteBO";
 import DatingSiteAPI from "../../api/DatingSiteAPI";
 import blockNoteBO from "../../api/BlockNoteBO";
+import "../App.css";
 
 /** Da sich die gestaltung der Profil komponente nicht unterscheidet, ob es das eigene Profil oder ein Profil einer
  * anderen Person ist, werden die spezifischen Funktionen in einem extra Komponenten behandelt.
@@ -86,12 +87,12 @@ class OptionsOtherProfile extends React.Component{
           <Grid container
             direction="row" justifyContent="center" alignItems="strech" >
             <Grid item md={4} xs={6} spacing={2} >
-                <button onClick={this.PersonSaved} style={{ height: "200%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2ec43d", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                <button className="button_container" onClick={this.PersonSaved} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#6A7285", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BookmarkAddedIcon/>
                 </button>
             </Grid>
             <Grid item md={4} xs={6} spacing={2}>
-               <button onClick={this.PersonBlocked} style={{ height: "200%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#e63946", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+               <button className="button_container" onClick={this.PersonBlocked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#EE6457", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BlockIcon/>
                </button>
             </Grid>

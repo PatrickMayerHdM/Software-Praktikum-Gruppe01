@@ -641,7 +641,7 @@ class CreateProfil extends Component {
 
                          */}
                         <Item>
-                            <FormGroup row style={{justifyContent: 'center'}}>
+                            <FormGroup row style={{justifyContent: 'center', backgroundColor: 'red'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
                                     {/**
 
@@ -651,7 +651,7 @@ class CreateProfil extends Component {
                                 </Box>
                             </FormGroup>
                         </Item>
-                        {/** Wenn ein Proifl vorhanden ist sollen die Buttons Eigenschaft/Löschen/Update angezeigt werden */}
+                        {/** Wenn ein Profil vorhanden ist, sollen die Buttons Eigenschaft/Löschen/Update angezeigt werden */}
                         {profileExists && (
                         <Item>
                             <FormGroup row style={{ justifyContent: 'center' }}>
