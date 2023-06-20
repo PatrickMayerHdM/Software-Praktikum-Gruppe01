@@ -97,8 +97,10 @@ class CreateProfil extends Component {
         this.handleDeleteReligion = this.handleDeleteReligion.bind(this);
         this.handleDeleteHair = this.handleDeleteHair.bind(this);
         this.handleDeletesmoking = this.handleDeletesmoking.bind(this);
-
-
+        this.handleDeleteSalary = this.handleDeleteSalary.bind(this);
+        this.handleDeleteClub = this.handleDeleteClub.bind(this);
+        this.handleDeleteHobbys = this.handleDeleteHobbys.bind(this);
+        this.handleDeletePolitical = this.handleDeletePolitical.bind(this);
     };
 
     /** Abfrage ob ein Profil bereits vorhanden ist oder nicht*/
@@ -203,10 +205,19 @@ class CreateProfil extends Component {
         const newPolitical = event.target.value;
         this.setState({politicaltendency: newPolitical})
     };
+
+    handleDeletePolitical = () => {
+        this.setState({ politicaltendency: '' });
+    };
+
     /** Event-Handler für die Änderung des Hobbys */
     handleChangeHobbys(event) {
       const newHobbys = event.target.value;
       this.setState({hobby: newHobbys})
+    };
+
+    handleDeleteHobbys = () => {
+        this.setState({ hobby: '' });
     };
 
     /** Event-Handler für die Änderung den Lieblingsverein */
@@ -214,10 +225,20 @@ class CreateProfil extends Component {
       const newClub = event.target.value;
       this.setState({favclub: newClub})
     };
+
+    handleDeleteClub = () => {
+        this.setState({ favclub: '' });
+    };
+
+
     /** Event-Handler für die Änderung des Einkommens */
     handleChangeSalary(event) {
         const newSalary = event.target.value;
         this.setState({income: newSalary})
+    };
+
+    handleDeleteSalary = () => {
+        this.setState({ income: '' });
     };
 
     /** Event-Handler für die Änderung des Geschlechts */
@@ -514,73 +535,122 @@ class CreateProfil extends Component {
           );
       } else if (selectedOption === "selectGehalt") {
         return (
-          <FormGroup row style={{ justifyContent: 'center' }}>
-            <Box sx={{ width: 400, margin: '0 auto' }}>
-              <FormLabel>Wie viel verdienst du?</FormLabel>
-              {/** Buttons für die Auswahl des Gehalts */}
-              <RadioGroup row value={this.state.income} onChange={this.handleChangeSalary}>
-                <FormControlLabel sx={{ width: '35%' }} value="1000" control={<Radio />} label="1000€" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="1500" control={<Radio />} label="1500€" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="2000" control={<Radio />} label="2000€" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="3500" control={<Radio />} label="3500€" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="5000" control={<Radio />} label=">5000€" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
-              </RadioGroup>
-            </Box>
-          </FormGroup>
+            <FormGroup row style={{ justifyContent: 'center' }}>
+                <Box sx={{ width: 400, margin: '0 auto' }}>
+                    <FormLabel>Wie viel verdienst du?</FormLabel>
+                    <div style={{ marginBottom: '1rem' }}>
+                        {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
+                        <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
+                            <ToggleButton value="select">
+                                <RadioButtonUncheckedIcon/>
+                            </ToggleButton>
+                            <ToggleButton value="create">
+                                <EditNoteIcon/>
+                            </ToggleButton>
+                            <ToggleButton value="delete" onClick={this.handleDeleteSalary}>
+                                <DeleteOutlineIcon/>
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                    </div>
+                    {this.state.SelectCreate === 'create' ? (
+                        <TextField label="Eigenes Label hinzufügen" name="income" value={this.state.income} onChange={this.handleChangeSalary} style={{ justifyContent: 'center' }}/>
+                    ) : (this.state.SelectCreate === 'delete' ? (
+                        <div>...</div>
+                    ) : (
+                        <RadioGroup row style={{ justifyContent: 'center' }}  value={this.state.income} onChange={this.handleChangeSalary}>
+                            <FormControlLabel sx={{ width: '35%' }} value="1000" control={<Radio />} label="1000€" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '35%' }} value="1500" control={<Radio />} label="1500€" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '35%' }} value="2000" control={<Radio />} label="2000€" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '35%' }} value="3500" control={<Radio />} label="3500€" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '35%' }} value="5000" control={<Radio />} label=">5000€" labelPlacement="bottom" />
+                            <FormControlLabel sx={{ width: '35%' }} value="Keine Angabe" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+                        </RadioGroup>
+                      ))}
+                  </Box>
+            </FormGroup>
         );
       } else if (selectedOption === "selectLieblingsverein") {
-        return (
-          <FormGroup row style={{ justifyContent: 'center' }}>
-            <Box sx={{ width: 400, margin: '0 auto' }}>
-              <FormLabel>Was ist dein Lieblingsverein?</FormLabel>
-              {/** Textfeld für deinen Lieblingsverein */}
-              <TextField
-                type={"text"}
-                label={"Name des Vereins"}
-                value={this.state.favclub}
-                onChange={this.handleChangeClub}
-                inputProps={{
-                  maxLength: 17,
-                }}
-              />
-            </Box>
-          </FormGroup>
-        );
+          return (
+            <FormGroup row style={{ justifyContent: 'center' }}>
+                <Box sx={{ width: 400, margin: '0 auto' }}>
+                    <FormLabel>Was ist dein Lieblingsverein?</FormLabel>
+                    <div style={{ marginBottom: '1rem' }}>
+                        <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
+                            <ToggleButton value="create">
+                                <EditNoteIcon/>
+                            </ToggleButton>
+                            <ToggleButton value="delete" onClick={this.handleDeleteClub}>
+                                <DeleteOutlineIcon/>
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                    </div>
+                    {this.state.SelectCreate === 'delete' ? (
+                        <div>...</div>
+                    ) : (
+                        <TextField type={"text"} label="Name des Vereins" name="favclub" value={this.state.favclub} onChange={this.handleChangeClub} style={{ justifyContent: 'center' }} inputProps={{maxLength: 20}}/>
+                    )}
+                  </Box>
+            </FormGroup>
+          );
       } else if (selectedOption === "selectHobbys") {
-        return (
-          <FormGroup row style={{ justifyContent: 'center' }}>
-            <Box sx={{ width: 400, margin: '0 auto' }}>
-              <FormLabel>Welche Hobbys hast du?</FormLabel>
-              {/** Textfeld für die Hobbys */}
-              <TextField
-                type={"text"}
-                label={"Hobbyname"}
-                value={this.state.hobby}
-                onChange={this.handleChangeHobbys}
-                inputProps={{
-                  maxLength: 17,
-                }}
-              />
-            </Box>
-          </FormGroup>
-        );
+          return (
+            <FormGroup row style={{ justifyContent: 'center' }}>
+                <Box sx={{ width: 400, margin: '0 auto' }}>
+                    <FormLabel>Welche Hobbys hast du?</FormLabel>
+                    <div style={{ marginBottom: '1rem' }}>
+                        <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
+                            <ToggleButton value="create">
+                                <EditNoteIcon/>
+                            </ToggleButton>
+                            <ToggleButton value="delete" onClick={this.handleDeleteHobbys}>
+                                <DeleteOutlineIcon/>
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                    </div>
+                    {this.state.SelectCreate === 'delete' ? (
+                        <div>...</div>
+                    ) : (
+                        <TextField type={"text"} label="Deine Hobbys: " name="hobby" value={this.state.hobby} onChange={this.handleChangeHobbys} style={{ justifyContent: 'center' }} inputProps={{maxLength: 20}}/>
+                    )}
+                  </Box>
+            </FormGroup>
+          );
       } else if (selectedOption === "selectPolitischeAusrichtung") {
-        return (
-          <FormGroup row style={{ justifyContent: 'center' }}>
-            <Box sx={{ width: 400, margin: '0 auto' }}>
-              <FormLabel>Was ist deine politische Ausrichtung?</FormLabel>
-              {/** Buttons für die Auswahl der politischen Ausrichtung */}
-              <RadioGroup row value={this.state.politicaltendency} onChange={this.handleChangePolitical}>
-                <FormControlLabel sx={{ width: '35%' }} value="Pazifismus" control={<Radio />} label="Pazifismus" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="Libertarianismus" control={<Radio />} label="Libertarianismus" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="Kommunitarismus" control={<Radio />} label="Kommunitarismus" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="Sozialkonservatismus" control={<Radio />} label="Sozialkonservatismus" labelPlacement="bottom" />
-                <FormControlLabel sx={{ width: '35%' }} value="" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
-              </RadioGroup>
-            </Box>
-          </FormGroup>
-        );
+          return (
+              <FormGroup row style={{ justifyContent: 'center' }}>
+                  <Box sx={{ width: 400, margin: '0 auto' }}>
+                      <FormLabel>Was ist deine politische Ausrichtung?</FormLabel>
+                      <div style={{ marginBottom: '1rem' }}>
+                          {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
+                          <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
+                              <ToggleButton value="select">
+                                  <RadioButtonUncheckedIcon/>
+                              </ToggleButton>
+                              <ToggleButton value="create">
+                                  <EditNoteIcon/>
+                              </ToggleButton>
+                              <ToggleButton value="delete" onClick={this.handleDeletePolitical}>
+                                  <DeleteOutlineIcon/>
+                              </ToggleButton>
+                          </ToggleButtonGroup>
+                      </div>
+                      {this.state.SelectCreate === 'create' ? (
+                          <TextField label="Eigenes Label hinzufügen" name="politicaltendency" value={this.state.politicaltendency} onChange={this.handleChangePolitical} style={{ justifyContent: 'center' }}/>
+                      ) : (this.state.SelectCreate === 'delete' ? (
+                          <div>...</div>
+                      ) : (
+                          <RadioGroup row style={{ justifyContent: 'center' }} value={this.state.politicaltendency} onChange={this.handleChangePolitical}>
+                              <FormControlLabel sx={{ width: '25%' }} value="Unpolitisch" control={<Radio />} label="Unpolitisch" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '25%' }} value="Politische Mitte" control={<Radio />} label="Politische Mitte" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '25%' }} value="Liberal" control={<Radio />} label="Liberal" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '25%' }} value="Links" control={<Radio />} label="Links" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '25%' }} value="Rechts" control={<Radio />} label="Rechts" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '25%' }} value="Keine Angabe" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+                          </RadioGroup>
+                      ))}
+                  </Box>
+              </FormGroup>
+          );
       }
       return null;
     }
@@ -711,7 +781,6 @@ class CreateProfil extends Component {
                                       <MenuItem value="selectHaarfarbe">Haarfarbe</MenuItem>
                                       <MenuItem value="selectGehalt">Gehalt</MenuItem>
                                       <MenuItem value="selectLieblingsverein">Lieblingsverein</MenuItem>
-                                      <MenuItem value="selectBildungsstatus">Bildungsstatus</MenuItem>
                                       <MenuItem value="selectHobbys">Hobbys</MenuItem>
                                       <MenuItem value="selectPolitischeAusrichtung">Politische Ausrichtung</MenuItem>
                                   </Select>

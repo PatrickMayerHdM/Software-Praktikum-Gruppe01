@@ -12,8 +12,8 @@ import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
-import SearchProfileBox from "../components/Search/SearchProfileBox";
 import infoobjectBO from "../api/InfoObjectBO";
+import SearchProfileBox from "../components/Search/SearchProfileBox";
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
