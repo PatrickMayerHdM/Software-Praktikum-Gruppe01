@@ -2,9 +2,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import "../components/Profile.css";
+import "../components/Profile/Profile.css";
 import SearchIcon from '@mui/icons-material/Search';
-import ProfileBoxList from "../components/ProfileBoxList";
+import ProfileBoxList from "../components/Profile/ProfileBoxList";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import { Link } from "react-router-dom"
@@ -12,7 +12,7 @@ import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
-import SearchProfileBox from "../components/SearchProfileBox";
+import SearchProfileBox from "../components/Search/SearchProfileBox";
 import infoobjectBO from "../api/InfoObjectBO";
 
 /**
@@ -51,7 +51,7 @@ class Search extends React.Component{
 
 
 
-    // Hier sollen später dann nur neue Profile (also noch nicht angeschaute) angezeigt werden.
+    // Hier sollen später dann nur noch nicht bereits angesehen Profile nach Änhlichkeitsmaß angezeigt werden.
     NewProfiles(){
         console.log("Button nur noch neue Profile gedrückt")
         const { profile_id } = this.state; // Zugriff auf profile_id aus dem state

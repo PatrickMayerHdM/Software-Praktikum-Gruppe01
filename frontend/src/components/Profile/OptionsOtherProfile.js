@@ -3,9 +3,9 @@ import Grid from "@mui/material/Grid";
 import React from "react";
 import BlockIcon from '@mui/icons-material/Block';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import favoriteNoteBO from "../api/FavoriteNoteBO";
-import DatingSiteAPI from "../api/DatingSiteAPI";
-import blockNoteBO from "../api/BlockNoteBO";
+import favoriteNoteBO from "../../api/FavoriteNoteBO";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
+import blockNoteBO from "../../api/BlockNoteBO";
 
 /** Da sich die gestaltung der Profil komponente nicht unterscheidet, ob es das eigene Profil oder ein Profil einer
  * anderen Person ist, werden die spezifischen Funktionen in einem extra Komponenten behandelt.

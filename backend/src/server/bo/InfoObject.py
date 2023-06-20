@@ -24,7 +24,6 @@ class InfoObject(bo):
         self.searchprofile_fk = None
         self.aboutme = ""
         self.income = ""
-        self.educationalstatus = ""
         self.favclub = ""
         self.hobby = ""
         self.politicaltendency = ""
@@ -142,14 +141,6 @@ class InfoObject(bo):
         """ Setzen des Nettogehalts. """
         self.income = income
 
-    def get_education(self):
-        """ Auslesen des Bildungsstandes. """
-        return self.educationalstatus
-
-    def set_education(self, edu):
-        """ Setzen des Bildungsstandes. """
-        self.educationalstatus = edu
-
     def get_favclub(self):
         """ Auslesen des Lieblingsvereins. """
         return self.favclub
@@ -189,7 +180,6 @@ class InfoObject(bo):
             'minAge': 100,
             'maxAge': 110,
             'income': 120,
-            'educationalstatus': 130,
             'favclub': 140,
             'hobby': 150,
             'politicaltendency': 160
@@ -231,7 +221,6 @@ class InfoObject(bo):
         obj.set_maxAge(dictionary.get('maxAge'))
         obj.set_aboutme(dictionary.get('aboutme'))
         obj.set_income(dictionary.get('income'))
-        obj.set_education((dictionary.get('educationalstatus')))
         obj.set_favclub(dictionary.get('favclub'))
         obj.set_hobby(dictionary.get('hobby'))
         obj.set_politicalstat(dictionary.get('politicaltendency'))
@@ -257,13 +246,8 @@ class InfoObject(bo):
             "100": self.get_minAge(),
             "110": self.get_maxAge(),
             "120": self.get_income(),
-            "130": self.get_education(),
             "140": self.get_favclub(),
             "150": self.get_hobby(),
             "160": self.get_politicalstat()
         }
         return info_dict
-
-    def dict2class(self, my_dict):
-        for key in my_dict:
-            setattr(self, key, my_dict[key])

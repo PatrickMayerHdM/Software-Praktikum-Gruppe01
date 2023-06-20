@@ -1,13 +1,13 @@
-import Item from "../theme";
+import Item from "../../theme";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import React from "react";
-import ProfileBox from "./ProfileBox";
+import ProfileBox from "../Profile/ProfileBox";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import {Link} from "react-router-dom";
-import DatingSiteAPI from "../api/DatingSiteAPI";
-import favoriteNoteBO from "../api/FavoriteNoteBO";
+import DatingSiteAPI from "../../api/DatingSiteAPI";
+import favoriteNoteBO from "../../api/FavoriteNoteBO";
 import PropTypes from 'prop-types';
 
 /**
@@ -64,7 +64,7 @@ class FavoriteProfileBox extends React.Component{
                 direction="row" justifyContent="center" alignItems="strech" >
                 <Grid item xs={8} spacing={2}>
                   <Item>
-                      <ProfileBox other_profile={this.props.other_profile}/>
+                      <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.state.adding_id}/>
                   </Item >
                 </Grid >
                 <Grid item xs={2} spacing={2} >
