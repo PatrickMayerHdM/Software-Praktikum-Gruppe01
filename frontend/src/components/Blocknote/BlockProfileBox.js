@@ -66,7 +66,7 @@ class BlockProfileBox extends React.Component{
                     <button onClick={() => {
                         this.BlockDelClicked();
                         this.props.onRemoveProfile(this.props.other_profile);
-                    }} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#d00000", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}
+                    }} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#EE6457", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}
                     >
                         <PersonRemoveIcon/>
                     </button>

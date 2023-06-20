@@ -7,7 +7,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import BlockIcon from '@mui/icons-material/Block';
 import {IconButton} from "@mui/material";
 import { Link } from "react-router-dom";
-import './Header.css';
+import './App.css';
 
 class Header extends Component {
     constructor(props) {

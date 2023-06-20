@@ -30,7 +30,7 @@ class ChatProfileBox extends React.Component{
                     <Grid item item xs={2} >
                     {/*Verlinkung zum ChatWindow mit der anderen Person    */}
                     <Link to={`/ChatWindow/${this.props.current_profile}/${this.props.other_profile}`}>
-                        <button onClick={this.newChat} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#2A9D8F", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
+                        <button onClick={this.newChat} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#6A7285", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                             <ChatBubbleIcon/>
                         </button>
                     </Link>

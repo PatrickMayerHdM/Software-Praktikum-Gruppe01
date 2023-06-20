@@ -98,38 +98,38 @@ class ProfileBox extends React.Component {
 
         return(
             <Box sx={{width: '100%'}} >
-                {/** Dies ist die Box, in welcher schlussendlich sich das Grid befindet */}
-                <Button onClick={this.onProfileClick}>
-                    <Link to={`/Profile/${this.state.profileBox_id}`}>
+                {/** Dies ist die Box, in welcher sich das Grid befindet */}
+                <Button onClick={this.onProfileClick} >
+                    <Link to={`/Profile/${this.state.profileBox_id}`} style={{ textDecoration: 'none', fontFamily: 'Arial, sans-serif' }}>
                         <Grid container spacing={1}>
                             {/** Das Grid an sich */}
                             <Grid item lg={12} md={12} xs={12} >
                                 {/** Ein Item für das Grid, hier der Vorname*/}
-                                <Item style={{ textDecoration: 'none' }}>
+                                <Item >
                                     Name: {firstName}
                                 </Item>
                             </Grid >
                             {/** Ein Item für das Grid, hier der Nachname */}
                             <Grid item lg={12} md={12} xs={12} >
-                                <Item style={{ textDecoration: 'none' }}>
+                                <Item>
                                     Nachname: {lastName}
                                 </Item >
                             </Grid >
                             {/** Ein Item für das Grid, hier das Alter*/}
                             <Grid item lg={3} md={3} xs={3} >
-                                <Item style={{ textDecoration: 'none' }}>
+                                <Item>
                                     Alter: {age}
                                 </Item >
                             </Grid >
                             {/** Ein Item für das Grid, hier das Geschlecht */}
                             <Grid item lg={6} md={6} xs={5} >
-                                <Item style={{ textDecoration: 'none' }}>
+                                <Item>
                                     Geschlecht: {gender}
                                 </Item >
                             </Grid >
                             {/** Ein Item für das Grid, hier die Größe*/}
                             <Grid item lg={3} md={3} xs={4} >
-                                <Item style={{ textDecoration: 'none' }}>
+                                <Item>
                                     Größe: {height}
                                 </Item >
                             </Grid >
