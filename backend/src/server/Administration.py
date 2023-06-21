@@ -594,10 +594,10 @@ class Administration(object):
         # print('Gender_Filtered list: Anzahl sollte 2 betragen:', gender_filtered_list)
 
         # Age Filter: Soll das gewünschte Alter der gesuchten Person ermitteln und nur Kandidaten in dieser Spanne zur Suche hinzufügen
-        if 110 in searchprofile['Char Values'] and 120 in searchprofile['Char Values']:
-            min_age = searchprofile['Char Values'][110]
+        if 100 in searchprofile['Char Values'] and 110 in searchprofile['Char Values']:
+            min_age = searchprofile['Char Values'][100]
             # print('searchprofile min_age',min_age)
-            max_age = searchprofile['Char Values'][120]
+            max_age = searchprofile['Char Values'][110]
             # print('searchprofile max_age', max_age)
 
             for profile in gender_filtered_list:  # jedes Profil aus der Liste holen
@@ -606,13 +606,18 @@ class Administration(object):
                     char_values = profile['Char Values']
                     if 30 in char_values:  # Prüfe den Value mit dem Key 30
                         age = char_values[30]
-                        # print(type(age))
-                        # print('age', age)
+                        print(type(age))
+                        print('age', age)
                         calculated_age = self.agefilter(age)  # Berechne das Alter anhand des Geburtstages
-                        # print('berechnetes Alter', calculated_age)
+                        print('berechnetes Alter', calculated_age)
+                        print('berechnetes Alter Type', type(calculated_age))
 
                         if calculated_age is not None:
-                            if min_age <= calculated_age <= max_age:  # Abfrage ob das berechnete Alter in der Suchrange liegt
+                            print('Type min_age,', type(min_age))
+                            print(' min_age,', min_age)
+                            print('Type max_age,', type(max_age))
+                            print('max age:', max_age)
+                            if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
                                 # print('Dieses Profil wird der Liste hinzugefügt:', profile)
                                 age_filtered_list.append(profile)
                                 print('age_filtered_list sollte nur 1 profil haben', len(age_filtered_list))
@@ -705,21 +710,21 @@ class Administration(object):
                 print('Userprofil height', userprof)
 
                 if search_value == 'small':
-                    if userprof < 160:
+                    if int(userprof) < 160:
                         score += 1
                         print('Small Match:', score)
                     else:
                         continue
 
                 elif search_value == 'mean':
-                    if userprof >= 160 and userprof <= 180:
+                    if int(userprof) >= 160 and int(userprof) <= 180:
                         score += 1
                         print('mean Match:', score)
                     else:
                         continue
 
                 elif search_value == 'large':
-                    if userprof > 180:
+                    if int(userprof) > 180:
                         score += 1
                         print('large Match:', score)
                     else:
@@ -736,7 +741,7 @@ class Administration(object):
                 userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
                 print('Einkommen des Userprofils:', userprof)
 
-                if userprof >= search_value:
+                if int(userprof) >= int(search_value):
                     score += 1
                     print('Einkommen Match +1:', score)
 
