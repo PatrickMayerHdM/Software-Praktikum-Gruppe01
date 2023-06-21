@@ -11,6 +11,7 @@ import matchmakingBO from "./MatchmakingBO";
 import NamedInfoObjectBO from "./NamedInfoObjectBO";
 import CharacteristicBO from "./CharacteristicBO";
 import profilevisitsBO from "./ProfilevisitsBO";
+import BusinessObject from "./BusinessObject";
 
 export default class DatingSiteAPI {
 
@@ -18,7 +19,7 @@ export default class DatingSiteAPI {
     static #api = null;
 
     // Local Python backend
-     #datingServerBaseURL = '/system';
+    #datingServerBaseURL = '/system';
 
     // Local http-fake-backend
     // #datingServerBaseURL = '/api/system';
@@ -45,7 +46,7 @@ export default class DatingSiteAPI {
                 throw Error(`${res.status} ${res.statusText}`);
             }
             return res.json();
-         })
+        })
 
 
     /**
@@ -55,7 +56,7 @@ export default class DatingSiteAPI {
 
     getAllMessages(profileID, otherprofileID) {
         return this.#fetchAdvanced(this.#getAllMessagesURL(profileID, otherprofileID)).then((responseJSON) => {
-            console.log("Innerhalb der Dating API: ", responseJSON )
+            console.log("Innerhalb der Dating API: ", responseJSON)
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -89,7 +90,7 @@ export default class DatingSiteAPI {
      * @param ID
      * @returns {Promise<unknown>}
      */
-    getChats(id){
+    getChats(id) {
         return this.#fetchAdvanced(this.#getChatsURL(id))
             .then((responseJSON) => {
                 console.log("Das responseJSON:")
@@ -115,11 +116,10 @@ export default class DatingSiteAPI {
 
     #addProfileURL = () => `${this.#datingServerBaseURL}/profiles`;
     #removeProfileURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
-
     #updateProfileURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
     #addInfoObject = () => `${this.#datingServerBaseURL}/infoobjects`;
     #getInfoObjectsURL = (profile_id) => `${this.#datingServerBaseURL}/infoobjects/${profile_id}`;
-    #getCharNameURL = () => `${this.#datingServerBaseURL}/characteristic`;
+    #getCharNameURL = (char_id) => `${this.#datingServerBaseURL}/Profile/characteristics/${char_id}`;
     #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
 
@@ -168,12 +168,6 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * @param {profileBO} profile object
-     * @public
-     */
-
-
-    /**
      * @param {infoobjectBO} infoobjec object
      * @public
      */
@@ -211,22 +205,6 @@ export default class DatingSiteAPI {
         })
     }
 
-    updateProfile(profileData) {
-         return this.#fetchAdvanced(this.#updateProfileURL(), {
-            method: "PUT",
-            headers: {
-            'Accept': 'application/json, text/plain',
-            'Content-type': "application/json",
-            },
-            body: JSON.stringify(profileData)
-        }).then((responseJSON) => {
-            let updatedProfile = profileBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-            resolve(updatedProfile);
-            });
-        });
-    }
-
     createCharDescForProfile(characteristic_desc_name) {
         return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {
             method: "POST",
@@ -253,14 +231,20 @@ export default class DatingSiteAPI {
             });
     }
 
-    getPropertyNames(charID) {
-        return this.#fetchAdvanced(this.#getCharNameURL(charID))
-            .then((responseJSON) => {
-                let namedCharName = CharacteristicBO.fromJSON(responseJSON);
-                return new Promise(function (resolve) {
-                    resolve(namedCharName);
-                });
-            });
+    /**
+     * @param {characteristicBO} characteristic object
+     * @public
+     */
+
+
+    getCharName(char_id) {
+        console.log("EigenschaftsID: ", char_id);
+        return this.#fetchAdvanced(this.#getCharNameURL(char_id))
+            .then((responeJSON) => {
+                let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
+                console.log("Nach FROMJSON: ", namedCHAR);
+                return namedCHAR
+            })
     }
 
 
@@ -277,6 +261,7 @@ export default class DatingSiteAPI {
             })
         })
     }
+
     /**
      * Bereich für die Suche
      */
