@@ -626,7 +626,6 @@ class CreateProfil extends Component {
                                       <MenuItem value="selectHaarfarbe">Haarfarbe</MenuItem>
                                       <MenuItem value="selectGehalt">Gehalt</MenuItem>
                                       <MenuItem value="selectLieblingsverein">Lieblingsverein</MenuItem>
-                                      <MenuItem value="selectBildungsstatus">Bildungsstatus</MenuItem>
                                       <MenuItem value="selectHobbys">Hobbys</MenuItem>
                                       <MenuItem value="selectPolitischeAusrichtung">Politische Ausrichtung</MenuItem>
                                   </Select>

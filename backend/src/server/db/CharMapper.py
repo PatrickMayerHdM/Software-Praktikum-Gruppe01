@@ -48,6 +48,7 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
+        print("Char Name Mapper: ", result)
         return result
 
     def find_key_by_char_name(self, key):
@@ -72,6 +73,27 @@ class CharMapper(mapper):
 
         print("Char ID by Name: ", result.get_named_char_id())
         return result.get_named_char_id()
+
+    def find_char_by_key(self, key):
+        print("Key aus CharMapper: ", key)
+        cursor = self._connection.cursor()
+        command = f"SELECT char_name FROM main.Characteristic WHERE char_id='{key}'"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
+            print("Char aus CharMapper: ", tuples[0])
+            (char_name, ) = tuples[0]
+            print("Char Name im Mapper: ", char_name[0])
+            result = char_name
+        else:
+            raise ValueError(f"Schlüssel {key} nicht gefunden.")
+
+        self._connection.commit()
+        cursor.close()
+
+        print("Char ID by Name: ", result)
+        return result
 
     def insert(self, char):
         cursor = self._connection.cursor()

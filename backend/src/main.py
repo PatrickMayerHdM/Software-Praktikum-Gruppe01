@@ -65,10 +65,9 @@ message = api.inherit('Message', bo, {
 })
 
 characteristic = api.inherit('Characteristics', bo, {
-    'char_id': fields.Integer(attribute='_char_id', description='ID einer Eigenschaft'),
+    'char_id': fields.Integer(attribute='_char_id', description='Eigenschafts ID '),
     'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname')
 })
-
 
 infoobject = api.inherit('InfoObject', bo, {
     'char_id': fields.Integer(attribute='char_id', description='ID einer Eigenschaft'),
@@ -661,30 +660,21 @@ class NamedInfoObjectListOperations(Resource):
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
 
-@datingapp.route('/characteristic')
+
+@datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):
-    @datingapp.marshal_with(characteristic, code=200)
-    @datingapp.expect(characteristic)
+    @datingapp.marshal_list_with(characteristic)
     @secured
-    def get(self):
-
-        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+    def get(self, char_id):
+        print('GET-Method Char Name:', api.payload)
 
         adm = Administration()
-        print('GET-Method Char:', api.payload)
 
-        proposal = Characteristics.from_dict(api.payload)
+        char_names = adm.get_char_by_key(char_id)
 
-        if proposal is not None:
-            charobj = adm.get_char_by_key(
-                proposal.get_characteristic_name(),
-            )
+        return char_names, 200
 
-            print("Char ID Main: ", charobj)
-            return charobj, 200
-        else:
-            return 'CharObj_Operations "POST" fehlgeschlagen', 500
 
 @datingapp.route('/visit')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
