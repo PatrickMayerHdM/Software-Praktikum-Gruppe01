@@ -711,6 +711,8 @@ class MatchingOperations(Resource):
 
         profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
 
+        print('Main.py profiles bevor es übergeben wird:', profiles)
+
         if profiles is not None:
             return profiles
         else:
