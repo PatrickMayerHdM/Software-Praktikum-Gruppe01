@@ -705,7 +705,7 @@ class ProfileVisitsOperations(Resource):
 
 """ Handling, um das Matchmaking aufzurufen. """
 
-@datingapp.route('/Search/Search/Matchmaking/<int:searchprofile_id>')
+@datingapp.route('/Search/Matchmaking/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class MatchingOperations(Resource):
