@@ -700,13 +700,13 @@ class ProfileVisitsOperations(Resource):
 @datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
 class MatchingOperations(Resource):
 
-    @datingapp.marshal_with(matchmaking)
     @secured
     def get(self, searchprofile_id):
         print('Main.Py übergebene Searchprofile_id:', searchprofile_id)
 
         adm = Administration()
         searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
+        print('main.py Suchprofil:', searchprof)
 
         profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
 

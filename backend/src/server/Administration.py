@@ -530,13 +530,11 @@ class Administration(object):
         """ Diese Methode stellt die Ausführung des Algorithmus dar, um potenzielle Partner auf der Plattform zu finden. """
 
         searchprofile = searchprof  # Searchprofile ist das Dict mit ID und Char-Values
-        print('Suchprofil: ', searchprofile)
+        print('Admin.py: Dieses Suchprofil wurde an Algo übergeben: ', searchprofile)
         result = []  # Ergebnisliste, die später übergeben werden soll. Ähnlichkeit: [['zQokAwj2tchqk4dkovLVvqCmzWp2', 11]]
         gid_list = []  # Alle Google IDs der Plattform
         gender_filtered_list = [] # Alle Profile, die dem gesuchten Geschlecht entsprechen
         age_filtered_list = [] # Alle Profile, die in der gesuchten Altersrange liegen
-
-        print('Hier in der Methode Matchmaking angekommen')
 
         with ProfileMapper() as prof_mapper:
             profiles = prof_mapper.find_all()  # Hole alle Profile aus der Datenbank
@@ -547,8 +545,9 @@ class Administration(object):
 
         # Überprüfung, ob sich eine gefundene Google-ID in der Blockierliste befindet.
         with SearchProfileMapper() as searchprof_mapper:
-            search_google_id = searchprof_mapper.find_gid_by_searchid(searchprofile['Profile ID'])
-            print('Google ID des Searchprofiles:' ,search_google_id)
+            search_google_id = searchprof_mapper.find_gid_by_searchid(searchprofile['Searchprofile ID'])
+            #print('Admin.py Zeile 551 - Hier war der Bug')
+            #print('Google ID des Searchprofiles:' ,search_google_id)
             with BlockNoteMapper() as block_mapper:
                 blocked_profiles = block_mapper.find_by_blocking_user(search_google_id) #finde alle blockierten profile
                 for googleid in blocked_profiles: # suche nach den googleid´s
@@ -789,12 +788,21 @@ class Administration(object):
 
     def get_char_values_for_searchprofile(self, searchprofile):
         """ Diese Methode gibt ein Dictionary mit einer gegebenen Suchprofil ID und deren Char Values zurück """
-        with SearchProfileMapper as mapper:
-            char_values = mapper.find_by_searchprofile(searchprofile)
+        with SearchProfileMapper() as mapper:
+            char_objects = mapper.find_by_searchprofile(searchprofile)
+            # Die Char Values sind hier Infoobjekte: 'Char Values': [<server.bo.InfoObject.InfoObject object at 0x11b353640>, ...]
+            # Hier wird eine Logik definiert, die das Dict im gewünschen Zustand übergibt. 'Char Values': {10: 'Jane', ...}}
+            transformed_values = {} #leeres Dict, das später hinzugefügt wird
+            for info_obj in char_objects:
+                char_id = info_obj.get_char_fk() # holt den char_fk
+                char_value = info_obj.get_value() # holt den value
+                transformed_values[char_id] = char_value
+
+            #print('admin.py: Transformed Values:', transformed_values)
 
         searchprof = {
             "Searchprofile ID": searchprofile,
-            "Char Values": char_values
+            "Char Values": transformed_values
         }
         return searchprof
 

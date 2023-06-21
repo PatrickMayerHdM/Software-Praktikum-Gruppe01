@@ -84,7 +84,7 @@ class SearchProfileMapper(mapper):
         cursor.execute(command)
 
         tuples = cursor.fetchone()
-        print('Seachprofile Mapper Google ID:', tuples[0])
+        #print('Seachprofile Mapper Google ID:', tuples[0])
 
         if tuples[0] is not None:
             return tuples[0]
