@@ -126,6 +126,16 @@ class Search extends React.Component{
         });
     }
 
+    /**
+     * Diese TestSearch hat eine BeispielsTest var, die ein Beispiels RESPONSEJSON darstellt.
+     * @constructor
+     */
+    TestSearch() {
+        console.log("Das ist die Testsearch mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
+        const BeispielRESPONSEJSON = ([['OnhCSTN3ypaBnidTh2x4cbC7ie12', 80.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 60.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 40.0]])
+        console.log(BeispielRESPONSEJSON)
+    }
+
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
     ChangeSearchProfiles(index) {
         //console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
