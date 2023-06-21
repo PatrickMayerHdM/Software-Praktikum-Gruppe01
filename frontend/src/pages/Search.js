@@ -12,8 +12,8 @@ import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
-import SearchProfileBox from "../components/Search/SearchProfileBox";
 import infoobjectBO from "../api/InfoObjectBO";
+import SearchProfileBox from "../components/Search/SearchProfileBox";
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
@@ -124,6 +124,16 @@ class Search extends React.Component{
         .catch(error => {
           console.error('Error fetching in Search() :', error);
         });
+    }
+
+    /**
+     * Diese TestSearch hat eine BeispielsTest var, die ein Beispiels RESPONSEJSON darstellt.
+     * @constructor
+     */
+    TestSearch() {
+        console.log("Das ist die Testsearch mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
+        const BeispielRESPONSEJSON = ([['OnhCSTN3ypaBnidTh2x4cbC7ie12', 80.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 60.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 40.0]])
+        console.log(BeispielRESPONSEJSON)
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.

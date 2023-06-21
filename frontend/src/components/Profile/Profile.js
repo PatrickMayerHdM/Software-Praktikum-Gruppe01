@@ -14,6 +14,7 @@ import DatingSiteAPI from "../../api/DatingSiteAPI";
 import OptionsOtherProfile from "./OptionsOtherProfile";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BlockIcon from "@mui/icons-material/Block";
+import CharacteristicBO from "../../api/CharacteristicBO";
 
 
 //** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
@@ -42,20 +43,23 @@ class Profile extends React.Component{
     }
 
 
-
     getSelectedProperties() {
+        const idList = [];
         DatingSiteAPI.getAPI()
         .getInfoObjects(this.state.lastPartURL)
         .then((responseInfoObjects) => {
+          console.log("InfoObjects: ", responseInfoObjects)
           const selectedProperties = {};
 
           for (const key in responseInfoObjects) {
             if (responseInfoObjects.hasOwnProperty(key)) {
               const infoObject = responseInfoObjects[key];
-              const charId = infoObject.char_id;
+              const char_id = infoObject.char_id;
               const charValue = infoObject.char_value;
 
-              switch (charId) {
+              if (char_id > 160) {
+                  idList.push(char_id);
+              } switch (char_id) {
                   case 30:
                   selectedProperties.age = charValue;
                   break;
@@ -105,8 +109,23 @@ class Profile extends React.Component{
             }
           }
           this.setState(selectedProperties);
+          console.log("Char ID Liste: ", idList)
+          idList.forEach((char_id) => {
+            const char = this.getCharNameByID(char_id)
+            console.log("CharBO: ", char)
+          })
         });
     }
+
+    getCharNameByID(char_id) {
+        DatingSiteAPI.getAPI()
+            .getCharName(char_id)
+            .then((responeCharNames) => {
+                console.log("CharName Test: ", responeCharNames)
+            })
+    }
+
+
 
 
     render() {
