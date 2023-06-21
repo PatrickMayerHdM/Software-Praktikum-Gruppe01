@@ -252,7 +252,7 @@ class Administration(object):
 
     def get_char_by_key(self, key):
         with CharMapper() as mapper:
-            return mapper.find_by_key(key)
+            return mapper.find_char_by_key(key)
 
     def create_char(self, named_char_name):
         c = NamedInfoObject()
