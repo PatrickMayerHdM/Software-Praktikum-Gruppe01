@@ -664,10 +664,11 @@ class NamedInfoObjectListOperations(Resource):
 @datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):
-    @datingapp.marshal_list_with(characteristic)
+    #@datingapp.marshal_list_with(characteristic)
     @secured
     def get(self, char_id):
-        print('GET-Method Char Name:', api.payload)
+        print("Angekommen in der NamedCharacteristicsOperations", char_id)
+        #print('GET-Method Char Name:', api.payload)
 
         adm = Administration()
 

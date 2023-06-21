@@ -406,9 +406,8 @@ export default class DatingSiteAPI {
         return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
             .then((responseJSON) => {
                 console.log("Das responseJSON: ", responseJSON);
-                let matchmakingBOs = matchmakingBO.fromJSON(responseJSON)
                 return new Promise(function (resolve){
-                    resolve(matchmakingBOs)
+                    resolve(responseJSON)
                 })
             });
     }

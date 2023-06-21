@@ -45,7 +45,7 @@ class Search extends React.Component{
         this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
         this.SearchallProfiles = this.SearchallProfiles.bind(this);
         this.Search = this.Search.bind(this);
-
+        this.TestSearch = this.TestSearch.bind(this);
     }
 
 
@@ -124,6 +124,21 @@ class Search extends React.Component{
         .catch(error => {
           console.error('Error fetching in Search() :', error);
         });
+    }
+
+    /**
+     * Diese TestSearch hat eine BeispielsTest var, die ein Beispiels RESPONSEJSON darstellt.
+     * @constructor
+     */
+    TestSearch() {
+        console.log("Das ist die Testsearch mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
+        const BeispielRESPONSEJSON = ([['OnhCSTN3ypaBnidTh2x4cbC7ie12', 80.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 60.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 40.0]])
+        console.log(BeispielRESPONSEJSON)
+        const lengthProfiles = BeispielRESPONSEJSON.length;
+        this.setState(prevState => ({
+            profiles: BeispielRESPONSEJSON,
+            numProfiles: lengthProfiles
+        }));
     }
 
     // Hier wird erstmal ein console.log ausgeführt, wenn ein Button gedrückt wird, damit später dann das Suchprofil hier geändert wird.
