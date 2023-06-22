@@ -84,11 +84,6 @@ namedinfoobject = api.inherit('NamedInfoObjects', bo, {
     'char_desc': fields.Integer(attribute='named_char_desc', description=' Char Desc eines Users')
 })
 
-chat = api.inherit('Chat', bo, {
-    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht'),
-    'profile_id': fields.Integer(attribute='_profile_id', description='Unique Id eines Profils')
-})
-
 favoritenote = api.inherit('FavoriteNote', bo, {
     'added_id': fields.String(attribute='_added_id', description='Id des hinzugefügten Profils'),
     'adding_id': fields.String(attribute='_adding_id', description='Id des hinzufügenden Profils')
@@ -329,8 +324,7 @@ Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat.
 @datingapp.param('id','profileBO')
 class ChatListOperations(Resource):
 
-    #@datingapp.marshal_with(chatList)
-    #@secured
+    # @secured
     def get(self, id):
         # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
         adm = Administration()
@@ -353,6 +347,7 @@ class ChatWindowOperations(Resource):
     # @secured
 
     def post(self):
+        """ Absenden einer neuen Nachricht im Chat."""
         adm = Administration()
         proposal = Message.from_dict(api.payload)
 
@@ -372,7 +367,7 @@ class MessageOperations(Resource):
     @datingapp.marshal_with(message)
     # @secured
     def get(self, sender_id, recipient_id):
-        """ Auslesen eines Chat-Verlaufs."""
+        """ Auslesen aller Nachrichten eines Chat-Verlaufs über sender_id und recipient_id."""
         adm = Administration()
         messages = adm.get_message_by_chat(sender_id, recipient_id)
 
