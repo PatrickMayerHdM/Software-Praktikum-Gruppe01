@@ -13,17 +13,17 @@ class SearchProfileBox extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            profile: this.props.Profilematchmaking[0],
-            SimValue: this.props.Profilematchmaking[1],
+            profile: this.props.Profilematchmaking[0], // Die google_id des Users der dargestellt werden soll
+            SimValue: Math.round(this.props.Profilematchmaking[1]), // Das Ähnlichkeitsmaß des Users gerundet
 
             error: '',
         }
     }
 
     componentDidMount() {
-        console.log("Das ist der durch props übergebene Teil: ", this.props.Profilematchmaking)
-        console.log("State des profile: ", this.state.profile)
-        console.log("State des SimValue: ", this.state.SimValue)
+        //console.log("(SearchProfileBox) Das ist der durch props übergebene Teil: ", this.props.Profilematchmaking)
+        //console.log("(SearchProfileBox) State des profile: ", this.state.profile)
+        //console.log("(SearchProfileBox) State des SimValue: ", this.state.SimValue)
     }
 
 
