@@ -3,33 +3,24 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
 import {Avatar, Container, css, Menu, MenuItem} from '@mui/material';
-import Item from "./theme";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import LogIn from "./pages/LogIn";
-import BlockProfileBox from "./components/Blocknote/BlockProfileBox";
-import FavoriteProfileBox from "./components/Favoritenote/FavoriteProfileBox";
 import ChatProfileBox from "./components/Chat/ChatProfileBox";
 import Profile from "./components/Profile/Profile";
-import OptionsOtherProfile from "./components/Profile/OptionsOtherProfile";
-import OptionsOwnProfile from "./components/Profile/OptionsOwnProfile";
 import ChatWindow from "./pages/ChatWindow";
-import ProfileBox from "./components/Profile/ProfileBox";
-import ProfileBoxList from "./components/Profile/ProfileBoxList";
 import CreateProfil, { checkProfilExc } from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "./components/App.css"
 import * as React from "react";
-import {BrowserRouter as Router, Routes, Route, useLocation, Navigate} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
 import FavoriteProfileBoxList from "./pages/FavoriteProfileBoxList";
 import BlockProfileBoxList from "./pages/BlockProfileBoxList";
 import ChatProfileBoxList from "./pages/ChatProfileBoxList";
 import SearchProfile from "./components/Search/SearchProfile";
 import Search from "./pages/Search";
+import ProfileTest from "./components/Profile/Profile-Test";
 /** Definition der App-Komponente */
 
 class App extends Component {
@@ -162,14 +153,14 @@ class App extends Component {
 
   render() {
 
-    const { currentUser, currentUserUid } = this.state;
+    const { currentUser } = this.state;
 
     if (!currentUser) {
-    // Wenn kein User angemeldet ist wird nur das Anmeldefenster gerendert.
+      {/** Wenn kein User angemeldet ist wird nur das Anmeldefenster gerendert. */}
     return <LogIn onLogIn={this.handleLogIn} />;
     } else if (!currentUser.displayName || !currentUser.photoURL) {
-    // Wenn ein User sich angemeldet hat wird er zuerst nur auf die Profil Seite gebracht
-    return <Navigate to="/Profil" />;
+      {/** Wenn ein User sich angemeldet hat wird er zuerst nur auf die Profil Seite gebracht */}
+      return <Navigate to="/Profil" />;
     }
 
     return (
@@ -196,12 +187,13 @@ class App extends Component {
                 </div>
             }
 
+            {/** Routing der App */}
             <Router>
               <Header user={currentUser}/>
                 <Routes>
                     <Route path="/" element={<Outlet />}>
                       <Route path="/" element={<CreateProfil user={currentUser}/>}></Route>
-                      <Route path="/Profil/:eigeneID" element={<Secured user={currentUser}><CreateProfil user={currentUser}/></Secured>}></Route>
+                      <Route path="/Profil/:eigeneID" element={<CreateProfil user={currentUser}/>}></Route>
                       <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
                       <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile user={currentUser}/>}></Route>
                       <Route path="/Profile/:eigeneID" element={<Profile user={currentUser}/>}></Route>
@@ -222,21 +214,4 @@ class App extends Component {
   }
 }
 
-/**
- *
- * @param {props} The React props
- * @returns
- *
- * Mögliche Änderung stehen noch aus?!
- *
- */
-function Secured(props) {
-	let location = useLocation();
-
-	if (!props.user) {
-		return <Navigate to={process.env.PUBLIC_URL + '/index.html'} state={{ from: location }} replace />;
-	}
-
-	return props.children;
-}
 export default App;

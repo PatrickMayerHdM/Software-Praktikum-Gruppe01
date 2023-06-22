@@ -15,6 +15,7 @@ import OptionsOtherProfile from "./OptionsOtherProfile";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BlockIcon from "@mui/icons-material/Block";
 import CharacteristicBO from "../../api/CharacteristicBO";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 
 //** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
@@ -30,6 +31,7 @@ class Profile extends React.Component{
         this.state = {
             error: '',
             lastPartURL: null,
+            customProperties: [],
         }
     }
 
@@ -39,90 +41,117 @@ class Profile extends React.Component{
         const lastPartURL = currentPath.split('/').pop();
         this.setState({lastPartURL: lastPartURL}, () => {
             this.getSelectedProperties();
+            this.getCustomPropertyNames();
         })
     }
 
 
     getSelectedProperties() {
         const idList = [];
+        const customProperties = [];
+
         DatingSiteAPI.getAPI()
         .getInfoObjects(this.state.lastPartURL)
         .then((responseInfoObjects) => {
-          console.log("InfoObjects: ", responseInfoObjects)
-          const selectedProperties = {};
+            console.log("InfoObjects: ", responseInfoObjects)
 
-          for (const key in responseInfoObjects) {
-            if (responseInfoObjects.hasOwnProperty(key)) {
-              const infoObject = responseInfoObjects[key];
-              const char_id = infoObject.char_id;
-              const charValue = infoObject.char_value;
+            for (const key in responseInfoObjects) {
+                if (responseInfoObjects.hasOwnProperty(key)) {
+                    const infoObject = responseInfoObjects[key];
+                    const char_id = infoObject.char_id;
+                    const charValue = infoObject.char_value;
 
-              if (char_id > 160) {
-                  idList.push(char_id);
-              } switch (char_id) {
-                  case 30:
-                  selectedProperties.age = charValue;
-                  break;
-                case 10:
-                  selectedProperties.firstName = charValue;
-                  break;
-                case 40:
-                  selectedProperties.gender = charValue;
-                  break;
-                case 70:
-                  selectedProperties.hair = charValue;
-                  break;
-                case 50:
-                  selectedProperties.height = charValue;
-                  break;
-                case 20:
-                  selectedProperties.lastName = charValue;
-                  break;
-                case 60:
-                  selectedProperties.religion = charValue;
-                  break;
-                case 80:
-                  selectedProperties.smoking = charValue;
-                  break;
-                case 90:
-                  selectedProperties.aboutme = charValue;
-                  break;
-                case 120:
-                  selectedProperties.income = charValue;
-                  break;
-                case 130:
-                  selectedProperties.educationalstatuts = charValue;
-                  break;
-                case 140:
-                  selectedProperties.favclub = charValue;
-                  break;
-                case 150:
-                  selectedProperties.hobby = charValue;
-                  break;
-                case 160:
-                  selectedProperties.politicaltendency = charValue;
-                  break;
-
-                default:
-                  break;
-              }
+                    if (char_id > 160) {
+                        customProperties.push({
+                            char_id: char_id,
+                            char_value: charValue,
+                        });
+                        idList.push(char_id);
+                    } else {
+                        switch (char_id) {
+                            case 30:
+                                customProperties.age = charValue;
+                                break;
+                            case 10:
+                                customProperties.firstName = charValue;
+                                break;
+                            case 40:
+                                customProperties.gender = charValue;
+                                break;
+                            case 70:
+                                customProperties.hair = charValue;
+                                break;
+                            case 50:
+                                customProperties.height = charValue;
+                                break;
+                            case 20:
+                                customProperties.lastName = charValue;
+                                break;
+                            case 60:
+                                customProperties.religion = charValue;
+                                break;
+                            case 80:
+                                customProperties.smoking = charValue;
+                                break;
+                            case 90:
+                                customProperties.aboutme = charValue;
+                                break;
+                            case 120:
+                                customProperties.income = charValue;
+                                break;
+                            case 140:
+                                customProperties.favclub = charValue;
+                                break;
+                            case 150:
+                                customProperties.hobby = charValue;
+                                break;
+                            case 160:
+                                customProperties.politicaltendency = charValue;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
-          }
-          this.setState(selectedProperties);
-          console.log("Char ID Liste: ", idList)
-          idList.forEach((char_id) => {
-            const char = this.getCharNameByID(char_id)
-            console.log("CharBO: ", char)
-          })
+            this.setState({ customProperties });
+            console.log("Char ID Liste: ", idList)
+            idList.forEach((char_id) => {
+                console.log("CharBO: ", idList)
+            })
         });
     }
 
-    getCharNameByID(char_id) {
-        DatingSiteAPI.getAPI()
-            .getCharName(char_id)
-            .then((responeCharNames) => {
-                console.log("CharName Test: ", responeCharNames)
-            })
+    // getCharNameByID(char_id) {
+    //     return DatingSiteAPI.getAPI()
+    //         .getCharName(char_id)
+    //         .then((responeCharNames) => {
+    //             console.log("CharName GET: ", responeCharNames)
+    //             return responeCharNames;
+    //         })
+    // }
+
+    getCustomPropertyNames() {
+      const { customProperties } = this.state;
+
+      const charNamePromises = customProperties.map((property) =>
+        DatingSiteAPI.getAPI().getCharName(property.char_id)
+      );
+
+      Promise.all(charNamePromises)
+        .then((charNames) => {
+          const updatedProperties = customProperties.map((property, index) => ({
+            ...property,
+            char_name: charNames[index],
+          }));
+
+
+          this.setState({ customProperties: updatedProperties });
+          console.log("CharNames: ", customProperties)
+        })
+        .catch((error) => {
+          console.error("Error getting custom property names:", error);
+        });
     }
 
 
@@ -143,11 +172,24 @@ class Profile extends React.Component{
             favclub,
             hobby,
             politicaltendency,
-            educationalstatus,
+            customProperties,
 
         } = this.state;
 
         const isOwnProfile = this.state.lastPartURL === this.props.user.uid;
+
+         const customPropertyItems = customProperties.map((property) => (
+                <Item>
+                  <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                    <Grid item md={4} xs={7} spacing={2}>
+                      {property.char_name}:
+                    </Grid>
+                    <Grid item md={4} xs={7} spacing={2}>
+                      <p>{property.char_value}</p>
+                    </Grid>
+                  </Grid>
+                </Item>
+              ));
 
         return (
             <div>
@@ -160,7 +202,7 @@ class Profile extends React.Component{
                                     Vorname:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={3}>
-                                    <p>{firstName}</p>
+                                    <p>{customProperties.firstName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -170,7 +212,7 @@ class Profile extends React.Component{
                                     Nachname:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{lastName}</p>
+                                    <p>{customProperties.lastName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -180,7 +222,7 @@ class Profile extends React.Component{
                                     Alter:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{age}</p>
+                                    <p>{customProperties.age}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -190,7 +232,7 @@ class Profile extends React.Component{
                                     Geschlecht:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{gender}</p>
+                                    <p>{customProperties.gender}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -201,7 +243,7 @@ class Profile extends React.Component{
                                     Körpergröße:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{height}cm</p>
+                                    <p>{customProperties.height}cm</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -213,7 +255,7 @@ class Profile extends React.Component{
                                     Religion:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{religion}</p>
+                                    <p>{customProperties.religion}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -225,7 +267,7 @@ class Profile extends React.Component{
                                     Haarfarbe:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{hair}</p>
+                                    <p>{customProperties.hair}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -237,7 +279,7 @@ class Profile extends React.Component{
                                     Raucher:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{smoking}</p>
+                                    <p>{customProperties.smoking}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -249,19 +291,7 @@ class Profile extends React.Component{
                                     Gehalt:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{income}</p>
-                                </Grid>
-                            </Grid >
-                        </Item>
-                        )}
-                        {educationalstatus &&(
-                        <Item>
-                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
-                                    Bildungsstatus:
-                                </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{educationalstatus}</p>
+                                    <p>{customProperties.income}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -273,7 +303,7 @@ class Profile extends React.Component{
                                     Lieblingsverein:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{favclub}</p>
+                                    <p>{customProperties.favclub}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -285,7 +315,7 @@ class Profile extends React.Component{
                                     Hobbys:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{hobby}</p>
+                                    <p>{customProperties.hobby}</p>
                                 </Grid>
                             </Grid >
                         </Item>
@@ -297,11 +327,12 @@ class Profile extends React.Component{
                                     Politische Ausrichtung:
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
-                                    <p>{politicaltendency}</p>
+                                    <p>{customProperties.politicaltendency}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
+                        {customPropertyItems}
                         {!isOwnProfile && (
                         <OptionsOtherProfile other_profile={this.state.lastPartURL} user={this.props.user}/>
                         )}
