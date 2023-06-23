@@ -88,6 +88,16 @@ class InfoObjectMapper(mapper):
         print("Bevor Info: ", named_info_obj.get_named_char_name())
 
         cursor = self._connection.cursor()
+
+        query = "SELECT COUNT(*) FROM main.InfoObject WHERE profile_id = %s AND char_value = %s"
+        cursor.execute(query, (named_info_obj.get_named_profile_fk(), named_info_obj.get_named_info_name()))
+        result = cursor.fetchone()
+        count = result[0]
+
+        if count > 0:
+            cursor.close()
+            return named_info_obj
+
         cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
         tuples = cursor.fetchall()
 
