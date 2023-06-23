@@ -6,8 +6,7 @@ import React from "react";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 
 /**
- * Dies ist eine Seite, zum Darstellen mehrerer FavoriteProfileBoxen innerhalb eines weiteren Grids.
- * Damit dies dann nicht mehr innerhalb der App.js geschehen muss und die App.js dadurch übersichtlicher bleibt.
+ * Dies ist eine Seite zur Darstellung mehrerer FavoriteProfileBoxen innerhalb eines weiteren Grids.
  */
 
 class FavoriteProfileBoxList extends React.Component{
@@ -23,6 +22,7 @@ class FavoriteProfileBoxList extends React.Component{
 
 
     getFavoriteProfiles() {
+        /** Auslesen aller gemerkten Profile eines Users. */
         DatingSiteAPI.getAPI()
         .getFavoritenoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
@@ -38,14 +38,15 @@ class FavoriteProfileBoxList extends React.Component{
     }
 
     componentDidMount() {
-      this.getFavoriteProfiles(() => {
+        /** Methode, die beim Aufrufen der Seite geladen wird.
+         *  Sie lädt alle ProfileBoxen, dessen Profile gemerkt wurden. */
+        this.getFavoriteProfiles(() => {
         console.log('profiles im componentDidMount:', this.state.profiles);
-      });
+        });
     }
 
     handleRemoveProfile = (removedProfileId) => {
-        console.log('handleRemoveProfile und profiles vor der Aktualisierung:', this.state.profiles);
-        console.log('handleRemoveProfile und die removedProfileId:', removedProfileId);
+        /** Löschen von Profilen aus der Merkliste */
         const updatedProfiles = this.state.profiles.filter(profileId => profileId !== removedProfileId);
         const lengthupdatedProfiles = updatedProfiles.length;
         this.setState({
@@ -57,6 +58,8 @@ class FavoriteProfileBoxList extends React.Component{
     };
 
     componentDidUpdate(prevProps) {
+        /** Methode, die aufgerufen wird, sobald sich der State verändert.
+         *  Dies passiert, wenn man das Profil auswählt, welches man zum Merkzettel hinzufügen möchte. */
         if (prevProps.other_profile !== this.props.other_profile) {
             this.setState({
                 added_id: this.props.other_profile
@@ -65,6 +68,7 @@ class FavoriteProfileBoxList extends React.Component{
     }
 
     handleProfileClick = (index) => {
+        /** Setzt den Index je nach ausgewähltem Profil */
         this.setState({ otherProfileIndex: index});
     };
 
@@ -93,7 +97,7 @@ class FavoriteProfileBoxList extends React.Component{
         return (
             <div>
                 <h2>Dein Merkzettel:</h2>
-
+                {/*Darstellung, wenn Einträge in der FavoriteNote vorhanden sind*/}
                 {Listing.length > 0 ? (
                     <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'}, margin: '0 auto'}} >
                         <Grid item container spacing={2} justifyContent="center">

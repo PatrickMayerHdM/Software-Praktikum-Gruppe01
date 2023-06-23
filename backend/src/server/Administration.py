@@ -65,7 +65,7 @@ class Administration(object):
         with AccountMapper() as mapper:
             mapper.delete(account)
 
-    """Spezifische Methoden für message"""
+    """ Spezifische Methoden für message """
 
     def addMessage(self, sender, recipient, content):
         """Objekt der Klasse Massage wird erstellt"""
@@ -115,34 +115,40 @@ class Administration(object):
             return mapper.find_by_chat(sender_profile, recipient_profile)
 
 
-    """Spezifische Methoden für blockNote"""
+    """ Spezifische Methoden für blockNote """
+
     def create_blocknote(self, blocking_id, blocked_id):
+        """ Erstellen einer neuer Instanz von BlockNote. """
         blocknote = BlockNote()
         blocknote.set_id(1)
         blocknote.set_blocking_id(blocking_id)
         blocknote.set_blocked_id(blocked_id)
-
+        """ Einfügen der neuen Instanz in die Datenbank. """
         with BlockNoteMapper() as mapper:
             return mapper.insert(blocknote)
 
     def save_blocknote(self, blocklist):
+        """ Updaten einer Instanz von BlockNote. """
         with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
     def delete_blocknote(self, blocking_id, blocked_id):
+        """ Löschen einer Instanz von BlockNote. """
         with BlockNoteMapper() as mapper:
             mapper.delete(blocking_id, blocked_id)
 
-
     def get_all_blocknote(self):
+        """ Auslesen aller Instanzen von BlockNote. """
         with BlockNoteMapper() as mapper:
             return mapper.find_all()
 
     def get_blocknote_by_blocknote_id(self, key):
+        """ Auslesen aller Instanzen von BlockNote mit einer bestimmten id. """
         with BlockNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
     def get_blocknote_by_blocking_user(self, blocking_user):
+        """ Auslesen aller Instanzen von BlockNote eines Users. """
 
         profiles = []
         with BlockNoteMapper() as mapper:
@@ -154,34 +160,40 @@ class Administration(object):
 
         return profiles
 
-    """Spezifische Methoden für favoritenote"""
+    """ Spezifische Methoden für favoritenote """
 
     def create_favoritenote(self, adding_id, added_id):
+        """ Erstellen einer neuer Instanz von FavoriteNote. """
         favoritenote = FavoriteNote()
         favoritenote.set_id(1)
         favoritenote.set_adding_id(adding_id)
         favoritenote.set_added_id(added_id)
-
+        """ Einfügen der neuen Instanz in die Datenbank. """
         with FavoriteNoteMapper() as mapper:
             mapper.insert(favoritenote)
 
     def save_favoritenote(self, favoritenote):
+        """ Updaten einer Instanz von FavoriteNote. """
         with FavoriteNoteMapper() as mapper:
             mapper.update(favoritenote)
 
     def delete_favoritenote(self, adding_id, added_id):
+        """ Löschen einer Instanz von FavoriteNote. """
         with FavoriteNoteMapper() as mapper:
             mapper.delete(adding_id, added_id)
 
     def get_all_favoritenotes(self):
+        """ Auslesen aller Instanzen von FavoriteNote. """
         with FavoriteNoteMapper() as mapper:
             return mapper.find_all()
 
     def get_favoritenote_by_favoritenote_id(self, key):
+        """ Auslesen aller Instanzen von FavoriteNote mit einer bestimmten id. """
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
     def get_favoritenote_by_adding_user(self, adding_user):
+        """ Auslesen aller Instanzen von FavoriteNote eines Users. """
 
         profiles = []
         with FavoriteNoteMapper() as mapper:
