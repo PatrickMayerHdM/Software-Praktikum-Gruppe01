@@ -243,7 +243,6 @@ export default class DatingSiteAPI {
         return this.#fetchAdvanced(this.#getCharNameURL(char_id))
             .then((responeJSON) => {
                 let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
-                console.log("Nach FROMJSON: ", namedCHAR);
                 return namedCHAR
             })
     }

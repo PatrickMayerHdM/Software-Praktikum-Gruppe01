@@ -20,7 +20,6 @@ import BlockProfileBoxList from "./pages/BlockProfileBoxList";
 import ChatProfileBoxList from "./pages/ChatProfileBoxList";
 import SearchProfile from "./components/Search/SearchProfile";
 import Search from "./pages/Search";
-import ProfileTest from "./components/Profile/Profile-Test";
 /** Definition der App-Komponente */
 
 class App extends Component {

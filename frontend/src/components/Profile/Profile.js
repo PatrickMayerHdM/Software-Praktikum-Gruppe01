@@ -41,121 +41,92 @@ class Profile extends React.Component{
         const lastPartURL = currentPath.split('/').pop();
         this.setState({lastPartURL: lastPartURL}, () => {
             this.getSelectedProperties();
-            this.getCustomPropertyNames();
         })
     }
 
+    async getSelectedProperties() {
+      const customProperties = {};
 
-    getSelectedProperties() {
-        const idList = [];
-        const customProperties = [];
+      try {
+        const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.state.lastPartURL);
+        console.log("InfoObjects: ", responseInfoObjects);
 
-        DatingSiteAPI.getAPI()
-        .getInfoObjects(this.state.lastPartURL)
-        .then((responseInfoObjects) => {
-            console.log("InfoObjects: ", responseInfoObjects)
+        for (const key in responseInfoObjects) {
+          if (responseInfoObjects.hasOwnProperty(key)) {
+            const infoObject = responseInfoObjects[key];
+            const char_id = infoObject.char_id;
+            const charValue = infoObject.char_value;
 
-            for (const key in responseInfoObjects) {
-                if (responseInfoObjects.hasOwnProperty(key)) {
-                    const infoObject = responseInfoObjects[key];
-                    const char_id = infoObject.char_id;
-                    const charValue = infoObject.char_value;
-
-                    if (char_id > 160) {
-                        customProperties.push({
-                            char_id: char_id,
-                            char_value: charValue,
-                        });
-                        idList.push(char_id);
-                    } else {
-                        switch (char_id) {
-                            case 30:
-                                customProperties.age = charValue;
-                                break;
-                            case 10:
-                                customProperties.firstName = charValue;
-                                break;
-                            case 40:
-                                customProperties.gender = charValue;
-                                break;
-                            case 70:
-                                customProperties.hair = charValue;
-                                break;
-                            case 50:
-                                customProperties.height = charValue;
-                                break;
-                            case 20:
-                                customProperties.lastName = charValue;
-                                break;
-                            case 60:
-                                customProperties.religion = charValue;
-                                break;
-                            case 80:
-                                customProperties.smoking = charValue;
-                                break;
-                            case 90:
-                                customProperties.aboutme = charValue;
-                                break;
-                            case 120:
-                                customProperties.income = charValue;
-                                break;
-                            case 140:
-                                customProperties.favclub = charValue;
-                                break;
-                            case 150:
-                                customProperties.hobby = charValue;
-                                break;
-                            case 160:
-                                customProperties.politicaltendency = charValue;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
+            if (char_id > 160) {
+              const char_name = await this.getCharNameByID(char_id);
+              customProperties[char_id] = {
+                char_id: char_id,
+                char_value: charValue,
+                char_name: char_name,
+              };
+            } else {
+              switch (char_id) {
+                case 30:
+                  customProperties.age = charValue;
+                  break;
+                case 10:
+                  customProperties.firstName = charValue;
+                  break;
+                case 40:
+                  customProperties.gender = charValue;
+                  break;
+                case 70:
+                  customProperties.hair = charValue;
+                  break;
+                case 50:
+                  customProperties.height = charValue;
+                  break;
+                case 20:
+                  customProperties.lastName = charValue;
+                  break;
+                case 60:
+                  customProperties.religion = charValue;
+                  break;
+                case 80:
+                  customProperties.smoking = charValue;
+                  break;
+                case 90:
+                  customProperties.aboutme = charValue;
+                  break;
+                case 120:
+                  customProperties.income = charValue;
+                  break;
+                case 140:
+                  customProperties.favclub = charValue;
+                  break;
+                case 150:
+                  customProperties.hobby = charValue;
+                  break;
+                case 160:
+                  customProperties.politicaltendency = charValue;
+                  break;
+                default:
+                  break;
+              }
             }
-            this.setState({ customProperties });
-            console.log("Char ID Liste: ", idList)
-            idList.forEach((char_id) => {
-                console.log("CharBO: ", idList)
-            })
-        });
+          }
+        }
+
+        this.setState({ customProperties });
+        console.log("Char ID Liste: ", customProperties);
+      } catch (error) {
+        console.error("Fehler beim auslesen der InfoObjekte: ", error);
+      }
     }
 
-    // getCharNameByID(char_id) {
-    //     return DatingSiteAPI.getAPI()
-    //         .getCharName(char_id)
-    //         .then((responeCharNames) => {
-    //             console.log("CharName GET: ", responeCharNames)
-    //             return responeCharNames;
-    //         })
-    // }
-
-    getCustomPropertyNames() {
-      const { customProperties } = this.state;
-
-      const charNamePromises = customProperties.map((property) =>
-        DatingSiteAPI.getAPI().getCharName(property.char_id)
-      );
-
-      Promise.all(charNamePromises)
-        .then((charNames) => {
-          const updatedProperties = customProperties.map((property, index) => ({
-            ...property,
-            char_name: charNames[index],
-          }));
-
-
-          this.setState({ customProperties: updatedProperties });
-          console.log("CharNames: ", customProperties)
+    getCharNameByID(char_id) {
+      return DatingSiteAPI.getAPI()
+        .getCharName(char_id)
+        .then((responseCharName) => {
+            return responseCharName;
         })
-        .catch((error) => {
-          console.error("Error getting custom property names:", error);
-        });
+
     }
-
-
-
 
     render() {
 
@@ -177,19 +148,6 @@ class Profile extends React.Component{
         } = this.state;
 
         const isOwnProfile = this.state.lastPartURL === this.props.user.uid;
-
-         const customPropertyItems = customProperties.map((property) => (
-                <Item>
-                  <Grid container direction="row" justifyContent="center" alignItems="stretch">
-                    <Grid item md={4} xs={7} spacing={2}>
-                      {property.char_name}:
-                    </Grid>
-                    <Grid item md={4} xs={7} spacing={2}>
-                      <p>{property.char_value}</p>
-                    </Grid>
-                  </Grid>
-                </Item>
-              ));
 
         return (
             <div>
@@ -332,7 +290,23 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {customPropertyItems}
+                        {Object.entries(customProperties).map(([key, value], index) => {
+                          if (typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                            return (
+                              <Item key={index}>
+                                <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                                  <Grid item md={4} xs={7} spacing={2}>
+                                    {value.char_name[0]}
+                                  </Grid>
+                                  <Grid item md={4} xs={7} spacing={2}>
+                                    <p>{value.char_value}</p>
+                                  </Grid>
+                                </Grid>
+                              </Item>
+                            );
+                          }
+                          return null;
+                        })}
                         {!isOwnProfile && (
                         <OptionsOtherProfile other_profile={this.state.lastPartURL} user={this.props.user}/>
                         )}
