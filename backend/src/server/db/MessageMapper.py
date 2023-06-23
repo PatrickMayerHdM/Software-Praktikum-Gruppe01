@@ -125,7 +125,10 @@ class MessageMapper(mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            message.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                message.set_id(maxid[0] + 1)
+            else:
+                message.set_id(1)
 
         command = 'INSERT INTO main.Message (message_id, sender_id, recipient_id, content) VALUES (%s, %s, %s, ' \
                   '%s)'
