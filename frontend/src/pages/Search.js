@@ -160,6 +160,10 @@ class Search extends React.Component{
      */
 
     Search() {
+        this.setState({
+            RenderProfiles: [ ],
+            numRenderProfiles: 0,
+        })
         //console.log("Mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
         DatingSiteAPI.getAPI()
         .getSearchResults(this.state.selectedProfile)
@@ -170,6 +174,7 @@ class Search extends React.Component{
                 profiles: profilesvar,
 
             }, () => {
+                this.RenderSearchResults()
                 // Hier wird der neue State des profiles Arrays ausgegeben und dazu die im State festgelegte Anzahl der Profile
                 //console.log("In Search.js in Search(), sieht so profiles aus: ", this.state.profiles, this.state.numProfiles);
             })
