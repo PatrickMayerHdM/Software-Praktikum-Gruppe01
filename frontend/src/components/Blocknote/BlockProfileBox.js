@@ -7,11 +7,10 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import DatingSiteAPI from "../../api/DatingSiteAPI";
 import PropTypes from 'prop-types';
 
-
 /**
- * Da in der konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
- * Diese ist explizit für die Kontaktsperre ausgelegt und zeigt zusätzlich nochmal einen entfernen Knopf an.
- * Dies soll später ermöglichen andere Personen, wieder von der Kontaktsperre zu nehmen.
+ * Da in der Konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
+ * Diese ist explizit für die Kontaktsperre ausgelegt und zeigt zusätzlich nochmal einen Entfernen-Button an.
+ * Dies soll ermöglichen andere Personen wieder von der Kontaktsperre zu nehmen.
  */
 
 class BlockProfileBox extends React.Component{
@@ -26,33 +25,28 @@ class BlockProfileBox extends React.Component{
     }
 
     static propTypes = {
+        // Es wird eine Prop mit dem Namen onRemoveProfile erwartet.
         onRemoveProfile: PropTypes.func.isRequired,
     };
 
-    /** Funktion welche ausgeführt wird, wenn der Button "Von Kontaktsperre Entfernen" gedrückt wird.
-         * Bisher zu Testzwecken noch nicht weiter ausgeführt */
+    /** Funktion welche ausgeführt wird, wenn der Button "Von Kontaktsperre Entfernen" gedrückt wird. */
     BlockDelClicked(){
         DatingSiteAPI.getAPI()
             // Löschen des BlockNote-Eintrags
             .removeBlocknoteProfile(this.state.blocking_id, this.state.blocked_id)
             .then(() => {
-                //console.log("Von Merkzettel entfernt");
+                console.log("Von Merkzettel entfernt");
             })
             .catch((e) =>
                 this.setState({
                     error: e,
                 })
             );
-        //console.log("Von Kontaktsperre entfernt")
     }
-
-
 
     render() {
 
-
-        /** Die Profilbox an sich, extra angepasst auf die gegebenheiten zur Darstellung der mit einer
-         * Kontaktsperre belegten Profile */
+        /** Die Profilbox angepasst zur Darstellung von einer Kontaktsperre mit Profilen. */
 
         return(
             <Box sx={{ flexGrow: 1 }}>
@@ -62,7 +56,7 @@ class BlockProfileBox extends React.Component{
                       <ProfileBox other_profile={this.props.other_profile} ownprofile_id={this.state.blocking_id}/>
                   </Item >
                 </Grid >
-                <Grid item item xs={2} >
+                <Grid item xs={2} >
                     <button onClick={() => {
                         this.BlockDelClicked();
                         this.props.onRemoveProfile(this.props.other_profile);
@@ -73,7 +67,7 @@ class BlockProfileBox extends React.Component{
                 </Grid>
               </Grid>
             </Box>
-            )
+        )
     }
 }
 

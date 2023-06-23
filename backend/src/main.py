@@ -3,10 +3,6 @@ from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
 
-
-
-
-
 from server.Administration import Administration
 from server.bo.Account import Account
 from server.bo.Profile import Profile
@@ -318,7 +314,6 @@ class SearchOneProfileOperation(Resource):
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
 
-
 @datingapp.route('/ChatProfileBoxList/<id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('id','profileBO')
@@ -447,8 +442,8 @@ class InfoObjectsOperations(Resource):
         else:
             return 'Profil konnte nicht aktualisiert werden.', 500
 
-"""Ab hier FavoriteNote"""
 
+"""Ab hier FavoriteNote"""
 
 @datingapp.route('/Favoritenote')
 @datingapp.response(500, 'Serverseitiger Fehler')
@@ -459,7 +454,6 @@ class FavoritenoteListOperations(Resource):
     # @secured
     def post(self):
         """Erstellen einer neuen FavoriteNote"""
-
         adm = Administration()
         proposal = FavoriteNote.from_dict(api.payload)
 
@@ -481,7 +475,7 @@ class FavoritenoteDeleteOperations(Resource):
     @secured
     def delete(self, profile_id, other_profile_id):
         """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die ID's in der URL bestimmt"""
+        Das Objekt wird durch die ID in der URL bestimmt."""
 
         adm = Administration()
         #print("profile_id im main: ", profile_id)
@@ -501,7 +495,7 @@ class FavoriteNoteOperations(Resource):
     @secured
     def get(self, profile_id):
         """Auslesen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URL bestimmt"""
+        Das Objekt wird durch die ID in der URL bestimmt."""
 
         adm = Administration()
         fnotes = adm.get_favoritenote_by_adding_user(profile_id)
@@ -565,7 +559,7 @@ class BlockNoteOperations(Resource):
     @secured
     def get(self, profile_id):
         """Auslesen eines BlockNote-Objekts.
-        Das Objekt wird durch die id in dem URI bestimmt"""
+        Das Objekt wird durch die ID in der URL bestimmt."""
 
         adm = Administration()
         bnotes = adm.get_blocknote_by_blocking_user(profile_id)
@@ -611,6 +605,8 @@ class BlocknoteDeleteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+    """ Ab hier Suchprofil """
 
 
 @datingapp.route('/Suche/Suchprofil')

@@ -1,8 +1,6 @@
 from server.bo.favoriteNote import FavoriteNote
 from server.db.mapper import mapper
 
-"""Notiz: in DB wird der Name Favoritenote verwendet"""
-
 
 class FavoriteNoteMapper(mapper):
     """ Mapper-Klasse, der die Merkliste auf eine relationale Datenbank abbildet."""
@@ -11,6 +9,7 @@ class FavoriteNoteMapper(mapper):
         super().__init__()
 
     def find_all(self):
+        """ Auslesen aller Merkungen. """
         result = []
         cursor = self._connection.cursor()
 
@@ -30,6 +29,7 @@ class FavoriteNoteMapper(mapper):
         return result
 
     def find_by_adding_user(self, adding_id):
+        """ Auslesen aller Merkungen eines Nutzers anhand seiner Id. """
         result = []
         cursor = self._connection.cursor()
         command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}' AND added_id NOT IN (SELECT blocked_id FROM main.Blocknote WHERE blocking_id='{adding_id}') AND added_id NOT IN (SELECT blocking_id FROM main.Blocknote WHERE blocked_id='{adding_id}')"
@@ -49,6 +49,7 @@ class FavoriteNoteMapper(mapper):
         return result
 
     def find_by_key(self, key):
+        """ Auslesen aller Merkungen anhand einer favoritenote_id. """
         result = None
 
         cursor = self._connection.cursor()
@@ -74,6 +75,7 @@ class FavoriteNoteMapper(mapper):
         return result
 
     def insert(self, favoritenote):
+        """ Hinzufügen einer Merkung. """
         cursor = self._connection.cursor()
         command = "SELECT favoritenote_id FROM main.Favoritenote WHERE adding_id = %s AND added_id = %s"
         data = (favoritenote.get_adding_id(), favoritenote.get_added_id())
@@ -98,6 +100,7 @@ class FavoriteNoteMapper(mapper):
         cursor.close()
 
     def update(self, merkliste):
+        """ Updaten einer Merkung. """
         cursor = self._connection.cursor()
 
         command = 'UPDATE main.Favoritenote SET added_id=%s, adding_id=%s WHERE favoritenote_id=%s'
@@ -109,6 +112,7 @@ class FavoriteNoteMapper(mapper):
         cursor.close()
 
     def delete(self, adding_id, added_id):
+        """ Löschen einer Merkung. """
         cursor = self._connection.cursor()
         command = f'DELETE FROM main.Favoritenote WHERE adding_id=%s AND added_id=%s'
         data = (adding_id, added_id)

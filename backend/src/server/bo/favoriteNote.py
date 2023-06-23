@@ -1,24 +1,31 @@
-from server.bo.relationship import relationship
 from BusinessObject import BusinessObject as bo
 
 
 class FavoriteNote(bo):
     def __init__(self):
+        """
+        adding_id = Hinzufügende User
+        added_id = Hinzugefügte User
+        """
         super().__init__()
         self.adding_id = None
         self.added_id = None
 
 
     def set_added_id(self, added_id):
+        """Setzen des Hinzugefügten."""
         self.added_id = added_id
 
     def get_added_id(self):
+        """Auslesen des Hinzugefügten."""
         return self.added_id
 
     def set_adding_id(self, adding_id):
+        """Setzen des Hinzufügenden."""
         self.adding_id = adding_id
 
     def get_adding_id(self):
+        """Auslesen des Hinzufügenden."""
         return self.adding_id
 
     def __str__(self):
