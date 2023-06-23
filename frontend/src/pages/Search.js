@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UpdateIcon from '@mui/icons-material/Update';
 import infoobjectBO from "../api/InfoObjectBO";
 import SearchProfileBox from "../components/Search/SearchProfileBox";
+import { Switch } from '@mui/material';
 
 /**
  * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
@@ -33,9 +34,12 @@ class Search extends React.Component{
             selectedProfile: null, // Das aktuell Ausgewählte Suchprofil.
             Searchprofiles: [ ],  // Dieses Array für Suchprofile wird beim Laden der Seite geladen und besteht aus den ID's der Suchprofile
             profiles: [ ], // Die Profile die wir als Antwort bekommen.
+            RenderProfiles: [ ], // Die Profile, welche dem User angezeigt werden.
+            numRenderProfiles: 0, // Die Anzahl der Profile die angezeigt werden sollen.
             profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
             clickable: false, // Boolean, ob ein User ein Suchprofil ausgewählt hat und dann suchen kann, da ein User dies ohne ein Auasgewähltes Suchprofil nicht kann.
             numProfiles: 0, // Nummer der Profile welche als Antwort kamen
+            switchModeVisits: false, // Boolean, ob ein User nur noch nicht besuchte Profile angezeigt bekommen will
         };
 
         this.NewProfiles = this.NewProfiles.bind(this);
@@ -46,6 +50,8 @@ class Search extends React.Component{
         this.SearchallProfiles = this.SearchallProfiles.bind(this);
         this.Search = this.Search.bind(this);
         this.TestSearch = this.TestSearch.bind(this);
+        this.handleSearchModeChange = this.handleSearchModeChange.bind(this);
+        this.RenderSearchResults = this.RenderSearchResults.bind(this);
     }
 
 
@@ -55,7 +61,7 @@ class Search extends React.Component{
      * Dieser Aufruf ermöglicht es, dem User Partnervorschläge basierend auf Konten zu sehen, welcher dieser User noch
      * nicht besucht hat. Diese Partnervorschläge sind dann anhand des Ähnlichkeitsmaß, in Bezug auf ein Suchprofil
      * geordnet.
-     * Um diese FUnktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
+     * Um diese Funktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
      * @constructor
      */
     NewProfiles(){
@@ -66,16 +72,51 @@ class Search extends React.Component{
             .then(profilesvar => {
                 // Ermitteln der Länge der zurückgegebenen Daten, dies ist zur Darstellung der SearchProfileBoxen relevant.
                 const lengthProfiles = profilesvar.length;
-                this.setState(prevState => ({
+                this.setState({
                     profiles: profilesvar,
                     numProfiles: lengthProfiles
-                }), () => {
+                }, () => {
                     console.log("In Search.js in Search(), sieht so profiles aus: ", this.state.profiles, this.state.numProfiles);
                 });
             })
             .catch(error => {
                 console.error('Error fetching data in NewProfiles():', error);
             });
+    }
+
+
+    RenderSearchResults() {
+        // Abfrage welchen Wert der switch (für noch nicht angesehene Profile) hat, hier ist true, dass dies ausgewählt wurde
+        if (this.state.switchModeVisits === true) {
+            // hier wird jedes einzelne Element des profiles Array ausgewählt.
+            this.state.profiles.forEach(element => {
+                // Mit einer if Abfrage wird geprüft, ob ein Profil von einem User bereits besucht wurde. (Wenn dies nicht der Fall ist, ist false enthalten).
+                if (element[2] === false) {
+                    console.log("Hier wird false ausgeführt RenderProfiles, also dieses Profil wurde noch nicht besucht: ", element);
+                    // Wenn ein Element (also Partnervorschlag) noch nciht besucht wurde, wird dieser dem RenderProfiles Array hinzugefügt.
+                    this.setState(prevState => ({
+                        RenderProfiles: [...prevState.RenderProfiles, element]
+                    }), () => {
+                        const lengthRenderProfiles = this.state.RenderProfiles.length;
+                        this.setState({ numRenderProfiles: lengthRenderProfiles }, () => {
+                            console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
+                        });
+                    });
+                }
+            })
+        } else {
+            // Hier ist der Code für wenn es dem User egal ist.
+            this.state.profiles.forEach(element => {
+                this.setState(prevState => ({
+                        RenderProfiles: [...prevState.RenderProfiles, element]
+                    }), () => {
+                        const lengthRenderProfiles = this.state.RenderProfiles.length;
+                        this.setState({ numRenderProfiles: lengthRenderProfiles }, () => {
+                            console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
+                        });
+                    });
+            })
+        }
     }
 
     /**
@@ -100,10 +141,10 @@ class Search extends React.Component{
         .then(profilesvar => {
             // Ermitteln der Länge der zurückgegebenen Daten, dies ist zur Darstellung der SearchProfileBoxen relevant.
             const lengthProfiles = profilesvar.length;
-            this.setState(prevState => ({
+            this.setState({
                 profiles: profilesvar,
                 numProfiles: lengthProfiles
-            }));
+            });
         })
         .catch(error => {
           console.error('Error fetching data in SearchallProfiles():', error);
@@ -125,13 +166,13 @@ class Search extends React.Component{
         .then(profilesvar => {
             // Ermitteln der Länge der zurückgegebenen Daten, dies ist zur Darstellung der SearchProfileBoxen relevant.
             const lengthProfiles = profilesvar.length;
-            this.setState(prevState => ({
+            this.setState({
                 profiles: profilesvar,
-                numProfiles: lengthProfiles
-            }), () => {
+
+            }, () => {
                 // Hier wird der neue State des profiles Arrays ausgegeben und dazu die im State festgelegte Anzahl der Profile
                 //console.log("In Search.js in Search(), sieht so profiles aus: ", this.state.profiles, this.state.numProfiles);
-            });
+            })
         })
         .catch(error => {
           console.error('Error fetching in Search() :', error);
@@ -143,15 +184,31 @@ class Search extends React.Component{
      * @constructor
      */
     TestSearch() {
+        this.setState({
+            RenderProfiles: [ ],
+            numRenderProfiles: 0,
+        })
         //console.log("Das ist die Testsearch mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
-        const BeispielRESPONSEJSON = ([['OnhCSTN3ypaBnidTh2x4cbC7ie12', 80.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 60.0], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 40.0]])
-        //console.log("So sieht das BeispielRESPONSEJSON in der console aus: ",BeispielRESPONSEJSON)
+        const BeispielRESPONSEJSON = ([['OnhCSTN3ypaBnidTh2x4cbC7ie12', 80.0, false], ['SKVd6ZZLxsf8CBarCJXIWPL0APC2', 60.0, true], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 40.0, false]])
+        //console.log("So sieht das BeispielRESPONSEJSON in der console aus:",BeispielRESPONSEJSON)
         // Ermitteln der Länge des BeispielRESPONSEJSON, dies ist zur Darstellung der SearchProfileBoxen relevant.
-        const lengthProfiles = BeispielRESPONSEJSON.length;
-        this.setState(prevState => ({
+        this.setState({
             profiles: BeispielRESPONSEJSON,
-            numProfiles: lengthProfiles
-        }));
+        }, () => {
+            this.RenderSearchResults()
+        })
+    }
+
+    handleSearchModeChange = () => {
+        //console.log("Das ist der Wert von switchModeVisits bevor es zu der Veränderung kam: ", this.state.switchModeVisits)
+        this.setState({
+            RenderProfiles: [ ],
+            numRenderProfiles: 0,
+            switchModeVisits: !this.state.switchModeVisits,
+        }, () => {
+            this.RenderSearchResults()
+            console.log("Das ist der Wert von switchModeVisits nachdem es zu der Veränderung kam: ", this.state.switchModeVisits)
+        });
     }
 
     /**
@@ -179,7 +236,7 @@ class Search extends React.Component{
      * @constructor
      */
     DeleteSearchProfile(){
-        //console.log("Das Suchprofil",this.state.selectedProfileIndex ,"wird gelöscht");
+        //console.log("Das Suchprofil [index]",this.state.selectedProfileIndex ,"und selectet: ",this.state.selectedProfile,"wird gelöscht");
         DatingSiteAPI.getAPI()
             .removeSearchProfile(this.state.selectedProfile)
             .catch((e) =>
@@ -226,9 +283,9 @@ class Search extends React.Component{
         .getSearchProfileIDs(this.props.user.uid)
         .then(Searchprofilesvar => {
           //console.log("Das ist Searchprofilesvar in der loadingPage: ",Searchprofilesvar)
-          this.setState(prevState => ({
-            Searchprofiles: Searchprofilesvar,
-          }));
+          this.setState({
+            Searchprofiles: Searchprofilesvar
+          })
            // Ermitteln der Länge der Suchprofile, dies ist für die Darstellung der SuchProfile als Liste für den User relevant.
           const lengthSearchprofiles = this.state.Searchprofiles.length;
           //console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
@@ -273,7 +330,7 @@ class Search extends React.Component{
         // const für den Status, ob die buttons (Suche, edit, delete ausführbar sind)
         const { clickable } = this.state
         // const um den State der Anzahl der Profile mit count anzusprechen
-        const count = this.state.numProfiles;
+        const count = this.state.numRenderProfiles ;
 
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
         const SearchProfileListing = Array(this.state.numSearchProfiles)
@@ -298,57 +355,41 @@ class Search extends React.Component{
               </button>
             </Grid>
           ));
-
         // Methode zur Darstellung einer SearchProfileBox (So wird ein anderer User dargestellt)
         const SearchListing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
-                <SearchProfileBox key={this.state.profiles[index]} current_profile={this.props.user.uid} Profilematchmaking={this.state.profiles[index]}/>
+                <SearchProfileBox key={this.state.RenderProfiles[index]} current_profile={this.props.user.uid} Profilematchmaking={this.state.RenderProfiles[index]}/>
             </Grid>
         ));
 
     return (
 
       <div>
-        <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
+        <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'} , margin: '0 auto'}}>
              <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={3} >
                  <Item sx={{ width: "100%"}}>
                      <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={0} >
                         <Item sx={{ width: "100%"}}>
                             <Grid container direction="row" justifyContent="center" alignItems="stretch">
                               {/** Hier wird der Button zum Anzeigen von nur neuen Profilen erstellt */}
-                                <Grid item md={2} xs={2} >
-                                  <button
-                                    onClick={this.NewProfiles}
-                                    style={{
-                                      height: "120%",
-                                      width: "100%",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      backgroundColor: "#374258",
-                                      color: "#fff",
-                                      cursor: "pointer",
-                                      pointerEvents: clickable ? '' : 'none',
-                                    }}
-                                  >
-                                    <UpdateIcon/>
-                                  </button>
+                                <Grid item md={2} xs={2} sx={{ backgroundColor: "#374258", color: "#fff", height: "100%", width: "100%" , border: "1.6px solid"}}>
+                                    <Switch onChange={this.handleSearchModeChange} label="Mein Switch" />
                                 </Grid>
-
 
                                 {/** Hier werden die Buttons zum Erstellen eines Suchprofils erstellt */}
                                 <Grid item md={2} xs={2} >
                                     <Link to="/Suche/Suchprofil/new">
                                         <button
                                             style={{
-                                          height: "120%",
-                                          width: "100%",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                          backgroundColor: "#374258",
-                                          color: "#fff",
-                                          cursor: "pointer"}}>
+                                                height: "100%",
+                                                width: "100%",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                backgroundColor: "#374258",
+                                                color: "#fff",
+                                                cursor: "pointer"}}
+                                        >
                                             <AddIcon/>
                                         </button>
                                     </Link>
@@ -360,7 +401,7 @@ class Search extends React.Component{
                                   <button
                                     onClick={() => this.Search()}
                                     style={{
-                                      height: "120%",
+                                      height: "100%",
                                       width: "100%",
                                       display: "flex",
                                       alignItems: "center",
@@ -382,7 +423,7 @@ class Search extends React.Component{
                                       <button
                                           onClick={() => this.EditSearchProfiles()}
                                         style={{
-                                          height: "120%",
+                                          height: "100%",
                                           width: "100%",
                                           display: "flex",
                                           alignItems: "center",
@@ -403,7 +444,7 @@ class Search extends React.Component{
                                       <button
                                           onClick={() => this.DeleteSearchProfile()}
                                         style={{
-                                          height: "120%",
+                                          height: "100%",
                                           width: "100%",
                                           display: "flex",
                                           alignItems: "center",
