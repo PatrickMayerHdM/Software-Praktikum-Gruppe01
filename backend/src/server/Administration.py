@@ -104,6 +104,7 @@ class Administration(object):
             return mapper.find_by_recipient(recipientid)
 
     def get_message_by_id(self, key):
+        """messages anhand eines keys auslesen"""
         with MessageMapper() as mapper:
             return mapper.find_by_key(key)
 
@@ -113,12 +114,6 @@ class Administration(object):
             print(mapper.find_by_chat(sender_profile, recipient_profile))
             return mapper.find_by_chat(sender_profile, recipient_profile)
 
-    # @staticmethod
-    # def find_by_chat(sender_profile, recipient_profile):
-    #     """Auslesen aller Nachrichten zwischen zwei Personen."""
-    #     message_mapper = MessageMapper()
-    #     messages = message_mapper.find_by_chat(sender_profile, recipient_profile)
-    #     return messages
 
     """Spezifische Methoden für blockNote"""
     def create_blocknote(self, blocking_id, blocked_id):
@@ -395,28 +390,8 @@ class Administration(object):
             return mapper.delete_searchprofile(infoobject)
 
 
-    # Logik für Profil, did die Info-Objekte in
-
-    "Chat-spezifische Methoden"
-    """
-    def create_chat(self, message_id):
-        chat = Chat()
-        chat.set_id(1)
-        chat.set_message_id(message_id)
-        with ChatMapper() as mapper:
-            mapper.insert(chat)
-
-    def get_all_chats(self):
-        with ChatMapper() as mapper:
-            return mapper.find_all()
-
-    def get_chat_by_id(self, key):
-        with ChatMapper() as mapper:
-            return mapper.find_by_key(key)
-"""
     def get_profile_by_message(self, profile_id):
-        """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
-        welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
+        """Diese Methode gibt eine Liste von Profilen zurück, welche mit dem "owner"-Profil kommunizieren"""
         profiles = []
 
         with MessageMapper() as message_mapper:
@@ -432,8 +407,6 @@ class Administration(object):
 
                 if recipient_id == profile_id and sender_id not in profiles:
                     profiles.append(sender_id)
-
-        print("Profiles:", profiles)
 
         return profiles
 
@@ -561,14 +534,11 @@ class Administration(object):
         """ Diese Methode stellt die Ausführung des Algorithmus dar, um potenzielle Partner auf der Plattform zu finden. """
 
         searchprofile = searchprof  # Searchprofile ist das Dict mit ID und Char-Values
-        print('Suchprofil: ', searchprofile)
+        print('Admin.py: Dieses Suchprofil wurde an Algo übergeben: ', searchprofile)
         result = []  # Ergebnisliste, die später übergeben werden soll. Ähnlichkeit: [['zQokAwj2tchqk4dkovLVvqCmzWp2', 11]]
         gid_list = []  # Alle Google IDs der Plattform
-        gender_filtered_list = []
-        age_filtered_list = []
-        similarity_list = []
-
-        print('Hier in der Methode Matchmaking angekommen')
+        gender_filtered_list = [] # Alle Profile, die dem gesuchten Geschlecht entsprechen
+        age_filtered_list = [] # Alle Profile, die in der gesuchten Altersrange liegen
 
         with ProfileMapper() as prof_mapper:
             profiles = prof_mapper.find_all()  # Hole alle Profile aus der Datenbank
@@ -576,6 +546,24 @@ class Administration(object):
                 # print('GID:', gid)
                 # print('GID GoogleID:', gid.get_google_fk())
                 gid_list.append(gid.get_google_fk())  # Füge der gid_list alle google_fk´s zu.
+
+        # Überprüfung, ob sich eine gefundene Google-ID in der Blockierliste befindet.
+        with SearchProfileMapper() as searchprof_mapper:
+            search_google_id = searchprof_mapper.find_gid_by_searchid(searchprofile['Searchprofile ID'])
+            #print('Admin.py Zeile 551 - Hier war der Bug')
+            #print('Google ID des Searchprofiles:' ,search_google_id)
+            with BlockNoteMapper() as block_mapper:
+                blocked_profiles = block_mapper.find_by_blocking_user(search_google_id) #finde alle blockierten profile
+                for googleid in blocked_profiles: # suche nach den googleid´s
+                    print('Das ist id die blocked_id:', googleid.get_blocked_id())
+                    blocked_id = googleid.get_blocked_id()
+                    if blocked_id in gid_list:
+                        print('Entferntes Profil aus GID_List', blocked_id)
+                        print('Das ist die GID List bevor die Blockierten Profile weg fallen:', gid_list)
+                        gid_list.remove(blocked_id) # entferne alle blockierten profile
+                        print('Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
+
+
 
         for elem in gid_list:
             with InfoObjectMapper() as info_mapper:
@@ -610,10 +598,10 @@ class Administration(object):
         # print('Gender_Filtered list: Anzahl sollte 2 betragen:', gender_filtered_list)
 
         # Age Filter: Soll das gewünschte Alter der gesuchten Person ermitteln und nur Kandidaten in dieser Spanne zur Suche hinzufügen
-        if 110 in searchprofile['Char Values'] and 120 in searchprofile['Char Values']:
-            min_age = searchprofile['Char Values'][110]
+        if 100 in searchprofile['Char Values'] and 110 in searchprofile['Char Values']:
+            min_age = searchprofile['Char Values'][100]
             # print('searchprofile min_age',min_age)
-            max_age = searchprofile['Char Values'][120]
+            max_age = searchprofile['Char Values'][110]
             # print('searchprofile max_age', max_age)
 
             for profile in gender_filtered_list:  # jedes Profil aus der Liste holen
@@ -622,13 +610,18 @@ class Administration(object):
                     char_values = profile['Char Values']
                     if 30 in char_values:  # Prüfe den Value mit dem Key 30
                         age = char_values[30]
-                        # print(type(age))
-                        # print('age', age)
+                        print(type(age))
+                        print('age', age)
                         calculated_age = self.agefilter(age)  # Berechne das Alter anhand des Geburtstages
-                        # print('berechnetes Alter', calculated_age)
+                        print('berechnetes Alter', calculated_age)
+                        print('berechnetes Alter Type', type(calculated_age))
 
                         if calculated_age is not None:
-                            if min_age <= calculated_age <= max_age:  # Abfrage ob das berechnete Alter in der Suchrange liegt
+                            print('Type min_age,', type(min_age))
+                            print(' min_age,', min_age)
+                            print('Type max_age,', type(max_age))
+                            print('max age:', max_age)
+                            if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
                                 # print('Dieses Profil wird der Liste hinzugefügt:', profile)
                                 age_filtered_list.append(profile)
                                 print('age_filtered_list sollte nur 1 profil haben', len(age_filtered_list))
@@ -721,21 +714,21 @@ class Administration(object):
                 print('Userprofil height', userprof)
 
                 if search_value == 'small':
-                    if userprof < 160:
+                    if int(userprof) < 160:
                         score += 1
                         print('Small Match:', score)
                     else:
                         continue
 
                 elif search_value == 'mean':
-                    if userprof >= 160 and userprof <= 180:
+                    if int(userprof) >= 160 and int(userprof) <= 180:
                         score += 1
                         print('mean Match:', score)
                     else:
                         continue
 
                 elif search_value == 'large':
-                    if userprof > 180:
+                    if int(userprof) > 180:
                         score += 1
                         print('large Match:', score)
                     else:
@@ -752,7 +745,7 @@ class Administration(object):
                 userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
                 print('Einkommen des Userprofils:', userprof)
 
-                if userprof >= search_value:
+                if int(userprof) >= int(search_value):
                     score += 1
                     print('Einkommen Match +1:', score)
 
@@ -804,12 +797,21 @@ class Administration(object):
 
     def get_char_values_for_searchprofile(self, searchprofile):
         """ Diese Methode gibt ein Dictionary mit einer gegebenen Suchprofil ID und deren Char Values zurück """
-        with SearchProfileMapper as mapper:
-            char_values = mapper.find_by_searchprofile(searchprofile)
+        with SearchProfileMapper() as mapper:
+            char_objects = mapper.find_by_searchprofile(searchprofile)
+            # Die Char Values sind hier Infoobjekte: 'Char Values': [<server.bo.InfoObject.InfoObject object at 0x11b353640>, ...]
+            # Hier wird eine Logik definiert, die das Dict im gewünschen Zustand übergibt. 'Char Values': {10: 'Jane', ...}}
+            transformed_values = {} #leeres Dict, das später hinzugefügt wird
+            for info_obj in char_objects:
+                char_id = info_obj.get_char_fk() # holt den char_fk
+                char_value = info_obj.get_value() # holt den value
+                transformed_values[char_id] = char_value
+
+            #print('admin.py: Transformed Values:', transformed_values)
 
         searchprof = {
             "Searchprofile ID": searchprofile,
-            "Char Values": char_values
+            "Char Values": transformed_values
         }
         return searchprof
 

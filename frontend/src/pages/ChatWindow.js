@@ -3,12 +3,16 @@ import "../components/Chat/Chat.css";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import messageBO from "../api/MessageBO";
 
+/**
+ * Diese Seite dient der Darstellung eines Chat-Verlaufes.
+ * Eigene Nachrichten werden grün dargestellt und rechts im Chat-Fenster angeordnet.
+ * Nachrichten der anderen Person werden grau dargestellt und links im Chat-Fenster angeordnet.
+ */
 class ChatWindow extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            // id: this.props.messageId,
             sender_id: this.props.user.uid,
             recipient_id: null,
             msg_list: [],
@@ -23,6 +27,7 @@ class ChatWindow extends Component {
         this.setInput = this.setInput.bind(this);
     }
 
+    /** Methode, die das automatische Scrollen zur aktuellen Position der neuesten Nachricht ermöglicht. */
     scrollToBottom() {
     const chatWindow = document.getElementById("chat_messages");
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -30,6 +35,7 @@ class ChatWindow extends Component {
 
     componentDidMount() {
         // Führt folgenden Code beim ersten Laden der Komponente aus
+
         // Auslesen des aktuellen Pfads der URL
         const currentPath = window.location.pathname;
         // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
