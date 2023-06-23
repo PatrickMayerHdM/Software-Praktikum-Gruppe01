@@ -787,39 +787,18 @@ class Administration(object):
             else:
                 profile.append(False) # Sonst false
 
-        print('updated result-list:', result)
+        print('updated (True/False) result-list:', result)
 
-
-
-        print('Ergebnisliste (Result):', result)
-        return result
-
-
-
-        """
-            # Berechnung des Match-Wertes in Prozent
-            #print('Total_checked_elem:', total_checked_elem)
-            matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
-            calc_prof = [prof['Profile ID'], matching_value]
-            #print('Matching Instanz:', matching_value)
-            result.append(calc_prof)
-            
-        print('Resultliste bevor visited_profile ausgeführt wird', result)
-        print('Ergebnisliste (Result):', result)
-        return result
-        
-       
-
-            
-
-
-        
+        """  
         Result-Liste sortieren, damit das Matching als erstes ausgelesen wird. 
         'key=lambda x: x[1] = definiert, nach welchem Element die Liste sortiert werden sollte 
         'reverse=True' = Sortierung in absteigender Folge
-        
-                #result.sort(key=lambda x: x[1], reverse=True)
-                """
+        """
+
+        result.sort(key=lambda x: x[1], reverse=True)
+
+        print('Ergebnisliste (Result):', result)
+        return result
 
     def get_char_values(self, profile_id):
         # Methode sollte gelöscht werden können
