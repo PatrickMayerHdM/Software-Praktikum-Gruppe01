@@ -289,7 +289,7 @@ class Search extends React.Component{
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor:
-                    this.state.selectedProfileIndex === index ? "#8F3985" : "#6A7285",
+                    this.state.selectedProfileIndex === index ? "#F74464" : "#6A7285",
                   color: "#fff",
                   cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
                 }}

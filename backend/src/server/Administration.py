@@ -104,6 +104,7 @@ class Administration(object):
             return mapper.find_by_recipient(recipientid)
 
     def get_message_by_id(self, key):
+        """messages anhand eines keys auslesen"""
         with MessageMapper() as mapper:
             return mapper.find_by_key(key)
 
@@ -113,12 +114,6 @@ class Administration(object):
             print(mapper.find_by_chat(sender_profile, recipient_profile))
             return mapper.find_by_chat(sender_profile, recipient_profile)
 
-    # @staticmethod
-    # def find_by_chat(sender_profile, recipient_profile):
-    #     """Auslesen aller Nachrichten zwischen zwei Personen."""
-    #     message_mapper = MessageMapper()
-    #     messages = message_mapper.find_by_chat(sender_profile, recipient_profile)
-    #     return messages
 
     """Spezifische Methoden für blockNote"""
     def create_blocknote(self, blocking_id, blocked_id):
@@ -364,28 +359,8 @@ class Administration(object):
             return mapper.delete_searchprofile(infoobject)
 
 
-    # Logik für Profil, did die Info-Objekte in
-
-    "Chat-spezifische Methoden"
-    """
-    def create_chat(self, message_id):
-        chat = Chat()
-        chat.set_id(1)
-        chat.set_message_id(message_id)
-        with ChatMapper() as mapper:
-            mapper.insert(chat)
-
-    def get_all_chats(self):
-        with ChatMapper() as mapper:
-            return mapper.find_all()
-
-    def get_chat_by_id(self, key):
-        with ChatMapper() as mapper:
-            return mapper.find_by_key(key)
-"""
     def get_profile_by_message(self, profile_id):
-        """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
-        welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
+        """Diese Methode gibt eine Liste von Profilen zurück, welche mit dem "owner"-Profil kommunizieren"""
         profiles = []
 
         with MessageMapper() as message_mapper:
@@ -401,8 +376,6 @@ class Administration(object):
 
                 if recipient_id == profile_id and sender_id not in profiles:
                     profiles.append(sender_id)
-
-        print("Profiles:", profiles)
 
         return profiles
 
