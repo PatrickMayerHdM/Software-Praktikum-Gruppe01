@@ -1014,12 +1014,6 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('localhost','mysql.infoschema','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'caching_sha2_password','$A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED','N','2023-05-03 05:18:26',NULL,'Y','N','N',NULL,NULL,NULL,NULL),('localhost','mysql.session','N','N','N','N','N','N','N','Y','N','N','N','N','N','N','N','Y','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'caching_sha2_password','$A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED','N','2023-05-03 05:18:26',NULL,'Y','N','N',NULL,NULL,NULL,NULL),('localhost','mysql.sys','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'caching_sha2_password','$A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED','N','2023-05-03 05:18:26',NULL,'Y','N','N',NULL,NULL,NULL,NULL),('localhost','root','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','','','','',0,0,0,0,'caching_sha2_password','$A$005$\n;4EH1\'U4:l7%6D4\"0Hk2aTrZrSjYaejhf.CjRcmLYXGeLVM/Q8qmkJhW3voNn6','N','2023-05-03 05:18:28',NULL,'N','Y','Y',NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `general_log`
 --
@@ -1080,6 +1074,7 @@ CREATE TABLE `Account` (
   `name` varchar(128) NOT NULL,
   `email` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`account_id`),
+  KEY `Account_google_idx` (`google_id`),
   KEY `Account_Profile_profile_id_fk` (`profile_id`),
   CONSTRAINT `Account_Profile_profile_id_fk` FOREIGN KEY (`profile_id`) REFERENCES `Profile` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -1094,6 +1089,7 @@ LOCK TABLES `Account` WRITE;
 INSERT INTO `Account` VALUES (1,'zQokAwj2tchqk4dkovLVvqCmzWp2',NULL,'Dominik Wunderlich','dominik.privatacc@gmail.com'),(2,'H2Qfee67TCh7dbHQz2qafu9Q9XB2',NULL,'Konstantin Fischer','jodoko.ecom@gmail.com');
 /*!40000 ALTER TABLE `Account` ENABLE KEYS */;
 UNLOCK TABLES;
+
 
 --
 -- Table structure for table `BlockNote`
@@ -1274,6 +1270,39 @@ CREATE TABLE `ProfileContainsMessage` (
   CONSTRAINT `ProfileContainsMessage_Message_message_id_fk` FOREIGN KEY (`message_id`) REFERENCES `Message` (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+/*SearchProfile*/
+
+DROP TABLE IF EXISTS `SearchProfile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `SearchProfile` (
+  `searchprofile_id` int NOT NULL,
+  `google_id_fk` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`searchprofile_id`),
+  KEY `SearchProfile_Account_google_id_fk` (`google_id_fk`),
+  CONSTRAINT `SearchProfile_Account_google_id_fk` FOREIGN KEY (`google_id_fk`) REFERENCES `Account` (`google_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*ProfileVisits*/
+
+DROP TABLE IF EXISTS `ProfileVisits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ProfileVisits` (
+  `profilevisits_id` int NOT NULL,
+  `mainprofile_id` varchar(128) DEFAULT NULL,
+  `visitedprofile_id` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`profilevisits_id`),
+  KEY `ProfileVisits_Account_mainprofile_id` (`mainprofile_id`),
+  KEY `ProfileVisits_Account_visitedprofile_id` (`visitedprofile_id`),
+  CONSTRAINT `ProfileVisits_Account_mainprofile_id` FOREIGN KEY (`mainprofile_id`) REFERENCES `Account` (`google_id`),
+  CONSTRAINT `ProfileVisits_Account_visitedprofile_id` FOREIGN KEY (`visitedprofile_id`) REFERENCES `Account` (`google_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `ProfileContainsMessage`

@@ -20,18 +20,22 @@ export default class favoriteNoteBO extends BusinessObject {
     }
 
     get addingId() {
+        // Auslesen des Hinzufügenden.
         return this.adding_id;
     }
 
     set addingId(aadding_id) {
+        // Setzen des Hinzufügenden.
         this.adding_id = aadding_id;
     }
 
     get addedId() {
+        // Auslesen des Hinzugefügten.
         return this.added_id;
     }
 
     set addedId(aadded_id) {
+        // Setzen des Hinzugefügten.
         this.added_id = aadded_id;
     }
 

@@ -38,7 +38,7 @@ class InfoObjectMapper(mapper):
         command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}') AND (searchprofile_id IS NULL)"
         cursor.execute(command)
         tuples = cursor.fetchall()
-        print('InfoObject Tuples aus DB:', tuples)
+        #print('InfoObject Tuples aus DB:', tuples)
 
         for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
             info_obj = InfoObject()
@@ -52,7 +52,7 @@ class InfoObjectMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("Erzeugte Objekte aus Tuples: ", result)
+        #print("Erzeugte Objekte aus Tuples: ", result)
         return result
 
     def insert(self, info_obj):
@@ -88,6 +88,16 @@ class InfoObjectMapper(mapper):
         print("Bevor Info: ", named_info_obj.get_named_char_name())
 
         cursor = self._connection.cursor()
+
+        query = "SELECT COUNT(*) FROM main.InfoObject WHERE profile_id = %s AND char_value = %s"
+        cursor.execute(query, (named_info_obj.get_named_profile_fk(), named_info_obj.get_named_info_name()))
+        result = cursor.fetchone()
+        count = result[0]
+
+        if count > 0:
+            cursor.close()
+            return named_info_obj
+
         cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
         tuples = cursor.fetchall()
 
