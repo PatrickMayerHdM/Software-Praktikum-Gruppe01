@@ -937,7 +937,7 @@ class CreateProfil extends Component {
                     <Item>
                         <FormGroup row style={{ justifyContent: 'center' }}>
                             <Box sx={{ width: 400, margin: '0 auto' }}>
-                                <Button onClick={this.  handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
+                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
                             </Box>
                         </FormGroup>
                     </Item>

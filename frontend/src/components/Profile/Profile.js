@@ -143,6 +143,8 @@ class Profile extends React.Component{
             favclub,
             hobby,
             politicaltendency,
+            educationalstatus,
+            aboutme,
             customProperties,
 
         } = this.state;
@@ -302,21 +304,21 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
-                        if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
-                          return (
-                            <Item key={index}>
-                              <Grid container direction="row" justifyContent="center" alignItems="stretch">
-                                <Grid item md={4} xs={7}>
-                                  {value.char_name[0]}
-                                </Grid>
-                                <Grid item md={4} xs={7}>
-                                  <p>{value.char_value}</p>
-                                </Grid>
-                              </Grid>
-                            </Item>
-                          );
-                        }
+                            {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
+                            if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                              return (
+                                <Item key={index}>
+                                  <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                                    <Grid item md={4} xs={7}>
+                                      {value.char_name[0]}
+                                    </Grid>
+                                    <Grid item md={4} xs={7}>
+                                      <p>{value.char_value}</p>
+                                    </Grid>
+                                  </Grid>
+                                </Item>
+                              );
+                            }
                         return null;
                         })}
                         {!isOwnProfile && (

@@ -226,7 +226,7 @@ class InfoObject(bo):
         if self.char_id == 30:
             birthdate = datetime.fromisoformat(self.char_value[:-1])
             curr_date = datetime.now()
-            age = curr_date.year - birthdate.year
+            age = curr_date.year - birthdate.year - ((curr_date.month, curr_date.day) < (birthdate.month, birthdate.day))
             return age
         else:
             return None
