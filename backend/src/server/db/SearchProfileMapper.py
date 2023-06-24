@@ -26,7 +26,6 @@ class SearchProfileMapper(mapper):
         return result
 
     def find_new(self):
-
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")
         searchprofile_id = cursor.fetchone()[0]
@@ -53,6 +52,7 @@ class SearchProfileMapper(mapper):
         return results
 
     def find_by_searchprofile(self, searchprofile):
+        """ Auslesen eines Suchprofils anhand einer Suchprofil_id """
         result = []
 
         cursor = self._connection.cursor()
@@ -76,21 +76,20 @@ class SearchProfileMapper(mapper):
         return result
 
     def find_gid_by_searchid(self, searchid):
-
         """ Diese Methode gibt eine Google ID anhand der Suchprofil ID zurück. """
-
         cursor = self._connection.cursor()
         command = f"SELECT google_id FROM main.Searchprofile WHERE searchprofile_id='{searchid}'"
         cursor.execute(command)
 
         tuples = cursor.fetchone()
-        #print('Seachprofile Mapper Google ID:', tuples[0])
 
         if tuples[0] is not None:
             return tuples[0]
 
 
     def insert(self, searchprofile):
+        """ Hinzufügen eines Suchprofils """
+
         # Verbindugn zur DB + cursor-objekt erstellt
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(searchprofile_id) AS maxid FROM main.Searchprofile")

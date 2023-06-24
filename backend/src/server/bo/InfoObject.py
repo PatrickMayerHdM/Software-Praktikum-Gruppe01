@@ -30,99 +30,129 @@ class InfoObject(bo):
 
 
     def set_value(self, value):
+        """ Setzen des Wertes. """
         self.char_value = value
 
     def get_value(self):
+        """ Auslesen des Wertes. """
         return self.char_value
 
     def set_searchprofile_id(self, id):
+        """ Setzen der Suchprofil_id. """
         self.searchprofile_id = id
 
     def get_searchprofile_id(self):
+        """ Auslesen der Suchprofil_id. """
         return self.searchprofile_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Characteristic wird hier gesetzt"""
 
     def set_char_fk(self, char_fk):
+        """ Setzen der Characteristic. """
         self.char_id = char_fk
 
     def get_char_fk(self):
+        """ Auslesen der Characteristic. """
         return self.char_id
 
     """Fremdschlüsselbeziehung zwischen InfoObject und Profil wird hier gesetzt"""
 
     def set_profile_fk(self, profile):
+        """ Setzen des Profils. """
         self.profile_fk = profile
 
     def get_profile_fk(self):
+        """ Auslesen des Profils. """
         return self.profile_fk
 
     def set_age(self, age):
+        """ Setzen des Alters. """
         self.age = age
 
     def get_age(self):
+        """ Auslesen des Alters. """
         return self.age
 
     def set_first_name(self, firstname):
+        """ Setzen des Vornamen. """
         self.firstname = firstname
 
     def get_first_name(self):
+        """ Auslesen des Vornamen. """
         return self.firstname
 
     def set_gender(self, gender):
+        """ Setzen des Geschlechts. """
         self.gender = gender
 
     def get_gender(self):
+        """ Auslesen des Geschlechts. """
         return self.gender
 
     def set_hair(self, hair):
+        """ Setzen der Haarfarbe. """
         self.hair = hair
 
     def get_hair(self):
+        """ Auslesen der Haarfarbe. """
         return self.hair
 
     def set_height(self, height):
+        """ Setzen der Größe. """
         self.height = height
 
     def get_height(self):
+        """ Auslesen der Größe. """
         return self.height
 
     def set_last_name(self, lastname):
+        """ Setzen des Nachnamen. """
         self.lastname = lastname
 
     def get_last_name(self):
+        """ Auslesen des Nachnamen. """
         return self.lastname
 
     def set_religion(self, religion):
+        """ Setzen der Religion. """
         self.religion = religion
 
     def get_religion(self):
+        """ Auslesen der Religion. """
         return self.religion
 
     def set_smoking_status(self, smoking):
+        """ Setzen des Raucherstatus. """
         self.smoking = smoking
 
     def get_smoking_status(self):
+        """ Auslesen des Raucherstatus. """
         return self.smoking
 
     # Ab hier die Änderungen wegen des Suchprofils
 
     def get_minAge(self):
+        """ Auslesen des MinAges beim Suchprofil. """
         return self.minAge
 
     def set_minAge(self, minAge):
+        """ Setzen des MinAges beim Suchprofil. """
         self.minAge = minAge
 
     def get_maxAge(self):
+        """ Auslesen des MaxAges beim Suchprofil. """
         return self.maxAge
 
     def set_maxAge(self, maxAge):
+        """ Setzen des MaxAges beim Suchprofil. """
         self.maxAge = maxAge
 
     def get_searchprofile_fk(self):
+        """ Auslesen der Suchprofil_id (hier FK). """
         return self.searchprofile_fk
 
     def set_searchprofile_fk(self, searchprofile_fk):
+        """ Setzen der Suchprofil_id (hier FK). """
         self.searchprofile_fk = searchprofile_fk
 
     def get_aboutme(self):
@@ -189,7 +219,7 @@ class InfoObject(bo):
     def calc_age(self):
         """
         Die Methode berechnet das aktuelle Alter des Nutzers anhand des Geburtstages.
-        Dabei wird das ISOFormat umgesetzt und das "Z" aus dem Datum entfernt.
+        Dabei wird das ISO Format umgesetzt und das "Z" aus dem Datum entfernt.
         Die Berechnung findet nur statt, wenn die char_id "30" (Alter) in dem Objekt enthalten ist.
         :return: Ganzzahl der Berechnung
         """

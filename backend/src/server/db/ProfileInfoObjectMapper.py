@@ -44,9 +44,8 @@ class ProfileInfoObjectMapper(mapper):
         return result
 
     def insert(self, object):
+        """ Hinzufügen der Info-Objekte zu einem spezifischem Profil. """
         cursor = self._connection.cursor()
-        #cursor.execute('SELECT MAX(id) AS maxid FROM main.ProfileContainsInfoObjects')
-        # die obere Zeile existiert so nicht, weil ein Datensatz in der Tabelle keine eigene id besitzt.
         tuples = cursor.fetchall()
 
         command = 'INSERT INTO main.ProfileContainsInfoObjects (profile_id, infoobject_id) VALUES (%s, %s)'
@@ -60,6 +59,7 @@ class ProfileInfoObjectMapper(mapper):
         return object
 
     def update(self, profile):
+        """ Updaten der Info-Objekte zu einem spezifischem Profil. """
         cursor = self._connection.cursor()
 
         command = 'UPDATE main.ProfileContainsInfoObjects SET profile_id=%s, infoobject_id=%s WHERE profile_id=%s'
@@ -71,6 +71,7 @@ class ProfileInfoObjectMapper(mapper):
         cursor.close()
 
     def delete(self, profile):
+        """ Löschen der Info-Objekte zu einem spezifischem Profil. """
         cursor = self._connection.cursor()
 
         command = f'DELETE FROM main.ProfileContainsInfoObjects WHERE profile_id={ProfileContainsInfoObj.get_profile()}'

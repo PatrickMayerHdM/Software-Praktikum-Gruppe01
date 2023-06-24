@@ -19,8 +19,8 @@ def secured(function):
         if id_token:
             try:
                 """
-                Verifiziert den token mit der Firebase Auth API, dies passiert dabei jedes mal wenn eine Seite geladen 
-                wird. Dies ist zwar recht Arbeitsintensiv, jedoch für unsere Anwendung in Ordnung.
+                Verifiziert den Token mit der Firebase Auth API. Dies passiert jedes Mal, wenn eine Seite geladen wird.
+                Dies ist zwar recht arbeitsintensiv, jedoch für unsere Anwendung in Ordnung.
                 """
                 claims = google.oauth2.id_token.verify_firebase_token(
                     id_token, firebase_request_adapter)
@@ -39,9 +39,9 @@ def secured(function):
 
                         """
                         Wenn der Account bei uns schon bekannt ist, wurde diese google_user_id schon verwendet. 
-                        Die google_user_id, dabei gehen wir davon aus, dass sich die google_user_id nicht verändern kann.
-                        Jedoch können sich andere Teile, wie der Name oder die E-Mailadresse verändern. 
-                        Um jetzt Fehler zu vermeiden, updaten wir jetzt in unserem System einmal diese beiden Objekte.
+                        Dabei gehen wir davon aus, dass sich die google_user_id nicht verändern kann.
+                        Jedoch können sich andere Teile, wie der Name oder die E-Mailadresse, verändern. 
+                        Um Fehler zu vermeiden, updaten wir in unserem System einmal diese beiden Objekte.
                         """
 
                         account.set_email(email)
@@ -51,9 +51,9 @@ def secured(function):
                     else:
 
                         """
-                        Dies tritt auf, wenn der Anwender mit dieser google_user_id bisher noch nicht in unserem System 
-                        war. Daher legen wir ein neues Account-Objekt an und übergeben in dieses den Namen, die E-Mail 
-                        adresse und die google_user_id.
+                        Dies tritt auf, wenn der Anwender mit der google_user_id noch nicht in unserem System war.
+                        Daher legen wir ein neues Account-Objekt an und übergeben in dieses den Namen, die E-Mailadresse
+                        und die google_user_id.
                         """
 
                         account = adm.create_account(google_user_id, None, name, email)

@@ -6,9 +6,11 @@ class SearchProfile(bo):
         self.google_id = None
 
     def get_google_fk(self):
+        """Auslesen der Google_id."""
         return self.google_id
 
     def set_google_fk(self, google_id):
+        """Setzen der Google_id."""
         self.google_id = google_id
 
     def __str__(self):

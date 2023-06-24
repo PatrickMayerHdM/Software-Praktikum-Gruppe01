@@ -1,4 +1,4 @@
-import { Component, useState } from "react";
+import { Component } from "react";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import FormLabel from "@mui/material/FormLabel";
@@ -7,13 +7,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Box from "@mui/material/Box";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
-import {Button, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 import * as React from "react";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import DatingSiteAPI, { getProfileByID, addInfoObject } from '../api/DatingSiteAPI';
+import DatingSiteAPI from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
 import characteristicBO from "../api/CharacteristicBO"
 import infoobjectBO from "../api/InfoObjectBO";
@@ -21,7 +20,6 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
-import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
 import profile from "../components/Profile/Profile";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -49,14 +47,14 @@ class CreateProfil extends Component {
             char_fk: 0,
             char_id: 0,
             profile_fk: 0,
-            firstName: null,
-            lastName: null,
+            firstName: "",
+            lastName: "",
             age: "",
-            gender: null,
-            height: null,
-            religion: null,
-            hair: null,
-            smoking: null,
+            gender: "",
+            height: "",
+            religion: "",
+            hair: "",
+            smoking: "",
             char_name: '',
             char_desc: '',
             showTextFields: false,
@@ -65,12 +63,13 @@ class CreateProfil extends Component {
             minAge: null,
             maxAge: null,
             searchprofile_fk: null,
-            income: null,
-            favclub: null,
-            hobby: null,
-            politicaltendency: null,
-            aboutme: null,
+            income: "",
+            favclub: "",
+            hobby: "",
+            politicaltendency: "",
+            aboutme: "",
             SelectCreate: "select",
+            customProperties: [],
         };
 
         /** Bindung der Handler an die Komponente */
@@ -86,12 +85,16 @@ class CreateProfil extends Component {
         this.handleChangeClub = this.handleChangeClub.bind(this);
         this.handleChangeHobbys = this.handleChangeHobbys.bind(this);
         this.handleChangePolitical = this.handleChangePolitical.bind(this);
+        this.handleChangeAboutMe = this.handleChangeAboutMe.bind(this);
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+
         this.handleCreateChar = this.handleCreateChar.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSaveInputs = this.handleSaveInputs.bind(this);
+        this.handleChangeCharDelete = this.handleChangeCharDelete.bind(this)
 
         this.handleInfoSelectCreate = this.handleInfoSelectCreate.bind(this);
         this.handleDeleteReligion = this.handleDeleteReligion.bind(this);
@@ -107,6 +110,7 @@ class CreateProfil extends Component {
     componentDidMount() {
         this.checkProfilExc();
         this.getSelectedProperties();
+        this.getSelectedPropertiesForCharValuesAndNames();
     };
 
     /** Handler und API für "checkProfilExc" */
@@ -188,6 +192,45 @@ class CreateProfil extends Component {
 
           this.setState(selectedProperties);
         });
+    }
+
+    async getSelectedPropertiesForCharValuesAndNames() {
+      const customProperties = {};
+
+      try {
+        const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.props.user.uid);
+
+        for (const key in responseInfoObjects) {
+          if (responseInfoObjects.hasOwnProperty(key)) {
+            const infoObject = responseInfoObjects[key];
+            const char_id = infoObject.char_id;
+            const charValue = infoObject.char_value;
+
+            if (char_id > 160) {
+              const char_name = await this.getCharNameByID(char_id);
+              customProperties[char_id] = {
+                char_id: char_id,
+                char_value: charValue,
+                char_name: char_name,
+              };
+            }
+          }
+        }
+
+        this.setState({ customProperties });
+        console.log("Char ID Liste: ", customProperties);
+      } catch (error) {
+        console.error("Fehler beim Auslesen der InfoObjekte: ", error);
+      }
+    }
+
+    getCharNameByID(char_id) {
+      return DatingSiteAPI.getAPI()
+        .getCharName(char_id)
+        .then((responseCharName) => {
+            return responseCharName;
+        })
+
     }
 
     /** Event-Handler für die Änderung des Vornamens */
@@ -282,6 +325,17 @@ class CreateProfil extends Component {
         const newAge = date.toISOString();
         this.setState({ age: newAge });
     };
+
+    handleChangeAboutMe = (event) => {
+      const newAboutMe = event.target.value;
+      this.setState({ aboutme: newAboutMe})
+    };
+
+    handleChangeCharDelete = (value) => {
+        console.log(value)
+        DatingSiteAPI.getAPI()
+            .removeNamedChar(value)
+    }
 
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
@@ -413,6 +467,7 @@ class CreateProfil extends Component {
                 hobby: "",
                 politicaltendency: "",
                 aboutme: "",
+                customProperties: null,
         });
         })
         .catch((e) =>
@@ -669,6 +724,8 @@ class CreateProfil extends Component {
                 profileExists,
                 apiage,
                 selectedOption,
+                customProperties,
+                aboutme,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -789,19 +846,67 @@ class CreateProfil extends Component {
                             </Box>
                             </FormGroup>
                         </Item>
-                        {/**
-
-                         Mögliche Änderung durch "Über Mich Feld"
-
-                         */}
                         <Item>
-                            <FormGroup row style={{justifyContent: 'center', backgroundColor: 'red'}}>
+                            <FormGroup row style={{justifyContent: 'center'}}>
+                                <Box sx={{width: 400, margin: '0 auto', height: 200}}>
+                                    <FormLabel> Erzähle uns von dir! </FormLabel>
+                                    {/** Eingabefeld für sich selber */}
+                                    <TextField
+                                        fullWidth
+                                        type={"text"}
+                                        value={aboutme}
+                                        multiline
+                                        rows={5}
+                                        onChange={this.handleChangeAboutMe}
+                                        inputProps={{
+                                            maxLength: 128,
+                                        }}
+                                    />
+                                </Box>
+                            </FormGroup>
+                        </Item>
+                        <Item>
+                            <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
-                                    {/**
-
-                                     Liste die für jede Eigenschaft erstellt werden kann
-
-                                     */}
+                                    {
+                                      customProperties &&
+                                      Object.entries(customProperties).map(([key, value], index) => {
+                                        if (
+                                          typeof value === 'object' &&
+                                          value.hasOwnProperty('char_id') &&
+                                          value.hasOwnProperty('char_name')
+                                        ) {
+                                          return (
+                                            <Box key={value.char_value} sx={{ width: 400, margin: '0 auto' }}>
+                                              <FormGroup row style={{ justifyContent: 'center' }}>
+                                                <Box sx={{ width: 150, margin: '0 auto' }}>
+                                                  <p>
+                                                    <strong>Eigenschaftsname:</strong>
+                                                  </p>
+                                                  <p>{value.char_name[0]}</p>
+                                                </Box>
+                                                <Box sx={{ width: 150, margin: '0 auto' }}>
+                                                  <p>
+                                                    <strong>Info:</strong>
+                                                  </p>
+                                                  <p>{value.char_value}</p>
+                                                </Box>
+                                                <Box sx={{ width: 150, margin: '0 auto' }}>
+                                                  <Button
+                                                    variant="contained"
+                                                    color="error"
+                                                    onClick={() => this.handleChangeCharDelete(value.char_value)}
+                                                    startIcon={<DeleteIcon />}
+                                                  >
+                                                    Löschen
+                                                  </Button>
+                                                </Box>
+                                              </FormGroup>
+                                            </Box>
+                                          );
+                                        }
+                                        return null;
+                                      })}
                                 </Box>
                             </FormGroup>
                         </Item>
@@ -810,7 +915,7 @@ class CreateProfil extends Component {
                         <Item>
                             <FormGroup row style={{ justifyContent: 'center' }}>
                                 <Box sx={{ width: 400, margin: '0 auto' }}>
-                                    <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
+                                    <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Individualisieren </Button>
                                     {showTextFields && (
                                     <>
                                       <Box sx={{ marginBottom: '10px' }}>
@@ -832,7 +937,7 @@ class CreateProfil extends Component {
                     <Item>
                         <FormGroup row style={{ justifyContent: 'center' }}>
                             <Box sx={{ width: 400, margin: '0 auto' }}>
-                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
+                                <Button onClick={this.  handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
                             </Box>
                         </FormGroup>
                     </Item>

@@ -7,7 +7,6 @@ class Account(bo):
         super().__init__()
         self.google_id = ""  # Die Google ID des Nutzers
         self.profile_id = None
-        # self.account_id = None # Die Account ID des Nutzers
         self.name = ""  # Name eines Nutzers
         self.email = ""  # E-Mail eines Nutzers
 

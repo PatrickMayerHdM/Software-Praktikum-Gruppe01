@@ -445,6 +445,16 @@ class InfoObjectsOperations(Resource):
         else:
             return 'Profil konnte nicht aktualisiert werden.', 500
 
+@datingapp.route('/infoobjects/<string:char_value>')
+@datingapp.response(500, 'Serverseitiger-Fehler')
+@datingapp.param('char_value', 'Der Wert des Info-Objekts')
+class NamedInfoObjectsOperations(Resource):
+    @secured
+    def delete(self, char_value):
+        adm = Administration()
+        adm.delete_info_object_by_char_value(char_value)
+        return '', 200
+
 
 """Ab hier FavoriteNote"""
 
@@ -670,6 +680,7 @@ class NamedCharacteristicsOperations(Resource):
 
         return char_names, 200
 
+"""Ab hier Profilevisits"""
 
 @datingapp.route('/visit')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")

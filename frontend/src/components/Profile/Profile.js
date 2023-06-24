@@ -15,6 +15,7 @@ import OptionsOtherProfile from "./OptionsOtherProfile";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BlockIcon from "@mui/icons-material/Block";
 import CharacteristicBO from "../../api/CharacteristicBO";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 
 //** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
@@ -30,6 +31,7 @@ class Profile extends React.Component{
         this.state = {
             error: '',
             lastPartURL: null,
+            customProperties: [],
         }
     }
 
@@ -42,91 +44,89 @@ class Profile extends React.Component{
         })
     }
 
+    async getSelectedProperties() {
+      const customProperties = {};
 
-    getSelectedProperties() {
-        const idList = [];
-        DatingSiteAPI.getAPI()
-        .getInfoObjects(this.state.lastPartURL)
-        .then((responseInfoObjects) => {
-          console.log("InfoObjects: ", responseInfoObjects)
-          const selectedProperties = {};
+      try {
+        const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.state.lastPartURL);
+        console.log("InfoObjects: ", responseInfoObjects);
 
-          for (const key in responseInfoObjects) {
-            if (responseInfoObjects.hasOwnProperty(key)) {
-              const infoObject = responseInfoObjects[key];
-              const char_id = infoObject.char_id;
-              const charValue = infoObject.char_value;
+            for (const key in responseInfoObjects) {
+          if (responseInfoObjects.hasOwnProperty(key)) {
+            const infoObject = responseInfoObjects[key];
+            const char_id = infoObject.char_id;
+            const charValue = infoObject.char_value;
 
-              if (char_id > 160) {
-                  idList.push(char_id);
-              } switch (char_id) {
-                  case 30:
-                  selectedProperties.age = charValue;
+            if (char_id > 160) {
+              const char_name = await this.getCharNameByID(char_id);
+              customProperties[char_id] = {
+                char_id: char_id,
+                char_value: charValue,
+                char_name: char_name,
+              };
+            } else {
+              switch (char_id) {
+                case 30:
+                  customProperties.age = charValue;
                   break;
                 case 10:
-                  selectedProperties.firstName = charValue;
+                  customProperties.firstName = charValue;
                   break;
                 case 40:
-                  selectedProperties.gender = charValue;
+                  customProperties.gender = charValue;
                   break;
                 case 70:
-                  selectedProperties.hair = charValue;
+                  customProperties.hair = charValue;
                   break;
                 case 50:
-                  selectedProperties.height = charValue;
+                  customProperties.height = charValue;
                   break;
                 case 20:
-                  selectedProperties.lastName = charValue;
+                  customProperties.lastName = charValue;
                   break;
                 case 60:
-                  selectedProperties.religion = charValue;
+                  customProperties.religion = charValue;
                   break;
                 case 80:
-                  selectedProperties.smoking = charValue;
+                  customProperties.smoking = charValue;
                   break;
                 case 90:
-                  selectedProperties.aboutme = charValue;
+                  customProperties.aboutme = charValue;
                   break;
                 case 120:
-                  selectedProperties.income = charValue;
-                  break;
-                case 130:
-                  selectedProperties.educationalstatuts = charValue;
+                  customProperties.income = charValue;
                   break;
                 case 140:
-                  selectedProperties.favclub = charValue;
+                  customProperties.favclub = charValue;
                   break;
                 case 150:
-                  selectedProperties.hobby = charValue;
+                  customProperties.hobby = charValue;
                   break;
                 case 160:
-                  selectedProperties.politicaltendency = charValue;
+                  customProperties.politicaltendency = charValue;
                   break;
-
                 default:
                   break;
               }
             }
           }
-          this.setState(selectedProperties);
-          console.log("Char ID Liste: ", idList)
-          idList.forEach((char_id) => {
-            const char = this.getCharNameByID(char_id)
-            console.log("CharBO: ", char)
-          })
-        });
+        }
+
+
+        this.setState({ customProperties });
+        console.log("Char ID Liste: ", customProperties);
+      } catch (error) {
+        console.error("Fehler beim auslesen der InfoObjekte: ", error);
+      }
     }
 
     getCharNameByID(char_id) {
-        DatingSiteAPI.getAPI()
-            .getCharName(char_id)
-            .then((responeCharNames) => {
-                console.log("CharName Test: ", responeCharNames)
-            })
+      return DatingSiteAPI.getAPI()
+        .getCharName(char_id)
+        .then((responseCharName) => {
+            return responseCharName;
+        })
     }
-
-
-
 
     render() {
 
@@ -143,7 +143,7 @@ class Profile extends React.Component{
             favclub,
             hobby,
             politicaltendency,
-            educationalstatus,
+            customProperties,
 
         } = this.state;
 
@@ -156,152 +156,169 @@ class Profile extends React.Component{
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech">
-                                <Grid md={4} xs={7} spacing={3}>
+                                <Grid item md={4} xs={7}>
                                     Vorname:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={3}>
-                                    <p>{firstName}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.firstName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                          <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Nachname:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{lastName}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.lastName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Alter:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{age}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.age}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Geschlecht:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{gender}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.gender}</p>
                                 </Grid>
                             </Grid >
                         </Item>
-                        {height &&(
+                        {customProperties.height &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Körpergröße:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{height}cm</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.height}cm</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {religion && (
+                        {customProperties.religion && (
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Religion:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{religion}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.religion}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {hair && (
+                        {customProperties.hair && (
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Haarfarbe:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{hair}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.hair}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {smoking &&(
+                        {customProperties.smoking &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Raucher:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{smoking}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.smoking}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {income &&(
+                        {customProperties.income &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Gehalt:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{income}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.income}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {educationalstatus &&(
+                        {customProperties.favclub &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
-                                    Bildungsstatus:
-                                </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{educationalstatus}</p>
-                                </Grid>
-                            </Grid >
-                        </Item>
-                        )}
-                        {favclub &&(
-                        <Item>
-                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Lieblingsverein:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{favclub}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.favclub}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {hobby &&(
+                        {customProperties.hobby &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Hobbys:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{hobby}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.hobby}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
-                        {politicaltendency &&(
+                        {customProperties.politicaltendency &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Politische Ausrichtung:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{politicaltendency}</p>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.politicaltendency}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         )}
+                        {customProperties.aboutme &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid item md={4} xs={7}>
+                                    Über mich:
+                                </Grid>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.aboutme}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
+                        {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
+                        if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                          return (
+                            <Item key={index}>
+                              <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                                <Grid item md={4} xs={7}>
+                                  {value.char_name[0]}
+                                </Grid>
+                                <Grid item md={4} xs={7}>
+                                  <p>{value.char_value}</p>
+                                </Grid>
+                              </Grid>
+                            </Item>
+                          );
+                        }
+                        return null;
+                        })}
                         {!isOwnProfile && (
                         <OptionsOtherProfile other_profile={this.state.lastPartURL} user={this.props.user}/>
                         )}

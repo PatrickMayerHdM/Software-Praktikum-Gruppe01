@@ -122,6 +122,7 @@ export default class DatingSiteAPI {
     #getCharNameURL = (char_id) => `${this.#datingServerBaseURL}/Profile/characteristics/${char_id}`;
     #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
+    #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
 
 
     /**
@@ -222,6 +223,7 @@ export default class DatingSiteAPI {
     }
 
     getInfoObjects(googleID) {
+        console.log("Google ID für InfosObjeckte: ", googleID)
         return this.#fetchAdvanced(this.#getInfoObjectsURL(googleID))
             .then((responseJSON) => {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
@@ -242,12 +244,21 @@ export default class DatingSiteAPI {
         return this.#fetchAdvanced(this.#getCharNameURL(char_id))
             .then((responeJSON) => {
                 let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
-                console.log("Nach FROMJSON: ", namedCHAR);
                 return namedCHAR
             })
     }
 
-
+    removeNamedChar(char_value) {
+        console.log("Namedchar in der API: ", char_value);
+        return this.#fetchAdvanced(this.#removeNamedCharByValueURL(char_value), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(char_value)
+        })
+    }
 
     getProfileByID(google_fk) {
         let profile = this.#fetchAdvanced(this.#getProfileByIdURL(google_fk));
