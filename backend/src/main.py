@@ -228,6 +228,7 @@ class InfoObjectListOperationsSearch(Resource):
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
+        time.sleep(3)
         print("Das ist die api.payload im main.py der InfoObjectListOperationsSearch", api.payload)
 
         proposal = InfoObject.from_dict(api.payload)
