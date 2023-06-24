@@ -67,7 +67,6 @@ class SearchProfile extends React.Component{
         this.handleChangeSelectedOption = this.handleChangeSelectedOption.bind(this);
         this.handleChangeSalary = this.handleChangeSalary.bind(this);
         this.handleChangeClub = this.handleChangeClub.bind(this);
-        this.handleChangeEducation = this.handleChangeEducation.bind(this);
         this.handleChangeHobbys = this.handleChangeHobbys.bind(this);
         this.handleChangePolitical = this.handleChangePolitical.bind(this);
         this.handleChangeInterests = this.handleChangeInterests.bind(this);
@@ -102,7 +101,7 @@ class SearchProfile extends React.Component{
     }
 
     handleDeleteReligion = () => {
-        this.setState({ religion: '' });
+        this.setState({ religion: null });
     };
 
     /** Event-Handler für die Änderung bei dem Raucherstatus der gesuchten Person */
@@ -112,7 +111,7 @@ class SearchProfile extends React.Component{
     }
 
     handleDeletesmoking = () => {
-        this.setState({ smoking: '' });
+        this.setState({ smoking: null });
     };
 
     /** Event-Handler für die Änderung an den Haaren der gesuchten Person */
@@ -122,7 +121,7 @@ class SearchProfile extends React.Component{
     };
 
     handleDeleteHair = () => {
-        this.setState({ hair: '' });
+        this.setState({ hair: null });
     };
 
     /** Event-Handler für die Änderung an der Körpergröße der gesuchten Person */
@@ -132,7 +131,7 @@ class SearchProfile extends React.Component{
     };
 
     handleDeleteHeight = () => {
-        this.setState({ height: '' });
+        this.setState({ height: null });
     };
 
     /** Event-Handler für die Änderung des Alters der gesuchten Person */
@@ -148,7 +147,7 @@ class SearchProfile extends React.Component{
     };
 
     handleDeletePolitical = () => {
-        this.setState({ politicaltendency: '' });
+        this.setState({ politicaltendency: null });
     };
 
     /** Event-Handler für die Änderung des Hobbys der gesuchten Person */
@@ -158,14 +157,9 @@ class SearchProfile extends React.Component{
     };
 
     handleDeleteHobbys = () => {
-        this.setState({ hobby: '' });
+        this.setState({ hobby: null });
     };
 
-    /** Event-Handler für die Änderung des Bildungsstatus der gesuchten Person */
-    handleChangeEducation(event) {
-      const newEdu = event.target.value;
-      this.setState({educationalstatuts: newEdu})
-    };
 
     /** Event-Handler für die Änderung den Lieblingsverein der gesuchten Person */
     handleChangeClub(event) {
@@ -174,7 +168,7 @@ class SearchProfile extends React.Component{
     };
 
     handleDeleteClub = () => {
-        this.setState({ favclub: '' });
+        this.setState({ favclub: null });
     };
 
     /** Event-Handler für die Änderung des Einkommens der gesuchten Person */
@@ -184,7 +178,7 @@ class SearchProfile extends React.Component{
     };
 
     handleDeleteSalary = () => {
-        this.setState({ income: '' });
+        this.setState({ income: null });
     };
 
     /** Event-Handler für die Änderung der Interessen der gesuchten Person */
@@ -194,7 +188,7 @@ class SearchProfile extends React.Component{
     };
 
     handleDeleteInterests = () => {
-        this.setState({ aboutme: '' });
+        this.setState({ aboutme: null });
     };
 
 
