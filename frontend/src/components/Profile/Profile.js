@@ -290,6 +290,18 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
+                        {customProperties.aboutme &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid item md={4} xs={7}>
+                                    Über mich:
+                                </Grid>
+                                <Grid item md={8} xs={7}>
+                                    <p>{customProperties.aboutme}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
                         {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
                         if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
                           return (

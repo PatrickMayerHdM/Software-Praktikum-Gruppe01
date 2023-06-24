@@ -118,6 +118,15 @@ class InfoObjectMapper(mapper):
 
         return named_info_obj
 
+    def delete_by_char_value(self, char_value):
+        cursor = self._connection.cursor()
+
+        command = f"DELETE FROM main.InfoObject WHERE char_value='{char_value}'"
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
     def Searchinsert(self, info_obj):
         """ Hinzufügen der Werte in ein Info-Objekte für ein Suchprofil. """
         cursor = self._connection.cursor()

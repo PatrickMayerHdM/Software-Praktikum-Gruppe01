@@ -1,4 +1,4 @@
-import { Component, useState } from "react";
+import { Component } from "react";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import FormLabel from "@mui/material/FormLabel";
@@ -9,11 +9,10 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import {Button, Grid, TextField} from "@mui/material";
 import * as React from "react";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import DatingSiteAPI, { getProfileByID, addInfoObject } from '../api/DatingSiteAPI';
+import DatingSiteAPI from '../api/DatingSiteAPI';
 import profileBO from "../api/ProfileBO";
 import characteristicBO from "../api/CharacteristicBO"
 import infoobjectBO from "../api/InfoObjectBO";
@@ -21,7 +20,6 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Characteristic from "../api/CharacteristicBO";
-import PropTypes from 'prop-types';
 import AddIcon from "@mui/icons-material/Add";
 import profile from "../components/Profile/Profile";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -87,6 +85,7 @@ class CreateProfil extends Component {
         this.handleChangeClub = this.handleChangeClub.bind(this);
         this.handleChangeHobbys = this.handleChangeHobbys.bind(this);
         this.handleChangePolitical = this.handleChangePolitical.bind(this);
+        this.handleChangeAboutMe = this.handleChangeAboutMe.bind(this);
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
@@ -95,6 +94,7 @@ class CreateProfil extends Component {
         this.handleCreateChar = this.handleCreateChar.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSaveInputs = this.handleSaveInputs.bind(this);
+        this.handleChangeCharDelete = this.handleChangeCharDelete.bind(this)
 
         this.handleInfoSelectCreate = this.handleInfoSelectCreate.bind(this);
         this.handleDeleteReligion = this.handleDeleteReligion.bind(this);
@@ -326,8 +326,16 @@ class CreateProfil extends Component {
         this.setState({ age: newAge });
     };
 
+    handleChangeAboutMe = (event) => {
+      const newAboutMe = event.target.value;
+      this.setState({ aboutme: newAboutMe})
+    };
 
-
+    handleChangeCharDelete = (value) => {
+        console.log(value)
+        DatingSiteAPI.getAPI()
+            .removeNamedChar(value)
+    }
 
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
@@ -717,6 +725,7 @@ class CreateProfil extends Component {
                 apiage,
                 selectedOption,
                 customProperties,
+                aboutme,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -837,11 +846,25 @@ class CreateProfil extends Component {
                             </Box>
                             </FormGroup>
                         </Item>
-                        {/**
-
-                         Mögliche Änderung durch "Über Mich Feld"
-
-                         */}
+                        <Item>
+                            <FormGroup row style={{justifyContent: 'center'}}>
+                                <Box sx={{width: 400, margin: '0 auto', height: 200}}>
+                                    <FormLabel> Erzähle uns von dir! </FormLabel>
+                                    {/** Eingabefeld für sich selber */}
+                                    <TextField
+                                        fullWidth
+                                        type={"text"}
+                                        value={aboutme}
+                                        multiline
+                                        rows={5}
+                                        onChange={this.handleChangeAboutMe}
+                                        inputProps={{
+                                            maxLength: 128,
+                                        }}
+                                    />
+                                </Box>
+                            </FormGroup>
+                        </Item>
                         <Item>
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
@@ -854,7 +877,7 @@ class CreateProfil extends Component {
                                           value.hasOwnProperty('char_name')
                                         ) {
                                           return (
-                                            <Box key={index} sx={{ width: 400, margin: '0 auto' }}>
+                                            <Box key={value.char_value} sx={{ width: 400, margin: '0 auto' }}>
                                               <FormGroup row style={{ justifyContent: 'center' }}>
                                                 <Box sx={{ width: 150, margin: '0 auto' }}>
                                                   <p>
@@ -872,7 +895,7 @@ class CreateProfil extends Component {
                                                   <Button
                                                     variant="contained"
                                                     color="error"
-                                                    onClick={() => this.handleChangeCharDelete(index)}
+                                                    onClick={() => this.handleChangeCharDelete(value.char_value)}
                                                     startIcon={<DeleteIcon />}
                                                   >
                                                     Löschen
@@ -892,7 +915,7 @@ class CreateProfil extends Component {
                         <Item>
                             <FormGroup row style={{ justifyContent: 'center' }}>
                                 <Box sx={{ width: 400, margin: '0 auto' }}>
-                                    <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
+                                    <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Individualisieren </Button>
                                     {showTextFields && (
                                     <>
                                       <Box sx={{ marginBottom: '10px' }}>

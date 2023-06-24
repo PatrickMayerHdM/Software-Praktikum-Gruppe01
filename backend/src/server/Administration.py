@@ -362,6 +362,10 @@ class Administration(object):
         print("Named Info Object aus Admin: ", info_obj)
         return info_obj
 
+    def delete_info_object_by_char_value(self, char_value):
+        with InfoObjectMapper() as mapper:
+            return mapper.delete_by_char_value(char_value)
+
     def update_info_object(self, profile_fk, info_dict):
         """
         In dieser Methode ist die Logik beschrieben, damit ein bestehendes Profil aktualisiert wird.
