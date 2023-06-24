@@ -217,7 +217,7 @@ class Search extends React.Component{
     }
 
     /**
-     * Diese Funktion wird ausgeführt, wenn ein User zwischen einem seiner SuchProfile wechselt und ein anderes Auswählt.
+     * Diese Funktion wird ausgeführt, wenn ein User zwischen einem seiner SuchProfile wechselt und ein anderes auswählt.
      * Denn im State ist immer vermerkt, welches SuchProfil ein User gerade ausgewählt hat.
      * Zusätzlich wird hier der State clickable gesetzt, dieser ist verantwortlich, ob ein User Optionen wie z.B. die
      * Suche klicken kann. Denn hierfür wird ein ausgewähltes Suchprofil benötigt.
@@ -236,8 +236,8 @@ class Search extends React.Component{
     }
 
     /**
-     * Diese Funktion wird ausgeführt wenn ein SuchProfil gelöscht werden soll.
-     * Um diese FUnktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
+     * Diese Funktion wird ausgeführt, wenn ein SuchProfil gelöscht werden soll.
+     * Um diese Funktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
      * @constructor
      */
     DeleteSearchProfile(){
@@ -262,7 +262,7 @@ class Search extends React.Component{
     /**
      * Diese componentDidUpdate Funktion wird bei der Aktualisierung des State von Searchprofiels aufgerufen.
      * Die Funktion an sich ändert bei einer Änderung der Suchprofile den Wert für die Anzahl dieser
-     * Suchprofile, dazu ist Sie dafür verantwortlich, dass ein entferntes Suchprofil, nicht mehr in der Liste angeziegt
+     * Suchprofile, dazu ist Sie dafür verantwortlich, dass ein entferntes Suchprofil, nicht mehr in der Liste angezeigt
      * wird.
      */
 
@@ -281,30 +281,40 @@ class Search extends React.Component{
      * Diese Funktion wird in der componentDidMount() aufgerufen und lädt die SuchProfile eines Users. Dafür wird
      * zu der DatingSiteAPI mit getSearchProfileIDs und der eigenen Profile_ID eine Anfrage geschickt.
      * Die SuchProfile, welche dann empfangen werden, sind in dem SearchProfiles Array gespeichert. Zudem wird
-     * die länge, also die Anzah lder SuchProfile gespeichert.
+     * die Länge, also die Anzahl der SuchProfile gespeichert.
      */
     loadingPage(){
         DatingSiteAPI.getAPI()
         .getSearchProfileIDs(this.props.user.uid)
         .then(Searchprofilesvar => {
-          //console.log("Das ist Searchprofilesvar in der loadingPage: ",Searchprofilesvar)
-          this.setState({
-            Searchprofiles: Searchprofilesvar
-          })
-           // Ermitteln der Länge der Suchprofile, dies ist für die Darstellung der SuchProfile als Liste für den User relevant.
-          const lengthSearchprofiles = this.state.Searchprofiles.length;
-          //console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
-          //this.setState({ numSearchProfiles: lengthSearchprofiles });
-          this.setState({ numSearchProfiles: lengthSearchprofiles });
+            this.setState({
+                Searchprofiles: Searchprofilesvar
+            }, () => {
+                // Ermitteln der Länge der Suchprofile, dies ist für die Darstellung der SuchProfile als Liste für den User relevant.
+                const lengthSearchprofiles = this.state.Searchprofiles.length;
+                //console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
+                this.setState({
+                    numSearchProfiles: lengthSearchprofiles
+                }, () => {
+                    // Dies ist eine Abfrage, ob ein User bereits ein SuchProfil hat, andernfalls wird der User zum Erstellen weitergeleitet
+                    if (this.state.numSearchProfiles === 0){
+                        // Wenn ein User noch kein SuchProfil hat, wird er zum Erstellen eines SuchProfils weitergeleitet.
+                        window.location.replace("/Suche/Suchprofil/new");
+                    } else {
+                        // Hier wird das erste SuchProfil eines Users automatisch ausgewählt.
+                        this.ChangeSearchProfiles(0)
+                    }
+                });
+            });
 
         })
         .catch(error => {
-          console.error('Error fetching data from API:', error);
+            console.error('Error fetching data from API:', error);
         });
     }
 
     /**
-     * Testfunktion zum laden der Search Seite. Hier wird eine Liste mit dummy SearchProfile Daten aufgerufen.
+     * Testfunktion zum Laden der Search Seite. Hier wird eine Liste mit dummy SearchProfile Daten aufgerufen.
      */
     loadPage() {
         const dummySearchProfiles = [12, 56];
@@ -318,7 +328,7 @@ class Search extends React.Component{
 
     /**
      * Die componentDidMount wird bei Laden der React Seite aufgerufen und ruft intern dann eine andere Funktion auf.
-     * Diese kann dann entweder die zum testing extra geschriebene Funktion loadPage() sein, oder die Funktion
+     * Diese kann dann entweder die zum Testing extra geschriebene Funktion loadPage() sein, oder die Funktion
      * loadingPage(). Diese Funktion wird dabei normalerweise ausgeführt und holt sich die Daten zu den SuchProfilen
      * aus dem BackEnd.
      */
@@ -328,7 +338,7 @@ class Search extends React.Component{
 
 
     /**
-     * rendert den Komponenten
+     * Rendert den Komponenten
      */
     render() {
 

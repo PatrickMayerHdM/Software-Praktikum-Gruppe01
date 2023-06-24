@@ -87,7 +87,7 @@ export default class DatingSiteAPI {
 
     /**
      *
-     * @param ID
+     * @param id
      * @returns {Promise<unknown>}
      */
     getChats(id) {
@@ -313,8 +313,7 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * Gibt ein Promise zurück, welches dann ein Array mit den verschiedenen ProfilIDs für Suchprofile
-     * @param {Number} accountID übergibt die accountID für welche die Profile nicht
+     * Gibt ein Promise zurück, welches dann ein Array mit den verschiedenen ProfilIDs für Suchprofile profile_id übergibt die accountID für welche die Profile nicht
     */
 
     getSearchProfileIDs(profile_id){
