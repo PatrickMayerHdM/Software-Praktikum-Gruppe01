@@ -144,7 +144,7 @@ class Profile extends React.Component{
             hobby,
             politicaltendency,
             educationalstatus,
-
+            aboutme,
         } = this.state;
 
         const isOwnProfile = this.state.lastPartURL === this.props.user.uid;
@@ -298,6 +298,18 @@ class Profile extends React.Component{
                                 </Grid>
                                 <Grid md={8} xs={7} spacing={2}>
                                     <p>{politicaltendency}</p>
+                                </Grid>
+                            </Grid >
+                        </Item>
+                        )}
+                        {aboutme &&(
+                        <Item>
+                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
+                                <Grid md={4} xs={7} spacing={2}>
+                                    Das macht mich aus:
+                                </Grid>
+                                <Grid md={8} xs={7} spacing={2}>
+                                    <p>{aboutme}</p>
                                 </Grid>
                             </Grid >
                         </Item>

@@ -283,6 +283,12 @@ class CreateProfil extends Component {
         this.setState({ age: newAge });
     };
 
+    /** Event-Handler für die Textuelle Eigenschaft "Interessen / Aboutme" */
+    handleChangeAboutMe = (event) => {
+        const newaboutme = event.target.value;
+        this.setState({aboutme: newaboutme})
+    }
+
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
         console.log(this.state)
@@ -669,6 +675,7 @@ class CreateProfil extends Component {
                 profileExists,
                 apiage,
                 selectedOption,
+                aboutme,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -789,11 +796,23 @@ class CreateProfil extends Component {
                             </Box>
                             </FormGroup>
                         </Item>
-                        {/**
-
-                         Mögliche Änderung durch "Über Mich Feld"
-
-                         */}
+                        <Item>
+                         <FormGroup row style={{justifyContent: 'center'}}>
+                                <Box sx={{width: 400, margin: '0 auto'}}>
+                                    <FormLabel>Das macht mich aus:</FormLabel>
+                                      <TextField fullWidth
+                                                 multiline  // Hinzugefügte Eigenschaft für mehrzeiligen Text
+                                                 rows={4}   // Anzahl der Zeilen im Textfeld
+                                                 type="text"
+                                                 value={aboutme}
+                                                 onChange={this.handleChangeAboutMe}
+                                                 inputProps={{
+                                                     maxLength: 128,
+                                        }}
+                                      />
+                                </Box>
+                            </FormGroup>
+                            </Item>
                         <Item>
                             <FormGroup row style={{justifyContent: 'center', backgroundColor: 'red'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
