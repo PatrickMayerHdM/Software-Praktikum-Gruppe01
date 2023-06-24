@@ -36,20 +36,21 @@ class SearchProfile extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            minAge: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            height: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            gender: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            religion: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            hair: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            smoking: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            income: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            favclub: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            educationalstatuts: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            hobby: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            politicaltendency: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
-            aboutme: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            maxAge: 0, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            minAge: 0, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            height: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            gender: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            religion: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            hair: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            smoking: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            income: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            favclub: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            educationalstatuts: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            hobby: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            politicaltendency: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            aboutme: " ", // Wert welcher bei dem Submit des Suchprofils übergeben wird.
 
-            lastPartURL: null, // Letzer Teil der URL, dies wird benötigt, um herauszufinden, ob es sich um ein neues Suchprofil oder das Bearbeiten eines Suchprofils handelt.
+            lastPartURL: " ", // Letzer Teil der URL, dies wird benötigt, um herauszufinden, ob es sich um ein neues Suchprofil oder das Bearbeiten eines Suchprofils handelt.
             char_fk: 0,
             searchprofile_id: null,
             error: null,
