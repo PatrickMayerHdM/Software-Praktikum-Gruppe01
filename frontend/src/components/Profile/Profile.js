@@ -304,36 +304,21 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
-                        if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
-                          return (
-                            <Item key={index}>
-                              <Grid container direction="row" justifyContent="center" alignItems="stretch">
-                                <Grid item md={4} xs={7}>
-                                  {value.char_name[0]}
-                                </Grid>
-                                <Grid item md={4} xs={7}>
-                                  <p>{value.char_value}</p>
-                                </Grid>
-                            </Grid >
-                        </Item>
-                        )}
-                        {aboutme &&(
-                        <Item>
-                            <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
-                                    Das macht mich aus:
-                                </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
-                                    <p>{aboutme}</p>
-                                </Grid>
-                            </Grid >
-                        </Item>
-                        )}
-                              </Grid>
-                            </Item>
-                          );
-                        }
+                            {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
+                            if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                              return (
+                                <Item key={index}>
+                                  <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                                    <Grid item md={4} xs={7}>
+                                      {value.char_name[0]}
+                                    </Grid>
+                                    <Grid item md={4} xs={7}>
+                                      <p>{value.char_value}</p>
+                                    </Grid>
+                                  </Grid>
+                                </Item>
+                              );
+                            }
                         return null;
                         })}
                         {!isOwnProfile && (
