@@ -118,7 +118,7 @@ matchmaking = api.inherit('Matchmaking', bo, {
 @datingapp.response(500, 'Serverseitiger Fehler')
 class ProfileListOperations(Resource):
     @datingapp.doc('Create new Profile')
-    #@secured
+    @secured
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
@@ -189,7 +189,7 @@ class ProfileOperations(Resource):
 class SearchProfileOpterations(Resource):
 
     @datingapp.marshal_list_with(searchprofile)
-    #@secured
+    @secured
     def get(self):
         """Auslesen aller Searchprofile-Objekte"""
         adm = Administration()
@@ -198,7 +198,7 @@ class SearchProfileOpterations(Resource):
 
     #@datingapp.marshal_with(SearchProfile, code=200)
     @datingapp.expect(searchprofile)
-    #@secured
+    @secured
     def post(self):
         adm = Administration()
         print("Da wir ein Suchprofil erwarten hier der print", SearchProfile)
@@ -247,7 +247,7 @@ class InfoObjectListOperationsSearch(Resource):
 class SearchInfoObjectUpdateOperations(Resource):
     @datingapp.marshal_with(infoobject)
     @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
-    #@secured
+    @secured
     def put(self, searchprofile_id):
         print("Main.py: PUT-Befehl: ", searchprofile_id)
         print("API.payload SUCHPROFIL", api.payload)
@@ -273,7 +273,7 @@ class SearchInfoObjectUpdateOperations(Resource):
 @datingapp.param('id','GoogleID für welche die Suchprofile gesucht werden')
 class SearchProfilesOperations(Resource):
 
-    #@secured
+    @secured
     def get(self, id):
 
         adm = Administration()
@@ -321,7 +321,7 @@ Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat.
 @datingapp.param('id','profileBO')
 class ChatListOperations(Resource):
 
-    # @secured
+    @secured
     def get(self, id):
         # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
         adm = Administration()
@@ -341,7 +341,7 @@ class ChatWindowOperations(Resource):
     @datingapp.doc("Create new message")
     @datingapp.marshal_with(message, code=200)
     @datingapp.expect(message)
-    # @secured
+    @secured
 
     def post(self):
         """ Absenden einer neuen Nachricht im Chat."""
@@ -362,7 +362,7 @@ class ChatWindowOperations(Resource):
 @datingapp.param('id', 'Die ID des Message-Objekts.')
 class MessageOperations(Resource):
     @datingapp.marshal_with(message)
-    # @secured
+    @secured
     def get(self, sender_id, recipient_id):
         """ Auslesen aller Nachrichten eines Chat-Verlaufs über sender_id und recipient_id."""
         adm = Administration()
@@ -426,7 +426,7 @@ class InfoObjectsOperations(Resource):
 
     @datingapp.marshal_with(infoobject)
     @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
-    #@secured
+    @secured
     def put(self, profile_id):
         print('Main.py: PUT Befehl: ', profile_id)
         print('Main.py: Api Payload:', api.payload)
@@ -454,7 +454,7 @@ class FavoritenoteListOperations(Resource):
     @datingapp.doc('Create new FavoriteNote')
     # @datingapp.marshal_with(favoritenote, code=200)
     @datingapp.expect(favoritenote)
-    # @secured
+    @secured
     def post(self):
         """Erstellen einer neuen FavoriteNote"""
         adm = Administration()
@@ -537,7 +537,7 @@ class BlocknoteListOperations(Resource):
     @datingapp.doc('Create new BlockNote')
     # @datingapp.marshal_with(blocknote, code=201)
     @datingapp.expect(blocknote)
-    # @secured
+    @secured
     def post(self):
         """Erstellen einer neuen BlockNote"""
 
@@ -594,7 +594,7 @@ class BlockNoteOperations(Resource):
 @datingapp.route('/BlocknoteProfiles/<profile_id>/<other_profile_id>')
 @datingapp.response(500, 'Serverseitiger Fehler beim Löschen der Blocknote')
 class BlocknoteDeleteOperations(Resource):
-    #@secured
+    @secured
     def delete(self, profile_id, other_profile_id):
         """Löschen eines BlockNote-Objekts in der Datenbank.
         Das Objekt wird durch die ID's in der URL bestimmt"""
@@ -658,7 +658,6 @@ class NamedInfoObjectListOperations(Resource):
 @datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):
-    #@datingapp.marshal_list_with(characteristic)
     @secured
     def get(self, char_id):
         print("Angekommen in der NamedCharacteristicsOperations", char_id)
@@ -676,7 +675,7 @@ class NamedCharacteristicsOperations(Resource):
 class ProfileVisitsOperations(Resource):
     @datingapp.doc("Create new visit")
     @datingapp.expect(profilevisits)
-    # @secured
+    @secured
 
     def post(self):
         adm = Administration()
