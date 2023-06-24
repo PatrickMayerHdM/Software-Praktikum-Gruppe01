@@ -156,40 +156,40 @@ class Profile extends React.Component{
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech">
-                                <Grid md={4} xs={7} spacing={3}>
+                                <Grid item md={4} xs={7}>
                                     Vorname:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={3}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.firstName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                          <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Nachname:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.lastName}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Alter:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.age}</p>
                                 </Grid>
                             </Grid >
                         </Item>
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Geschlecht:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.gender}</p>
                                 </Grid>
                             </Grid >
@@ -197,10 +197,10 @@ class Profile extends React.Component{
                         {customProperties.height &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Körpergröße:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.height}cm</p>
                                 </Grid>
                             </Grid >
@@ -209,10 +209,10 @@ class Profile extends React.Component{
                         {customProperties.religion && (
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Religion:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.religion}</p>
                                 </Grid>
                             </Grid >
@@ -221,10 +221,10 @@ class Profile extends React.Component{
                         {customProperties.hair && (
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Haarfarbe:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.hair}</p>
                                 </Grid>
                             </Grid >
@@ -233,10 +233,10 @@ class Profile extends React.Component{
                         {customProperties.smoking &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Raucher:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.smoking}</p>
                                 </Grid>
                             </Grid >
@@ -245,10 +245,10 @@ class Profile extends React.Component{
                         {customProperties.income &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Gehalt:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.income}</p>
                                 </Grid>
                             </Grid >
@@ -257,10 +257,10 @@ class Profile extends React.Component{
                         {customProperties.favclub &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Lieblingsverein:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.favclub}</p>
                                 </Grid>
                             </Grid >
@@ -269,10 +269,10 @@ class Profile extends React.Component{
                         {customProperties.hobby &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Hobbys:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.hobby}</p>
                                 </Grid>
                             </Grid >
@@ -281,10 +281,10 @@ class Profile extends React.Component{
                         {customProperties.politicaltendency &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
-                                <Grid md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                     Politische Ausrichtung:
                                 </Grid>
-                                <Grid md={8} xs={7} spacing={2}>
+                                <Grid item md={8} xs={7}>
                                     <p>{customProperties.politicaltendency}</p>
                                 </Grid>
                             </Grid >
@@ -295,10 +295,10 @@ class Profile extends React.Component{
                           return (
                             <Item key={index}>
                               <Grid container direction="row" justifyContent="center" alignItems="stretch">
-                                <Grid item md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                   {value.char_name[0]}
                                 </Grid>
-                                <Grid item md={4} xs={7} spacing={2}>
+                                <Grid item md={4} xs={7}>
                                   <p>{value.char_value}</p>
                                 </Grid>
                               </Grid>

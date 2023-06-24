@@ -49,14 +49,14 @@ class CreateProfil extends Component {
             char_fk: 0,
             char_id: 0,
             profile_fk: 0,
-            firstName: null,
-            lastName: null,
+            firstName: "",
+            lastName: "",
             age: "",
-            gender: null,
-            height: null,
-            religion: null,
-            hair: null,
-            smoking: null,
+            gender: "",
+            height: "",
+            religion: "",
+            hair: "",
+            smoking: "",
             char_name: '',
             char_desc: '',
             showTextFields: false,
@@ -65,11 +65,11 @@ class CreateProfil extends Component {
             minAge: null,
             maxAge: null,
             searchprofile_fk: null,
-            income: null,
-            favclub: null,
-            hobby: null,
-            politicaltendency: null,
-            aboutme: null,
+            income: "",
+            favclub: "",
+            hobby: "",
+            politicaltendency: "",
+            aboutme: "",
             SelectCreate: "select",
             customProperties: [],
         };
@@ -459,6 +459,7 @@ class CreateProfil extends Component {
                 hobby: "",
                 politicaltendency: "",
                 aboutme: "",
+                customProperties: null,
         });
         })
         .catch((e) =>
@@ -845,21 +846,35 @@ class CreateProfil extends Component {
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
                                     {
+                                      customProperties &&
                                       Object.entries(customProperties).map(([key, value], index) => {
-                                        if (typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                                        if (
+                                          typeof value === 'object' &&
+                                          value.hasOwnProperty('char_id') &&
+                                          value.hasOwnProperty('char_name')
+                                        ) {
                                           return (
-                                            <Box key={index} sx={{width: 400, margin: '0 auto'}}>
-                                              <FormGroup row style={{justifyContent: 'center'}}>
-                                                <Box sx={{width: 150, margin: '0 auto'}}>
-                                                    <p><strong>Eigenschaftsname:</strong></p>
-                                                    <p>{value.char_name[0]}</p>
+                                            <Box key={index} sx={{ width: 400, margin: '0 auto' }}>
+                                              <FormGroup row style={{ justifyContent: 'center' }}>
+                                                <Box sx={{ width: 150, margin: '0 auto' }}>
+                                                  <p>
+                                                    <strong>Eigenschaftsname:</strong>
+                                                  </p>
+                                                  <p>{value.char_name[0]}</p>
                                                 </Box>
-                                                <Box sx={{width: 150, margin: '0 auto'}}>
-                                                  <p><strong>Info:</strong></p>
+                                                <Box sx={{ width: 150, margin: '0 auto' }}>
+                                                  <p>
+                                                    <strong>Info:</strong>
+                                                  </p>
                                                   <p>{value.char_value}</p>
                                                 </Box>
-                                                <Box sx={{width: 150, margin: '0 auto'}}>
-                                                  <Button variant="contained"  color="error" onClick={() => this.handleChangeCharDelete(index)} startIcon={<DeleteIcon />}>
+                                                <Box sx={{ width: 150, margin: '0 auto' }}>
+                                                  <Button
+                                                    variant="contained"
+                                                    color="error"
+                                                    onClick={() => this.handleChangeCharDelete(index)}
+                                                    startIcon={<DeleteIcon />}
+                                                  >
                                                     Löschen
                                                   </Button>
                                                 </Box>
@@ -868,8 +883,7 @@ class CreateProfil extends Component {
                                           );
                                         }
                                         return null;
-                                      })
-                                    }
+                                      })}
                                 </Box>
                             </FormGroup>
                         </Item>
@@ -900,7 +914,7 @@ class CreateProfil extends Component {
                     <Item>
                         <FormGroup row style={{ justifyContent: 'center' }}>
                             <Box sx={{ width: 400, margin: '0 auto' }}>
-                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
+                                <Button onClick={this.  handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
                             </Box>
                         </FormGroup>
                     </Item>
