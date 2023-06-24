@@ -670,6 +670,7 @@ class NamedCharacteristicsOperations(Resource):
 
         return char_names, 200
 
+"""Ab hier Profilevisits"""
 
 @datingapp.route('/visit')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")

@@ -6,6 +6,7 @@ class ProfilevisitsMapper(mapper):
         super().__init__()
 
     def find_by_key(self, key):
+        """ Auslesen aller besuchten Profile anhand eines mainprofiles. """
         results = []
 
         cursor = self._connection.cursor()
@@ -25,7 +26,7 @@ class ProfilevisitsMapper(mapper):
         return results
 
     def insert(self, visitedprofile):
-        print("insert in ProfilevisitsMapper", visitedprofile.get_visitedprofile_id)
+        """ Hinzufügen eines Profils, welches vom mainprofile besucht wurde. """
         cursor = self._connection.cursor()
         command = "SELECT profilevisits_id FROM main.Profilevisits WHERE mainprofile_id = %s AND visitedprofile_id = %s"
         data = (visitedprofile.get_mainprofile_id(), visitedprofile.get_visitedprofile_id())

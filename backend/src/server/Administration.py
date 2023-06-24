@@ -531,10 +531,12 @@ class Administration(object):
     """Spezifische Methoden für Profilevisits"""
 
     def get_profilevisits(self, key):
+        """ Auslesen der besuchten Profile für ein mainprofile, welches hier der Key ist."""
         with ProfilevisitsMapper() as mapper:
             return mapper.find_by_key(key)
 
     def create_profilevisits(self, visitedprofile):
+        """ Hinzufügen eines Profils, welches vom mainprofile besucht wurde."""
         visitedprofile.set_id(1)
 
         with ProfilevisitsMapper() as mapper:
