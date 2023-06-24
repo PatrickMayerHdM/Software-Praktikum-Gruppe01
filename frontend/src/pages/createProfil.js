@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Box from "@mui/material/Box";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
-import {Button, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 import * as React from "react";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -71,6 +71,7 @@ class CreateProfil extends Component {
             politicaltendency: null,
             aboutme: null,
             SelectCreate: "select",
+            customProperties: [],
         };
 
         /** Bindung der Handler an die Komponente */
@@ -86,9 +87,11 @@ class CreateProfil extends Component {
         this.handleChangeClub = this.handleChangeClub.bind(this);
         this.handleChangeHobbys = this.handleChangeHobbys.bind(this);
         this.handleChangePolitical = this.handleChangePolitical.bind(this);
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+
         this.handleCreateChar = this.handleCreateChar.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSaveInputs = this.handleSaveInputs.bind(this);
@@ -107,6 +110,7 @@ class CreateProfil extends Component {
     componentDidMount() {
         this.checkProfilExc();
         this.getSelectedProperties();
+        this.getSelectedPropertiesForCharValuesAndNames();
     };
 
     /** Handler und API für "checkProfilExc" */
@@ -188,6 +192,45 @@ class CreateProfil extends Component {
 
           this.setState(selectedProperties);
         });
+    }
+
+    async getSelectedPropertiesForCharValuesAndNames() {
+      const customProperties = {};
+
+      try {
+        const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.props.user.uid);
+
+        for (const key in responseInfoObjects) {
+          if (responseInfoObjects.hasOwnProperty(key)) {
+            const infoObject = responseInfoObjects[key];
+            const char_id = infoObject.char_id;
+            const charValue = infoObject.char_value;
+
+            if (char_id > 160) {
+              const char_name = await this.getCharNameByID(char_id);
+              customProperties[char_id] = {
+                char_id: char_id,
+                char_value: charValue,
+                char_name: char_name,
+              };
+            }
+          }
+        }
+
+        this.setState({ customProperties });
+        console.log("Char ID Liste: ", customProperties);
+      } catch (error) {
+        console.error("Fehler beim Auslesen der InfoObjekte: ", error);
+      }
+    }
+
+    getCharNameByID(char_id) {
+      return DatingSiteAPI.getAPI()
+        .getCharName(char_id)
+        .then((responseCharName) => {
+            return responseCharName;
+        })
+
     }
 
     /** Event-Handler für die Änderung des Vornamens */
@@ -282,6 +325,9 @@ class CreateProfil extends Component {
         const newAge = date.toISOString();
         this.setState({ age: newAge });
     };
+
+
+
 
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
@@ -669,6 +715,7 @@ class CreateProfil extends Component {
                 profileExists,
                 apiage,
                 selectedOption,
+                customProperties,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -795,13 +842,34 @@ class CreateProfil extends Component {
 
                          */}
                         <Item>
-                            <FormGroup row style={{justifyContent: 'center', backgroundColor: 'red'}}>
+                            <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 400, margin: '0 auto'}}>
-                                    {/**
-
-                                     Liste die für jede Eigenschaft erstellt werden kann
-
-                                     */}
+                                    {
+                                      Object.entries(customProperties).map(([key, value], index) => {
+                                        if (typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                                          return (
+                                            <Box key={index} sx={{width: 400, margin: '0 auto'}}>
+                                              <FormGroup row style={{justifyContent: 'center'}}>
+                                                <Box sx={{width: 150, margin: '0 auto'}}>
+                                                    <p><strong>Eigenschaftsname:</strong></p>
+                                                    <p>{value.char_name[0]}</p>
+                                                </Box>
+                                                <Box sx={{width: 150, margin: '0 auto'}}>
+                                                  <p><strong>Info:</strong></p>
+                                                  <p>{value.char_value}</p>
+                                                </Box>
+                                                <Box sx={{width: 150, margin: '0 auto'}}>
+                                                  <Button variant="contained"  color="error" onClick={() => this.handleChangeCharDelete(index)} startIcon={<DeleteIcon />}>
+                                                    Löschen
+                                                  </Button>
+                                                </Box>
+                                              </FormGroup>
+                                            </Box>
+                                          );
+                                        }
+                                        return null;
+                                      })
+                                    }
                                 </Box>
                             </FormGroup>
                         </Item>

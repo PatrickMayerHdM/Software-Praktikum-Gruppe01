@@ -51,7 +51,7 @@ class Profile extends React.Component{
         const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.state.lastPartURL);
         console.log("InfoObjects: ", responseInfoObjects);
 
-        for (const key in responseInfoObjects) {
+            for (const key in responseInfoObjects) {
           if (responseInfoObjects.hasOwnProperty(key)) {
             const infoObject = responseInfoObjects[key];
             const char_id = infoObject.char_id;
@@ -112,6 +112,7 @@ class Profile extends React.Component{
           }
         }
 
+
         this.setState({ customProperties });
         console.log("Char ID Liste: ", customProperties);
       } catch (error) {
@@ -125,7 +126,6 @@ class Profile extends React.Component{
         .then((responseCharName) => {
             return responseCharName;
         })
-
     }
 
     render() {
@@ -194,7 +194,7 @@ class Profile extends React.Component{
                                 </Grid>
                             </Grid >
                         </Item>
-                        {height &&(
+                        {customProperties.height &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -206,7 +206,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {religion && (
+                        {customProperties.religion && (
                         <Item >
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -218,7 +218,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {hair && (
+                        {customProperties.hair && (
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -230,7 +230,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {smoking &&(
+                        {customProperties.smoking &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -242,7 +242,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {income &&(
+                        {customProperties.income &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -254,7 +254,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {favclub &&(
+                        {customProperties.favclub &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -266,7 +266,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {hobby &&(
+                        {customProperties.hobby &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -278,7 +278,7 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {politicaltendency &&(
+                        {customProperties.politicaltendency &&(
                         <Item>
                             <Grid container direction="row" justifyContent="center" alignItems="strech" >
                                 <Grid md={4} xs={7} spacing={2}>
@@ -290,22 +290,22 @@ class Profile extends React.Component{
                             </Grid >
                         </Item>
                         )}
-                        {Object.entries(customProperties).map(([key, value], index) => {
-                          if (typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
-                            return (
-                              <Item key={index}>
-                                <Grid container direction="row" justifyContent="center" alignItems="stretch">
-                                  <Grid item md={4} xs={7} spacing={2}>
-                                    {value.char_name[0]}
-                                  </Grid>
-                                  <Grid item md={4} xs={7} spacing={2}>
-                                    <p>{value.char_value}</p>
-                                  </Grid>
+                        {customProperties !== null && Object.entries(customProperties).map(([key, value], index) => {
+                        if (value !== null && typeof value === 'object' && value.hasOwnProperty('char_id') && value.hasOwnProperty('char_name')) {
+                          return (
+                            <Item key={index}>
+                              <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                                <Grid item md={4} xs={7} spacing={2}>
+                                  {value.char_name[0]}
                                 </Grid>
-                              </Item>
-                            );
-                          }
-                          return null;
+                                <Grid item md={4} xs={7} spacing={2}>
+                                  <p>{value.char_value}</p>
+                                </Grid>
+                              </Grid>
+                            </Item>
+                          );
+                        }
+                        return null;
                         })}
                         {!isOwnProfile && (
                         <OptionsOtherProfile other_profile={this.state.lastPartURL} user={this.props.user}/>
