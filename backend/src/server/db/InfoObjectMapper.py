@@ -38,7 +38,7 @@ class InfoObjectMapper(mapper):
         command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}') AND (searchprofile_id IS NULL)"
         cursor.execute(command)
         tuples = cursor.fetchall()
-        print('InfoObject Tuples aus DB:', tuples)
+        #print('InfoObject Tuples aus DB:', tuples)
 
         for (infoobject_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
             info_obj = InfoObject()
@@ -52,7 +52,7 @@ class InfoObjectMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("Erzeugte Objekte aus Tuples: ", result)
+        #print("Erzeugte Objekte aus Tuples: ", result)
         return result
 
     def insert(self, info_obj):

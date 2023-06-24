@@ -638,7 +638,6 @@ class Administration(object):
                             if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
                                 # print('Dieses Profil wird der Liste hinzugefügt:', profile)
                                 age_filtered_list.append(profile)
-                                print('age_filtered_list sollte nur 1 profil haben', len(age_filtered_list))
                                 print('age_filtered_list: ', age_filtered_list)
 
         # Jetzt finden die Berechnungen statt. Dabei wird das Suchprofil mit den Profilen in der age-filtered-list abgeglichen
@@ -766,6 +765,7 @@ class Administration(object):
                 else:
                     continue
 
+
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
             # Noch nicht getestet
             for key in prof['Char Values']:
@@ -774,12 +774,42 @@ class Administration(object):
                     if compare_text == 1:
                         score += 1
                         total_checked_elem += 1
-
+                        continue
             # Berechnung des Match-Wertes in Prozent
             print('Total_checked_elem:', total_checked_elem)
             matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
             print('Matching Instanz:', matching_value)
             result.append([prof['Profile ID'], matching_value])
+
+            # True oder False Statement in Liste hinzufügen, damit "nur neue" Profile ausgelesen werden können
+            # Zuerst laden wir uns alle Profile die bereits besucht wurden in unsere Liste.
+            print('Admin.py: Beginn des Profilesvisited')
+            with ProfilevisitsMapper() as visited_mapper:
+                print('Übergebene GoogleID an Mapper:', search_google_id)
+                visited_profiles_list = visited_mapper.find_by_key(search_google_id)
+                print('Visited Profiles List:', visited_profiles_list)
+
+            # jetzt iterieren wir über die Result Liste, und setzen den State auf True wenn ein Profil bereits besucht wurde
+            # oder auf false, wenn das Profil bisher noch nicht gesehen wurde.
+        print('Initial Result-List:', result)
+        print('Initial Age-Filtered-list', age_filtered_list)
+        for profile in result:
+            if profile[0] in visited_profiles_list:  # Prüfe den Listeneintrag an der Stelle 0 (googleID)
+                print('Profile an der Stelle [0]', profile[0])
+                profile.append(True) # Wenn das aktuell fokussierte Profil nicht in visited-profiles ist dann erweiter es um True
+
+            else:
+                profile.append(False) # Sonst false
+
+        print('updated (True/False) result-list:', result)
+
+        """  
+        Result-Liste sortieren, damit das Matching als erstes ausgelesen wird. 
+        'key=lambda x: x[1] = definiert, nach welchem Element die Liste sortiert werden sollte 
+        'reverse=True' = Sortierung in absteigender Folge
+        """
+
+        result.sort(key=lambda x: x[1], reverse=True)
 
         print('Ergebnisliste (Result):', result)
         return result

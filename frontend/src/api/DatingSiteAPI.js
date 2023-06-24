@@ -320,8 +320,8 @@ export default class DatingSiteAPI {
     getSearchProfileIDs(profile_id){
         return this.#fetchAdvanced(this.#getSearchProfilesByIdURL(profile_id))
             .then((responseJSON) => {
-                console.log("Das responseJSON")
-                console.log(responseJSON)
+                //console.log("Das responseJSON")
+                //console.log(responseJSON)
                 return new Promise(function (resolve) {
                     resolve(responseJSON);
                 })

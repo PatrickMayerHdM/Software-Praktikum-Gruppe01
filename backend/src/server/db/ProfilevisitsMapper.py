@@ -10,19 +10,18 @@ class ProfilevisitsMapper(mapper):
         results = []
 
         cursor = self._connection.cursor()
-        command = f'SELECT profilevisits_id, mainprofile_id, visitedprofile_id FROM main.Profilevisits WHERE mainprofile_id=%s'
-        data = (key, )
-        cursor.execute(command, data)
+        command = f"SELECT profilevisits_id, mainprofile_id, visitedprofile_id FROM main.Profilevisits WHERE mainprofile_id='{key}'"
+        cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples is not None:
-            for row in tuples:
-                (profilevisits_id, _) = row
-                results.append(profilevisits_id)
+            for i in tuples:
+                results.append(i[2])
+
 
         self._connection.commit()
         cursor.close()
-
+        #print('Profilevisitsmapper: return:', results)
         return results
 
     def insert(self, visitedprofile):

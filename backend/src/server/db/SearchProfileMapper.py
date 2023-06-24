@@ -44,7 +44,7 @@ class SearchProfileMapper(mapper):
 
         if tuples is not None:
             for row in tuples:
-                (searchprofile_id, _) = row
+                searchprofile_id = row[0] # gibt nur die ID des SuchProfils zurück und nicht die gesamten Daten, aus der Datenbank
                 results.append(searchprofile_id)
 
         self._connection.commit()
