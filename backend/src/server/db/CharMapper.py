@@ -30,6 +30,7 @@ class CharMapper(mapper):
         return result
 
     def find_by_key(self, key):
+        """ Auslesen einer Eigenschaft anhand eines Keys."""
         cursor = self._connection.cursor()
         command = f'SELECT char_id, char_name FROM main.Characteristic WHERE char_id=%s'
         data = (key, )
@@ -52,16 +53,14 @@ class CharMapper(mapper):
         return result
 
     def find_key_by_char_name(self, key):
-        print("Key aus CharMapper: ", key)
+        """ Auslesen eines Keys anhand Eigenschaftsnamen."""
         cursor = self._connection.cursor()
         command = f"SELECT char_id, char_name FROM main.Characteristic WHERE char_name='{key}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            print("Tuples aus CharMapper: ", tuples[0])
             (char_id) = tuples[0]
-            print("Char ID im Mapper: ", char_id[0])
             char = NamedInfoObject()
             char.set_named_char_id(char_id[0])
             result = char
@@ -71,20 +70,17 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("Char ID by Name: ", result.get_named_char_id())
         return result.get_named_char_id()
 
     def find_char_by_key(self, key):
-        print("Key aus CharMapper: ", key)
+        """ Auslesen einer Eigenschaft anhand einer Char_id."""
         cursor = self._connection.cursor()
         command = f"SELECT char_name FROM main.Characteristic WHERE char_id='{key}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         if tuples is not None and len(tuples) > 0 and tuples[0] is not None:
-            print("Char aus CharMapper: ", tuples[0])
             (char_name, ) = tuples[0]
-            print("Char Name im Mapper: ", char_name[0])
             result = char_name
         else:
             raise ValueError(f"Schlüssel {key} nicht gefunden.")
@@ -92,10 +88,10 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("Char ID by Name: ", result)
         return result
 
     def insert(self, char):
+        """ Hinzufügen einer Eigenschaft."""
         cursor = self._connection.cursor()
         cursor.execute('SELECT MAX(char_id) AS maxid FROM main.Characteristic')
         tuples = cursor.fetchall()
@@ -110,16 +106,14 @@ class CharMapper(mapper):
 
         data = (char.get_id(),
                 char.get_characteristic_name())
-
         cursor.execute(command, data)
-
         self._connection.commit()
         cursor.close()
 
-        print("CharMapper: ", char)
         return char
 
     def insert_named_char(self, key):
+        """ Hinzufügen eines named_char."""
         cursor = self._connection.cursor()
 
         select_query = 'SELECT char_id FROM main.Characteristic WHERE char_name = %s'
@@ -146,10 +140,10 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        print("CharMapper: ", key)
         return key
 
     def update(self, char):
+        """ Updaten einer Eigenschaft."""
         cursor = self._connection.cursor()
 
         command = 'UPDATE main.Characteristic SET char_name=%s WHERE char_id=%s'
@@ -162,6 +156,7 @@ class CharMapper(mapper):
         cursor.close()
 
     def delete(self, char):
+        """ Löschen einer Eigenschaft."""
         cursor = self._connection.cursor()
 
         command = f'DELETE FROM main.Characteristic WHERE char_id={char.get_id()}'

@@ -30,10 +30,8 @@ class InfoObjectMapper(mapper):
         return result
 
     def find_by_key(self, key):
-        result = []
-
         """ Auslesen der Info-Objekte nach Key """
-
+        result = []
         cursor = self._connection.cursor()
         command = f"SELECT * FROM main.InfoObject WHERE (profile_id='{key}') AND (searchprofile_id IS NULL)"
         cursor.execute(command)
@@ -56,6 +54,7 @@ class InfoObjectMapper(mapper):
         return result
 
     def insert(self, info_obj):
+        """ Hinzufügen eines Info-Objekts. """
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
         tuples = cursor.fetchall()
@@ -83,12 +82,8 @@ class InfoObjectMapper(mapper):
         return info_obj
 
     def insert_named_info(self, named_info_obj):
-        print("Bevor Info: ", named_info_obj)
-        print("Bevor Info: ", named_info_obj.get_named_char_id())
-        print("Bevor Info: ", named_info_obj.get_named_char_name())
-
+        """ Hinzufügen eines Named_info_obj. """
         cursor = self._connection.cursor()
-
         query = "SELECT COUNT(*) FROM main.InfoObject WHERE profile_id = %s AND char_value = %s"
         cursor.execute(query, (named_info_obj.get_named_profile_fk(), named_info_obj.get_named_info_name()))
         result = cursor.fetchone()
@@ -116,7 +111,6 @@ class InfoObjectMapper(mapper):
                 named_info_obj.get_named_info_name(),
                 named_info_obj.get_named_profile_fk())
 
-        print("Mapper: ", data)
         cursor.execute(command, data)
 
         self._connection.commit()
@@ -125,6 +119,7 @@ class InfoObjectMapper(mapper):
         return named_info_obj
 
     def Searchinsert(self, info_obj):
+        """ Hinzufügen der Werte in ein Info-Objekte für ein Suchprofil. """
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(infoobject_id) AS maxid FROM main.InfoObject")
         tuples = cursor.fetchall()
@@ -155,9 +150,7 @@ class InfoObjectMapper(mapper):
         return info_obj
 
     def update(self, info_obj):
-        #print(type(info_obj))
-        #print('Info Mapper value: ', info_obj.get_value())
-        #print('Info Mapper profile_id:', info_obj.get_profile_fk())
+        """ Update eines Profils mit Info-Objekten. """
         command = 'UPDATE main.InfoObject SET char_value=%s WHERE profile_id=%s AND char_id=%s'
         data = (info_obj.get_value(), info_obj.get_profile_fk(), info_obj.get_char_fk())
 
@@ -168,10 +161,7 @@ class InfoObjectMapper(mapper):
         self._connection.commit()
 
     def update_search(self, info_obj):
-        print(type(info_obj))
-        print('Info Mapper value: ', info_obj.get_value())
-        print('Info Mapper searchprofile_id:', info_obj.get_searchprofile_id())
-
+        """ Update eines Suchprofils mit Info-Objekten. """
         command = 'UPDATE main.InfoObject SET char_value=%s WHERE searchprofile_id=%s AND char_id=%s'
         data = (info_obj.get_value(), info_obj.get_searchprofile_id(), info_obj.get_char_fk())
 
@@ -181,6 +171,7 @@ class InfoObjectMapper(mapper):
         self._connection.commit()
 
     def find_by_id(self, key):
+        """ Auslesen von Info-Objekten anhand einer Profil_id. """
         command = 'SELECT infoobject_id, char_id, char_value, profile_id FROM main.InfoObject WHERE profile_id = %s'
         data = (key,)
 
@@ -202,6 +193,7 @@ class InfoObjectMapper(mapper):
         return None
 
     def find_by_searchid(self, key):
+        """ Auslesen von Info-Objekten anhand einer Suchprofil_id. """
         command = 'SELECT * FROM main.InfoObject WHERE searchprofile_id = %s'
         data = (key,)
 
@@ -223,9 +215,7 @@ class InfoObjectMapper(mapper):
 
 
     def delete(self, info_obj):
-        print('InfoObjectMapper "google_id":', info_obj)
-        print(type(info_obj))
-        #print("Delete Info: ", google_id.profile_id)
+        """ Löschen von Info-Objekten anhand einer Profil_id. """
         cursor = self._connection.cursor()
 
         command = f'DELETE FROM main.InfoObject WHERE profile_id=%s'
@@ -236,7 +226,7 @@ class InfoObjectMapper(mapper):
         cursor.close()
 
     def delete_searchprofile(self, searchprofile_id):
-
+        """ Löschen von Info-Objekten anhand einer Suchprofil_id. """
         cursor = self._connection.cursor()
 
         command = f"DELETE FROM main.InfoObject WHERE searchprofile_id='{searchprofile_id.searchprofile_id}'"

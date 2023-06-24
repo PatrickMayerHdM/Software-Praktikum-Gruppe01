@@ -48,6 +48,7 @@ class MatchmakingMapper(mapper):
         return result
 
     def compare_info_objects(self, profile_id1, profile_id2):
+        """ Vergleichen von Info-Objekten zweier Profile. """
         info_objects1 = self.find_info_by_profile(profile_id1)
         info_objects2 = self.find_info_by_profile(profile_id2)
 
@@ -69,6 +70,7 @@ class MatchmakingMapper(mapper):
         return matches
 
     def find_matching_info_objects(self, profile_id1, profile_id2):
+        """ Auslesen von übereinstimmenden Info-Objekten zweier Profile. """
         info_objects1 = self.find_info_by_profile(profile_id1)
         info_objects2 = self.find_info_by_profile(profile_id2)
 
