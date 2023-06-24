@@ -197,7 +197,6 @@ class App extends Component {
                       <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile user={currentUser}/>}></Route>
                       <Route path="/Profile/:eigeneID" element={<Profile user={currentUser}/>}></Route>
                       <Route path="/Suche" element={<Search user={currentUser}/>}></Route>
-                      <Route path="/Suche/Suchprofil/:SuchprofilID" element={<SearchProfile/>}></Route>
                       <Route path="/Merkliste" element={<FavoriteProfileBoxList user={currentUser}/>}></Route>
                       <Route path="/Sperrliste" element={<BlockProfileBoxList user={currentUser}/>}></Route>
                       <Route element={<ChatProfileBox user={currentUser}/>}></Route>

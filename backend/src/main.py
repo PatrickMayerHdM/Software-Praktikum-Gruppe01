@@ -268,16 +268,16 @@ class SearchInfoObjectUpdateOperations(Resource):
 
 
 """Handling um alle Suchprofil ID's eines Profils zu bekommen"""
-@datingapp.route('/Search/SearchProfiles/<id>/')
+@datingapp.route('/Search/SearchProfiles/<profile_id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
-@datingapp.param('id','GoogleID für welche die Suchprofile gesucht werden')
+@datingapp.param('profile_id','GoogleID für welche die Suchprofile gesucht werden')
 class SearchProfilesOperations(Resource):
 
-    @secured
-    def get(self, id):
+    #@secured
+    def get(self, profile_id):
 
         adm = Administration()
-        SearchP = adm.get_searchprofiles_by_google_id(id)
+        SearchP = adm.get_searchprofiles_by_google_id(profile_id)
 
         if SearchP is not None:
             return SearchP, 200
@@ -318,12 +318,12 @@ Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat.
 
 @datingapp.route('/ChatProfileBoxList/<id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
-@datingapp.param('id','profileBO')
+@datingapp.param('id','id des Profils')
 class ChatListOperations(Resource):
 
-    @secured
+    #@secured
     def get(self, id):
-        # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
+        # ermöglicht es, die Administration() mit der kürzeren Schreibweise adm abzurufen.
         adm = Administration()
         x = adm.get_profile_by_message(id)
 
@@ -668,6 +668,7 @@ class NamedInfoObjectListOperations(Resource):
 @datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):
+    #@datingapp.marshal_list_with(characteristic)
     @secured
     def get(self, char_id):
         print("Angekommen in der NamedCharacteristicsOperations", char_id)

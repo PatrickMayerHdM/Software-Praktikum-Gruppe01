@@ -57,6 +57,7 @@ class SearchProfile extends React.Component{
             selectedOption: null, // Dies ist die vom User ausgewählte Option im Dropdown
         };
 
+        // Binding der Funktionen
         this.handleChangeGen = this.handleChangeGen.bind(this);
         this.handleChangeRel = this.handleChangeRel.bind(this);
         this.handleChangeSmo = this.handleChangeSmo.bind(this);
@@ -82,6 +83,10 @@ class SearchProfile extends React.Component{
         this.handleDeleteInterests = this.handleDeleteInterests.bind(this);
         this.handleDeleteHeight = this.handleDeleteHeight.bind(this);
     }
+
+    /**
+     * Funktionen für Veränderungen an den Werten
+     */
 
     /** Event-Handler für die Änderung des Geschlechts der gesuchten Person */
     handleChangeGen = (val) => {
@@ -193,6 +198,7 @@ class SearchProfile extends React.Component{
 
 
     submit = (event) => {
+        // Ermitteln, ob es sich um ein erstmaliges Anlegen eines Suchprifils handelt.
          if (this.state.lastPartURL === "new") {
              // Erstmaliges Anlegen eines Suchprofils
              event.preventDefault();
