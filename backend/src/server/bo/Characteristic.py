@@ -8,18 +8,23 @@ class Characteristics(bo):
         self._char_name = ""
 
     def get_id(self):
+        """Auslesen der ID."""
         return self._id
 
     def set_char_id(self, value):
+        """Setzen der Char_id."""
         self._char_id = value
 
     def get_char_id(self):
+        """Auslesen der Char_id."""
         return self._char_id
 
     def get_characteristic_name(self):
+        """Auslesen des Eigenschaftsnamen."""
         return self._char_name
 
     def set_characteristic(self, value):
+        """Setzen des Eigenschaftsnamen."""
         self._char_name = value
 
     @staticmethod
