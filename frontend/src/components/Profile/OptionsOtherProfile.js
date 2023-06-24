@@ -8,21 +8,20 @@ import DatingSiteAPI from "../../api/DatingSiteAPI";
 import blockNoteBO from "../../api/BlockNoteBO";
 import "../App.css";
 
-/** Da sich die gestaltung der Profil komponente nicht unterscheidet, ob es das eigene Profil oder ein Profil einer
- * anderen Person ist, werden die spezifischen Funktionen in einem extra Komponenten behandelt.
- * Hier werden jetzt die Optionen, welche ein User explizit beim anschauen eines anderen Profils hat.*/
+/** Da sich die Gestaltung der Profilkomponente nicht unterscheidet, ob es das eigene Profil oder ein Profil einer
+ * anderen Person ist, werden die spezifischen Funktionen in einer extra Komponente behandelt.
+ * Hier werden jetzt die Optionen dargestellt, welche ein User beim Anschauen eines anderen Profils hat.*/
 
 class OptionsOtherProfile extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            adding_id: this.props.user.uid,
-            added_id: this.props.other_profile,
-            blocking_id: this.props.user.uid,
-            blocked_id: this.props.other_profile,
-            lastPartURL: null
-
+            adding_id: this.props.user.uid, // der blockierende User
+            added_id: this.props.other_profile, // der geblockte User
+            blocking_id: this.props.user.uid, // die eigene User-Id (Google-Id)
+            blocked_id: this.props.other_profile, // die User-Id (Google-Id) des anderen Users
+            lastPartURL: null, // die an der URL auszulesende Id
         }
 
         this.PersonSaved = this.PersonSaved.bind(this);
@@ -56,8 +55,6 @@ class OptionsOtherProfile extends React.Component{
                     error: e,
                 })
             );
-        console.log("Zum Merkzettel hinzugefügt")
-
     }
 
 
@@ -77,7 +74,6 @@ class OptionsOtherProfile extends React.Component{
                     error: e,
                 })
             );
-        console.log("Zur Kontaktsperre hinzugefügt")
     }
 
     render() {

@@ -27,6 +27,7 @@ class ProfileMapper(mapper):
         return result
 
     def find_by_key(self, key):
+        """ Auslesen eines Profils anhand einer Google_id (hier FK)"""
         result = []
 
         cursor = self._connection.cursor()
@@ -45,35 +46,10 @@ class ProfileMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-        #print("Profil von der Datenbank im Mapper:", result)
         return result
 
-    # def find_by_account_id(self, account_id):
-    #     result = None
-    #     cursor = self._connection.cursor()
-    #     command = 'SELECT profile_id, favoriteNote_id, account_id, blockNote_id FROM main.Profile WHERE account_id=%s'
-    #     data = (account_id,)
-    #     cursor.execute(command, data)
-    #     tuples = cursor.fetchall()
-    #
-    #     try:
-    #         (profile_id, favoriteNote_id, account_id, blockNote_id) = tuples[0]
-    #         p = Profile()
-    #         p.set_id(profile_id)
-    #         p.set_favorite_note_id(favoriteNote_id)
-    #         p.set_account_id(account_id)
-    #         p.set_block_note_id(blockNote_id)
-    #         result = p
-    #
-    #     except IndexError:
-    #         "Wenn Tupel leer sind, dann wird IndexError geworfen"
-    #         result = None
-    #
-    #     self._connection.commit()
-    #     cursor.close()
-    #     return result
-
     def insert(self, profile):
+        """ Hinzufügen eines Profils """
         # Verbindugn zur DB + cursor-objekt erstellt
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(profile_id) AS maxid FROM main.profile")
@@ -114,7 +90,6 @@ class ProfileMapper(mapper):
         cursor = self._connection.cursor()
 
         command = f"DELETE FROM main.profile WHERE google_fk='{google_id[0].get_google_fk()}'"
-        print("Profile Mapper Data: ", google_id)
         cursor.execute(command)
 
         self._connection.commit()

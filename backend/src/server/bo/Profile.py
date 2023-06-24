@@ -9,21 +9,27 @@ class Profile(bo):
         self._google_fk = None
 
     def get_favorite_note_id(self):
+        """Auslesen der Favoritenote_id."""
         return self._favoritenote_id
 
     def set_favorite_note_id(self, favoritenote_id):
+        """Setzen der Favoritenote_id."""
         self._favoritenote_id = favoritenote_id
 
     def get_block_note_id(self):
+        """Auslesen der Blocknote_id."""
         return self._blocknote_id
 
     def set_block_note_id(self, blocknote_id):
+        """Setzen der Blocknote_id."""
         self._blocknote_id = blocknote_id
 
     def set_google_fk(self, google_id):
+        """Setzen der Google_id."""
         self._google_fk = google_id
 
     def get_google_fk(self):
+        """Auslesen der Google_id."""
         return self._google_fk
 
     def __str__(self):
