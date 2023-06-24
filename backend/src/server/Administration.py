@@ -892,6 +892,6 @@ class Administration(object):
         """
         birthdate = datetime.fromisoformat(age_str[:-1])  # das "z" entfernen
         curr_date = datetime.now()
-        age = curr_date.year - birthdate.year
+        age = curr_date.year - birthdate.year - ((curr_date.month, curr_date.day) < (birthdate.month, birthdate.day))
         return age
 
