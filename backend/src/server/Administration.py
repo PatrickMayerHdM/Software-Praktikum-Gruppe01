@@ -65,7 +65,7 @@ class Administration(object):
         with AccountMapper() as mapper:
             mapper.delete(account)
 
-    """Spezifische Methoden für message"""
+    """ Spezifische Methoden für message """
 
     def addMessage(self, sender, recipient, content):
         """Objekt der Klasse Massage wird erstellt"""
@@ -104,6 +104,7 @@ class Administration(object):
             return mapper.find_by_recipient(recipientid)
 
     def get_message_by_id(self, key):
+        """messages anhand eines keys auslesen"""
         with MessageMapper() as mapper:
             return mapper.find_by_key(key)
 
@@ -113,41 +114,41 @@ class Administration(object):
             print(mapper.find_by_chat(sender_profile, recipient_profile))
             return mapper.find_by_chat(sender_profile, recipient_profile)
 
-    # @staticmethod
-    # def find_by_chat(sender_profile, recipient_profile):
-    #     """Auslesen aller Nachrichten zwischen zwei Personen."""
-    #     message_mapper = MessageMapper()
-    #     messages = message_mapper.find_by_chat(sender_profile, recipient_profile)
-    #     return messages
 
-    """Spezifische Methoden für blockNote"""
+    """ Spezifische Methoden für blockNote """
+
     def create_blocknote(self, blocking_id, blocked_id):
+        """ Erstellen einer neuer Instanz von BlockNote. """
         blocknote = BlockNote()
         blocknote.set_id(1)
         blocknote.set_blocking_id(blocking_id)
         blocknote.set_blocked_id(blocked_id)
-
+        """ Einfügen der neuen Instanz in die Datenbank. """
         with BlockNoteMapper() as mapper:
             return mapper.insert(blocknote)
 
     def save_blocknote(self, blocklist):
+        """ Updaten einer Instanz von BlockNote. """
         with BlockNoteMapper() as mapper:
             mapper.update(blocklist)
 
     def delete_blocknote(self, blocking_id, blocked_id):
+        """ Löschen einer Instanz von BlockNote. """
         with BlockNoteMapper() as mapper:
             mapper.delete(blocking_id, blocked_id)
 
-
     def get_all_blocknote(self):
+        """ Auslesen aller Instanzen von BlockNote. """
         with BlockNoteMapper() as mapper:
             return mapper.find_all()
 
     def get_blocknote_by_blocknote_id(self, key):
+        """ Auslesen aller Instanzen von BlockNote mit einer bestimmten id. """
         with BlockNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
     def get_blocknote_by_blocking_user(self, blocking_user):
+        """ Auslesen aller Instanzen von BlockNote eines Users. """
 
         profiles = []
         with BlockNoteMapper() as mapper:
@@ -159,34 +160,40 @@ class Administration(object):
 
         return profiles
 
-    """Spezifische Methoden für favoritenote"""
+    """ Spezifische Methoden für favoritenote """
 
     def create_favoritenote(self, adding_id, added_id):
+        """ Erstellen einer neuer Instanz von FavoriteNote. """
         favoritenote = FavoriteNote()
         favoritenote.set_id(1)
         favoritenote.set_adding_id(adding_id)
         favoritenote.set_added_id(added_id)
-
+        """ Einfügen der neuen Instanz in die Datenbank. """
         with FavoriteNoteMapper() as mapper:
             mapper.insert(favoritenote)
 
     def save_favoritenote(self, favoritenote):
+        """ Updaten einer Instanz von FavoriteNote. """
         with FavoriteNoteMapper() as mapper:
             mapper.update(favoritenote)
 
     def delete_favoritenote(self, adding_id, added_id):
+        """ Löschen einer Instanz von FavoriteNote. """
         with FavoriteNoteMapper() as mapper:
             mapper.delete(adding_id, added_id)
 
     def get_all_favoritenotes(self):
+        """ Auslesen aller Instanzen von FavoriteNote. """
         with FavoriteNoteMapper() as mapper:
             return mapper.find_all()
 
     def get_favoritenote_by_favoritenote_id(self, key):
+        """ Auslesen aller Instanzen von FavoriteNote mit einer bestimmten id. """
         with FavoriteNoteMapper() as mapper:
             return mapper.find_by_key(key)
 
     def get_favoritenote_by_adding_user(self, adding_user):
+        """ Auslesen aller Instanzen von FavoriteNote eines Users. """
 
         profiles = []
         with FavoriteNoteMapper() as mapper:
@@ -202,6 +209,7 @@ class Administration(object):
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
     def create_profile(self, favoritenote_id, blocknote_id, google_fk):
+        self.create_char_list()
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
@@ -245,7 +253,37 @@ class Administration(object):
     #         return mapper.find_by_account_id(account_id)
 
     # Hier wird die Logik für das Characteristic auf Basis der Mapper realisiert
+    def create_char_list(self):
+        with CharMapper() as mapper:
+            chars = mapper.find_all()
+            if chars:
+                return chars
 
+            characteristics_list = [
+                (10, "firstName"),
+                (20, "lastName"),
+                (30, "age"),
+                (40, "gender"),
+                (50, "height"),
+                (60, "religion"),
+                (70, "hair"),
+                (80, "smoking"),
+                (90, "Über Mich"),
+                (100, "minAge"),
+                (110, "maxAge"),
+                (120, "income"),
+                (130, "educationalstatus"),
+                (140, "favclub"),
+                (150, "hobby"),
+                (160, "politicaltendency")
+            ]
+
+            for char_id, char_name in characteristics_list:
+                char = Characteristics()
+                char.set_id(char_id)
+                char.set_characteristic(char_name)
+                with CharMapper() as mapper:
+                    mapper.insert(char)
     def get_all_char(self):
         with CharMapper() as mapper:
             return mapper.find_all()
@@ -364,28 +402,8 @@ class Administration(object):
             return mapper.delete_searchprofile(infoobject)
 
 
-    # Logik für Profil, did die Info-Objekte in
-
-    "Chat-spezifische Methoden"
-    """
-    def create_chat(self, message_id):
-        chat = Chat()
-        chat.set_id(1)
-        chat.set_message_id(message_id)
-        with ChatMapper() as mapper:
-            mapper.insert(chat)
-
-    def get_all_chats(self):
-        with ChatMapper() as mapper:
-            return mapper.find_all()
-
-    def get_chat_by_id(self, key):
-        with ChatMapper() as mapper:
-            return mapper.find_by_key(key)
-"""
     def get_profile_by_message(self, profile_id):
-        """Diese Methode gibt eine Liste von Profilen in Form von profile_ids zurück,
-        welche mit dem "owner"-Profil in Form der profile_id kommunizieren"""
+        """Diese Methode gibt eine Liste von Profilen zurück, welche mit dem "owner"-Profil kommunizieren"""
         profiles = []
 
         with MessageMapper() as message_mapper:
@@ -401,8 +419,6 @@ class Administration(object):
 
                 if recipient_id == profile_id and sender_id not in profiles:
                     profiles.append(sender_id)
-
-        print("Profiles:", profiles)
 
         return profiles
 
@@ -620,7 +636,6 @@ class Administration(object):
                             if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
                                 # print('Dieses Profil wird der Liste hinzugefügt:', profile)
                                 age_filtered_list.append(profile)
-                                print('age_filtered_list sollte nur 1 profil haben', len(age_filtered_list))
                                 print('age_filtered_list: ', age_filtered_list)
 
         # Jetzt finden die Berechnungen statt. Dabei wird das Suchprofil mit den Profilen in der age-filtered-list abgeglichen
@@ -748,6 +763,7 @@ class Administration(object):
                 else:
                     continue
 
+
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
             # Noch nicht getestet
             for key in prof['Char Values']:
@@ -756,12 +772,42 @@ class Administration(object):
                     if compare_text == 1:
                         score += 1
                         total_checked_elem += 1
-
+                        continue
             # Berechnung des Match-Wertes in Prozent
             print('Total_checked_elem:', total_checked_elem)
             matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
             print('Matching Instanz:', matching_value)
             result.append([prof['Profile ID'], matching_value])
+
+            # True oder False Statement in Liste hinzufügen, damit "nur neue" Profile ausgelesen werden können
+            # Zuerst laden wir uns alle Profile die bereits besucht wurden in unsere Liste.
+            print('Admin.py: Beginn des Profilesvisited')
+            with ProfilevisitsMapper() as visited_mapper:
+                print('Übergebene GoogleID an Mapper:', search_google_id)
+                visited_profiles_list = visited_mapper.find_by_key(search_google_id)
+                print('Visited Profiles List:', visited_profiles_list)
+
+            # jetzt iterieren wir über die Result Liste, und setzen den State auf True wenn ein Profil bereits besucht wurde
+            # oder auf false, wenn das Profil bisher noch nicht gesehen wurde.
+        print('Initial Result-List:', result)
+        print('Initial Age-Filtered-list', age_filtered_list)
+        for profile in result:
+            if profile[0] in visited_profiles_list:  # Prüfe den Listeneintrag an der Stelle 0 (googleID)
+                print('Profile an der Stelle [0]', profile[0])
+                profile.append(True) # Wenn das aktuell fokussierte Profil nicht in visited-profiles ist dann erweiter es um True
+
+            else:
+                profile.append(False) # Sonst false
+
+        print('updated (True/False) result-list:', result)
+
+        """  
+        Result-Liste sortieren, damit das Matching als erstes ausgelesen wird. 
+        'key=lambda x: x[1] = definiert, nach welchem Element die Liste sortiert werden sollte 
+        'reverse=True' = Sortierung in absteigender Folge
+        """
+
+        result.sort(key=lambda x: x[1], reverse=True)
 
         print('Ergebnisliste (Result):', result)
         return result

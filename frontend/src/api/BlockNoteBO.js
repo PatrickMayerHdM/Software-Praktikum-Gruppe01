@@ -13,8 +13,6 @@ export default class blockNoteBO extends BusinessObject {
      * @param {*} ablocked_id
      */
 
-
-
     constructor(ablocking_id, ablocked_id) {
         super();
         this.blocking_id = ablocking_id
@@ -22,21 +20,24 @@ export default class blockNoteBO extends BusinessObject {
     }
 
     get blockingId() {
+        // Auslesen des Blockierenden.
         return this.blocking_id;
     }
 
     set blockingId(ablocking_id) {
+        // Setzen des Blockierenden.
         this.blocking_id = ablocking_id;
     }
 
     get blockedId() {
+        // Auslesen des Geblockten.
         return this.blocked_id;
     }
 
     set blockedId(ablocked_id) {
+        // Setzen des Geblockten.
         this.blocked_id = ablocked_id;
     }
-
 
     /**
      * Entfernt ein Profil aus der Liste

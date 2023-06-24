@@ -1,11 +1,9 @@
+import time
+
 from flask import Flask
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
-
-
-
-
 
 from server.Administration import Administration
 from server.bo.Account import Account
@@ -82,11 +80,6 @@ namedinfoobject = api.inherit('NamedInfoObjects', bo, {
     'char_id': fields.String(attribute='char_id', description='Char ID '),
     'char_name': fields.Integer(attribute='named_char_name', description=' Char_Name eines Users'),
     'char_desc': fields.Integer(attribute='named_char_desc', description=' Char Desc eines Users')
-})
-
-chat = api.inherit('Chat', bo, {
-    'message_id': fields.Integer(attribute='_message_id', description='Unique Id einer Nachricht'),
-    'profile_id': fields.Integer(attribute='_profile_id', description='Unique Id eines Profils')
 })
 
 favoritenote = api.inherit('FavoriteNote', bo, {
@@ -323,14 +316,12 @@ class SearchOneProfileOperation(Resource):
 """Handling im main, für den getChats() in der DaitingSiteAPI.
 Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
 
-
 @datingapp.route('/ChatProfileBoxList/<id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('id','profileBO')
 class ChatListOperations(Resource):
 
-    #@datingapp.marshal_with(chatList)
-    #@secured
+    # @secured
     def get(self, id):
         # ermöglicht es, die Administration() mit der Kürzeren Schreibweise adm abzurufen.
         adm = Administration()
@@ -353,6 +344,7 @@ class ChatWindowOperations(Resource):
     # @secured
 
     def post(self):
+        """ Absenden einer neuen Nachricht im Chat."""
         adm = Administration()
         proposal = Message.from_dict(api.payload)
 
@@ -372,7 +364,7 @@ class MessageOperations(Resource):
     @datingapp.marshal_with(message)
     # @secured
     def get(self, sender_id, recipient_id):
-        """ Auslesen eines Chat-Verlaufs."""
+        """ Auslesen aller Nachrichten eines Chat-Verlaufs über sender_id und recipient_id."""
         adm = Administration()
         messages = adm.get_message_by_chat(sender_id, recipient_id)
 
@@ -393,6 +385,7 @@ class InfoObjectListOperations(Resource):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
         print('Post-Method Infoobject:', api.payload)
+        time.sleep(3)
 
         proposal = InfoObject.from_dict(api.payload)
 
@@ -452,8 +445,8 @@ class InfoObjectsOperations(Resource):
         else:
             return 'Profil konnte nicht aktualisiert werden.', 500
 
-"""Ab hier FavoriteNote"""
 
+"""Ab hier FavoriteNote"""
 
 @datingapp.route('/Favoritenote')
 @datingapp.response(500, 'Serverseitiger Fehler')
@@ -464,7 +457,6 @@ class FavoritenoteListOperations(Resource):
     # @secured
     def post(self):
         """Erstellen einer neuen FavoriteNote"""
-
         adm = Administration()
         proposal = FavoriteNote.from_dict(api.payload)
 
@@ -486,7 +478,7 @@ class FavoritenoteDeleteOperations(Resource):
     @secured
     def delete(self, profile_id, other_profile_id):
         """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die ID's in der URL bestimmt"""
+        Das Objekt wird durch die ID in der URL bestimmt."""
 
         adm = Administration()
         #print("profile_id im main: ", profile_id)
@@ -506,7 +498,7 @@ class FavoriteNoteOperations(Resource):
     @secured
     def get(self, profile_id):
         """Auslesen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die id in dem URL bestimmt"""
+        Das Objekt wird durch die ID in der URL bestimmt."""
 
         adm = Administration()
         fnotes = adm.get_favoritenote_by_adding_user(profile_id)
@@ -570,7 +562,7 @@ class BlockNoteOperations(Resource):
     @secured
     def get(self, profile_id):
         """Auslesen eines BlockNote-Objekts.
-        Das Objekt wird durch die id in dem URI bestimmt"""
+        Das Objekt wird durch die ID in der URL bestimmt."""
 
         adm = Administration()
         bnotes = adm.get_blocknote_by_blocking_user(profile_id)
@@ -616,6 +608,8 @@ class BlocknoteDeleteOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+    """ Ab hier Suchprofil """
 
 
 @datingapp.route('/Suche/Suchprofil')
@@ -717,6 +711,29 @@ class MatchingOperations(Resource):
             return profiles
         else:
             return 500
+
+@datingapp.route('/Search/Matchmaking/Newprofiles/<string:google_fk>/<int:searchprofile_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'Die Searchprofile-ID des Searchprofile-Objekts')
+class MatchingNewProfilesOperations(Resource):
+
+    @secured
+    def get(self, google_fk, searchprofile_id):
+        print('Main.Py übergebene Searchprofile_id:', searchprofile_id, "und die übergebene Google_id: ", google_fk)
+
+        adm = Administration()
+        searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
+        print('main.py Suchprofil:', searchprof)
+
+        profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
+
+        print('Main.py profiles bevor es übergeben wird:', profiles)
+
+        if profiles is not None:
+            return profiles
+        else:
+            return 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

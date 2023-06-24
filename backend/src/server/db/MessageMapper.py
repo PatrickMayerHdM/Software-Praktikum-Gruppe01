@@ -93,6 +93,7 @@ class MessageMapper(mapper):
         return result
 
     def find_by_key(self, key):
+        """ Auslesen aller Nachrichten eines keys."""
         result = None
 
         cursor = self._connection.cursor()
@@ -107,8 +108,8 @@ class MessageMapper(mapper):
             message.set_sender(sender_id)
             message.set_recipient(recipient_id)
             message.set_content(content)
-
             result = message
+
         else:
             result = None
 
@@ -118,12 +119,16 @@ class MessageMapper(mapper):
         return result
 
     def insert(self, message):
+        """ Hinzufügen einer Nachricht."""
         cursor = self._connection.cursor()
         cursor.execute('SELECT MAX(message_id) AS maxid FROM main.Message')
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            message.set_id(maxid[0] + 1)
+            if maxid[0] is not None:
+                message.set_id(maxid[0] + 1)
+            else:
+                message.set_id(1)
 
         command = 'INSERT INTO main.Message (message_id, sender_id, recipient_id, content) VALUES (%s, %s, %s, ' \
                   '%s)'
@@ -152,7 +157,7 @@ class MessageMapper(mapper):
 
     def delete(self, google_id):
         """ Löschen von Nachrichten, wo der Nutzer mit der gegebenen Google_Id
-            der Sender oder Empfänger der Nachrich ist. """
+            der Sender oder Empfänger der Nachricht ist. """
         cursor = self._connection.cursor()
 
         command = f"DELETE FROM main.Message WHERE sender_id='{google_id}' OR recipient_id='{google_id}'"

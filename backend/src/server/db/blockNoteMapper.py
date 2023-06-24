@@ -1,16 +1,15 @@
 from server.bo.blockNote import BlockNote
 from server.db.mapper import mapper
 
-"""Notiz: in DB wird der Name blockNote verwendet"""
-
 
 class BlockNoteMapper(mapper):
-    """ Mapper-Klasse, der die Blocklist auf eine relationale Datenbank abbildet."""
+    """ Mapper-Klasse, der die Sperrliste auf eine relationale Datenbank abbildet."""
 
     def __init__(self):
         super().__init__()
 
     def find_all(self):
+        """ Auslesen aller Sperrungen. """
         result = []
         cursor = self._connection.cursor()
 
@@ -30,6 +29,7 @@ class BlockNoteMapper(mapper):
         return result
 
     def find_by_blocking_user(self, blocking_id):
+        """ Auslesen aller Sperrungen eines Nutzers anhand seiner Id. """
         result = []
         cursor = self._connection.cursor()
         command = f"SELECT blocknote_id, blocking_id, blocked_id FROM main.Blocknote WHERE blocking_id='{blocking_id}'"
@@ -49,6 +49,7 @@ class BlockNoteMapper(mapper):
         return result
 
     def find_by_key(self, key):
+        """ Auslesen aller Sperrungen anhand einer blocknote_id. """
         result = None
 
         cursor = self._connection.cursor()
@@ -74,6 +75,7 @@ class BlockNoteMapper(mapper):
         return result
 
     def insert(self, blocknote):
+        """ Hinzufügen einer Sperrung. """
         cursor = self._connection.cursor()
         cursor.execute("SELECT MAX(blocknote_id) AS maxid FROM main.Blocknote")
         tuples = cursor.fetchall()
@@ -92,6 +94,7 @@ class BlockNoteMapper(mapper):
         cursor.close()
 
     def update(self, blockliste):
+        """ Updaten einer Sperrung. """
         cursor = self._connection.cursor()
 
         command = 'UPDATE main.Blocknote SET blocked_id=%s, blocking_id=%s WHERE blocknote_id=%s'
@@ -104,6 +107,7 @@ class BlockNoteMapper(mapper):
         cursor.close()
 
     def delete(self, blocking_id, blocked_id):
+        """ Löschen einer Sperrung. """
         cursor = self._connection.cursor()
         command = 'DELETE FROM main.Blocknote WHERE blocking_id=%s AND blocked_id=%s'
         data = (blocking_id, blocked_id)
