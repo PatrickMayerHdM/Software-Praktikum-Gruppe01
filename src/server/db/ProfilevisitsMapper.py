@@ -1,5 +1,4 @@
 from server.db.mapper import mapper
-from server.bo.Profilevisits import Profilevisits
 
 class ProfilevisitsMapper(mapper):
     def __init__(self):

@@ -1,19 +1,16 @@
 import time
 
-from flask import Flask
+from flask import Flask, request, redirect, url_for
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
 
 from server.Administration import Administration
-from server.bo.Account import Account
 from server.bo.Profile import Profile
 from server.bo.favoriteNote import FavoriteNote
 from server.bo.blockNote import BlockNote
 from server.bo.Message import Message
-from server.bo.Characteristic import Characteristics
 from server.bo.InfoObject import InfoObject
-from server.bo.BusinessObject import BusinessObject
 from server.bo.SearchProfile import SearchProfile
 from server.bo.namedInfoObject import NamedInfoObject
 from server.bo.Profilevisits import Profilevisits
@@ -22,7 +19,16 @@ from server.bo.Profilevisits import Profilevisits
 from SecurityDecorator import secured
 
 #Flask wird instanziert
-app = Flask(__name__)
+app = Flask(__name__, static_folder="build", static_url_path='/')
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
+
 
 # Aufrufe mit /system/* werden ermöglicht.
 CORS(app, resources=r'/system/*')
@@ -748,4 +754,4 @@ class MatchingNewProfilesOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True)

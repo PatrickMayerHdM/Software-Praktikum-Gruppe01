@@ -1,4 +1,4 @@
-from BusinessObject import BusinessObject as bo
+from server.bo.BusinessObject import BusinessObject as bo
 
 class ProfileContainsInfoObj(bo):
     def __init__(self, profile_id, infoobj_id):
