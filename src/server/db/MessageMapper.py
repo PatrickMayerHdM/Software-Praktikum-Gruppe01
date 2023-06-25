@@ -1,5 +1,5 @@
-from server.bo.Message import Message
-from server.db.mapper import mapper
+from Message import Message
+from src.server.db.mapper import mapper
 
 
 class MessageMapper(mapper):

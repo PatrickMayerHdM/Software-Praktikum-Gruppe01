@@ -1,6 +1,6 @@
-from server.bo.Characteristic import Characteristics
-from server.db.mapper import mapper
-from server.bo.namedInfoObject import NamedInfoObject
+from Characteristic import Characteristics
+from src.server.db.mapper import mapper
+from namedInfoObject import NamedInfoObject
 
 """ Eigenschafts-Klasse die Merkmale eines Profils widerspiegeln. """
 

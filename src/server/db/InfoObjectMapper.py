@@ -1,6 +1,5 @@
-from server.bo.InfoObject import InfoObject
-from server.db.mapper import mapper
-from server.bo.namedInfoObject import NamedInfoObject
+from InfoObject import InfoObject
+from src.server.db.mapper import mapper
 
 """ Mapper-Klasse des BOs Info-Objekt."""
 

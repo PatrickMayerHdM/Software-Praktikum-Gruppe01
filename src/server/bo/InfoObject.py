@@ -1,5 +1,4 @@
-from server.bo.BusinessObject import BusinessObject as bo
-from Characteristic import Characteristics
+from BusinessObject import BusinessObject as bo
 from datetime import datetime
 
 

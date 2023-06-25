@@ -1,5 +1,5 @@
-from server.bo.ProfileContainsInfoObjects import ProfileContainsInfoObj
-from server.db.mapper import mapper
+from ProfileContainsInfoObjects import ProfileContainsInfoObj
+from src.server.db.mapper import mapper
 
 class ProfileInfoObjectMapper(mapper):
     """ Mapper-Klasse, welche die InfoObjekte zu Profilen auf eine DB abbildet. """

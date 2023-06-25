@@ -1,4 +1,4 @@
-from server.bo.BusinessObject import BusinessObject as bo
+from BusinessObject import BusinessObject as bo
 
 
 class Account(bo):

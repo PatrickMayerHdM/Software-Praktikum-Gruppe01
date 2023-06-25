@@ -1,5 +1,5 @@
-from server.bo.Account import Account
-from server.db.mapper import mapper
+from Account import Account
+from src.server.db.mapper import mapper
 
 class AccountMapper(mapper):
     """ Mapper-Klasse, die Account-Objekte auf eine relationale Datenbank abbildet. """
