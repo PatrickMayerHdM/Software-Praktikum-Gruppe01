@@ -12,7 +12,7 @@ class MatchmakingMapper(mapper):
         """ Auslesen der Info-Objekte zweier Profile. """
         result = []
         cursor = self._connection.cursor()
-        command = f"SELECT infoobject_id, char_id, char_value, profile_id FROM main.infoobject WHERE profile_id='{profile_id}'"
+        command = f"SELECT infoobject_id, char_id, char_value, profile_id FROM main.Infoobject WHERE profile_id='{profile_id}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -33,7 +33,7 @@ class MatchmakingMapper(mapper):
         """ Auslesen der Freitexte von zwei Profilen """
         result = []
         cursor = self._connection.cursor()
-        command = f"SELECT char_value FROM main.infoobject WHERE char_id=90"
+        command = f"SELECT char_value FROM main.Infoobject WHERE char_id=90"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
