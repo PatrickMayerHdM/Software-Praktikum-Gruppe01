@@ -64,7 +64,7 @@ class ProfileMapper(mapper):
                 """Wenn keine id vorhanden ist, beginnen wir mit der id 1"""
                 profile.set_id(1)
 
-        command = "INSERT INTO main.profile (profile_id, favoritenote_id, blocknote_id, google_fk) VALUES (%s, %s, %s, %s)"
+        command = "INSERT INTO main.Profile (profile_id, favoritenote_id, blocknote_id, google_fk) VALUES (%s, %s, %s, %s)"
         data = (profile.get_id(), profile.get_favorite_note_id(), profile.get_block_note_id(), profile.get_google_fk())
         cursor.execute(command, data)
 
