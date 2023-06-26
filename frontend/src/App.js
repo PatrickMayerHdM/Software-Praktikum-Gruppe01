@@ -2,12 +2,12 @@ import { Component } from "react";
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from './components/config';
-import {Avatar, Container, css, Menu, MenuItem} from '@mui/material';
+import {Avatar, Menu, MenuItem} from '@mui/material';
 import LogIn from "./pages/LogIn";
 import ChatProfileBox from "./components/Chat/ChatProfileBox";
 import Profile from "./components/Profile/Profile";
 import ChatWindow from "./pages/ChatWindow";
-import CreateProfil, { checkProfilExc } from "./pages/createProfil";
+import CreateProfil from "./pages/createProfil";
 import './pages/avatarContainer.css';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -20,12 +20,12 @@ import BlockProfileBoxList from "./pages/BlockProfileBoxList";
 import ChatProfileBoxList from "./pages/ChatProfileBoxList";
 import SearchProfile from "./components/Search/SearchProfile";
 import Search from "./pages/Search";
+
 /** Definition der App-Komponente */
 
 class App extends Component {
 
-  /** alle Zustandsvariablen: aktueller Nutzer, Ankerpunkt für das Dropdown-Menü, Fehler bei der "auth",
-   *  Fehler in der Anwendung, Ladezustand der "auth" */
+  /** alle Zustandsvariablen der App: */
 
   constructor(props) {
     super(props);
@@ -41,12 +41,13 @@ class App extends Component {
 
   componentDidMount() {
 
-    /** Hier wird die Firebase-App initialisieren und der Authentifizierungsstatus überwacht.
-     *  beim Ändern des Anmelde-Status wird der Zustand aktualisiert. */
+    /** Beim Laden der Seite wird der folgende Code ausgeführt: */
 
+    /** Hier wird die firbaseConfig aus der config.js initsialisiert */
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    /** Hier wird der Anmeldezustand überwacht: */
     onAuthStateChanged(auth, (user) => {
 
       /** Änderung des Anmeldezustandes  */
@@ -59,8 +60,7 @@ class App extends Component {
               authLoading: true
           });
 
-          /** Authentifizierungstoken des Useres wird abgerufen und in einem Cookie gespeichert. currentUser wird auf
-           * den aktuellen User gesetzt, vorherige Errors werden auf null gesetzt und der Ladezustand wird beendet */
+          /** Hier wird der Authentifizierungstokens des Useres in einem Cookie gespeichert */
 
           user.getIdToken().then(token => {
             document.cookie = `token=${token};path=/`;
@@ -79,8 +79,7 @@ class App extends Component {
             });
           });
 
-          /** Wenn kein Benutzer angemeldet ist wird der Cookie gelöscht und der Zustand angepasst
-           * => kein aktueller User und Ladezustand beendet*/
+          /** Wenn kein Benutzer angemeldet ist, wird der Cookiezustand "gelöscht" */
       } else {
         document.cookie = 'token=;path=/';
 
@@ -92,10 +91,9 @@ class App extends Component {
     });
   }
 
-  /** Handler-Funktion, die beim Klicken auf den "Anmelden"-Button aufgerufen wird */
+  /** Handler-Funktion, die aufgerufen wird, wenn der User den "Anmelden"-Button gedrückt hat */
 
   handleLogIn = () => {
-  /** Firebase-App initialisieren und Authentifizierungs-Objekt erstellen */
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
@@ -176,10 +174,11 @@ class App extends Component {
                         </Avatar>
                     )}
                     <Menu
-                        anchorEl={this.state.menuAnchor} /** Das Element, an dem das Menü angezeigt werden soll */
-                        open={Boolean(this.state.menuAnchor)} /** gibt an ob das Menü geöffnet ist */
+                        anchorEl={this.state.menuAnchor} /** Hier wird das Abmelden Menü gesetzt */
+                        open={Boolean(this.state.menuAnchor)} /** Hier wird der Status gesetzt ob das Menü geöffnet worden ist */
                         onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
                     >
+                      {/** Hier ist der "Abmelde"-Button der beim drücken die "handleLogOut"*/}
                       <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
                     </Menu>
                   </div>
