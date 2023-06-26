@@ -24,7 +24,7 @@ class BlockProfileBoxList extends React.Component{
         DatingSiteAPI.getAPI()
         .getBlocknoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
-            const lengthProfiles = this.state.profiles.length;
+            const lengthProfiles = profilesvar.length;
             this.setState(prevState => ({
                 profiles: profilesvar,
                 numProfiles: lengthProfiles
