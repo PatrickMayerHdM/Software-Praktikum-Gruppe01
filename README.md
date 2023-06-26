@@ -1,3 +1,5 @@
 # Software-Praktikum-Gruppe01
-Software Praktikum Repository der Gruppe 01.
+
+Dies ist die Realisierung der Partnerbörse für das Software-Praktikum des Studiengangs WI7 im Sommersemester 2023
+
 
