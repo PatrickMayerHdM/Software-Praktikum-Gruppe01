@@ -1136,7 +1136,6 @@ CREATE TABLE `Characteristic` (
 
 LOCK TABLES `Characteristic` WRITE;
 /*!40000 ALTER TABLE `Characteristic` DISABLE KEYS */;
-INSERT INTO `Characteristic` VALUES (10,'firstName'),(20,'lastName'),(30,'age'),(40,'gender'),(50,'height'),(60,'religion'),(70,'hair'),(80,'smoking'),(90,'Über Mich');
 /*!40000 ALTER TABLE `Characteristic` ENABLE KEYS */;
 UNLOCK TABLES;
 
