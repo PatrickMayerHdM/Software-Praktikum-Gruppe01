@@ -38,53 +38,24 @@ class Search extends React.Component{
             numRenderProfiles: 0, // Die Anzahl der Profile die angezeigt werden sollen.
             profile_id: this.props.user.uid, // Die eigene profile_id die durch props aus App.js erhalten wird
             clickable: false, // Boolean, ob ein User ein Suchprofil ausgewählt hat und dann suchen kann, da ein User dies ohne ein Auasgewähltes Suchprofil nicht kann.
-            numProfiles: 0, // Nummer der Profile welche als Antwort kamen
             switchModeVisits: false, // Boolean, ob ein User nur noch nicht besuchte Profile angezeigt bekommen will
         };
 
-        this.NewProfiles = this.NewProfiles.bind(this);
         this.DeleteSearchProfile = this.DeleteSearchProfile.bind(this);
-        this.loadPage = this.loadPage.bind(this);
         this.loadingPage = this.loadingPage.bind(this);
         this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
-        this.SearchallProfiles = this.SearchallProfiles.bind(this);
         this.Search = this.Search.bind(this);
         this.TestSearch = this.TestSearch.bind(this);
         this.handleSearchModeChange = this.handleSearchModeChange.bind(this);
         this.RenderSearchResults = this.RenderSearchResults.bind(this);
+
     }
 
 
     /**
-     * Diese Funktion ruft in der DatingsiteAPI getOnlyNewProfiles auf und übergibt dabei die Profile_id (des
-     * eigenen Profils) und die SearchProfileID (this.state.selectedProfile) des ausgewählten Suchprofils.
-     * Dieser Aufruf ermöglicht es, dem User Partnervorschläge basierend auf Konten zu sehen, welcher dieser User noch
-     * nicht besucht hat. Diese Partnervorschläge sind dann anhand des Ähnlichkeitsmaß, in Bezug auf ein Suchprofil
-     * geordnet.
-     * Um diese Funktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
+     * Diese
      * @constructor
      */
-    NewProfiles(){
-        const { profile_id } = this.state; // Zugriff auf profile_id aus dem state
-        //console.log("Button nur noch neue Profile gedrückt, von dieser Profil:id: ", profile_id," mit diesem " + "SuchProfil: ", this.state.selectedProfile)
-        DatingSiteAPI.getAPI()
-            .getOnlyNewProfiles(profile_id, this.state.selectedProfile)
-            .then(profilesvar => {
-                // Ermitteln der Länge der zurückgegebenen Daten, dies ist zur Darstellung der SearchProfileBoxen relevant.
-                const lengthProfiles = profilesvar.length;
-                this.setState({
-                    profiles: profilesvar,
-                    numProfiles: lengthProfiles
-                }, () => {
-                    console.log("In Search.js in Search(), sieht so profiles aus: ", this.state.profiles, this.state.numProfiles);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching data in NewProfiles():', error);
-            });
-    }
-
-
     RenderSearchResults() {
         // Abfrage welchen Wert der switch (für noch nicht angesehene Profile) hat, hier ist true, dass dies ausgewählt wurde
         if (this.state.switchModeVisits === true) {
@@ -119,64 +90,33 @@ class Search extends React.Component{
         }
     }
 
-    /**
-     * Diese Funktion wird bei einem onClick() auf das Suchprofil bearbeiten ausgeführt.
-     * Es beinhaltet einen Console.log zum debug, da das eigentliche Weiterleiten über den Link gemacht wird,
-     * ist hier kein weiterer Code notwendig.
-     * Der User wird dann auf die Seite zum Bearbeiten/Erstellen eines Suchprofils weitergeleitet.
-     */
-
-    EditSearchProfiles(event) {
-        //console.log("Das Suchprofil", this.state.selectedProfileIndex, " wird bearbeitet")
-        //console.log("Es wurde auf das Suchprofil: ", this.state.Searchprofiles[this.state.selectedProfileIndex], "geändert");
-    }
-
-    /**
-     * Eine Funktion, welche eine Liste von allen Profilen zurückgibt, dabei werden keine Filter oder Suchprofile
-     * beachtet. Sie ist nicht aktuell für den User nicht nutzbar.
-     */
-    SearchallProfiles() {
-        DatingSiteAPI.getAPI()
-        .getAllProfiles()
-        .then(profilesvar => {
-            // Ermitteln der Länge der zurückgegebenen Daten, dies ist zur Darstellung der SearchProfileBoxen relevant.
-            const lengthProfiles = profilesvar.length;
-            this.setState({
-                profiles: profilesvar,
-                numProfiles: lengthProfiles
-            });
-        })
-        .catch(error => {
-          console.error('Error fetching data in SearchallProfiles():', error);
-        });
-    }
-
 
     /**
      * Hier wird die eigentliche Suche ausgeführt, der User kann diese Funktion durch das Drücken eines Buttons
      * ausführen. Dabei wird an die DatingSiteAPI das ausgewählte Suchprofil übergeben.
-     * Um diese FUnktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
+     * Um diese Funktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
      * @constructor
      */
 
     Search() {
+        /**
+         * Da bei jeder Suchanfrage, andere Suchergebnisse dargestellt werden müssen die dargestellten Profile
+         * wieder zurückgesetzt werden, damit die neuen Suchergebisse dargestellt werden können.
+         */
         this.setState({
             RenderProfiles: [ ],
             numRenderProfiles: 0,
         })
-        //console.log("Mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
         DatingSiteAPI.getAPI()
         .getSearchResults(this.state.selectedProfile)
         .then(profilesvar => {
-            // Ermitteln der Länge der zurückgegebenen Daten, dies ist zur Darstellung der SearchProfileBoxen relevant.
-            const lengthProfiles = profilesvar.length;
             this.setState({
+                // Die Ergebnisse der Suche werden in den State des Profiles Array gesetzt.
                 profiles: profilesvar,
 
             }, () => {
+                // Hier wird die RenderSearchResults aufgerufen, da dies der Schritt nach dem Empfangen der Suchergebnisse ist.
                 this.RenderSearchResults()
-                // Hier wird der neue State des profiles Arrays ausgegeben und dazu die im State festgelegte Anzahl der Profile
-                //console.log("In Search.js in Search(), sieht so profiles aus: ", this.state.profiles, this.state.numProfiles);
             })
         })
         .catch(error => {
@@ -260,45 +200,51 @@ class Search extends React.Component{
     };
 
     /**
-     * Diese componentDidUpdate Funktion wird bei der Aktualisierung des State von Searchprofiels aufgerufen.
-     * Die Funktion an sich ändert bei einer Änderung der Suchprofile den Wert für die Anzahl dieser
-     * Suchprofile, dazu ist Sie dafür verantwortlich, dass ein entferntes Suchprofil, nicht mehr in der Liste angezeigt
-     * wird.
+     * Diese componentDidUpdate-Funktion wird aufgerufen, wenn der Zustand von Searchprofiles aktualisiert wird. Sie
+     * aktualisiert die Anzahl der Suchprofile und sorgt dafür, dass ein entferntes Suchprofil nicht mehr in der Liste
+     * angezeigt wird.
      */
 
     componentDidUpdate(prevProps, prevState) {
-      if (prevState.Searchprofiles !== this.state.Searchprofiles) {
-        const numSearchProfiles = this.state.Searchprofiles.length;
-        this.setState({ numSearchProfiles });
+        // Hier wird überprüft, ob sich der Zustand von Searchprofiles mit dem vorherigen Zustand von Searchprofiles unterscheidet.
+        if (prevState.Searchprofiles !== this.state.Searchprofiles) {
+            // Hier wird die Länge/ Anzahl der SuchProfile, wenn es zu einer Änderung kam aktualisiert.
+            const numSearchProfiles = this.state.Searchprofiles.length;
+            this.setState({ numSearchProfiles });
 
-        if (this.state.selectedProfile && !this.state.Searchprofiles.includes(this.state.selectedProfile)) {
-          this.setState({ selectedProfileIndex: null, selectedProfile: null });
+            //
+            if (this.state.selectedProfile && !this.state.Searchprofiles.includes(this.state.selectedProfile)) {
+                this.setState({ selectedProfileIndex: null, selectedProfile: null });
+            }
         }
-      }
     }
 
     /**
      * Diese Funktion wird in der componentDidMount() aufgerufen und lädt die SuchProfile eines Users. Dafür wird
      * zu der DatingSiteAPI mit getSearchProfileIDs und der eigenen Profile_ID eine Anfrage geschickt.
-     * Die SuchProfile, welche dann empfangen werden, sind in dem SearchProfiles Array gespeichert. Zudem wird
+     * Die SuchProfile, welche dann empfangen werden, sind im State Array SearchProfiles gespeichert. Zudem wird
      * die Länge, also die Anzahl der SuchProfile gespeichert.
+     * Dazu wird ein User zum Erstellen eines SuchProfils weitergeleitet, wenn ein User noch keine Suchprofile besitzt.
+     * Und das erste SuchProfil eines Users wird automatisch ausgewählt (wenn er Suchprofile hat), damit der User
+     * direkt suchen kann.
      */
     loadingPage(){
+        // API Anfrage für die Suchprofile eines Users.
         DatingSiteAPI.getAPI()
         .getSearchProfileIDs(this.props.user.uid)
         .then(Searchprofilesvar => {
             this.setState({
+                // Setzen der SuchProfile eines Users in das State Array Searchprofiles.
                 Searchprofiles: Searchprofilesvar
             }, () => {
                 // Ermitteln der Länge der Suchprofile, dies ist für die Darstellung der SuchProfile als Liste für den User relevant.
                 const lengthSearchprofiles = this.state.Searchprofiles.length;
-                //console.log("Die Seite wird geladen", lengthSearchprofiles, this.state.numSearchProfiles);
                 this.setState({
                     numSearchProfiles: lengthSearchprofiles
                 }, () => {
-                    // Dies ist eine Abfrage, ob ein User bereits ein SuchProfil hat, andernfalls wird der User zum Erstellen weitergeleitet
+                    // Dies ist eine Abfrage, ob ein User bereits ein SuchProfil hat, andernfalls wird der User zum Erstellen eines SuchProfils weitergeleitet.
                     if (this.state.numSearchProfiles === 0){
-                        // Wenn ein User noch kein SuchProfil hat, wird er zum Erstellen eines SuchProfils weitergeleitet.
+                        // Hier findet die Weiterleitung auf die Seite zum Erstellen eines SuchProfils statt.
                         window.location.replace("/Suche/Suchprofil/new");
                     } else {
                         // Hier wird das erste SuchProfil eines Users automatisch ausgewählt.
@@ -313,18 +259,6 @@ class Search extends React.Component{
         });
     }
 
-    /**
-     * Testfunktion zum Laden der Search Seite. Hier wird eine Liste mit dummy SearchProfile Daten aufgerufen.
-     */
-    loadPage() {
-        const dummySearchProfiles = [12, 56];
-
-        this.setState({ Searchprofiles: dummySearchProfiles }, () => {
-            const lengthSearchprofiles = this.state.Searchprofiles.length;
-            this.setState({ numSearchProfiles: lengthSearchprofiles });
-            console.log(this.state.profile_id)
-        });
-    }
 
     /**
      * Die componentDidMount wird bei Laden der React Seite aufgerufen und ruft intern dann eine andere Funktion auf.
@@ -370,7 +304,7 @@ class Search extends React.Component{
               </button>
             </Grid>
           ));
-        // Methode zur Darstellung einer SearchProfileBox (So wird ein anderer User dargestellt)
+        // Methode zur Darstellung einer SearchProfileBox (So wird ein Partnervorschlag dem User dargestellt)
         const SearchListing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
                 <SearchProfileBox key={this.state.RenderProfiles[index]} current_profile={this.props.user.uid} Profilematchmaking={this.state.RenderProfiles[index]}/>
@@ -436,7 +370,6 @@ class Search extends React.Component{
                                 <Grid item md={2} xs={2} >
                                   <Link to={`/Suche/Suchprofil/${this.state.selectedProfile}`} style={{ pointerEvents: clickable ? '' : 'none' }} >
                                       <button
-                                          onClick={() => this.EditSearchProfiles()}
                                         style={{
                                           height: "100%",
                                           width: "100%",
@@ -478,7 +411,7 @@ class Search extends React.Component{
                         </Item>
 
                         <Item sx={{ width: "100%"}}>
-                            {/** Hier werden die Buttons für die Anzahl der Suchprofile eingetragen */}
+                            {/** Hier werden die Suchprofile, die ein User auswählen kann, dargestellt. */}
                                 {SearchProfileListing}
                         </Item>
                      </Stack>
@@ -486,10 +419,12 @@ class Search extends React.Component{
                      {SearchListing.length > 0 ? (
                         <Box sx={{ width: '100%',margin: '0 auto'}} >
                             <Grid item container spacing={2} justifyContent="center">
+                                {/** Hier werden die Suchergebnisse (Partnervorschläge), die ein User als Antwort bekommt, dargestellt. */}
                                 {SearchListing}
                             </Grid>
                         </Box>
                     ) : (
+                        // Dies stellt den Text dar, welcher einem User angezeigt wird, wenn dieser noch nicht gesucht hat.
                         <p>Suche um Profile zu sehen...</p>
                     )}
              </Stack>
