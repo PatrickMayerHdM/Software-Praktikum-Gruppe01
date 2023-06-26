@@ -581,7 +581,8 @@ class Administration(object):
                         gid_list.remove(blocked_id) # entferne alle blockierten profile
                         print('Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
 
-
+        # Entfernen der eigenen Google ID um nicht selbst in der Liste gefunden zu werden.
+        gid_list.remove(search_google_id)
 
         for elem in gid_list:
             with InfoObjectMapper() as info_mapper:
@@ -761,10 +762,14 @@ class Administration(object):
                 if searchprofile['Char Values'][120] is not None:
                     search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
                     print('gesuchtes Einkommen', search_value)
+                else:
+                    continue
 
                 if prof['Char Values'][120] is not None:
                     userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
                     print('Einkommen des Userprofils:', userprof)
+                else:
+                    continue
 
                 if userprof is not None and search_value is not None:
                     if int(userprof) >= int(search_value):
@@ -781,7 +786,7 @@ class Administration(object):
                 print('Prüfung ob Key über 161', key)
                 if key >= 161:
                     print('Übergebener Key zur Prüfung ab 161', key)
-                    compare_text = self.compare_text(searchprofile['Char Values'][key], prof['Char Values'][key])
+                    compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][key])
                     if compare_text == 1:
                         score += 1
                         total_checked_elem += 1
