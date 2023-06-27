@@ -26,15 +26,17 @@ class FavoriteProfileBoxList extends React.Component{
         DatingSiteAPI.getAPI()
         .getFavoritenoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
-            this.setState({
-                profiles: profilesvar,
-            }, () => {
-                const lengthProfiles = profilesvar.length;
-                console.log("Dies ist lengthProfiles: ", lengthProfiles)
-                this.setState({ numProfiles: lengthProfiles },
-                    () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
+            setTimeout(() => {
+                this.setState({
+                    profiles: profilesvar,
+                }, () => {
+                    const lengthProfiles = profilesvar.length;
+                    console.log("Dies ist lengthProfiles: ", lengthProfiles)
+                    this.setState({ numProfiles: lengthProfiles },
+                        () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
 
-            });
+                });
+            }, 2000);
         })
         .catch(error => {
           console.error('Error fetching data from API:', error);
