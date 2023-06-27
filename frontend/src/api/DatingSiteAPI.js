@@ -124,6 +124,8 @@ export default class DatingSiteAPI {
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
 
+    #updateNamedCharByCharValueURL = (profile_id) => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
+
 
     /**
      * @param {profileBO} profile object
@@ -205,6 +207,24 @@ export default class DatingSiteAPI {
             })
         })
     }
+
+    updateNamedCharByURL(google_fk) {
+        console.log("updatedNamedChar: ", google_fk)
+        return this.#fetchAdvanced(this.#updateNamedCharByCharValueURL(google_fk), {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(google_fk)
+        }).then((responseJSON) => {
+            let newnamedcharvalue = NamedInfoObjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newnamedcharvalue);
+            })
+        })
+    }
+
 
     createCharDescForProfile(characteristic_desc_name) {
         return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {

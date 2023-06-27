@@ -364,6 +364,23 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete_by_char_value(char_value)
 
+    def update_named_info_object(self, profile_fk, char_id, char_name, infoobj):
+        with InfoObjectMapper() as InfoMapper:
+            with CharMapper() as mapper:
+                print("Updated Named Info and Char in der Admin: ", profile_fk, infoobj, char_name, char_id)
+                namedinfo = NamedInfoObject()
+                namedinfo.set_named_char_id(char_id)
+                namedinfo.set_named_char(char_name)
+                namedinfo.set_named_info(infoobj)
+                namedinfo.set_named_profile_fk(profile_fk)
+                mapper.update(namedinfo)
+                InfoMapper.named_update(namedinfo)
+
+        print("Admin UpdatedNamed: ", namedinfo)
+        return namedinfo
+
+
+
     def update_info_object(self, profile_fk, info_dict):
         """
         In dieser Methode ist die Logik beschrieben, damit ein bestehendes Profil aktualisiert wird.

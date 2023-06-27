@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Box from "@mui/material/Box";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
-import {Button, Grid, TextField} from "@mui/material";
+import {Button, Grid, Icon, TextField} from "@mui/material";
 import * as React from "react";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -34,6 +34,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 class CreateProfil extends Component {
@@ -47,29 +48,32 @@ class CreateProfil extends Component {
             char_fk: 0,
             char_id: 0,
             profile_fk: 0,
-            firstName: "",
-            lastName: "",
-            age: "",
-            gender: "",
-            height: "",
-            religion: "",
-            hair: "",
-            smoking: "",
-            char_name: '',
-            char_desc: '',
+            firstName: null,
+            lastName: null,
+            age: null,
+            gender: null,
+            height: null,
+            religion: null,
+            hair: null,
+            smoking: null,
+            char_name: null,
+            char_desc: null,
             showTextFields: false,
             profileExists: false,
             selectedOption: null,
             minAge: null,
             maxAge: null,
             searchprofile_fk: null,
-            income: "",
-            favclub: "",
-            hobby: "",
-            politicaltendency: "",
-            aboutme: "",
+            income: null,
+            favclub: null,
+            hobby: null,
+            politicaltendency: null,
+            aboutme: null,
             SelectCreate: "select",
             customProperties: [],
+            editProperty: null,
+            updatedCharName: null,
+            updatedCharValue: null,
         };
 
         /** Bindung der Handler an die Komponente */
@@ -95,6 +99,10 @@ class CreateProfil extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSaveInputs = this.handleSaveInputs.bind(this);
         this.handleChangeCharDelete = this.handleChangeCharDelete.bind(this)
+        this.handleChangeOpenCharEdit = this.handleChangeOpenCharEdit.bind(this);
+        this.handleSaveCharChange = this.handleSaveCharChange.bind(this);
+        this.handleCharValueChange = this.handleCharValueChange.bind(this);
+        this.handleCharNameChange = this.handleCharNameChange.bind(this);
 
         this.handleInfoSelectCreate = this.handleInfoSelectCreate.bind(this);
         this.handleDeleteReligion = this.handleDeleteReligion.bind(this);
@@ -250,7 +258,7 @@ class CreateProfil extends Component {
     };
 
     handleDeletePolitical = () => {
-        this.setState({ politicaltendency: '' });
+        this.setState({ politicaltendency: null });
     };
 
     /** Event-Handler für die Änderung des Hobbys */
@@ -260,7 +268,7 @@ class CreateProfil extends Component {
     };
 
     handleDeleteHobbys = () => {
-        this.setState({ hobby: '' });
+        this.setState({ hobby: null });
     };
 
     /** Event-Handler für die Änderung den Lieblingsverein */
@@ -270,7 +278,7 @@ class CreateProfil extends Component {
     };
 
     handleDeleteClub = () => {
-        this.setState({ favclub: '' });
+        this.setState({ favclub: null });
     };
 
 
@@ -281,7 +289,7 @@ class CreateProfil extends Component {
     };
 
     handleDeleteSalary = () => {
-        this.setState({ income: '' });
+        this.setState({ income: null });
     };
 
     /** Event-Handler für die Änderung des Geschlechts */
@@ -300,7 +308,7 @@ class CreateProfil extends Component {
       this.setState({ religion: selectedReligion});
     };
     handleDeleteReligion = () => {
-        this.setState({ religion: '' });
+        this.setState({ religion: null });
     };
     /** Event-Handler für die Änderung als Raucher/Nicht-Raucher */
     handleChangeSmoking = (event) => {
@@ -309,7 +317,7 @@ class CreateProfil extends Component {
     };
 
     handleDeletesmoking = () => {
-        this.setState({ smoking: '' });
+        this.setState({ smoking: null });
     };
 
     /** Event-Handler für die Änderung der Haarfarbe */
@@ -318,7 +326,7 @@ class CreateProfil extends Component {
         this.setState({ hair: selectedHair });
     };
     handleDeleteHair = () => {
-        this.setState({ hair: '' });
+        this.setState({ hair: null });
     };
     /** Event-Handler für die Änderung des Alters */
     handleChangeAge = (date) => {
@@ -336,6 +344,43 @@ class CreateProfil extends Component {
         DatingSiteAPI.getAPI()
             .removeNamedChar(value)
     }
+
+    handleChangeOpenCharEdit = (charID) => {
+        this.setState({ editProperty: charID })
+    }
+
+    handleCharNameChange = (event) => {
+        const newCharName = event.target.value;
+        this.setState({ updatedCharName: newCharName })
+    }
+    
+    handleCharValueChange = (event) => {
+        const newCharValue = event.target.value;
+        this.setState({ updatedCharValue: newCharValue})
+    }
+    
+
+     handleSaveCharChange = (char_id) => {
+        console.log(this.state)
+        console.log(char_id)
+        const newchar_id = char_id;
+        const { updatedCharName, updatedCharValue } = this.state;
+        const updatedNamedInfoBO = new NamedInfoObjectBO(
+            this.state.id,
+            this.props.user.uid,
+            this.state.searchprofile_id,
+            this.state.updatedCharValue,
+            this.state.updatedCharName,
+            newchar_id)
+
+        DatingSiteAPI.getAPI()
+            .updateNamedCharByURL(updatedNamedInfoBO)
+            .catch((e) =>
+                this.setState({
+                    error: e,
+                })
+            );
+    };
 
     /** Event-Handler für das Drücken des Buttons "Profil erstellen" und der API Aufruf */
     handleSubmit(event) {
@@ -491,7 +536,7 @@ class CreateProfil extends Component {
         return (
             <FormGroup row style={{ justifyContent: 'center' }}>
             <Box sx={{ width: 400, margin: '0 auto' }}>
-                <FormLabel>Welcher Religion gehörst du an?</FormLabel>
+                <FormLabel>Welche religiöse Ansicht hast du?</FormLabel>
                 <div style={{ marginBottom: '1rem' }}>
                     {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
                     <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
@@ -515,7 +560,7 @@ class CreateProfil extends Component {
                         <FormControlLabel sx={{ width: '35%' }} value="Atheist" control={<Radio />} label="Atheist" labelPlacement="bottom" />
                         <FormControlLabel sx={{ width: '35%' }} value="Christlich" control={<Radio />} label="Christlich" labelPlacement="bottom" />
                         <FormControlLabel sx={{ width: '35%' }} value="Muslimisch" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
-                        <FormControlLabel sx={{ width: '35%' }} value="Keine Angabe" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
+                        <FormControlLabel sx={{ width: '35%' }} value="Andere" control={<Radio />} label="Andere" labelPlacement="bottom" />
                     </RadioGroup>
                 ))}
             </Box>
@@ -549,7 +594,7 @@ class CreateProfil extends Component {
                         <FormControlLabel sx={{ width: '35%' }} value="Schwarz" control={<Radio />} label="Schwarz" labelPlacement="bottom"/>
                         <FormControlLabel sx={{ width: '35%' }} value="Braun" control={<Radio />} label="Braun" labelPlacement="bottom"/>
                         <FormControlLabel sx={{ width: '35%' }} value="Blond" control={<Radio />} label="Blond" labelPlacement="bottom"/>
-                        <FormControlLabel sx={{ width: '35%' }} value="Keine Angabe" control={<Radio />} label="Keine Angabe" labelPlacement="bottom"/>
+                        <FormControlLabel sx={{ width: '35%' }} value="Andere" control={<Radio />} label="Andere" labelPlacement="bottom"/>
                     </RadioGroup>
                 ))}
             </Box>
@@ -582,7 +627,7 @@ class CreateProfil extends Component {
                           <RadioGroup row style={{ justifyContent: 'center' }} value={this.state.smoking} onChange={this.handleChangeSmoking}>
                               <FormControlLabel sx={{ width: '25%' }} value="Nicht-Raucher" control={<Radio/>} label="Nicht-Raucher" labelPlacement="bottom" />
                               <FormControlLabel sx={{ width: '25%' }} value="Raucher" control={<Radio/>} label="Raucher" labelPlacement="bottom" />
-                              <FormControlLabel sx={{ width: '25%' }} value="Keine Angabe" control={<Radio/>} label="Keine Angabe" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '25%' }} value="egal" control={<Radio/>} label="Keine Angabe" labelPlacement="bottom" />
                           </RadioGroup>
                       ))}
                   </Box>
@@ -618,7 +663,6 @@ class CreateProfil extends Component {
                             <FormControlLabel sx={{ width: '35%' }} value="2000" control={<Radio />} label="2000€" labelPlacement="bottom" />
                             <FormControlLabel sx={{ width: '35%' }} value="3500" control={<Radio />} label="3500€" labelPlacement="bottom" />
                             <FormControlLabel sx={{ width: '35%' }} value="5000" control={<Radio />} label=">5000€" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '35%' }} value="Keine Angabe" control={<Radio />} label="Keine Angabe" labelPlacement="bottom" />
                         </RadioGroup>
                       ))}
                   </Box>
@@ -726,6 +770,8 @@ class CreateProfil extends Component {
                 selectedOption,
                 customProperties,
                 aboutme,
+                updatedCharName,
+                updatedCharValue,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -797,9 +843,8 @@ class CreateProfil extends Component {
                                 <FormLabel> Was für ein Geschlecht hast du ? </FormLabel>
                                 {/** Auswahlbuttons für das Geschlecht */}
                                 <RadioGroup row value={gender} onChange={this.handleChangeGender}>
-                                    <FormControlLabel sx={{ width: '25%' }} value="männlich" control={<Radio/>} label="Mann" labelPlacement="bottom"/>
-                                    <FormControlLabel sx={{ width: '25%' }} value="weiblich" control={<Radio/>} label="Frau" labelPlacement="bottom"/>
-                                    <FormControlLabel sx={{ width: '25%' }} value="divers" control={<Radio/>} label="Divers" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '40%' }} value="männlich" control={<Radio/>} label="Männlich" labelPlacement="bottom"/>
+                                    <FormControlLabel sx={{ width: '40%' }} value="weiblich" control={<Radio/>} label="Weiblich" labelPlacement="bottom"/>
                                 </RadioGroup>
                             </Box>
                             </FormGroup>
@@ -876,6 +921,8 @@ class CreateProfil extends Component {
                                           value.hasOwnProperty('char_id') &&
                                           value.hasOwnProperty('char_name')
                                         ) {
+                                          const isEditOpen = this.state.editProperty === value.char_id;
+
                                           return (
                                             <Box key={value.char_value} sx={{ width: 400, margin: '0 auto' }}>
                                               <FormGroup row style={{ justifyContent: 'center' }}>
@@ -887,7 +934,7 @@ class CreateProfil extends Component {
                                                 </Box>
                                                 <Box sx={{ width: 150, margin: '0 auto' }}>
                                                   <p>
-                                                    <strong>Info:</strong>
+                                                    <strong>Beschreibung:</strong>
                                                   </p>
                                                   <p>{value.char_value}</p>
                                                 </Box>
@@ -900,6 +947,38 @@ class CreateProfil extends Component {
                                                   >
                                                     Löschen
                                                   </Button>
+                                                  <Button
+                                                    sx={{ marginTop: '5%' }}
+                                                    variant="contained"
+                                                    onClick={() => this.handleChangeOpenCharEdit(value.char_id)}
+                                                    startIcon={<BorderColorIcon />}
+                                                  >
+                                                    Anpassen
+                                                  </Button>
+                                                    {isEditOpen && (
+                                                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '5%' }}>
+                                                            <FormGroup row style={{ justifyContent: 'center' }}>
+                                                                    <FormLabel> Gib deine angepassten Eigenschaftsnamen und Infos hier ein: </FormLabel>
+                                                                        <TextField
+                                                                          label="Eigenschaftsname"
+                                                                          value={updatedCharName}
+                                                                          onChange={this.handleCharNameChange}
+                                                                          size="small"
+                                                                          fullWidth
+                                                                          sx={{ mb: 2, width: '250px', margin: '15px' }}
+                                                                        />
+                                                                        <TextField
+                                                                          label="Eigenschaftsbeschreibung"
+                                                                          value={updatedCharValue}
+                                                                          onChange={this.handleCharValueChange}
+                                                                          size="small"
+                                                                          fullWidth
+                                                                          sx={{ mb: 2, width: '250px', margin: '15px' }}
+                                                                        />
+                                                                        <Button sx={{ mb: 2 }} variant="contained" onClick={() => this.handleSaveCharChange(value.char_id)} startIcon={<SaveIcon />}>Speichern</Button>
+                                                            </FormGroup>
+                                                        </Box>
+                                                    )}
                                                 </Box>
                                               </FormGroup>
                                             </Box>
@@ -915,17 +994,18 @@ class CreateProfil extends Component {
                         <Item>
                             <FormGroup row style={{ justifyContent: 'center' }}>
                                 <Box sx={{ width: 400, margin: '0 auto' }}>
-                                    <Button onClick={this.handleCreateChar} variant="outlined" startIcon={<BorderColorIcon />}> Individualisieren </Button>
+                                    <Button onClick={this.handleCreateChar} variant="contained" startIcon={<BorderColorIcon />}> Eigenschaft erstellen! </Button>
                                     {showTextFields && (
                                     <>
-                                      <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Eigenschaftsname" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                      <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                        <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle deine eigene Eigenschaft: </FormLabel>
+                                        <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
-                                        <TextField label="Beschreibung" value={this.state.char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} />
+                                        <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.handleInputChange(event, 'char_desc')} />
                                       </Box>
                                       <Box sx={{ marginBottom: '10px' }}>
-                                        <Button onClick={this.handleSaveInputs} variant="outlined" startIcon={<SaveIcon />}> Speichern </Button>
+                                        <Button onClick={this.handleSaveInputs} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
                                       </Box>
                                     </>
                                     )}
@@ -937,28 +1017,28 @@ class CreateProfil extends Component {
                     <Item>
                         <FormGroup row style={{ justifyContent: 'center' }}>
                             <Box sx={{ width: 400, margin: '0 auto' }}>
-                                <Button onClick={this.handleRemove} variant="outlined" startIcon={<DeleteIcon />}> Profil löschen! </Button>
+                                <Button onClick={this.handleRemove} variant="contained" color="error" startIcon={<DeleteIcon />}> Profil löschen! </Button>
                             </Box>
                         </FormGroup>
                     </Item>
                     )}
                     {profileExists && (
                     <Item>
-                        <Button onClick={this.handleUpdate} variant="outlined" startIcon={<SaveIcon />}> Profil Update </Button>
+                        <Button onClick={this.handleUpdate} variant="contained" color="warning" startIcon={<SaveIcon />}> Profil Update </Button>
                     </Item>
                     )}
                     {/** Falls kein Profil vorhanden ist soll nur der Button "Profil erstellen" wird */}
                     {!profileExists && (
                     <Item>
                     {/** Button für die Profilerstellung */}
-                        <Button onClick={this.handleSubmit} variant="outlined" startIcon={<AddIcon />}>Profil erstellen</Button>
+                        <Button onClick={this.handleSubmit} variant="contained"  startIcon={<AddIcon />}>Profil erstellen</Button>
                     </Item>
                     )}
                     {profileExists && (
                     <Item>
                     {/** Button für das anzeigen seines eigenes Profils */}
                         <Link to={`/Profile/${this.props.user.uid}`}>
-                            <Button variant="outlined" startIcon={<AccountCircleIcon />}>Profil anzeigen</Button>
+                            <Button variant="contained" color="inherit" startIcon={<AccountCircleIcon />}>Profil anzeigen</Button>
                         </Link>
                     </Item>
                      )}

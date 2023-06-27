@@ -147,8 +147,9 @@ class CharMapper(mapper):
         cursor = self._connection.cursor()
 
         command = 'UPDATE main.Characteristic SET char_name=%s WHERE char_id=%s'
-        data = (char.get_id(),
-                char.get_characteristic_name())
+        data = (char.get_named_char_name(),
+                char.get_named_char_id())
+        print("CharMapper: ", data)
 
         cursor.execute(command, data)
 
