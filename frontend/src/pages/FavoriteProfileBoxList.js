@@ -29,8 +29,11 @@ class FavoriteProfileBoxList extends React.Component{
             this.setState({
                 profiles: profilesvar,
             }, () => {
-                const lengthProfiles = this.state.profiles.length;
-                this.setState({ numProfiles: lengthProfiles });
+                const lengthProfiles = profilesvar.length;
+                console.log("Dies ist lengthProfiles: ", lengthProfiles)
+                this.setState({ numProfiles: lengthProfiles },
+                    () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
+
             });
         })
         .catch(error => {
@@ -41,9 +44,7 @@ class FavoriteProfileBoxList extends React.Component{
     componentDidMount() {
         /** Methode, die beim Aufrufen der Seite geladen wird.
          *  Sie lädt alle ProfileBoxen, dessen Profile gemerkt wurden. */
-        this.getFavoriteProfiles(() => {
-        console.log('profiles im componentDidMount:', this.state.profiles);
-        });
+        this.getFavoriteProfiles();
     }
 
     handleRemoveProfile = (removedProfileId) => {
