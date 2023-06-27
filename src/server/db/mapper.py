@@ -18,12 +18,12 @@ class mapper(AbstractContextManager, ABC):
         if os.getenv('GAE_ENV', '').startswith('standard'):
             """Falls Code in der Cloud läuft, sind wir im "if" Zweig"""
 
-            self._connection = connector.connect(user='demo', password='demo', unix_socket='', database='DatingApp_V2')
+            self._connection = connector.connect(user='root', password='demo', unix_socket='/cloudsql/sopratest-001:europe-west3:sopra-db-001', database='main')
 
         else:
             """Kommen wir hier an, läuft der Code auf einem lokalen Development Server. Es wird eine Verbindung zu 
             einer lokal installierten MySQL Datenbank hergestellt."""
-            self._connection = connector.connect(user='root', password='Juli29.dominik', host='127.0.0.1', database='main')
+            self._connection = connector.connect(user='root', password='password', host='127.0.0.1', database='main')
 
         return self
 

@@ -12,11 +12,9 @@ from server.db.InfoObjectMapper import InfoObjectMapper
 from server.bo.Profile import Profile
 from server.bo.InfoObject import InfoObject
 from server.bo.Characteristic import Characteristics
-from server.bo.SearchProfile import SearchProfile
 from server.db.SearchProfileMapper import SearchProfileMapper
 from datetime import datetime
 from server.bo.namedInfoObject import NamedInfoObject
-from server.bo.Profilevisits import Profilevisits
 from server.db.ProfilevisitsMapper import ProfilevisitsMapper
 from server.db.MatchmakingMapper import MatchmakingMapper
 
