@@ -34,3 +34,8 @@
 .button_container {
     margin-bottom: 20px;
 }
+
+.authors {
+    text-decoration: none;
+    color: black;
+}

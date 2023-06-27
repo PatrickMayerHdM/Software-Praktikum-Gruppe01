@@ -22,19 +22,23 @@ class ChatProfileBoxList extends React.Component{
     }
 
     /** Methode, die beim Aufrufen der Seite geladen wird. Sie lädt alle ChatProfileBoxen mit denen Chats vorhanden sind. */
+
     componentDidMount() {
         DatingSiteAPI.getAPI()
-        .getChats(this.props.user.uid)
-        .then(profilesvar => {
-            const lengthProfiles = this.state.profiles.length;
-            this.setState(prevState => ({
-                profiles: [...prevState.profiles, ...profilesvar],
-                numProfiles: lengthProfiles
-            }));
-        })
-        .catch(error => {
-          console.error('Error fetching data from API:', error);
-        });
+            .getChats(this.props.user.uid)
+            .then(profilesvar => {
+                const lengthProfiles = profilesvar.length;
+                console.log("Dies ist lengthProfiles: ", lengthProfiles);
+                this.setState(prevState => ({
+                    profiles: profilesvar,
+                    numProfiles: lengthProfiles
+                }), () => {
+                    console.log("Dies ist numProfiles der Chats: ", this.state.numProfiles);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data from API:', error);
+            });
     }
 
     handleProfileClick = (index) => {

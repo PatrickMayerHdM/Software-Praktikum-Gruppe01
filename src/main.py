@@ -181,10 +181,25 @@ class ProfileOperations(Resource):
 
         adm = Administration()
         print("Google ID Main: ", google_fk)
+
+        # Auslesen aller Suchprofile einer Google-Id
+        sps = adm.get_searchprofiles_by_google_id(google_fk)
+
+        for sp in sps:
+            # Löschen der InfoObjekte der Suchprofile
+            adm.delete_info_object_search(sp)
+            # Löschen der Suchprofile
+            adm.delete_searchprofile(sp)
+
+        # Auslesen der InfoObjekte einer Google-Id
         info_obj = adm.get_info_object_by_id(google_fk)
+        # Löschen der InfoObjekte
         adm.delete_info_object(info_obj)
+        # Löschen der Nachrichten
         adm.delete_message(google_fk)
+        # Auslesen des Profils
         prof = adm.get_profile_by_google_id(google_fk)
+        # Löschen des Profils
         adm.delete_profile(prof)
         return '', 200
 
@@ -280,7 +295,7 @@ class SearchInfoObjectUpdateOperations(Resource):
 @datingapp.param('profile_id','GoogleID für welche die Suchprofile gesucht werden')
 class SearchProfilesOperations(Resource):
 
-    #@secured
+    # @secured
     def get(self, profile_id):
 
         adm = Administration()
@@ -754,4 +769,4 @@ class MatchingNewProfilesOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8001)

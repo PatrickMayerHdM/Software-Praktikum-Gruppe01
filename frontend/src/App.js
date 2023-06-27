@@ -20,6 +20,7 @@ import BlockProfileBoxList from "./pages/BlockProfileBoxList";
 import ChatProfileBoxList from "./pages/ChatProfileBoxList";
 import SearchProfile from "./components/Search/SearchProfile";
 import Search from "./pages/Search";
+import AboutUs from "./pages/AboutUs";
 /** Definition der App-Komponente */
 
 class App extends Component {
@@ -202,6 +203,7 @@ class App extends Component {
                       <Route element={<ChatProfileBox user={currentUser}/>}></Route>
                       <Route path="/Chats" element={<ChatProfileBoxList user={currentUser}/>}></Route>
                       <Route path="/ChatWindow/:eigeneID/:andereID" element={<ChatWindow user={currentUser}/>}></Route>
+                      <Route path="/AboutUs" element={<AboutUs/>}></Route>
                     </Route>
                 </Routes>
             </Router>

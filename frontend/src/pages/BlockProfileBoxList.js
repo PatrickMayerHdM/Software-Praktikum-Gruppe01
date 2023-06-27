@@ -24,11 +24,14 @@ class BlockProfileBoxList extends React.Component{
         DatingSiteAPI.getAPI()
         .getBlocknoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
-            const lengthProfiles = profilesvar.length;
-            this.setState(prevState => ({
+            this.setState({
                 profiles: profilesvar,
-                numProfiles: lengthProfiles
-            }));
+            }, () => {
+                const lengthProfiles = profilesvar.length;
+                console.log("Dies ist lengthProfiles: ", lengthProfiles)
+                this.setState({ numProfiles: lengthProfiles },
+                    () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
+            });
         })
         .catch(error => {
           console.error('Error fetching data from API:', error);
@@ -40,9 +43,7 @@ class BlockProfileBoxList extends React.Component{
         /** Methode, die beim Aufrufen der Seite geladen wird.
          *  Sie lädt alle ProfileBoxen, dessen Profile geblockt wurden. */
 
-        this.getBlockProfiles(() => {
-            console.log('profiles im componentDidMount:', this.state.profiles);
-        });
+        this.getBlockProfiles();
     }
 
     handleRemoveProfile = (removedProfileId) => {
