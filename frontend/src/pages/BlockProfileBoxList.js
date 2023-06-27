@@ -24,11 +24,12 @@ class BlockProfileBoxList extends React.Component{
         DatingSiteAPI.getAPI()
         .getBlocknoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
-            const lengthProfiles = profilesvar.length;
-            this.setState(prevState => ({
+            this.setState({
                 profiles: profilesvar,
-                numProfiles: lengthProfiles
-            }));
+            }, () => {
+                const lengthProfiles = this.state.profiles.length;
+                this.setState({ numProfiles: lengthProfiles });
+            });
         })
         .catch(error => {
           console.error('Error fetching data from API:', error);
