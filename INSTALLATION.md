@@ -1,7 +1,7 @@
 # Installationsanleitung
 ### Software Praktikum (WI7) - Gruppe 01 - Sommersemester 2023<br>
 
-Diminik Wunderlich, Efstratios Vassilliou, Patrick Mayer, Taro Nakajima, Orest Tkach, Michael Fezer
+Dominik Wunderlich, Efstratios Vassilliou, Patrick Mayer, Taro Nakajima, Orest Tkach, Michael Fezer
 
 ## Frontend/Client-Seite
 (Taro, Strato oder Patrick)
