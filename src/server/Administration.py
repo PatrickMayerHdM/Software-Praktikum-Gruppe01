@@ -579,7 +579,8 @@ class Administration(object):
                         gid_list.remove(blocked_id) # entferne alle blockierten profile
                         print('Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
 
-
+        # Entfernen der eigenen Google ID um nicht selbst in der Liste gefunden zu werden.
+        gid_list.remove(search_google_id)
 
         for elem in gid_list:
             with InfoObjectMapper() as info_mapper:
@@ -755,14 +756,23 @@ class Administration(object):
             if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
                 print('Income Block')
-                search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
-                print('gesuchtes Einkommen', search_value)
-                userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
-                print('Einkommen des Userprofils:', userprof)
 
-                if int(userprof) >= int(search_value):
-                    score += 1
-                    print('Einkommen Match +1:', score)
+                if searchprofile['Char Values'][120] is not None:
+                    search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
+                    print('gesuchtes Einkommen', search_value)
+                else:
+                    continue
+
+                if prof['Char Values'][120] is not None:
+                    userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
+                    print('Einkommen des Userprofils:', userprof)
+                else:
+                    continue
+
+                if userprof is not None and search_value is not None:
+                    if int(userprof) >= int(search_value):
+                        score += 1
+                        print('Einkommen Match +1:', score)
 
                 else:
                     continue
@@ -771,12 +781,15 @@ class Administration(object):
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
             # Noch nicht getestet
             for key in prof['Char Values']:
+                print('Prüfung ob Key über 161', key)
                 if key >= 161:
-                    compare_text = self.compare_text(searchprofile['Char Values'][key], prof['Char Values'][key])
+                    print('Übergebener Key zur Prüfung ab 161', key)
+                    compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][key])
                     if compare_text == 1:
                         score += 1
                         total_checked_elem += 1
                         continue
+
             # Berechnung des Match-Wertes in Prozent
             print('Total_checked_elem:', total_checked_elem)
             matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
