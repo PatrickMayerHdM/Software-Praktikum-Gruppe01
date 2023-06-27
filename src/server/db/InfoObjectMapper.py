@@ -1,5 +1,5 @@
-from InfoObject import InfoObject
-from src.server.db.mapper import mapper
+from server.bo.InfoObject import InfoObject
+from server.db.mapper import mapper
 
 """ Mapper-Klasse des BOs Info-Objekt."""
 
@@ -248,7 +248,7 @@ class InfoObjectMapper(mapper):
         """ Löschen von Info-Objekten anhand einer Suchprofil_id. """
         cursor = self._connection.cursor()
 
-        command = f"DELETE FROM main.InfoObject WHERE searchprofile_id='{searchprofile_id.searchprofile_id}'"
+        command = f"DELETE FROM main.InfoObject WHERE searchprofile_id='{searchprofile_id}'"
         cursor.execute(command)
 
         self._connection.commit()

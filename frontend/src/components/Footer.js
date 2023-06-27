@@ -4,13 +4,10 @@ class Footer extends Component {
     render() {
         return (
             <footer className="footer">
-                <a className="footer_text" href="">SoPra 2023 - Gruppe 1</a>
-                <span style={{ marginLeft: "50px" }}></span>
-                <a className="footer_text" href="">Impressum</a>
+                <a className="footer_text" href="/AboutUs">Über uns</a>
             </footer>
         );
     }
-
 }
 
 export default Footer;

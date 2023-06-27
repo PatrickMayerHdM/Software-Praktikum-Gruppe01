@@ -20,12 +20,13 @@ import BlockProfileBoxList from "./pages/BlockProfileBoxList";
 import ChatProfileBoxList from "./pages/ChatProfileBoxList";
 import SearchProfile from "./components/Search/SearchProfile";
 import Search from "./pages/Search";
-
+import AboutUs from "./pages/AboutUs";
 /** Definition der App-Komponente */
 
 class App extends Component {
 
-  /** alle Zustandsvariablen der App: */
+  /** alle Zustandsvariablen: aktueller Nutzer, Ankerpunkt für das Dropdown-Menü, Fehler bei der "auth",
+   *  Fehler in der Anwendung, Ladezustand der "auth" */
 
   constructor(props) {
     super(props);
@@ -201,6 +202,7 @@ class App extends Component {
                       <Route element={<ChatProfileBox user={currentUser}/>}></Route>
                       <Route path="/Chats" element={<ChatProfileBoxList user={currentUser}/>}></Route>
                       <Route path="/ChatWindow/:eigeneID/:andereID" element={<ChatWindow user={currentUser}/>}></Route>
+                      <Route path="/AboutUs" element={<AboutUs/>}></Route>
                     </Route>
                 </Routes>
             </Router>
