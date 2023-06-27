@@ -281,7 +281,7 @@ class CreateProfil extends Component {
     };
 
     handleDeleteSalary = () => {
-        this.setState({ income: '' });
+        this.setState({ income: null });
     };
 
     /** Event-Handler für die Änderung des Geschlechts */

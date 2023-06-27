@@ -734,12 +734,12 @@ class Administration(object):
             # Hier fehlt noch der Scorewert vergleich von der Körpergörße
             if 50 in searchprofile['Char Values'] and 50 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                print('Check Height')
-                print('total checked elem: Körpergröße', total_checked_elem)
+                #print('Check Height')
+                #print('total checked elem: Körpergröße', total_checked_elem)
                 search_value = searchprofile['Char Values'][50]  # small, mean, large
-                print('gesuchte größe', search_value)
+                #print('gesuchte größe', search_value)
                 userprof = int(prof['Char Values'][50])  # integer 190 für 190cm
-                print('Userprofil height', userprof)
+                #print('Userprofil height', userprof)
 
                 if search_value == 'small':
                     if int(userprof) < 160:
@@ -758,33 +758,26 @@ class Administration(object):
                 else:
                     pass
 
-            print('Admin.Py Z758 Age-filtered-list nach Körpergröße Matching', age_filtered_list)
+            #print('Admin.Py Z758 Age-filtered-list nach Körpergröße Matching', age_filtered_list)
 
             # Scorewert Berechnung des Einkommens
-            if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
+            print('Income Block')
+            if searchprofile['Char Values'][120] is not None and 120 in prof['Char Values']:
+            #if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
+                search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Einkommen', total_checked_elem)
-                #print('Income Block')
-
-                if searchprofile['Char Values'][120] is not None:
-                    search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
-                    #print('gesuchtes Einkommen', search_value)
-                else:
-                    continue
+                print('total checked elem: Einkommen', total_checked_elem)
+                print('gesuchtes Einkommen', search_value)
 
                 if prof['Char Values'][120] is not None:
                     userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
-                    #print('Einkommen des Userprofils:', userprof)
-                else:
-                    continue
+                    print('Einkommen des Userprofils:', userprof)
 
-                if userprof is not None and search_value is not None:
                     if int(userprof) >= int(search_value):
                         score += 1
-                        #print('Einkommen Match +1:', score)
-
-                else:
-                    continue
+                        print('Einkommen Match +1:', score)
+                    else:
+                        continue
 
 
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
