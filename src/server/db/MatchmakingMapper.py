@@ -1,5 +1,5 @@
-from InfoObject import InfoObject
-from src.server.db.mapper import mapper
+from server.bo.InfoObject import InfoObject
+from server.db.mapper import mapper
 
 
 class MatchmakingMapper(mapper):

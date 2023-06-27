@@ -1,5 +1,5 @@
-from src.server.db.mapper import mapper
-from Profile import Profile
+from server.db.mapper import mapper
+from server.bo.Profile import Profile
 
 
 class ProfileMapper(mapper):

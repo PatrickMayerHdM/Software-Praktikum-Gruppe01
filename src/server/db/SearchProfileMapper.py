@@ -1,6 +1,6 @@
-from src.server.db.mapper import mapper
-from SearchProfile import SearchProfile
-from InfoObject import InfoObject
+from server.db.mapper import mapper
+from server.bo.SearchProfile import SearchProfile
+from server.bo.InfoObject import InfoObject
 
 class SearchProfileMapper(mapper):
 

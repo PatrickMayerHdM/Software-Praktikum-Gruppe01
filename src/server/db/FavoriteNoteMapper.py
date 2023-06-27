@@ -1,5 +1,5 @@
-from favoriteNote import FavoriteNote
-from src.server.db.mapper import mapper
+from server.bo.favoriteNote import FavoriteNote
+from server.db.mapper import mapper
 
 
 class FavoriteNoteMapper(mapper):

@@ -1,5 +1,5 @@
-from blockNote import BlockNote
-from src.server.db.mapper import mapper
+from server.bo.blockNote import BlockNote
+from server.db.mapper import mapper
 
 
 class BlockNoteMapper(mapper):
