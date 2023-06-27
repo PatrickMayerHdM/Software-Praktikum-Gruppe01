@@ -562,6 +562,7 @@ class Administration(object):
                 # print('GID:', gid)
                 # print('GID GoogleID:', gid.get_google_fk())
                 gid_list.append(gid.get_google_fk())  # Füge der gid_list alle google_fk´s zu.
+                print('Admin.py Z565: GID List:', gid_list)
 
         # Überprüfung, ob sich eine gefundene Google-ID in der Blockierliste befindet.
         with SearchProfileMapper() as searchprof_mapper:
@@ -571,16 +572,17 @@ class Administration(object):
             with BlockNoteMapper() as block_mapper:
                 blocked_profiles = block_mapper.find_by_blocking_user(search_google_id) #finde alle blockierten profile
                 for googleid in blocked_profiles: # suche nach den googleid´s
-                    print('Das ist id die blocked_id:', googleid.get_blocked_id())
+                    #print('Das ist id die blocked_id:', googleid.get_blocked_id())
                     blocked_id = googleid.get_blocked_id()
                     if blocked_id in gid_list:
-                        print('Entferntes Profil aus GID_List', blocked_id)
-                        print('Das ist die GID List bevor die Blockierten Profile weg fallen:', gid_list)
+                        #print('Entferntes Profil aus GID_List', blocked_id)
+                        #print('Das ist die GID List bevor die Blockierten Profile weg fallen:', gid_list)
                         gid_list.remove(blocked_id) # entferne alle blockierten profile
-                        print('Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
+                        print('Admin: Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
 
         # Entfernen der eigenen Google ID um nicht selbst in der Liste gefunden zu werden.
         gid_list.remove(search_google_id)
+        print('Admin.py: Z585: GID List nachdem das eigene Profil entfernt wurde', gid_list)
 
         for elem in gid_list:
             with InfoObjectMapper() as info_mapper:
@@ -609,10 +611,9 @@ class Administration(object):
                         'Profile ID': elem,
                         'Char Values': char_values,
                     }
-                    gender_filtered_list.append(
-                        profile)  # Füge das Profil inkl. Infoobjekte der ersten "filter-list" hinzu.
+                    gender_filtered_list.append(profile)  # Füge das Profil inkl. Infoobjekte der ersten "filter-list" hinzu.
                     # print('Profil hinzugefügt', char_values)
-        # print('Gender_Filtered list: Anzahl sollte 2 betragen:', gender_filtered_list)
+        print('Admin.py Z616: Gender_Filtered list:', gender_filtered_list)
 
         # Age Filter: Soll das gewünschte Alter der gesuchten Person ermitteln und nur Kandidaten in dieser Spanne zur Suche hinzufügen
         if 100 in searchprofile['Char Values'] and 110 in searchprofile['Char Values']:
@@ -627,21 +628,23 @@ class Administration(object):
                     char_values = profile['Char Values']
                     if 30 in char_values:  # Prüfe den Value mit dem Key 30
                         age = char_values[30]
-                        print(type(age))
-                        print('age', age)
+                        #print(type(age))
+                        #print('age', age)
                         calculated_age = self.agefilter(age)  # Berechne das Alter anhand des Geburtstages
-                        print('berechnetes Alter', calculated_age)
-                        print('berechnetes Alter Type', type(calculated_age))
+                        #print('berechnetes Alter', calculated_age)
+                        #print('berechnetes Alter Type', type(calculated_age))
 
                         if calculated_age is not None:
-                            print('Type min_age,', type(min_age))
-                            print(' min_age,', min_age)
-                            print('Type max_age,', type(max_age))
-                            print('max age:', max_age)
+                            #print('Type min_age,', type(min_age))
+                            #print(' min_age,', min_age)
+                            #print('Type max_age,', type(max_age))
+                            #print('max age:', max_age)
                             if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
                                 # print('Dieses Profil wird der Liste hinzugefügt:', profile)
                                 age_filtered_list.append(profile)
-                                print('age_filtered_list: ', age_filtered_list)
+                                #print('age_filtered_list: ', age_filtered_list)
+
+        print('Admin.py: Z 647: Age-filtered List:', age_filtered_list)
 
         # Jetzt finden die Berechnungen statt. Dabei wird das Suchprofil mit den Profilen in der age-filtered-list abgeglichen
         # Zuerst wird der Text bzw. der Wert verglichen dafür wird die Methode compare text aufgerufen
@@ -651,79 +654,88 @@ class Administration(object):
             # Vergleich der Religion zwischen Such- und Userprofil
             if 60 in searchprofile['Char Values'] and 60 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Religion', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][60], prof['Char Values'][60])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Religion', compare_text)
-                print('Gesamtscore', score)
+                #print('Compared Text: Religion', compare_text)
+                #print('Gesamtscore', score)
 
             # Vergleich der Haarfarbe
             if 70 in searchprofile['Char Values'] and 70 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Haarfarbe', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][70], prof['Char Values'][70])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Haarfarbe', compare_text)
-                print('Gesamtscore nach Durchlauf 2:', score)
+                #print('Compared Text: Haarfarbe', compare_text)
+                #print('Gesamtscore nach Durchlauf 2:', score)
 
             # Vergleich des Raucherstatus zwischen Such- und Userprofil
             if 80 in searchprofile['Char Values'] and 80 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Raucherstatus', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][80], prof['Char Values'][80])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Raucherstatus', compare_text)
-                print('Gesamtscore:', score)
+                #print('Compared Text: Raucherstatus', compare_text)
+                #print('Gesamtscore:', score)
 
             # Vergleich der Interessen zwischen Such- und Userprofil
             if 90 in searchprofile['Char Values'] and 90 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Interessen', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][90])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Interessen', compare_text)
-                print('Gesamtscore:', score)
+                #print('Compared Text: Interessen', compare_text)
+                #print('Gesamtscore:', score)
 
             # Vergleich des höchsten Bildungsabschlusses zwischen Such- und Userprofil
             if 130 in searchprofile['Char Values'] and 130 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Bildung', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][130], prof['Char Values'][130])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Bildung', compare_text)
-                print('Gesamtscore:', score)
+                #print('Compared Text: Bildung', compare_text)
+                #print('Gesamtscore:', score)
 
             # Vergleich des lieblings Sportvereins zwischen Such- und Userprofil
             if 140 in searchprofile['Char Values'] and 140 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Sportverein', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][140], prof['Char Values'][140])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Sportverein', compare_text)
-                print('Gesamtscore:', score)
+                #print('Compared Text: Sportverein', compare_text)
+                #print('Gesamtscore:', score)
 
             # Vergleich des Hobby´s zwischen Such- und Userprofil
             if 150 in searchprofile['Char Values'] and 150 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Hobbys', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][150], prof['Char Values'][150])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Hobby', compare_text)
-                print('Gesamtscore:', score)
+                #print('Compared Text: Hobby', compare_text)
+                #print('Gesamtscore:', score)
 
             # Vergleich der politischen Einstellung zwischen Such- und Userprofil
             if 160 in searchprofile['Char Values'] and 160 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                #print('total checked elem: Politik', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][160], prof['Char Values'][160])
                 if compare_text == 1:
                     score += 1
-                print('Compared Text: Politik', compare_text)
-                print('Gesamtscore:', score)
+                #print('Compared Text: Politik', compare_text)
+                #print('Gesamtscore:', score)
 
             # Hier fehlt noch der Scorewert vergleich von der Körpergörße
             if 50 in searchprofile['Char Values'] and 50 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
                 print('Check Height')
+                print('total checked elem: Körpergröße', total_checked_elem)
                 search_value = searchprofile['Char Values'][50]  # small, mean, large
                 print('gesuchte größe', search_value)
                 userprof = int(prof['Char Values'][50])  # integer 190 für 190cm
@@ -733,46 +745,43 @@ class Administration(object):
                     if int(userprof) < 160:
                         score += 1
                         print('Small Match:', score)
-                    else:
-                        continue
 
                 elif search_value == 'mean':
                     if int(userprof) >= 160 and int(userprof) <= 180:
                         score += 1
                         print('mean Match:', score)
-                    else:
-                        continue
 
                 elif search_value == 'large':
                     if int(userprof) > 180:
                         score += 1
                         print('large Match:', score)
-                    else:
-                        continue
                 else:
                     pass
+
+            print('Admin.Py Z758 Age-filtered-list nach Körpergröße Matching', age_filtered_list)
 
             # Scorewert Berechnung des Einkommens
             if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                print('Income Block')
+                #print('total checked elem: Einkommen', total_checked_elem)
+                #print('Income Block')
 
                 if searchprofile['Char Values'][120] is not None:
                     search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
-                    print('gesuchtes Einkommen', search_value)
+                    #print('gesuchtes Einkommen', search_value)
                 else:
                     continue
 
                 if prof['Char Values'][120] is not None:
                     userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
-                    print('Einkommen des Userprofils:', userprof)
+                    #print('Einkommen des Userprofils:', userprof)
                 else:
                     continue
 
                 if userprof is not None and search_value is not None:
                     if int(userprof) >= int(search_value):
                         score += 1
-                        print('Einkommen Match +1:', score)
+                        #print('Einkommen Match +1:', score)
 
                 else:
                     continue
@@ -781,28 +790,30 @@ class Administration(object):
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
             # Noch nicht getestet
             for key in prof['Char Values']:
-                print('Prüfung ob Key über 161', key)
+                #print('Prüfung ob Key über 161', key)
                 if key >= 161:
-                    print('Übergebener Key zur Prüfung ab 161', key)
+                    #print('Übergebener Key zur Prüfung ab 161', key)
                     compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][key])
                     if compare_text == 1:
                         score += 1
                         total_checked_elem += 1
+                        #print('Keys ab 161 Total Checked Elem +1:', total_checked_elem)
                         continue
 
             # Berechnung des Match-Wertes in Prozent
-            print('Total_checked_elem:', total_checked_elem)
+            #print('Total_checked_elem:', total_checked_elem)
             matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
-            print('Matching Instanz:', matching_value)
+            #print('Matching Instanz:', matching_value)
+            print('Vor dem Result Append beim Matching', prof['Profile ID'])
             result.append([prof['Profile ID'], matching_value])
 
             # True oder False Statement in Liste hinzufügen, damit "nur neue" Profile ausgelesen werden können
             # Zuerst laden wir uns alle Profile die bereits besucht wurden in unsere Liste.
             print('Admin.py: Beginn des Profilesvisited')
             with ProfilevisitsMapper() as visited_mapper:
-                print('Übergebene GoogleID an Mapper:', search_google_id)
+                #print('Übergebene GoogleID an Mapper:', search_google_id)
                 visited_profiles_list = visited_mapper.find_by_key(search_google_id)
-                print('Visited Profiles List:', visited_profiles_list)
+                #print('Visited Profiles List:', visited_profiles_list)
 
             # jetzt iterieren wir über die Result Liste, und setzen den State auf True wenn ein Profil bereits besucht wurde
             # oder auf false, wenn das Profil bisher noch nicht gesehen wurde.
