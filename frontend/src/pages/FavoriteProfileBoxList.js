@@ -33,7 +33,6 @@ class FavoriteProfileBoxList extends React.Component{
                 console.log("Dies ist lengthProfiles: ", lengthProfiles)
                 this.setState({ numProfiles: lengthProfiles },
                     () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
-
             });
         })
         .catch(error => {
