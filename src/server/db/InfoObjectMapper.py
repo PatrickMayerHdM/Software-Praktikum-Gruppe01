@@ -237,7 +237,7 @@ class InfoObjectMapper(mapper):
         """ Löschen von Info-Objekten anhand einer Suchprofil_id. """
         cursor = self._connection.cursor()
 
-        command = f"DELETE FROM main.InfoObject WHERE searchprofile_id='{searchprofile_id.searchprofile_id}'"
+        command = f"DELETE FROM main.InfoObject WHERE searchprofile_id='{searchprofile_id}'"
         cursor.execute(command)
 
         self._connection.commit()
