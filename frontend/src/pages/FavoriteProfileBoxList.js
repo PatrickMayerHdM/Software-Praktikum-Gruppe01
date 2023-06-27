@@ -26,11 +26,15 @@ class FavoriteProfileBoxList extends React.Component{
         DatingSiteAPI.getAPI()
         .getFavoritenoteProfileURL(this.props.user.uid)
         .then(profilesvar => {
-            const lengthProfiles = profilesvar.length;
-            this.setState(prevState => ({
+            this.setState({
                 profiles: profilesvar,
-                numProfiles: lengthProfiles
-            }));
+            }, () => {
+                const lengthProfiles = profilesvar.length;
+                console.log("Dies ist lengthProfiles: ", lengthProfiles)
+                this.setState({ numProfiles: lengthProfiles },
+                    () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
+
+            });
         })
         .catch(error => {
           console.error('Error fetching data from API:', error);
@@ -40,9 +44,7 @@ class FavoriteProfileBoxList extends React.Component{
     componentDidMount() {
         /** Methode, die beim Aufrufen der Seite geladen wird.
          *  Sie lädt alle ProfileBoxen, dessen Profile gemerkt wurden. */
-        this.getFavoriteProfiles(() => {
-        console.log('profiles im componentDidMount:', this.state.profiles);
-        });
+        this.getFavoriteProfiles();
     }
 
     handleRemoveProfile = (removedProfileId) => {
@@ -76,7 +78,6 @@ class FavoriteProfileBoxList extends React.Component{
 
         // const für die Anzahl der anzuzeigenden Profile innerhalb der Merkliste
         const count = this.state.numProfiles;
-        const { profiles } = this.state;
         const current_profile = this.props.user.uid;
 
         // Methode zur Darstellung einer FavoriteProfileBox
