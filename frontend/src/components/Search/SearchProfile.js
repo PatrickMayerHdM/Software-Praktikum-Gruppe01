@@ -366,7 +366,7 @@ class SearchProfile extends React.Component{
             return (
             <FormGroup row style={{ justifyContent: 'center' }}>
             <Box sx={{ width: 400, margin: '0 auto' }}>
-                <FormLabel> Welche Religion sollte die gesuchte Person haben?</FormLabel>
+                <FormLabel> Welche religiöse Ansicht sollte die gesuchte Person haben?</FormLabel>
                 <div style={{ marginBottom: '1rem' }}>
                     {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
                     <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
@@ -391,7 +391,6 @@ class SearchProfile extends React.Component{
                         <FormControlLabel sx={{ width: '12%' }} value="Christlich" control={<Radio />} label="Christlich" labelPlacement="bottom" />
                         <FormControlLabel sx={{ width: '12%' }} value="Muslimisch" control={<Radio />} label="Muslimisch" labelPlacement="bottom" />
                         <FormControlLabel sx={{ width: '12%' }} value="Andere" control={<Radio />} label="Andere" labelPlacement="bottom" />
-                        <FormControlLabel sx={{ width: '12%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
                     </RadioGroup>
                 ))}
             </Box>
@@ -422,9 +421,9 @@ class SearchProfile extends React.Component{
                           <div>...</div>
                       ) : (
                           <RadioGroup row style={{justifyContent: 'center'}} value={this.state.smoking} onChange={this.handleChangeSmo} className={"checkbox_search"}>
-                              <FormControlLabel sx={{ width: '20%' }} value="Nicht-Raucher" control={<Radio />} label="Nein" labelPlacement="bottom" />
                               <FormControlLabel sx={{ width: '20%' }} value="Raucher" control={<Radio />} label="Ja" labelPlacement="bottom" />
-                              <FormControlLabel sx={{ width: '20%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '20%' }} value="Nicht-Raucher" control={<Radio />} label="Nein" labelPlacement="bottom" />
+                              <FormControlLabel sx={{ width: '20%' }} value="egal" control={<Radio />} label="nicht relevant" labelPlacement="bottom" />
                           </RadioGroup>
                       ))}
                   </Box>
@@ -459,8 +458,7 @@ class SearchProfile extends React.Component{
                                 <FormControlLabel sx={{ width: '10%' }} value="Schwarz" control={<Radio />} label="Schwarz" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="Braun" control={<Radio />} label="Braun" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="Blond" control={<Radio />} label="Blond" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '10%' }} value="Anders" control={<Radio />} label="Andere" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '10%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '10%' }} value="Andere" control={<Radio />} label="Andere" labelPlacement="bottom" />
                             </RadioGroup>
                         ))}
                     </Box>
@@ -492,7 +490,6 @@ class SearchProfile extends React.Component{
                             <FormControlLabel sx={{ width: '20%' }} value="2000" control={<Radio />} label="2000€" labelPlacement="bottom" />
                             <FormControlLabel sx={{ width: '20%' }} value="3500" control={<Radio />} label="3500€" labelPlacement="bottom" />
                             <FormControlLabel sx={{ width: '20%' }} value="5000" control={<Radio />} label="5000€" labelPlacement="bottom" />
-                            <FormControlLabel sx={{ width: '20%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
                         </RadioGroup>
                       )
                     }
@@ -593,7 +590,7 @@ class SearchProfile extends React.Component{
                                 <FormControlLabel sx={{ width: '25%' }} value="Liberal" control={<Radio />} label="Liberal" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '25%' }} value="Links" control={<Radio />} label="Links" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '25%' }} value="Rechts" control={<Radio />} label="Rechts" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '25%' }} value="indifferent" control={<Radio />} label="indifferent" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '25%' }} value="Keine Angabe" control={<Radio />} label="indifferent" labelPlacement="bottom" />
                             </RadioGroup>
                         ))}
                     </Box>
@@ -649,7 +646,6 @@ class SearchProfile extends React.Component{
                             <RadioGroup row style={{justifyContent: 'center'}} value={this.state.gender} onChange={this.handleChangeGen} className={"checkbox_search"}>
                                 <FormControlLabel sx={{ width: '10%' }} value="männlich" control={<Radio />} label="Mann" labelPlacement="bottom" />
                                 <FormControlLabel sx={{ width: '10%' }} value="weiblich" control={<Radio />} label="Frau" labelPlacement="bottom" />
-                                <FormControlLabel sx={{ width: '10%' }} value="Divers" control={<Radio />} label="Divers" labelPlacement="bottom" />
                             </RadioGroup>
                         </Item>
 

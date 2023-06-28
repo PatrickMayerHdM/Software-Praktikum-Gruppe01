@@ -168,6 +168,17 @@ class InfoObjectMapper(mapper):
 
         self._connection.commit()
 
+    def named_update(self, info_obj):
+        """ Update eines Profils mit Info-Objekten. """
+        command = 'UPDATE main.InfoObject SET char_value=%s WHERE profile_id=%s AND char_id=%s'
+        data = (info_obj.get_named_info_name(), info_obj.get_named_profile_fk(), info_obj.get_named_char_id())
+
+        with self._connection.cursor() as cursor:
+            #print('Info Mapper command und data:', command, data)
+            cursor.execute(command, data)
+
+        self._connection.commit()
+
     def update_search(self, info_obj):
         """ Update eines Suchprofils mit Info-Objekten. """
         command = 'UPDATE main.InfoObject SET char_value=%s WHERE searchprofile_id=%s AND char_id=%s'

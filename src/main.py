@@ -665,7 +665,6 @@ class NamedInfoObjectListOperations(Resource):
     def post(self):
         """ Anlegen eines neuen NamedInfoObject-Objekts. """
         adm = Administration()
-        print('Post-Method Infoobject:', api.payload)
 
         proposal = NamedInfoObject.from_dict(api.payload)
 
@@ -681,20 +680,39 @@ class NamedInfoObjectListOperations(Resource):
             )
 
             respone = {charobj, infoobj}
-            print("Post NamednfoBO: ", respone)
             return respone, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/updateNamedCharNamesAndValues')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedCharAndInfoOperations(Resource):
+    @secured
+    def put(self):
+        """ Update eines bestimmten NamedChars. """
+        adm = Administration()
+        proposal = NamedInfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            namedcharnameandvalue = adm.update_named_info_object(
+                proposal.get_named_profile_fk(),
+                proposal.get_named_char_id(),
+                proposal.get_named_char_name(),
+                proposal.get_named_info_name(),
+            )
+
+            print("Main Namedchar: ", namedcharnameandvalue.get_named_char_id())
+            return "", 200
+        else:
+            return 'NamedCharNameAndValue konnte nicht aktualisiert werden.', 500
 
 
 @datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):
-    #@datingapp.marshal_list_with(characteristic)
     @secured
     def get(self, char_id):
         print("Angekommen in der NamedCharacteristicsOperations", char_id)
-        #print('GET-Method Char Name:', api.payload)
 
         adm = Administration()
 
