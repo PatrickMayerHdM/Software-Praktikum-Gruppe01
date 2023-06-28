@@ -28,7 +28,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 /**
  * Damit dem User beim Suchen passende Personen angezeigt werden, kann dieser Suchprofile erstellen, diese in Verbindung
  * mit den Profilen der anderen User legen dann auch das Ähnlichkeitsmaß fest.
- * In dieser Klasse soll ein User dann ein Suchprofil anlegen können.
+ * Auf dieser Seite hat der User dann die Optionen, dass dieser die Suchprofile erstellen bzw. bearbeiten kann.
  * */
 
 class SearchProfile extends React.Component{
@@ -85,7 +85,7 @@ class SearchProfile extends React.Component{
     }
 
     /**
-     * Funktionen für Veränderungen an den Werten
+     * Funktionen für Veränderungen an den Werten, welche ein Nutzer Auswählen kann.
      */
 
     /** Event-Handler für die Änderung des Geschlechts der gesuchten Person */
@@ -273,6 +273,9 @@ class SearchProfile extends React.Component{
          }
      };
 
+    /**
+     * Diese Funktion, wird aus dem
+     */
 
     componentDidMount() {
         const currentPath = window.location.pathname;

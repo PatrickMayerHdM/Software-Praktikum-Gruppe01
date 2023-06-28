@@ -4,23 +4,20 @@ import React from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import "../components/Profile/Profile.css";
 import SearchIcon from '@mui/icons-material/Search';
-import ProfileBoxList from "../components/Profile/ProfileBoxList";
 import Stack from "@mui/material/Stack";
 import Item from "../theme";
 import { Link } from "react-router-dom"
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import UpdateIcon from '@mui/icons-material/Update';
-import infoobjectBO from "../api/InfoObjectBO";
 import SearchProfileBox from "../components/Search/SearchProfileBox";
 import { Switch } from '@mui/material';
 
 /**
- * Innerhalb der Suche gibt es für den User später verschiedene Optionen.
- * Hierbei kann dieser einerseits, nur neue Profile anzeigen und andererseits kann dieser zwischen seinen Suchprofilen
- * das Suchprofil auswählen, mit welcher er aktuell suchen will.
- *
+ * In der Suche kann ein User einerseits Partnervorschläge finden. Diese Partnervorschläge haben ein Ähnlichkeitsmaß
+ * zu dem von dem User ausgewählten Suchprofil.
+ * Diese Suchergebnisse, kann der User zudem danach filtern, ob dieser die gefundene Person bereits angesehen hat.
+ * Zudem kann der User Suchprofile löschen und auf die Seite zum Erstellen bzw. Bearbeiten eines Suchprofils gelangen.
  */
 
 
@@ -45,7 +42,6 @@ class Search extends React.Component{
         this.loadingPage = this.loadingPage.bind(this);
         this.ChangeSearchProfiles = this.ChangeSearchProfiles.bind(this);
         this.Search = this.Search.bind(this);
-        this.TestSearch = this.TestSearch.bind(this);
         this.handleSearchModeChange = this.handleSearchModeChange.bind(this);
         this.RenderSearchResults = this.RenderSearchResults.bind(this);
 
@@ -53,9 +49,12 @@ class Search extends React.Component{
 
 
     /**
-     * Diese
-     * @constructor
+     * Diese Funktion RenderSearchResults() ist dafür verantwortlich, die Partnervorschläge zu filtern und anzuzeigen,
+     * je nachdem, ob der Benutzer nur die noch nicht besuchten Profile sehen möchte oder alle. Dies funktioniert mit
+     * dem State switchModeVisits, je nach der Entscheidung werden dem User die dazustellenden Profile in einem Array
+     * zusammengefasst.
      */
+
     RenderSearchResults() {
         // Abfrage welchen Wert der switch (für noch nicht angesehene Profile) hat, hier ist true, dass dies ausgewählt wurde
         if (this.state.switchModeVisits === true) {
@@ -63,27 +62,30 @@ class Search extends React.Component{
             this.state.profiles.forEach(element => {
                 // Mit einer if Abfrage wird geprüft, ob ein Profil von einem User bereits besucht wurde. (Wenn dies nicht der Fall ist, ist false enthalten).
                 if (element[2] === false) {
-                    console.log("Hier wird false ausgeführt RenderProfiles, also dieses Profil wurde noch nicht besucht: ", element);
+                    //console.log("Hier wird false ausgeführt RenderProfiles, also dieses Profil wurde noch nicht besucht: ", element);
                     // Wenn ein Element (also Partnervorschlag) noch nciht besucht wurde, wird dieser dem RenderProfiles Array hinzugefügt.
                     this.setState(prevState => ({
                         RenderProfiles: [...prevState.RenderProfiles, element]
                     }), () => {
                         const lengthRenderProfiles = this.state.RenderProfiles.length;
                         this.setState({ numRenderProfiles: lengthRenderProfiles }, () => {
-                            console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
+                            //console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
                         });
                     });
                 }
             })
         } else {
-            // Hier ist der Code für wenn es dem User egal ist.
+            /**
+             * Wenn ein User alle Partnervorschläge sehen will, ohne die Prüfung, ob der User sie schon gesehen hat,
+             * wird dieser Code ausgeführt.
+             */
             this.state.profiles.forEach(element => {
                 this.setState(prevState => ({
                         RenderProfiles: [...prevState.RenderProfiles, element]
                     }), () => {
                         const lengthRenderProfiles = this.state.RenderProfiles.length;
                         this.setState({ numRenderProfiles: lengthRenderProfiles }, () => {
-                            console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
+                            //console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
                         });
                     });
             })
@@ -107,6 +109,7 @@ class Search extends React.Component{
             RenderProfiles: [ ],
             numRenderProfiles: 0,
         })
+        console.log("Test2")
         DatingSiteAPI.getAPI()
         .getSearchResults(this.state.selectedProfile)
         .then(profilesvar => {
@@ -124,26 +127,6 @@ class Search extends React.Component{
         });
     }
 
-    /**
-     * Diese TestSearch hat eine BeispielsTest var, die ein Beispiels RESPONSEJSON darstellt.
-     * @constructor
-     */
-    TestSearch() {
-        this.setState({
-            RenderProfiles: [ ],
-            numRenderProfiles: 0,
-        })
-        //console.log("Das ist die Testsearch mit dem Suchprofil",this.state.selectedProfile ,"wird gesucht");
-        const BeispielRESPONSEJSON = ([['OnhCSTN3ypaBnidTh2x4cbC7ie12', 80.0, false], ['SKVd6ZZLxsf8CBarCJXIWPL0APC2', 60.0, true], ['zQokAwj2tchqk4dkovLVvqCmzWp2', 40.0, false]])
-        //console.log("So sieht das BeispielRESPONSEJSON in der console aus:",BeispielRESPONSEJSON)
-        // Ermitteln der Länge des BeispielRESPONSEJSON, dies ist zur Darstellung der SearchProfileBoxen relevant.
-        this.setState({
-            profiles: BeispielRESPONSEJSON,
-        }, () => {
-            this.RenderSearchResults()
-        })
-    }
-
     handleSearchModeChange = () => {
         //console.log("Das ist der Wert von switchModeVisits bevor es zu der Veränderung kam: ", this.state.switchModeVisits)
         this.setState({
@@ -152,7 +135,7 @@ class Search extends React.Component{
             switchModeVisits: !this.state.switchModeVisits,
         }, () => {
             this.RenderSearchResults()
-            console.log("Das ist der Wert von switchModeVisits nachdem es zu der Veränderung kam: ", this.state.switchModeVisits)
+            //console.log("Das ist der Wert von switchModeVisits nachdem es zu der Veränderung kam: ", this.state.switchModeVisits)
         });
     }
 
@@ -164,15 +147,16 @@ class Search extends React.Component{
      * @param index
      * @constructor
      */
+
     ChangeSearchProfiles(index) {
         //console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
         // State handling, damit die Farbe von dem ausgewählten Profil geändert wird
         this.setState({ selectedProfileIndex: index });
         this.setState({ clickable: true });
         this.setState({ selectedProfile: this.state.Searchprofiles[index] }, () => {
+
           //console.log("Es wurde auf das Suchprofil: ", this.state.selectedProfile, "geändert (mit selectedProfile)" + " mit diesem Index: ", index);
         });
-
     }
 
     /**
@@ -180,6 +164,7 @@ class Search extends React.Component{
      * Um diese Funktion auszuführen, muss ein User ein SuchProfil ausgewählt haben.
      * @constructor
      */
+
     DeleteSearchProfile(){
         //console.log("Das Suchprofil [index]",this.state.selectedProfileIndex ,"und selectet: ",this.state.selectedProfile,"wird gelöscht");
         DatingSiteAPI.getAPI()
@@ -228,6 +213,7 @@ class Search extends React.Component{
      * Und das erste SuchProfil eines Users wird automatisch ausgewählt (wenn er Suchprofile hat), damit der User
      * direkt suchen kann.
      */
+
     loadingPage(){
         // API Anfrage für die Suchprofile eines Users.
         DatingSiteAPI.getAPI()
@@ -249,6 +235,8 @@ class Search extends React.Component{
                     } else {
                         // Hier wird das erste SuchProfil eines Users automatisch ausgewählt.
                         this.ChangeSearchProfiles(0)
+                        // Hier wird automatisch mit dem ersten SuchProfil eines Users gesucht, wenn dieser die Suche aufruft.
+                        this.Search();
                     }
                 });
             });
