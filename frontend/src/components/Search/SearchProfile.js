@@ -705,7 +705,7 @@ class SearchProfile extends React.Component{
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 450, margin: '0 auto'}}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Auswahleigenschaften</InputLabel>
+                                        <InputLabel>Weitere mögliche Eigenschaften:</InputLabel>
                                         <Select
                                             value={defaultValue}
                                             label="Auswahleigenschaften"

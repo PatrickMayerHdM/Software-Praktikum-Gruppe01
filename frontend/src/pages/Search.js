@@ -199,7 +199,7 @@ class Search extends React.Component{
      * direkt suchen kann.
      */
 
-    async loadingPage(){
+    loadingPage(){
         // API Anfrage für die Suchprofile eines Users.
         DatingSiteAPI.getAPI()
         .getSearchProfileIDs(this.props.user.uid)
@@ -212,8 +212,7 @@ class Search extends React.Component{
                 const lengthSearchprofiles = this.state.Searchprofiles.length;
                 this.setState({
                     numSearchProfiles: lengthSearchprofiles
-                },
-                    async () => {
+                }, () => {
                     // Dies ist eine Abfrage, ob ein User bereits ein SuchProfil hat, andernfalls wird der User zum Erstellen eines SuchProfils weitergeleitet.
                     if (this.state.numSearchProfiles === 0){
                         // Hier findet die Weiterleitung auf die Seite zum Erstellen eines SuchProfils statt.
@@ -223,14 +222,12 @@ class Search extends React.Component{
                          * Da bei jeder Suchanfrage, andere Suchergebnisse dargestellt werden müssen die dargestellten Profile
                          * wieder zurückgesetzt werden, damit die neuen Suchergebnisse dargestellt werden können.
                          */
-                        await this.setState({
+                        this.setState({
                             RenderProfiles: [ ],
                             numRenderProfiles: 0,
                         })
                         // Hier wird das erste SuchProfil eines Users automatisch ausgewählt.
-                        await this.ChangeSearchProfiles(0)
-                        // Hier wird automatisch mit dem ersten SuchProfil eines Users gesucht, wenn dieser die Suche aufruft.
-                        this.Search();
+                        this.ChangeSearchProfiles(0)
                     }
                 });
             });
