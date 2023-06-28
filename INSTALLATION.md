@@ -4,27 +4,35 @@
 Dominik Wunderlich, Efstratios Vassilliou, Patrick Mayer, Taro Nakajima, Orest Tkach, Michael Fezer
 
 ## Frontend/Client-Seite
-(Taro, Strato oder Patrick)
+Das Frontend baut auf React auf und liegt im Projekt-Verzeichnis "frontend".
+
+### Voraussetzungen für das Frontend
+1. Für das Frontend wird folgendes benötigt:<br>
+Es müssen package dependencies installiert werden. Hierfür wird im Terminal "npm install" ausgeführt.<br>
+2. Node.js
+
+Um das Frontend starten zu können muss npm start ausgeführt werden.
+
 
 ## Backend/Service-Seite
 Das Backend baut auf Python, Flask und RestX auf.
 Es befindet sich im Projekt-Verzeichnis "src".
 
 ### Voraussetzungen für das Backend
-Für Backends wird folgendes benötigt:<br>
-Python<br>
-Flask <br>
-flask-restx<br>
-flask-cors<br>
-google-auth<br>
-requests
+Für Backend wird folgendes benötigt:<br>
+1. Python<br>
+2. Flask <br>
+3. flask-restx<br>
+4. flask-cors<br>
+5. google-auth<br>
+6. requests
 
 Um das Backend starten zu können muss die main.py ausgeführt werden. 
 
 ## Datenbank/MySQL
 Um eine Datenbank erfolgreich mit der App zu verbinden wird die aktuelle Version des "MySQL Community Server"
 und der "MySQL Workbench" benötigt. Mithilfe der Workbench kann eine "MySQL Connection" erstellt werden, welche 
-man in PyCharm installiert, um letztendlich die dump.sql auf dieser "MySQL Connection" auszuführen. <br>
+man in PyCharm mit dem Projekt verbindet, um letztendlich die dump.sql auf dieser "MySQL Connection" auszuführen. <br>
 Die dump.sql ist im Projekt-Verzeichnis "mysql" zu finden.
 
 
