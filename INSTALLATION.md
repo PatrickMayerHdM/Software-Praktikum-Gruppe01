@@ -4,7 +4,7 @@
 Dominik Wunderlich, Efstratios Vassilliou, Patrick Mayer, Taro Nakajima, Orest Tkach, Michael Fezer
 
 ## Frontend/Client-Seite
-Das Frontend baut auf React auf und liegt im Projekt-Verzeichnis "frontend".
+Das Frontend baut auf JavaScript, dessen Framework "React" auf und liegt im Projekt-Verzeichnis "frontend".
 
 ### Voraussetzungen für das Frontend
 1. Für das Frontend wird folgendes benötigt:<br>
