@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Item from "../../theme";
 import {Link} from "react-router-dom";
-import Profile from "./Profile";
 import DatingSiteAPI from "../../api/DatingSiteAPI";
 import {Button} from "@mui/material";
 import profilevisitsBO from "../../api/ProfilevisitsBO";
@@ -13,22 +12,25 @@ import profilevisitsBO from "../../api/ProfilevisitsBO";
  * Diese Ansicht eines anderen Profils kann dann beispielsweise innerhalb der Suchergebnisse genutzt werden.
  */
 
+/** Definition der ProfileBox-Komponente */
+
 class ProfileBox extends React.Component {
 
+    /** alle Zustandsvariablen: */
     constructor(props) {
         super(props);
         this.state = {
             profileBox_id: this.props.other_profile,
             ownprofile_id: this.props.ownprofile_id,
         }
-
         this.onProfileClick = this.onProfileClick.bind(this)
     }
 
+    /** Diese Funktion wird aufgerufen, wenn auf ein Profil geklickt wird.
+     * Sie fügt einen neuen Profilbesuch hinzu, indem sie die entsprechende API-Methode aufruft.
+     * Wenn dabei ein Fehler auftritt, wird dieser im Zustand der Komponente gespeichert.*/
     onProfileClick(){
-        console.log("Auf das Anzeigen eines großen Profils wurde gedrückt")
         const newvisit = new profilevisitsBO(null, this.state.ownprofile_id , this.state.profileBox_id)
-
         DatingSiteAPI.getAPI()
             .addprofilevisits(newvisit)
             .catch((e) =>
@@ -36,58 +38,62 @@ class ProfileBox extends React.Component {
                     error: e,
                 })
             )
-        console.log("Profil angesehen: ", newvisit)
     }
 
+    /** Wenn diese Box geladen wird, werden mithilfe eines API-Aufrufs die InfoObjekte des jeweiligen Profils abgerufen.
+     * Dabei sind nur der vollständige Name, das Alter, die Größe und das Geschlecht erforderlich.
+     * Es wird ein leeres Objekt namens "selectedProperties" erstellt. Anschließend wird mithilfe einer for-Schleife durch die "responseInfoObjects"
+     * iteriert und dabei werden die entsprechenden Zustände gesetzt, um die Daten zu speichern. */
     componentDidMount() {
         DatingSiteAPI.getAPI()
             .getInfoObjects(this.state.profileBox_id)
             .then((responseInfoObjects) => {
-          const selectedProperties = {};
+                const selectedProperties = {};
+                for (const key in responseInfoObjects) {
+                    if (responseInfoObjects.hasOwnProperty(key)) {
+                        const infoObject = responseInfoObjects[key];
+                        const charId = infoObject.char_id;
+                        const charValue = infoObject.char_value;
 
-          for (const key in responseInfoObjects) {
-            if (responseInfoObjects.hasOwnProperty(key)) {
-              const infoObject = responseInfoObjects[key];
-              const charId = infoObject.char_id;
-              const charValue = infoObject.char_value;
+                        switch (charId) {
+                            case 30:
+                                selectedProperties.age = charValue;
+                                break;
+                            case 10:
+                                selectedProperties.firstName = charValue;
+                                break;
+                            case 40:
+                                selectedProperties.gender = charValue;
+                                break;
+                            case 70:
+                                selectedProperties.hair = charValue;
+                                break;
+                            case 50:
+                                selectedProperties.height = charValue;
+                                break;
+                            case 20:
+                                selectedProperties.lastName = charValue;
+                                break;
+                            case 60:
+                                selectedProperties.religion = charValue;
+                                break;
+                            case 80:
+                                selectedProperties.smoking = charValue;
+                                break;
 
-              switch (charId) {
-                  case 30:
-                  selectedProperties.age = charValue;
-                  break;
-                case 10:
-                  selectedProperties.firstName = charValue;
-                  break;
-                case 40:
-                  selectedProperties.gender = charValue;
-                  break;
-                case 70:
-                  selectedProperties.hair = charValue;
-                  break;
-                case 50:
-                  selectedProperties.height = charValue;
-                  break;
-                case 20:
-                  selectedProperties.lastName = charValue;
-                  break;
-                case 60:
-                  selectedProperties.religion = charValue;
-                  break;
-                case 80:
-                  selectedProperties.smoking = charValue;
-                  break;
-
-                default:
-                  break;
-              }
-            }
-          }
-          this.setState(selectedProperties);
-        });
+                                default:
+                                break;
+                        }
+                    }
+                }
+                this.setState(selectedProperties);
+            });
     }
 
+    /** render() sorgt für das Anzeigen im Webbrowser */
     render() {
 
+        {/** Hier werden die States der InfoObjekte gesetzt */}
         const {
             age,
             lastName,
@@ -136,7 +142,6 @@ class ProfileBox extends React.Component {
                         </Grid >
                     </Link>
                 </Button>
-
             </Box >
         )
     }
