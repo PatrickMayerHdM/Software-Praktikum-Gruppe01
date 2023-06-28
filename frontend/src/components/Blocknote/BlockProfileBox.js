@@ -5,7 +5,6 @@ import React from "react";
 import ProfileBox from "../Profile/ProfileBox";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import DatingSiteAPI from "../../api/DatingSiteAPI";
-import PropTypes from 'prop-types';
 
 /**
  * Da in der Konzeption die Profilbox nicht immer gleich aussieht, ist hier eine Anpassung.
@@ -24,19 +23,12 @@ class BlockProfileBox extends React.Component{
         this.BlockDelClicked = this.BlockDelClicked.bind(this);
     }
 
-    static propTypes = {
-        // Es wird eine Prop mit dem Namen onRemoveProfile erwartet.
-        onRemoveProfile: PropTypes.func.isRequired,
-    };
 
     /** Funktion welche ausgeführt wird, wenn der Button "Von Kontaktsperre Entfernen" gedrückt wird. */
     BlockDelClicked(){
         DatingSiteAPI.getAPI()
             // Löschen des BlockNote-Eintrags
             .removeBlocknoteProfile(this.state.blocking_id, this.state.blocked_id)
-            .then(() => {
-                console.log("Von Merkzettel entfernt");
-            })
             .catch((e) =>
                 this.setState({
                     error: e,

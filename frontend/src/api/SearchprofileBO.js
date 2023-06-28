@@ -20,22 +20,31 @@ export default class searchprofileBO extends BusinessObject {
 
     /**
      * Setzt die searchprofile_id
-     *
-     * @param {*} asearchprofile_id
      */
 
     get_searchprofile_id() {
         return this.searchprofile_id
     }
 
+    /**
+     * Auslesen der searchprofile_id
+     */
+
     set_searchprofile_id(asearchprofile_id) {
         this.searchprofile_id = asearchprofile_id
     }
 
+    /**
+     * Auslesen der google_id
+     */
 
     get_google_id() {
         return this.google_id;
     }
+
+    /**
+     * Setzt die google_id
+     */
 
     set_google_id(agoogle_id) {
         this.google_id = agoogle_id;

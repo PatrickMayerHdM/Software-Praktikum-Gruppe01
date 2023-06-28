@@ -62,15 +62,12 @@ class Search extends React.Component{
             this.state.profiles.forEach(element => {
                 // Mit einer if Abfrage wird geprüft, ob ein Profil von einem User bereits besucht wurde. (Wenn dies nicht der Fall ist, ist false enthalten).
                 if (element[2] === false) {
-                    //console.log("Hier wird false ausgeführt RenderProfiles, also dieses Profil wurde noch nicht besucht: ", element);
                     // Wenn ein Element (also Partnervorschlag) noch nciht besucht wurde, wird dieser dem RenderProfiles Array hinzugefügt.
                     this.setState(prevState => ({
                         RenderProfiles: [...prevState.RenderProfiles, element]
                     }), () => {
                         const lengthRenderProfiles = this.state.RenderProfiles.length;
-                        this.setState({ numRenderProfiles: lengthRenderProfiles }, () => {
-                            //console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
-                        });
+                        this.setState({ numRenderProfiles: lengthRenderProfiles });
                     });
                 }
             })
@@ -84,9 +81,7 @@ class Search extends React.Component{
                         RenderProfiles: [...prevState.RenderProfiles, element]
                     }), () => {
                         const lengthRenderProfiles = this.state.RenderProfiles.length;
-                        this.setState({ numRenderProfiles: lengthRenderProfiles }, () => {
-                            //console.log("Dies ist der aktuelle Stand der RenderProfiles", this.state.RenderProfiles, "und dies ist der Stand der numRenderProfiles", this.state.numRenderProfiles);
-                        });
+                        this.setState({ numRenderProfiles: lengthRenderProfiles });
                     });
             })
         }
@@ -103,13 +98,12 @@ class Search extends React.Component{
     Search() {
         /**
          * Da bei jeder Suchanfrage, andere Suchergebnisse dargestellt werden müssen die dargestellten Profile
-         * wieder zurückgesetzt werden, damit die neuen Suchergebisse dargestellt werden können.
+         * wieder zurückgesetzt werden, damit die neuen Suchergebnisse dargestellt werden können.
          */
         this.setState({
             RenderProfiles: [ ],
             numRenderProfiles: 0,
         })
-        console.log("Test2")
         DatingSiteAPI.getAPI()
         .getSearchResults(this.state.selectedProfile)
         .then(profilesvar => {
@@ -128,14 +122,12 @@ class Search extends React.Component{
     }
 
     handleSearchModeChange = () => {
-        //console.log("Das ist der Wert von switchModeVisits bevor es zu der Veränderung kam: ", this.state.switchModeVisits)
         this.setState({
             RenderProfiles: [ ],
             numRenderProfiles: 0,
             switchModeVisits: !this.state.switchModeVisits,
         }, () => {
             this.RenderSearchResults()
-            //console.log("Das ist der Wert von switchModeVisits nachdem es zu der Veränderung kam: ", this.state.switchModeVisits)
         });
     }
 
@@ -149,14 +141,10 @@ class Search extends React.Component{
      */
 
     ChangeSearchProfiles(index) {
-        //console.log("Es wurde auf das Suchprofil mit dem index: ", index, "geändert");
         // State handling, damit die Farbe von dem ausgewählten Profil geändert wird
         this.setState({ selectedProfileIndex: index });
         this.setState({ clickable: true });
-        this.setState({ selectedProfile: this.state.Searchprofiles[index] }, () => {
-
-          //console.log("Es wurde auf das Suchprofil: ", this.state.selectedProfile, "geändert (mit selectedProfile)" + " mit diesem Index: ", index);
-        });
+        this.setState({ selectedProfile: this.state.Searchprofiles[index] });
     }
 
     /**
@@ -166,7 +154,6 @@ class Search extends React.Component{
      */
 
     DeleteSearchProfile(){
-        //console.log("Das Suchprofil [index]",this.state.selectedProfileIndex ,"und selectet: ",this.state.selectedProfile,"wird gelöscht");
         DatingSiteAPI.getAPI()
             .removeSearchProfile(this.state.selectedProfile)
             .catch((e) =>
@@ -179,8 +166,6 @@ class Search extends React.Component{
         this.setState({
             Searchprofiles: updatedSearchProfiles,
             numSearchProfiles: lengthupdatedSearchProfiles
-        }, () => {
-            //console.log('handleRemoveProfile und profiles nach der Aktualisierung:', this.state.Searchprofiles);
         });
     };
 
@@ -214,7 +199,7 @@ class Search extends React.Component{
      * direkt suchen kann.
      */
 
-    loadingPage(){
+    async loadingPage(){
         // API Anfrage für die Suchprofile eines Users.
         DatingSiteAPI.getAPI()
         .getSearchProfileIDs(this.props.user.uid)
@@ -227,14 +212,23 @@ class Search extends React.Component{
                 const lengthSearchprofiles = this.state.Searchprofiles.length;
                 this.setState({
                     numSearchProfiles: lengthSearchprofiles
-                }, () => {
+                },
+                    async () => {
                     // Dies ist eine Abfrage, ob ein User bereits ein SuchProfil hat, andernfalls wird der User zum Erstellen eines SuchProfils weitergeleitet.
                     if (this.state.numSearchProfiles === 0){
                         // Hier findet die Weiterleitung auf die Seite zum Erstellen eines SuchProfils statt.
                         window.location.replace("/Suche/Suchprofil/new");
                     } else {
+                        /**
+                         * Da bei jeder Suchanfrage, andere Suchergebnisse dargestellt werden müssen die dargestellten Profile
+                         * wieder zurückgesetzt werden, damit die neuen Suchergebnisse dargestellt werden können.
+                         */
+                        await this.setState({
+                            RenderProfiles: [ ],
+                            numRenderProfiles: 0,
+                        })
                         // Hier wird das erste SuchProfil eines Users automatisch ausgewählt.
-                        this.ChangeSearchProfiles(0)
+                        await this.ChangeSearchProfiles(0)
                         // Hier wird automatisch mit dem ersten SuchProfil eines Users gesucht, wenn dieser die Suche aufruft.
                         this.Search();
                     }
@@ -271,27 +265,26 @@ class Search extends React.Component{
 
         // const welche genau ein Listing für ein Suchprofil darstellt, dabei wir auch die Nummer des Suchprofils angezeigt
         const SearchProfileListing = Array(this.state.numSearchProfiles)
-          .fill(null)
-          .map((item, index) => (
-            <Grid item key={index} md={2} xs={2} >
-              <button
-                onClick={() => this.ChangeSearchProfiles(index)}
-                  style={{
-                  height: "120%",
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor:
-                    this.state.selectedProfileIndex === index ? "#F74464" : "#6A7285",
-                  color: "#fff",
-                  cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
-                }}
-              >
-                Suchprofil {index + 1}
-              </button>
-            </Grid>
-          ));
+            .fill(null)
+            .map((item, index) => (
+                <Grid item key={index} md={2} xs={2} >
+                    <button onClick={() => this.ChangeSearchProfiles(index)}
+                            style={{
+                                height: "120%",
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor:
+                                    this.state.selectedProfileIndex === index ? "#F74464" : "#6A7285",
+                                color: "#fff",
+                                cursor: "pointer", paddingBottom: "1%", paddingTop: "1%",
+                            }}
+                    >
+                        Suchprofil {index + 1}
+                    </button>
+                </Grid>
+            ));
         // Methode zur Darstellung einer SearchProfileBox (So wird ein Partnervorschlag dem User dargestellt)
         const SearchListing = Array(count).fill(null).map((item, index) => (
             <Grid item xs={12} key={index} >
@@ -300,23 +293,41 @@ class Search extends React.Component{
         ));
 
     return (
+        <div>
+            <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'} , margin: '0 auto'}}>
+                <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={3} >
+                    <Item sx={{ width: "100%"}}>
+                        <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={0} >
+                            <Item sx={{ width: "100%"}}>
+                                <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                                    {/** Hier wird der Button zum Anzeigen von nur neuen Profilen erstellt */}
+                                    <Grid item md={2} xs={2} sx={{ backgroundColor: "#374258", color: "#fff", height: "100%", width: "100%" , border: "1.6px solid"}}>
+                                        <Switch onChange={this.handleSearchModeChange} label="Mein Switch" />
+                                    </Grid>
 
-      <div>
-        <Box sx={{ width: {lg: '50%', md: '60%', sm: '80%'} , margin: '0 auto'}}>
-             <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={3} >
-                 <Item sx={{ width: "100%"}}>
-                     <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={0} >
-                        <Item sx={{ width: "100%"}}>
-                            <Grid container direction="row" justifyContent="center" alignItems="stretch">
-                              {/** Hier wird der Button zum Anzeigen von nur neuen Profilen erstellt */}
-                                <Grid item md={2} xs={2} sx={{ backgroundColor: "#374258", color: "#fff", height: "100%", width: "100%" , border: "1.6px solid"}}>
-                                    <Switch onChange={this.handleSearchModeChange} label="Mein Switch" />
-                                </Grid>
+                                    {/** Hier werden die Buttons zum Erstellen eines Suchprofils erstellt */}
+                                    <Grid item md={2} xs={2} >
+                                        <Link to="/Suche/Suchprofil/new">
+                                            <button
+                                                style={{
+                                                    height: "100%",
+                                                    width: "100%",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    backgroundColor: "#374258",
+                                                    color: "#fff",
+                                                    cursor: "pointer"}}
+                                            >
+                                                <AddIcon/>
+                                            </button>
+                                        </Link>
+                                    </Grid>
 
-                                {/** Hier werden die Buttons zum Erstellen eines Suchprofils erstellt */}
-                                <Grid item md={2} xs={2} >
-                                    <Link to="/Suche/Suchprofil/new">
+                                    {/** Hier wird der Button zum Suchen nach dem aktuell ausgewählten Suchprofil angezeigt */}
+                                    <Grid item md={4} xs={4}>
                                         <button
+                                            onClick={() => this.Search()}
                                             style={{
                                                 height: "100%",
                                                 width: "100%",
@@ -325,86 +336,66 @@ class Search extends React.Component{
                                                 justifyContent: "center",
                                                 backgroundColor: "#374258",
                                                 color: "#fff",
-                                                cursor: "pointer"}}
+                                                cursor: "pointer",
+                                                margin: "auto",
+                                                pointerEvents: clickable ? '' : 'none',
+                                            }}
                                         >
-                                            <AddIcon/>
+                                            <SearchIcon />
                                         </button>
-                                    </Link>
+                                    </Grid>
 
+                                    {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
+                                    <Grid item md={2} xs={2} >
+                                        <Link to={`/Suche/Suchprofil/${this.state.selectedProfile}`} style={{ pointerEvents: clickable ? '' : 'none' }} >
+                                            <button
+                                                style={{
+                                                    height: "100%",
+                                                    width: "100%",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    backgroundColor: "#374258",
+                                                    color: "#fff",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                <EditIcon/>
+                                            </button>
+                                        </Link>
+                                    </Grid>
+
+                                    {/** Hier wird der Button zum Löschen des ausgewählten Suchprofils erstellt */}
+                                    <Grid item md={2} xs={2} >
+
+                                        <button
+                                            onClick={() => this.DeleteSearchProfile()}
+                                            style={{
+                                                height: "100%",
+                                                width: "100%",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                backgroundColor: "#374258",
+                                                color: "#fff",
+                                                cursor: "pointer",
+                                                pointerEvents: clickable ? '' : 'none',
+                                            }}
+                                        >
+                                            <DeleteIcon/>
+                                        </button>
+                                    </Grid>
                                 </Grid>
+                            </Item>
 
-                                {/** Hier wird der Button zum Suchen nach dem aktuell ausgewählten Suchprofil angezeigt */}
-                                <Grid item md={4} xs={4}>
-                                  <button
-                                    onClick={() => this.Search()}
-                                    style={{
-                                      height: "100%",
-                                      width: "100%",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      backgroundColor: "#374258",
-                                      color: "#fff",
-                                      cursor: "pointer",
-                                      margin: "auto",
-                                      pointerEvents: clickable ? '' : 'none',
-                                    }}
-                                  >
-                                    <SearchIcon />
-                                  </button>
-                                </Grid>
-
-                                  {/** Hier wird der Button zum Bearbeiten von Suchprofilen erstellt */}
-                                <Grid item md={2} xs={2} >
-                                  <Link to={`/Suche/Suchprofil/${this.state.selectedProfile}`} style={{ pointerEvents: clickable ? '' : 'none' }} >
-                                      <button
-                                        style={{
-                                          height: "100%",
-                                          width: "100%",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                          backgroundColor: "#374258",
-                                          color: "#fff",
-                                          cursor: "pointer"
-                                        }}
-                                      >
-                                        <EditIcon/>
-                                      </button>
-                                  </Link>
-                                </Grid>
-
-                                  {/** Hier wird der Button zum Löschen des ausgewählten Suchprofils erstellt */}
-                                <Grid item md={2} xs={2} >
-
-                                      <button
-                                          onClick={() => this.DeleteSearchProfile()}
-                                        style={{
-                                          height: "100%",
-                                          width: "100%",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                          backgroundColor: "#374258",
-                                          color: "#fff",
-                                          cursor: "pointer",
-                                          pointerEvents: clickable ? '' : 'none',
-                                        }}
-                                      >
-                                        <DeleteIcon/>
-                                      </button>
-
-                                </Grid>
-                            </Grid>
-                        </Item>
-
-                        <Item sx={{ width: "100%"}}>
-                            {/** Hier werden die Suchprofile, die ein User auswählen kann, dargestellt. */}
+                            <Item sx={{ width: "100%"}}>
+                                {/** Hier werden die Suchprofile, die ein User auswählen kann, dargestellt. */}
                                 {SearchProfileListing}
-                        </Item>
-                     </Stack>
-                 </Item>
-                     {SearchListing.length > 0 ? (
+                            </Item>
+                        </Stack>
+                    </Item>
+                    {/** Wenn SearchListing länger als 0 ist, word ein SearchListing dargestellt*/}
+                    {SearchListing.length > 0 ? (
                         <Box sx={{ width: '100%',margin: '0 auto'}} >
                             <Grid item container spacing={2} justifyContent="center">
                                 {/** Hier werden die Suchergebnisse (Partnervorschläge), die ein User als Antwort bekommt, dargestellt. */}
@@ -415,9 +406,9 @@ class Search extends React.Component{
                         // Dies stellt den Text dar, welcher einem User angezeigt wird, wenn dieser noch nicht gesucht hat.
                         <p>Suche um Profile zu sehen...</p>
                     )}
-             </Stack>
-        </Box>
-      </div>
+                </Stack>
+            </Box>
+        </div>
     );
   }
 }
