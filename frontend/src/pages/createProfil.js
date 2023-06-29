@@ -7,7 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Box from "@mui/material/Box";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
-import {Button, TextField} from "@mui/material";
+import {Button, ButtonGroup, Fab, TextField} from "@mui/material";
 import * as React from "react";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -31,6 +31,8 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ArticleIcon from '@mui/icons-material/Article';
+
 
 
 class CreateProfil extends Component {
@@ -70,6 +72,7 @@ class CreateProfil extends Component {
             editProperty: null,
             updatedCharName: null,
             updatedCharValue: null,
+            char_typ: "",
         };
 
         /** Bindung der Handler an die Komponente */
@@ -360,7 +363,8 @@ class CreateProfil extends Component {
             this.state.searchprofile_id,
             this.state.updatedCharValue,
             this.state.updatedCharName,
-            newchar_id)
+            newchar_id,
+            this.state.char_typ)
          DatingSiteAPI.getAPI()
              .updateNamedCharByURL(updatedNamedInfoBO)
              .catch((e) =>
@@ -427,6 +431,10 @@ class CreateProfil extends Component {
         this.setState({showTextFields: true});
     };
 
+    handleSelectedChar = (value) => {
+        this.setState({ char_typ: value });
+    };
+
     handleInputChange = (event, field) => {
         this.setState({ [field]: event.target.value });
     };
@@ -440,7 +448,8 @@ class CreateProfil extends Component {
             this.state.searchprofile_id,
             this.state.char_desc,
             this.state.char_name,
-            this.state.char_id)
+            this.state.char_id,
+            this.state.char_typ)
 
         DatingSiteAPI.getAPI()
             .createCharDescForProfile(newInfoBO)
@@ -765,6 +774,7 @@ class CreateProfil extends Component {
                 aboutme,
                 updatedCharName,
                 updatedCharValue,
+                char_typ,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -864,10 +874,10 @@ class CreateProfil extends Component {
                                 <FormGroup row style={{justifyContent: 'center'}}>
                                     <Box sx={{width: 450, margin: '0 auto'}}>
                                         <FormControl fullWidth>
-                                            <InputLabel>Auswahleigenschaften</InputLabel>
+                                            <InputLabel> Weitere Eigenschaften </InputLabel>
                                             <Select
                                                 value={defaultValue}
-                                                label="Auswahleigenschaften"
+                                                label="Weitere Eigenschaften"
                                                 onChange={this.handleChangeSelectedOption}
                                             >
                                                 <MenuItem value="selectReligion">Religion</MenuItem>
@@ -987,15 +997,48 @@ class CreateProfil extends Component {
                                             {showTextFields && (
                                                 <>
                                                     <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
-                                                        <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle deine eigene Eigenschaft: </FormLabel>
-                                                        <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                                        <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                                                            <Button
+                                                                onClick={() => this.handleSelectedChar("text")}
+                                                                startIcon={<ArticleIcon/>}
+                                                            > Texteigenschaft </Button>
+                                                            <Button
+                                                                onClick={() => this.handleSelectedChar("select")}
+                                                                endIcon={<RadioButtonUncheckedIcon/>}
+                                                            > Auswahleigenschaft </Button>
+                                                        </ButtonGroup>
                                                     </Box>
-                                                    <Box sx={{ marginBottom: '10px' }}>
-                                                        <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.handleInputChange(event, 'char_desc')} />
-                                                    </Box>
-                                                    <Box sx={{ marginBottom: '10px' }}>
-                                                        <Button onClick={this.handleSaveInputs} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
-                                                    </Box>
+                                                    {char_typ === "select" && (
+                                                        <>
+                                                        <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                            <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle deine eigene Auswahleigenschaft: </FormLabel>
+                                                            <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                                        </Box>
+                                                        <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                            <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle hier die passenden Auswahlen: </FormLabel>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <TextField label="Auswahlname"  size="small" value={this.state.char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} ></TextField>
+                                                                <Fab color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
+                                                                    <AddIcon />
+                                                                </Fab>
+                                                            </Box>
+                                                        </Box>
+                                                        </>
+                                                    )}
+                                                    {char_typ === "text" && (
+                                                        <>
+                                                        <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                            <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle deine eigene Eigenschaft: </FormLabel>
+                                                            <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                                        </Box>
+                                                        <Box sx={{ marginBottom: '10px' }}>
+                                                            <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.handleInputChange(event, 'char_desc')} />
+                                                        </Box>
+                                                        <Box sx={{ marginBottom: '10px' }}>
+                                                            <Button onClick={this.handleSaveInputs} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
+                                                        </Box>
+                                                        </>
+                                                    )}
                                                 </>
                                             )}
                                         </Box>

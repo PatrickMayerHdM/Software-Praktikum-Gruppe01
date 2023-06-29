@@ -227,6 +227,7 @@ export default class DatingSiteAPI {
 
 
     createCharDescForProfile(characteristic_desc_name) {
+        console.log("API: ", characteristic_desc_name)
         return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {
             method: "POST",
             headers: {
