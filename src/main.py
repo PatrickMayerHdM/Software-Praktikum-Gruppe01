@@ -1,6 +1,6 @@
 import time
 
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, jsonify
 from flask_restx import Api, Resource, fields
 #CORS ermöglicht es einem Client, Ressourcen von einem Server anzufordern, dessen Ursprung sich von dem des Clients unterscheidet.
 from flask_cors import CORS, cross_origin
@@ -720,6 +720,21 @@ class NamedCharacteristicsOperations(Resource):
 
         return char_names, 200
 
+@datingapp.route('/characteristics/all')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class CharacteristicsOperations(Resource):
+    @datingapp.marshal_list_with(characteristic)
+    @secured
+    def get(self):
+        adm = Administration()
+        char_names = adm.get_all_char_names()
+
+        print("Main AllCharNames: ", char_names)
+        print("Main: ", type(char_names))
+        print(type(char_names[0]))
+        print(char_names[1].get_characteristic_name())
+        return char_names, 200
+
 """Ab hier Profilevisits"""
 
 @datingapp.route('/visit')
@@ -787,4 +802,4 @@ class MatchingNewProfilesOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8001)
+    app.run(debug=True, port=5000)

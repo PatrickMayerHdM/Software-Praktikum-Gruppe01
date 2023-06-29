@@ -73,6 +73,9 @@ class CreateProfil extends Component {
             updatedCharName: null,
             updatedCharValue: null,
             char_typ: "",
+            selections: [],
+            openuserchar: false,
+            selectedCharNames: [],
         };
 
         /** Bindung der Handler an die Komponente */
@@ -100,8 +103,8 @@ class CreateProfil extends Component {
         this.handleChangeCharDelete = this.handleChangeCharDelete.bind(this)
         this.handleChangeOpenCharEdit = this.handleChangeOpenCharEdit.bind(this);
         this.handleSaveCharChange = this.handleSaveCharChange.bind(this);
-        this.handleCharValueChange = this.handleCharValueChange.bind(this);
-        this.handleCharNameChange = this.handleCharNameChange.bind(this);
+        this.handleChangeCharName = this.handleChangeCharName.bind(this);
+        this.handleChangeCharValue = this.handleChangeCharValue.bind(this);
 
         this.handleInfoSelectCreate = this.handleInfoSelectCreate.bind(this);
         this.handleDeleteReligion = this.handleDeleteReligion.bind(this);
@@ -118,6 +121,7 @@ class CreateProfil extends Component {
         this.checkProfilExc();
         this.getSelectedProperties();
         this.getSelectedPropertiesForCharValuesAndNames();
+        this.getAllInfoObjects();
     };
 
     /** Handler und API für "checkProfilExc" */
@@ -224,6 +228,25 @@ class CreateProfil extends Component {
         } catch (error) {
             console.error("Fehler beim Auslesen der InfoObjekte: ", error);
         }
+    }
+
+    getAllInfoObjects() {
+        return DatingSiteAPI.getAPI()
+            .getAllCharNames()
+            .then((responseCharNames) => {
+                const selectedCharNames = [];
+                for (const key in responseCharNames) {
+                    if (responseCharNames.hasOwnProperty(key)) {
+                        const char_id = responseCharNames[key].id;
+                        const char_name = responseCharNames[key].char_name;
+                        if (char_id > 160) {
+                            selectedCharNames.push({ char_id, char_name });
+                        }
+                    }
+                }
+                this.setState({ selectedCharNames });
+                console.log("Liste: ", selectedCharNames);
+            });
     }
 
     getCharNameByID(char_id) {
@@ -341,16 +364,15 @@ class CreateProfil extends Component {
         this.setState({ editProperty: charID })
     }
 
-    handleCharNameChange = (event) => {
-        const newCharName = event.target.value;
-        this.setState({ updatedCharName: newCharName })
-    }
-    
-    handleCharValueChange = (event) => {
-        const newCharValue = event.target.value;
-        this.setState({ updatedCharValue: newCharValue})
-    }
-    
+    handleChangeCharName = (event) => {
+        this.setState({ updatedCharName: event.target.value });
+    };
+
+    handleChangeCharValue = (event) => {
+        this.setState({ updatedCharValue: event.target.value });
+    };
+
+
 
      handleSaveCharChange = (char_id) => {
         const newchar_id = char_id;
@@ -365,6 +387,7 @@ class CreateProfil extends Component {
             this.state.updatedCharName,
             newchar_id,
             this.state.char_typ)
+         console.log("API: ", updatedNamedInfoBO)
          DatingSiteAPI.getAPI()
              .updateNamedCharByURL(updatedNamedInfoBO)
              .catch((e) =>
@@ -458,6 +481,15 @@ class CreateProfil extends Component {
                     error: e,
                 })
             );
+    };
+
+    handleOpenUserChar = () => {
+        this.setState({ openuserchar: true })
+    };
+
+    handleChangeSelectedProperty = (event) => {
+        const selectedProperty = event.target.value;
+        this.setState({  });
     };
 
     handleUpdate(event) {
@@ -775,6 +807,8 @@ class CreateProfil extends Component {
                 updatedCharName,
                 updatedCharValue,
                 char_typ,
+                openuserchar,
+                selectedCharNames,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -957,19 +991,23 @@ class CreateProfil extends Component {
                                                                     {isEditOpen && (
                                                                         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '5%' }}>
                                                                             <FormGroup row style={{ justifyContent: 'center' }}>
-                                                                                <FormLabel> Gib deine angepassten Eigenschaftsnamen und Infos hier ein: </FormLabel>
+                                                                                <FormLabel> Ändere hier den Eigenschaftsnamen und die Eigenschaftsbeschreibung: </FormLabel>
                                                                                 <TextField
                                                                                     label="Eigenschaftsname"
+                                                                                    name="updatedCharName"
+                                                                                    defaultValue={value.char_name[0]}
                                                                                     value={updatedCharName}
-                                                                                    onChange={this.handleCharNameChange}
+                                                                                    onChange={this.handleChangeCharName}
                                                                                     size="small"
                                                                                     fullWidth
                                                                                     sx={{ mb: 2, width: '250px', margin: '15px' }}
                                                                                 />
                                                                                 <TextField
                                                                                     label="Eigenschaftsbeschreibung"
+                                                                                    name="updatedCharValue"
+                                                                                    defaultValue={value.char_value}
                                                                                     value={updatedCharValue}
-                                                                                    onChange={this.handleCharValueChange}
+                                                                                    onChange={this.handleChangeCharValue}
                                                                                     size="small"
                                                                                     fullWidth
                                                                                     sx={{ mb: 2, width: '250px', margin: '15px' }}
@@ -1012,13 +1050,13 @@ class CreateProfil extends Component {
                                                         <>
                                                         <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle deine eigene Auswahleigenschaft: </FormLabel>
-                                                            <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')} />
+                                                            <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name}/>
                                                         </Box>
                                                         <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle hier die passenden Auswahlen: </FormLabel>
                                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                                <TextField label="Auswahlname"  size="small" value={this.state.char_desc} onChange={(event) => this.handleInputChange(event, 'char_desc')} ></TextField>
-                                                                <Fab color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
+                                                                <TextField label="Auswahlname"  size="small" value={this.state.char_desc}></TextField>
+                                                                <Fab color="primary" aria-label="add" sx={{ marginLeft: '5px' }} onClick={this.handleAddSelectionField}>
                                                                     <AddIcon />
                                                                 </Fab>
                                                             </Box>
@@ -1043,6 +1081,36 @@ class CreateProfil extends Component {
                                             )}
                                         </Box>
                                     </FormGroup>
+                                </Item>
+                            )}
+                            {profileExists && (
+                                <Item>
+                                    <Box sx={{ width: 400, margin: '0 auto' }}>
+                                        <FormGroup row style={{ justifyContent: 'center' }}>
+                                            <Button onClick={this.handleOpenUserChar} variant="contained"  startIcon={<AddIcon />}> Eigenschaftsvorschläge </Button>
+                                            {openuserchar && (
+                                                <Box sx={{ width: 400, margin: '0 auto', marginTop: '5%' }}>
+                                                    <FormGroup row style={{ justifyContent: 'center' }}>
+                                                        <FormControl fullWidth>
+                                                            <InputLabel> Bereits erstellte Eigesnchaften </InputLabel>
+                                                            <Select
+                                                                value={defaultValue}
+                                                                lable="Vorschläge"
+                                                                onChange={this.handleChangeSelectedProperty}
+                                                            >
+                                                                {selectedCharNames &&
+                                                                    selectedCharNames.map((char, index) => (
+                                                                        <MenuItem key={char.char_id} value={char.char_id}>
+                                                                            {char.char_name}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </FormGroup>
+                                                </Box>
+                                            )}
+                                        </FormGroup>
+                                    </Box>
                                 </Item>
                             )}
                             {profileExists && (
