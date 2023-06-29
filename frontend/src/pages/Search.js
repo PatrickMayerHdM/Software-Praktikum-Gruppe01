@@ -62,7 +62,7 @@ class Search extends React.Component{
             this.state.profiles.forEach(element => {
                 // Mit einer if Abfrage wird geprüft, ob ein Profil von einem User bereits besucht wurde. (Wenn dies nicht der Fall ist, ist false enthalten).
                 if (element[2] === false) {
-                    // Wenn ein Element (also Partnervorschlag) noch nciht besucht wurde, wird dieser dem RenderProfiles Array hinzugefügt.
+                    // Wenn ein Element (also Partnervorschlag) noch nicht besucht wurde, wird dieser dem RenderProfiles Array hinzugefügt.
                     this.setState(prevState => ({
                         RenderProfiles: [...prevState.RenderProfiles, element]
                     }), () => {
