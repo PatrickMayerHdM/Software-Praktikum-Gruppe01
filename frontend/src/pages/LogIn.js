@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
-import PropTypes from 'prop-types';
 
 
-/** Definition der LogIn-Komponente als eine Unterklasse von Component */
+/** Definition der LogIn-Komponente */
 class LogIn extends Component {
 
 
-	/** Funktion, die aufgerufen wird, wenn der "Anmelden"-Button geklickt wird */
+	/** Funktion, die aufgerufen wird, wenn der "Anmelden"-Button gedrückt wird */
 	handleLogInButtonClicked = () => {
 		this.props.onLogIn();
 	}
 
-	/** Funktion zum Rendern der Elemente der Komponente */
+	/** Funktion zum Rendern der Elemente für die LogIn-Seite */
 	render() {
 		return (
 			<div>
 				<Typography sx={{margin: 5}} align='center' variant='h4'>Willkommen zur HdM React/Python Projektvorstellung</Typography>
+				<Typography sx={{margin: 5}} align='center' variant='h2'> Just-Deployed </Typography>
 				<Typography sx={{margin: 4}} align='center'>Bitte melden Sie sich an, um die Dienste der HdM Dating Seite nutzen zu können.</Typography>
 				<Grid container justifyContent='center'>
 					<Grid item>
@@ -28,10 +28,6 @@ class LogIn extends Component {
 	}
 }
 
-/** onLogIn ist ein Prop, die erwartet wird und eine Funktion sein muss */
-LogIn.propTypes = {
-	onLogIn: PropTypes.func.isRequired,
-};
 
-/** Exportieren der LogIn-Komponente, um sie in anderen Teilen der Anwendung verwenden zu können */
+/** Exportieren der LogIn-Komponente */
 export default LogIn;
