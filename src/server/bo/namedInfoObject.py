@@ -6,6 +6,7 @@ class NamedInfoObject(bo):
         super().__init__()
         self.named_char_desc = ""   # Info
         self.named_char_name = ""   # Eigenschaft
+        self.named_char_typ = ""    # Typ der Eigenschaft
         self.profile_fk = None
         self.char_id = None
         self.searchprofile_id = None
@@ -54,6 +55,14 @@ class NamedInfoObject(bo):
         """Auslesen der Suchprofil_id."""
         return self.searchprofile_id
 
+    def set_char_typ(self, value):
+        """Setzen des Char_Typs."""
+        self.named_char_typ = value
+
+    def get_char_typ(self):
+        """Auslesen des Char_Typs."""
+        return self.named_char_typ
+
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = NamedInfoObject()
@@ -61,4 +70,5 @@ class NamedInfoObject(bo):
         obj.set_named_char_id(dictionary['char_id'])
         obj.set_named_char(dictionary['char_name'])
         obj.set_named_info(dictionary['char_desc'])
+        obj.set_char_typ(dictionary['char_typ'])
         return obj

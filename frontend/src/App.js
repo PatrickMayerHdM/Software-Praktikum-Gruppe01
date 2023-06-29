@@ -25,8 +25,7 @@ import AboutUs from "./pages/AboutUs";
 
 class App extends Component {
 
-  /** alle Zustandsvariablen: aktueller Nutzer, Ankerpunkt für das Dropdown-Menü, Fehler bei der "auth",
-   *  Fehler in der Anwendung, Ladezustand der "auth" */
+  /** alle Zustandsvariablen: */
 
   constructor(props) {
     super(props);
@@ -99,8 +98,8 @@ class App extends Component {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  /** Ruft das "signInWithPopup" Fenster auf um sich anmelden zu können, bei erfolgriecher Anmeldung
-   *  wird der User "gespeichert" un der Zustand aktualisiert. Bei einem Fehler wird dieser
+  /** Ruft das "signInWithPopup" Fenster auf, um sich anmelden zu können, bei erfolgreicher Anmeldung
+   *  wird der User „gespeichert“ und der Zustand aktualisiert. Bei einem Fehler wird dieser
    *  in der Konsole ausgegeben. */
 
 
@@ -147,17 +146,17 @@ class App extends Component {
     this.setState({menuAnchor: null});
   };
 
-  /** render() gibt das HTML zurück, das gerendert werden soll */
+  /** render() sorgt für das Anzeigen im Webbrowser */
 
   render() {
 
     const { currentUser } = this.state;
 
     if (!currentUser) {
-      {/** Wenn kein User angemeldet ist wird nur das Anmeldefenster gerendert. */}
+      {/** Wenn kein User angemeldet ist, wird nur das Anmeldefenster gerendert. */}
     return <LogIn onLogIn={this.handleLogIn} />;
     } else if (!currentUser.displayName || !currentUser.photoURL) {
-      {/** Wenn ein User sich angemeldet hat wird er zuerst nur auf die Profil Seite gebracht */}
+      {/** Wenn ein User sich angemeldet hat, wird er zuerst auf die Create-Profilseite gebracht */}
       return <Navigate to="/Profil" />;
     }
 
@@ -175,18 +174,18 @@ class App extends Component {
                         </Avatar>
                     )}
                     <Menu
-                        anchorEl={this.state.menuAnchor} /** Hier wird das Abmelden Menü gesetzt */
-                        open={Boolean(this.state.menuAnchor)} /** Hier wird der Status gesetzt ob das Menü geöffnet worden ist */
-                        onClose={this.handleClose} /** der Hanlder für das Schließen des Menüs */
+                        anchorEl={this.state.menuAnchor} // Hier wird das Abmelden Menü gesetzt
+                        open={Boolean(this.state.menuAnchor)} // Hier wird der Status gesetzt ob das Menü geöffnet worden ist
+                        onClose={this.handleClose} // Hanlder für das Schließen des Menüs
                     >
-                      {/** Hier ist der "Abmelde"-Button der beim drücken die "handleLogOut"*/}
+                      {/** Hier ist der "Abmelde"-Button, der die "handleLogOut" Funktion aufruft */}
                       <MenuItem onClick={this.handleLogOut}> Abmelden </MenuItem>
                     </Menu>
                   </div>
                 </div>
             }
 
-            {/** Routing der App */}
+            {/** Routing der gesamten App */}
             <Router>
               <Header user={currentUser}/>
                 <Routes>
