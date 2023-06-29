@@ -3,6 +3,12 @@
 
 Dominik Wunderlich, Efstratios Vassilliou, Patrick Mayer, Taro Nakajima, Orest Tkach, Michael Fezer
 
+<p align="center">
+<img src="img.png" alt=""> <br>
+Quelle: https://xfrogclothing.com/product/just-deploy-no-way-test-shirt/
+</p>
+
+
 ## Frontend/Client-Seite
 Das Frontend baut auf JavaScript, dessen Framework "React" auf und liegt im Projekt-Verzeichnis "frontend".
 
