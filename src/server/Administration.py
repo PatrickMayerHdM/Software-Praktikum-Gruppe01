@@ -240,12 +240,17 @@ class Administration(object):
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
     def create_profile(self, favoritenote_id, blocknote_id, google_fk):
+        """
+        Diese Methode erstellt ein Profil basierend auf den Attributen.
+        :param favoritenote_id: --
+        :param blocknote_id: --
+        :param google_fk: Google-ID eines Users
+        """
         self.create_char_list()
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
         prof.set_google_fk(google_fk)
-        # prof.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             mapper.insert(prof)
@@ -320,15 +325,28 @@ class Administration(object):
             return mapper.find_all()
 
     def get_char_by_key(self, key):
+        """
+        Mit dieser Methode kann man eine Eigenschaft durch eine ID auslesen.
+        :param key: Eigenschafts-ID
+        :return: Es wird der Eigenschaftsname zurückgegeben.
+        """
         with CharMapper() as mapper:
             return mapper.find_char_by_key(key)
 
     def get_all_char_names(self):
+        """
+        Mit dieser Methode werden alle Eigenschaftsnamen ausgelesen.
+        :return: Es werden alle Eigenschaftsnamen ausgegeben.
+        """
         with CharMapper() as mapper:
             return mapper.find_all()
 
 
     def create_char(self, named_char_name):
+        """
+        Mit dieser Methode wird ein NamedInfoObjekt erstellt.
+        :param named_char_name: der Value des NamedInfoObjekts.
+        """
         c = NamedInfoObject()
         c.set_named_char(named_char_name)
         c.set_id(1)
@@ -350,8 +368,12 @@ class Administration(object):
             return mapper.find_all()
 
     def get_info_object_by_id(self, key):
+        """
+        Mit dieser Methode werden InfoObjekte basierend auf dem Key ausgelesen.
+        :param key: InfoObjekt-ID
+        :return: Das entsprechende InfoObjekt wird zurückgegeben.
+        """
         with InfoObjectMapper() as mapper:
-            print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
     def get_info_object_by_searchid(self, key):
@@ -369,7 +391,6 @@ class Administration(object):
         :param profile_fk: Die GoogleID eines Users.
         :param info_dict: Ein Dictionary, dass alle Informationen enthält.
         """
-        print("InfoDict: ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():
@@ -384,29 +405,61 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def create_named_info_object(self, profile_fk, infoobj, char_name):
+        """
+        Erstellt ein NamedInfoObjekt basierend auf den angegebenen Attributen.
+        :param profile_fk: Die GoogleID eines Users.
+        :param infoobj: individuell erstelltes InfoObjekt eines Users.
+        :param char_name: individuell erstellte Eigenschaft eines Users.
+        """
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
-                print("Create Named Info Object: ", profile_fk, infoobj, char_name)
                 info_obj = NamedInfoObject()
                 info_obj.set_id(1)
                 info_obj.set_named_char_id(char_mapper.find_key_by_char_name(char_name))
                 info_obj.set_named_info(infoobj)
                 info_obj.set_named_profile_fk(profile_fk)
-                print("Vor Insert Admin: ", info_obj)
                 mapper.insert_named_info(info_obj)
 
-        print("Named Info Object aus Admin: ", info_obj)
         return info_obj
 
     def delete_info_object_by_char_value(self, char_value):
+        """
+        Löscht InfoObjekte basierend auf dem Char_Value.
+        :param char_value: der Value eines InfoObjekts.
+        """
         with InfoObjectMapper() as mapper:
             return mapper.delete_by_char_value(char_value)
 
     def get_all_info_objects_by_char_id(self, char_id):
+        """
+        Durch diesen Aufruf werden alle InfoObjekte ausgelesen,
+        die diese individuelle Eigenschafts-ID haben.
+        :param char_id: individuelle Eigenschafts-ID
+        :return: Es wird eine Liste zurückgegeben, die diese InfoObjekte enthält.
+        Darüber hinaus werden nur einzigartige InfoObjekte zurückgegeben, d.h., jeder char_value,
+        der mehrfach vorkommt, wird nicht zur Liste hinzugefügt.
+        """
         with InfoObjectMapper() as mapper:
-            return mapper.find_all_info_objects_by_char_id(char_id)
+            info_objects = mapper.find_all_info_objects_by_char_id(char_id)
+
+        to_send_info_objects = {}
+
+        for info_obj in info_objects:
+            char_value = info_obj.get_value()
+            if char_value not in to_send_info_objects:
+                to_send_info_objects[char_value] = info_obj
+
+        return list(to_send_info_objects.values())
 
     def update_named_info_object(self, profile_fk, char_id, char_name, infoobj):
+        """
+        In dieser Methode werden bereits vorhandene NamedInfoObjekte aktualisiert.
+        :param profile_fk: Google-ID eines Users
+        :param char_id: individuelle Eigenschafts-ID
+        :param char_name: Eigenschaftsname
+        :param infoobj: der Value des Users
+        :return: Das aktualisierte InfoObjekt wird zurückgegeben.
+        """
         with InfoObjectMapper() as InfoMapper:
             with CharMapper() as mapper:
                 namedinfo = NamedInfoObject()
@@ -453,6 +506,12 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
+        """
+        Mit dieser Funktion werden InfoObjekte basierend auf einer individuellen InfoObjekt-ID
+        und der passenden Profil-ID ausgelesen.
+        :param infoobject_id: individuelle InfoObjekt-ID
+        :param profile_id: Google-ID eines Users
+        """
         with InfoObjectMapper() as mapper:
             return mapper.find_by_id(infoobject_id, profile_id)
 
