@@ -137,10 +137,11 @@ class ChatWindow extends Component {
                                 width: "10%",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                backgroundColor: "#6A7285" ,
+                                backgroundColor: "#374258" ,
                                 color: "#fff",
                                 cursor: "pointer",
                                 padding: "1%",
+                                borderRadius: '15px'
                             }}
                     >
                         <ReplayIcon></ReplayIcon>
@@ -153,7 +154,7 @@ class ChatWindow extends Component {
                                // Bei einer Änderung des Eingabetextes wird die setInput Funktion aufgerufen, um
                                // den Inhalt zu aktualisieren.
                                className="chatWindow_inputField"
-                               placeholder="Schreib eine Nachricht..."
+                               placeholder="Schreibe eine Nachricht ..."
                                type="text"
                         />
                         {/* Wenn User auf den Button klickt, wird diese handleSend ausgelöst. */ }
@@ -164,10 +165,12 @@ class ChatWindow extends Component {
                                 width: "10%",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                backgroundColor: "#6A7285" ,
+                                backgroundColor: "#374258" ,
                                 color: "#fff",
                                 cursor: "pointer",
                                 padding: "1%",
+                                marginRight: "15px",
+                                borderRadius: "15px"
                             }}
                             type="submit"
                     >
