@@ -564,8 +564,16 @@ class CreateProfil extends Component {
 
     handleChangeSelectedProperty = (event) => {
         const selectedProperty = event.target.value;
-        this.setState({  });
+        this.getInfoObjectsByCharID(selectedProperty);
     };
+
+    getInfoObjectsByCharID(char_id) {
+        return DatingSiteAPI.getAPI()
+            .getInfoObjectsCharID(char_id)
+            .then((responseCharName) => {
+                return responseCharName;
+            })
+    }
 
     handleUpdate(event) {
         event.preventDefault();
@@ -1234,8 +1242,14 @@ class CreateProfil extends Component {
                                                             >
                                                                 {selectedCharNames &&
                                                                     selectedCharNames.map((char, index) => (
-                                                                        <MenuItem key={char.char_id} value={char.char_id}>
-                                                                            {char.char_name}
+                                                                        <MenuItem
+                                                                            key={char.char_id}
+                                                                            value={char.char_id}
+                                                                        >
+                                                                            {/** Patrick Aufgabe: Viel Spass :) */}
+                                                                            <div onClick={() => this.handleClickMenuItem(char.char_id)}>
+                                                                                {char.char_name}
+                                                                            </div>
                                                                         </MenuItem>
                                                                     ))}
                                                             </Select>
