@@ -25,8 +25,7 @@ class CharMapper(mapper):
         self._connection.commit()
         cursor.close()
 
-
-
+        print("CharMapper: ", result)
         return result
 
     def find_by_key(self, key):

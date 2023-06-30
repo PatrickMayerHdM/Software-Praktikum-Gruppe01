@@ -7,9 +7,6 @@ class Characteristics(bo):
         self._char_id = None
         self._char_name = ""
 
-    def get_id(self):
-        """Auslesen der ID."""
-        return self._id
 
     def set_char_id(self, value):
         """Setzen der Char_id."""
