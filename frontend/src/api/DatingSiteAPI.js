@@ -111,7 +111,8 @@ export default class DatingSiteAPI {
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
     #getAllCharNameURL = () => `${this.#datingServerBaseURL}/characteristics/all`;
-    #updateNamedCharByCharValueURL = (profile_id) => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
+    #updateNamedCharByCharValueURL = () => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
+    #getAllInfoObjectsByCharIDURL = (char_id) => `${this.#datingServerBaseURL}/infoobjects/all/${char_id}`
 
 
     /**
@@ -176,6 +177,14 @@ export default class DatingSiteAPI {
                 resolve(newinfoobjectBO);
             })
         })
+    }
+
+    getInfoObjectsCharID(char_id) {
+        return this.#fetchAdvanced(this.#getAllInfoObjectsByCharIDURL(char_id))
+            .then((responeJSON) => {
+                console.log("Alle InfoObjects aus dem API Call: ", responeJSON)
+                return responeJSON
+            })
     }
 
     updateInfoObject(infoobject) {
