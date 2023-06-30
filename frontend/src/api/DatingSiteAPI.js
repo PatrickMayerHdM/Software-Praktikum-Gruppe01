@@ -110,7 +110,7 @@ export default class DatingSiteAPI {
     #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
-
+    #getAllCharNameURL = () => `${this.#datingServerBaseURL}/characteristics/all`;
     #updateNamedCharByCharValueURL = (profile_id) => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
 
 
@@ -211,6 +211,15 @@ export default class DatingSiteAPI {
             })
         })
     }
+
+    getAllCharNames() {
+        return this.#fetchAdvanced(this.#getAllCharNameURL())
+            .then((responeJSON) => {
+                console.log("getallcharnames: ", responeJSON)
+                let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
+                return namedCHAR
+            })
+    };
 
 
     createCharDescForProfile(characteristic_desc_name) {

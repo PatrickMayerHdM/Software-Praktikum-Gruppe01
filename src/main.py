@@ -720,6 +720,21 @@ class NamedCharacteristicsOperations(Resource):
 
         return char_names, 200
 
+@datingapp.route('/characteristics/all')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class CharacteristicsOperations(Resource):
+    @datingapp.marshal_list_with(characteristic)
+    @secured
+    def get(self):
+        adm = Administration()
+        char_names = adm.get_all_char_names()
+
+        print("Main AllCharNames: ", char_names)
+        print("Main: ", type(char_names))
+        print(type(char_names[0]))
+        print(char_names[1].get_characteristic_name())
+        return char_names, 200
+
 """Ab hier Profilevisits"""
 
 @datingapp.route('/visit')
@@ -770,15 +785,15 @@ class MatchingNewProfilesOperations(Resource):
 
     @secured
     def get(self, google_fk, searchprofile_id):
-        #print('Main.Py übergebene Searchprofile_id:', searchprofile_id, "und die übergebene Google_id: ", google_fk)
+        print('Main.Py übergebene Searchprofile_id:', searchprofile_id, "und die übergebene Google_id: ", google_fk)
 
         adm = Administration()
         searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
-        #print('main.py Suchprofil:', searchprof)
+        print('main.py Suchprofil:', searchprof)
 
         profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
 
-        #print('Main.py profiles bevor es übergeben wird:', profiles)
+        print('Main.py profiles bevor es übergeben wird:', profiles)
 
         if profiles is not None:
             return profiles

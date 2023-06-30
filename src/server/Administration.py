@@ -290,6 +290,11 @@ class Administration(object):
         with CharMapper() as mapper:
             return mapper.find_char_by_key(key)
 
+    def get_all_char_names(self):
+        with CharMapper() as mapper:
+            return mapper.find_all()
+
+
     def create_char(self, named_char_name):
         c = NamedInfoObject()
         c.set_named_char(named_char_name)
