@@ -23,7 +23,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 /**
  * Damit dem User beim Suchen passende Personen angezeigt werden, kann dieser Suchprofile erstellen, diese in Verbindung
@@ -693,7 +693,7 @@ class SearchProfile extends React.Component{
                                      Freitextfeldern der anderen Person verglichen*/}
                                     <TextField
                                         type={"text"}
-                                        value={this.state.aboutme}
+                                        value={this.state.aboutme === null ? '': this.state.aboutme}
                                         onChange={this.handleChangeInterests}
                                         inputProps={{maxLength: 30,}}
                                     />
@@ -724,6 +724,75 @@ class SearchProfile extends React.Component{
                                     {this.rederSelectedContent()}
                                 </Box>
                             </FormGroup>
+                        </Item>
+                        <Item>
+                            {/** Das sind die Tag-Felder der bereits ausgewählten Eigenschaften eines Suchprofils. */}
+
+                           <div>
+                               {this.state.aboutme && (
+                               <span
+                                   className={"tag"}>{this.state.aboutme}
+                                   <button onClick={this.handleDeleteInterests} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.religion && (
+                               <span
+                                   className={"tag"}>{this.state.religion}
+                                   <button onClick={this.handleDeleteReligion} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.smoking && (
+                               <span
+                                   className={"tag"}>{this.state.smoking}
+                                   <button onClick={this.handleDeletesmoking} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.hair && (
+                               <span
+                                   className={"tag"}>{this.state.hair}
+                                   <button onClick={this.handleDeleteHair} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.height && (
+                               <span
+                                   className={"tag"}>{this.state.height}
+                                   <button onClick={this.handleDeleteHeight} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.income && (
+                               <span
+                                   className={"tag"}>{this.state.income}
+                                   <button onClick={this.handleDeleteSalary} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.favclub && (
+                               <span
+                                   className={"tag"}>{this.state.favclub}
+                                   <button onClick={this.handleDeleteClub} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.hobby && (
+                               <span
+                                   className={"tag"}>{this.state.hobby}
+                                   <button onClick={this.handleDeleteHobbys} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+
+                               {this.state.politicaltendency && (
+                               <span
+                                   className={"tag"}>{this.state.politicaltendency}
+                                   <button onClick={this.handleDeletePolitical} style={{ marginLeft: '5px' }}>x</button>
+                               </span>
+                                   )}
+                           </div>
+
                         </Item>
 
                         <Item>
