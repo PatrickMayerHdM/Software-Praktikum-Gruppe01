@@ -731,64 +731,82 @@ class SearchProfile extends React.Component{
                            <div>
                                {this.state.aboutme && (
                                <span
-                                   className={"tag"}>{this.state.aboutme}
-                                   <button onClick={this.handleDeleteInterests} style={{ marginLeft: '5px' }}>x</button>
+                                   className="tag">{this.state.aboutme}
+                                   <button onClick={this.handleDeleteInterests} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.religion && (
                                <span
                                    className={"tag"}>{this.state.religion}
-                                   <button onClick={this.handleDeleteReligion} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeleteReligion} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.smoking && (
                                <span
                                    className={"tag"}>{this.state.smoking}
-                                   <button onClick={this.handleDeletesmoking} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeletesmoking} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.hair && (
                                <span
                                    className={"tag"}>{this.state.hair}
-                                   <button onClick={this.handleDeleteHair} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeleteHair} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.height && (
                                <span
                                    className={"tag"}>{this.state.height}
-                                   <button onClick={this.handleDeleteHeight} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeleteHeight} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.income && (
                                <span
                                    className={"tag"}>{this.state.income}
-                                   <button onClick={this.handleDeleteSalary} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeleteSalary} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.favclub && (
                                <span
                                    className={"tag"}>{this.state.favclub}
-                                   <button onClick={this.handleDeleteClub} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeleteClub} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.hobby && (
                                <span
                                    className={"tag"}>{this.state.hobby}
-                                   <button onClick={this.handleDeleteHobbys} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeleteHobbys} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
 
                                {this.state.politicaltendency && (
                                <span
                                    className={"tag"}>{this.state.politicaltendency}
-                                   <button onClick={this.handleDeletePolitical} style={{ marginLeft: '5px' }}>x</button>
+                                   <button onClick={this.handleDeletePolitical} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                   </button>
                                </span>
                                    )}
                            </div>
