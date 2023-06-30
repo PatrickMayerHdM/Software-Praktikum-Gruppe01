@@ -28,7 +28,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 /**
  * Damit dem User beim Suchen passende Personen angezeigt werden, kann dieser Suchprofile erstellen, diese in Verbindung
  * mit den Profilen der anderen User legen dann auch das Ähnlichkeitsmaß fest.
- * In dieser Klasse soll ein User dann ein Suchprofil anlegen können.
+ * Auf dieser Seite hat der User dann die Optionen, dass dieser die Suchprofile erstellen bzw. bearbeiten kann.
  * */
 
 class SearchProfile extends React.Component{
@@ -85,7 +85,7 @@ class SearchProfile extends React.Component{
     }
 
     /**
-     * Funktionen für Veränderungen an den Werten
+     * Funktionen für Veränderungen an den Werten, welche ein Nutzer Auswählen kann.
      */
 
     /** Event-Handler für die Änderung des Geschlechts der gesuchten Person */
@@ -191,9 +191,14 @@ class SearchProfile extends React.Component{
         this.setState({ aboutme: null });
     };
 
+    /**
+     * Diese Funktion wird ausgeführt, wenn ein User auf dem submit/ speichern Button von dem User gedrückt wird.
+     * Hier wird einmal unterschieden, zwischen dem Fall bei dem ein User ein bestehendes Profil updaten will und dem
+     * Fall, dass ein User ein neues Profil erstellt.
+     */
 
     submit = (event) => {
-        // Ermitteln, ob es sich um ein erstmaliges Anlegen eines Suchprifils handelt.
+        // Ermitteln, ob es sich um ein erstmaliges Anlegen eines Suchprofils handelt.
          if (this.state.lastPartURL === "new") {
              // Erstmaliges Anlegen eines Suchprofils
              event.preventDefault();
@@ -235,10 +240,8 @@ class SearchProfile extends React.Component{
                      })
                  );
 
-             console.log(newInfoObject)
-             console.log("FrontEnd Payload", newSearchprofile)
          } else {
-             // Der Code zum Ändern eines Suchprofils
+             // Der Code zum Update eines Suchprofils
              event.preventDefault();
              const newSearchInfoObject = new infoobjectBO(
                  this.props.user.uid,
@@ -271,8 +274,13 @@ class SearchProfile extends React.Component{
                      })
                  );
          }
-     };
+    };
 
+    /**
+     * Diese Funktion wird bei dem Laden einer der SearchProfile.js ausgeführt.
+     * Hier wird einerseits der letzte Teil der URL erfasst, welcher bestimmt, ob es sich entweder um das Anlegen eines
+     * SuchProfils handelt oder um das Ändern bzw. Updaten eines SuchProfils.
+     */
 
     componentDidMount() {
         const currentPath = window.location.pathname;
@@ -345,9 +353,23 @@ class SearchProfile extends React.Component{
                 });
         }};
 
+
+    /**
+     * Ein User hat die Möglichkeit aus einer Auswahl von angebbaren Eigenschaften eine auszuwählen, um hierfür dann
+     * eine Information anzugeben.
+     * Wenn ein User nun eine Möglichkeit auswählt, wird die ausgewählte Möglichkeit, in handleChangeSelectedOption als
+     * State von selectedOption gesetzt.
+     */
+
     handleChangeSelectedOption = event => {
-      this.setState({ selectedOption: event.target.value });
+        this.setState({ selectedOption: event.target.value });
     };
+
+    /**
+     * Ein User kann bei Eigenschaften entscheiden, ob er einen der schon vorgefertigten Werte eintragen will,
+     * oder einen Freitext dazu schreiben will.
+     * Hier wird der State von SelectCreate festgelegt, welche der Optionen ein User gerade ausgewählt hat.
+     */
 
     handleInfoSelectCreate = (event, newSelectedValue) => {
         this.setState({ SelectCreate: newSelectedValue });
@@ -356,9 +378,11 @@ class SearchProfile extends React.Component{
     /**
      * Diese Funktion besitzt die Darstellungen zu den ausgewählten Optionen eines Users in dem drop-down menu.
      */
+
     rederSelectedContent() {
         const { selectedOption } = this.state;
 
+        // Wenn die Ausgewählte Option (selectedOption) hier zum Beispiel Religion ist, wird dies dann dem User dargestellt.
         if (selectedOption === "selectReligion") {
             return (
             <FormGroup row style={{ justifyContent: 'center' }}>
@@ -395,37 +419,37 @@ class SearchProfile extends React.Component{
         );
         } else if (selectedOption === 'selectRaucherstatuts') {
             return (
-              <FormGroup row style={{ justifyContent: 'center' }}>
-                  <Box sx={{ width: 400, margin: '0 auto' }}>
-                      <FormLabel>Sollte die Person rauchen?</FormLabel>
-                      <div style={{ marginBottom: '1rem' }}>
-                          {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
-                          <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
-                              <ToggleButton value="select">
-                                  <RadioButtonUncheckedIcon/>
-                              </ToggleButton>
-                              <ToggleButton value="create">
-                                  <EditNoteIcon/>
-                              </ToggleButton>
-                              <ToggleButton value="delete" onClick={this.handleDeletesmoking}>
-                                  <DeleteOutlineIcon/>
-                              </ToggleButton>
-                          </ToggleButtonGroup>
-                      </div>
-                      {this.state.SelectCreate === 'create' ? (
-                          <TextField label="Eigenes Label hinzufügen" name="smoking" value={this.state.smoking} onChange={this.handleChangeSmo} style={{ justifyContent: 'center' }}/>
-                      ) : (this.state.SelectCreate === 'delete' ? (
-                          <div>...</div>
-                      ) : (
-                          <RadioGroup row style={{justifyContent: 'center'}} value={this.state.smoking} onChange={this.handleChangeSmo} className={"checkbox_search"}>
-                              <FormControlLabel sx={{ width: '20%' }} value="Raucher" control={<Radio />} label="Ja" labelPlacement="bottom" />
-                              <FormControlLabel sx={{ width: '20%' }} value="Nicht-Raucher" control={<Radio />} label="Nein" labelPlacement="bottom" />
-                              <FormControlLabel sx={{ width: '20%' }} value="egal" control={<Radio />} label="nicht relevant" labelPlacement="bottom" />
-                          </RadioGroup>
-                      ))}
-                  </Box>
-              </FormGroup>
-          );
+                <FormGroup row style={{ justifyContent: 'center' }}>
+                    <Box sx={{ width: 400, margin: '0 auto' }}>
+                        <FormLabel>Sollte die Person rauchen?</FormLabel>
+                        <div style={{ marginBottom: '1rem' }}>
+                            {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
+                            <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
+                                <ToggleButton value="select">
+                                    <RadioButtonUncheckedIcon/>
+                                </ToggleButton>
+                                <ToggleButton value="create">
+                                    <EditNoteIcon/>
+                                </ToggleButton>
+                                <ToggleButton value="delete" onClick={this.handleDeletesmoking}>
+                                    <DeleteOutlineIcon/>
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                        </div>
+                        {this.state.SelectCreate === 'create' ? (
+                            <TextField label="Eigenes Label hinzufügen" name="smoking" value={this.state.smoking} onChange={this.handleChangeSmo} style={{ justifyContent: 'center' }}/>
+                        ) : (this.state.SelectCreate === 'delete' ? (
+                            <div>...</div>
+                        ) : (
+                            <RadioGroup row style={{justifyContent: 'center'}} value={this.state.smoking} onChange={this.handleChangeSmo} className={"checkbox_search"}>
+                                <FormControlLabel sx={{ width: '20%' }} value="Raucher" control={<Radio />} label="Ja" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '20%' }} value="Nicht-Raucher" control={<Radio />} label="Nein" labelPlacement="bottom" />
+                                <FormControlLabel sx={{ width: '20%' }} value="egal" control={<Radio />} label="nicht relevant" labelPlacement="bottom" />
+                            </RadioGroup>
+                        ))}
+                    </Box>
+                </FormGroup>
+            );
         } else if (selectedOption === 'selectHaarfarbe'){
             return(
                 <FormGroup row style={{ justifyContent: 'center' }}>
@@ -681,7 +705,7 @@ class SearchProfile extends React.Component{
                             <FormGroup row style={{justifyContent: 'center'}}>
                                 <Box sx={{width: 450, margin: '0 auto'}}>
                                     <FormControl fullWidth>
-                                        <InputLabel>Auswahleigenschaften</InputLabel>
+                                        <InputLabel>Weitere mögliche Eigenschaften:</InputLabel>
                                         <Select
                                             value={defaultValue}
                                             label="Auswahleigenschaften"
