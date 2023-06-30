@@ -114,6 +114,26 @@ class BlockNoteMapper(mapper):
 
         return result
 
+    def find_blocked_ids_for_chat(self, sender_profile, recipient_profile):
+        """Ausgabe der Profile, die den Nutzer blockiert haben."""
+        result = []
+        cursor = self._connection.cursor()
+        command = f"SELECT blocknote_id, blocking_id, blocked_id FROM main.Blocknote WHERE (blocking_id='{sender_profile}' AND blocked_id='{recipient_profile}') OR (blocking_id='{recipient_profile}' AND blocked_id='{sender_profile}')"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (blocknote_id, blocking_id, blocked_id) in tuples:
+            blockliste = BlockNote()
+            blockliste.set_id(blocknote_id)
+            blockliste.set_blocking_id(blocking_id)
+            blockliste.set_blocked_id(blocked_id)
+            result.append(blockliste)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, blocknote):
         """ Hinzufügen einer Sperrung. """
         cursor = self._connection.cursor()

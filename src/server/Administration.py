@@ -108,9 +108,26 @@ class Administration(object):
 
     def get_message_by_chat(self, sender_profile, recipient_profile):
         """ messages zwischen zwei Personen auslesen """
+
+        messages = [] # Ausgabe der Nachrichten
+        blocked_chat_profiles = [] # Liste der Profile, die nicht angezeigt werden sollen
+
         with MessageMapper() as mapper:
-            print(mapper.find_by_chat(sender_profile, recipient_profile))
-            return mapper.find_by_chat(sender_profile, recipient_profile)
+            chat_messages = mapper.find_by_chat(sender_profile, recipient_profile)
+
+        with BlockNoteMapper() as blockmapper:
+            blocked_chat_profs = blockmapper.find_blocked_ids_for_chat(sender_profile, recipient_profile)
+
+        for obj in blocked_chat_profs:
+            blocked_chat_profiles.append(obj.get_blocked_id())
+
+        for msg in chat_messages:
+            a_msg = msg.get_sender()
+
+            if a_msg not in blocked_chat_profiles:
+                messages.append(msg)
+
+        return messages
 
 
     """ Spezifische Methoden für blockNote """
@@ -199,7 +216,6 @@ class Administration(object):
 
         with FavoriteNoteMapper() as mapper:
             fav_profiles = mapper.find_by_adding_user(adding_user)
-            print("FAV_PROFILES: ", fav_profiles)
 
         with BlockNoteMapper() as blockmapper:
             self_blocked_user = blockmapper.find_blocked_ids_by_blocking_id(adding_user)
@@ -208,11 +224,9 @@ class Administration(object):
 
         for obj in self_blocked_user:
             self_blocked_list.append(obj.get_blocked_id()) # Google-Id der geblockten Profile durch den Nutzer
-            print("SELF BLOCKED: ", self_blocked_list)
 
         for obj2 in other_blocked_user:
             other_blocked_list.append(obj2.get_blocking_id()) # Google-Id von denjenigen, die den Nutzer geblockt haben
-            print("OTHER BLOCKED: ", other_blocked_list)
 
         for fav_profile in fav_profiles:
             added_user = fav_profile.get_added_id()
@@ -220,7 +234,6 @@ class Administration(object):
             if (added_user not in self_blocked_list) and (added_user not in other_blocked_list):
                 profiles.append(added_user)
 
-        print("ERGEBNIS: ", profiles)
         return profiles
 
 
