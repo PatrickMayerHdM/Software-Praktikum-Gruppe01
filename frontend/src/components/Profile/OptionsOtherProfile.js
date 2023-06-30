@@ -23,14 +23,12 @@ class OptionsOtherProfile extends React.Component{
             blocked_id: this.props.other_profile, // die User-Id (Google-Id) des anderen Users
             lastPartURL: null, // die an der URL auszulesende Id
         }
-
         this.PersonSaved = this.PersonSaved.bind(this);
         this.PersonBlocked = this.PersonBlocked.bind(this);
     }
 
     componentDidMount() {
         const currentPath = window.location.pathname;
-        // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
         const lastPartURL = currentPath.split('/').pop();
         this.setState({lastPartURL: lastPartURL})
         this.setState({added_id: lastPartURL})

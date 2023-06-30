@@ -11,8 +11,9 @@ export default class NamedInfoObjectBO extends BusinessObject {
      * @param {*} achar_desc
      * @param {*} achar_name
      * @param {*} achar_id
+     * @param {*} achar_typ
      */
-    constructor(aid, aprofile_fk, asearchprofile_id, achar_desc, achar_name, achar_id) {
+    constructor(aid, aprofile_fk, asearchprofile_id, achar_desc, achar_name, achar_id, achar_typ) {
         super();
         this.id = aid;
         this.profile_fk = aprofile_fk;
@@ -20,6 +21,7 @@ export default class NamedInfoObjectBO extends BusinessObject {
         this.char_id = achar_id;
         this.char_name = achar_name;
         this.char_desc = achar_desc;
+        this.char_typ = achar_typ;
     }
 
     get_named_info_id() {
@@ -33,7 +35,6 @@ export default class NamedInfoObjectBO extends BusinessObject {
     set_named_info_id(aid) {
         this.char_id = aid
     }
-
     set_named_info_desc(achar_desc) {
         this.char_desc = achar_desc
     }
@@ -65,6 +66,13 @@ export default class NamedInfoObjectBO extends BusinessObject {
     }
     get_char_id() {
         return this.char_id;
+    }
+
+    set_char_typ(achar_typ) {
+        this.char_typ = achar_typ;
+    }
+    get_char_typ() {
+        return this.char_typ;
     }
 
     static fromJSON(namedinfoobject) {

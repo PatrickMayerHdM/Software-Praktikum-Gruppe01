@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import "../components/Chat/Chat.css";
 import DatingSiteAPI from "../api/DatingSiteAPI";
 import messageBO from "../api/MessageBO";
+import ReplayIcon from '@mui/icons-material/Replay';
+import SendIcon from '@mui/icons-material/Send';
 
 /**
  * Diese Seite dient der Darstellung eines Chat-Verlaufes.
@@ -85,7 +87,7 @@ class ChatWindow extends Component {
     // Erstellen eines neuen Nachrichtenobjektes
     const newMessage = new messageBO(sender_id, recipient_id, input);
     DatingSiteAPI.getAPI()
-        // Hinzufügen der neuen Nachicht
+        // Hinzufügen der neuen Nachricht
         .addMessage(newMessage)
         // Leeren des input-Feldes und Darstellung des neuen Chat-Verlaufs
         .then(() => {
@@ -101,7 +103,6 @@ class ChatWindow extends Component {
             })
         );
     }
-
 
     render() {
         // Speichern der aktuellen Zustände in den Variablen
@@ -129,19 +130,51 @@ class ChatWindow extends Component {
                 ))}
                 </div>
 
-                <form className="chatWindow_input">
-                    <input value={input}
-                           onChange={e => this.setInput(e.target.value)}
-                           // Bei einer Änderung des Eingabetextes wird die setInput Funktion aufgerufen, um
-                           // den Inhalt zu aktualisieren.
-                           className="chatWindow_inputField"
-                           placeholder="Schreib eine Nachricht..."
-                           type="text"/>
+                <div className="chatWindow_input">
+                    <button onClick={() => this.getAllMessages()}
+                            style={{
+                                height: "60px",
+                                width: "10%",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#35d7a7" ,
+                                color: "#fff",
+                                cursor: "pointer",
+                                padding: "1%",
+                            }}
+                    >
+                        <ReplayIcon></ReplayIcon>
+                    </button>
+                    <form style={{
+                        width: "80%",
+                    }}>
+                        <input value={input}
+                               onChange={e => this.setInput(e.target.value)}
+                               // Bei einer Änderung des Eingabetextes wird die setInput Funktion aufgerufen, um
+                               // den Inhalt zu aktualisieren.
+                               className="chatWindow_inputField"
+                               placeholder="Schreib eine Nachricht..."
+                               type="text"
+                        />
+                        {/* Wenn User auf den Button klickt, wird diese handleSend ausgelöst. */ }
+                    </form>
                     <button onClick={this.handleSend}
-                            /* Wenn User auf den Button klickt, wird diese handleSend ausgelöst. */
+                            style={{
+                                height: "60px",
+                                width: "10%",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#35d7a7" ,
+                                color: "#fff",
+                                cursor: "pointer",
+                                padding: "1%",
+                            }}
                             type="submit"
-                            className="chatWindow_inputButton">Senden</button>
-                </form>
+                    >
+                        <SendIcon></SendIcon>
+                    </button>
+                </div>
+
             </div>
         )
     }

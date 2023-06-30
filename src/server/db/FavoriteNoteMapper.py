@@ -32,7 +32,7 @@ class FavoriteNoteMapper(mapper):
         """ Auslesen aller Merkungen eines Nutzers anhand seiner Id. """
         result = []
         cursor = self._connection.cursor()
-        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}' AND added_id NOT IN (SELECT blocked_id FROM main.Blocknote WHERE blocking_id='{adding_id}') AND added_id NOT IN (SELECT blocking_id FROM main.Blocknote WHERE blocked_id='{adding_id}')"
+        command = f"SELECT favoritenote_id, adding_id, added_id FROM main.Favoritenote WHERE adding_id='{adding_id}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 

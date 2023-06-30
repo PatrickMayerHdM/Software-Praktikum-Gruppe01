@@ -7,7 +7,6 @@ import favoriteNoteBO from "./FavoriteNoteBO";
 import blockNoteBO from "./BlockNoteBO";
 import searchprofileBO from "./SearchprofileBO";
 import FavoriteNoteBO from '../api/FavoriteNoteBO';
-import matchmakingBO from "./MatchmakingBO";
 import NamedInfoObjectBO from "./NamedInfoObjectBO";
 import CharacteristicBO from "./CharacteristicBO";
 import profilevisitsBO from "./ProfilevisitsBO";
@@ -30,7 +29,6 @@ export default class DatingSiteAPI {
     #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/ChatWindow/${profileID}/${otherprofileID}`;
     #addMessageURL = () => `${this.#datingServerBaseURL}/ChatWindow`;
     #getChatsURL = (id) => `${this.#datingServerBaseURL}/ChatProfileBoxList/${id}`;
-    //#getMessageByIdURL = (id) => `${this.#datingServerBaseURL}/Message/${id}`;
 
     // Singelton API
     static getAPI() {
@@ -86,15 +84,12 @@ export default class DatingSiteAPI {
     }
 
     /**
-     *
-     * @param id
-     * @returns {Promise<unknown>}
+     * Verantwortlich, um die Profile zu bekommen, mit welchen ein User einen Chat hat.
      */
+
     getChats(id) {
         return this.#fetchAdvanced(this.#getChatsURL(id))
             .then((responseJSON) => {
-                console.log("Das responseJSON:")
-                console.log(responseJSON)
                 return new Promise(function (resolve) {
                     resolve(responseJSON);
                 })
@@ -102,14 +97,6 @@ export default class DatingSiteAPI {
             })
     }
 
-    /*getMessageByID(messageID) {
-        return this.#fetchAdvanced(this.#getMessageByIdURL(messageID)).then((responseJSON) => {
-            let responseMessageBO = MessageBO.fromJSON(responseJSON)[0];
-            return new Promise(function (resolve) {
-                resolve(responseMessageBO);
-            })
-        })
-    }*/
 
 
     // Profile related
@@ -123,7 +110,7 @@ export default class DatingSiteAPI {
     #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
-
+    #getAllCharNameURL = () => `${this.#datingServerBaseURL}/characteristics/all`;
     #updateNamedCharByCharValueURL = (profile_id) => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
 
 
@@ -225,8 +212,18 @@ export default class DatingSiteAPI {
         })
     }
 
+    getAllCharNames() {
+        return this.#fetchAdvanced(this.#getAllCharNameURL())
+            .then((responeJSON) => {
+                console.log("getallcharnames: ", responeJSON)
+                let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
+                return namedCHAR
+            })
+    };
+
 
     createCharDescForProfile(characteristic_desc_name) {
+        console.log("API: ", characteristic_desc_name)
         return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {
             method: "POST",
             headers: {
@@ -297,55 +294,18 @@ export default class DatingSiteAPI {
      * Bereich für die Suche
      */
 
-    #getNewProfilesByIdURL = (google_id, SearchProfileID) => `${this.#datingServerBaseURL}/Search/Matchmaking/Newprofiles/${google_id}/${SearchProfileID}`;
     #getSearchProfilesByIdURL = (profile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${profile_id}`;
     #removeSearchProfile = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #addSearchProfileURL = () => `${this.#datingServerBaseURL}/SearchProfiles`;
     #addSearchInfoObject = () => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects`;
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
-    #getAllProfilesURL = () => `${this.#datingServerBaseURL}/profiles`;
     #updateSearchProfileURL = (searchprofile_id) => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects/${searchprofile_id}`;
     #getSearchResultsURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/Matchmaking/${searchprofile_id}`;
 
 
-
-
     /**
-     * Gibt ein Promise zurück, welches dann ein Array mit ProfilIDs enthält
-     * @param {Number} profileID übergibt die profileID welche ein Profil nicht nicht besucht haben soll
-    */
-
-    getOnlyNewProfiles(profileID, SearchProfileID){
-        return this.#fetchAdvanced(this.#getNewProfilesByIdURL(profileID, SearchProfileID))
-            .then((responseJSON) => {
-                console.log("Das ist das profile_id im API call: ",profileID )
-                console.log("Das responseJSON")
-                console.log(responseJSON)
-                return new Promise(function (resolve) {
-                    resolve(responseJSON);
-                })
-
-            })
-
-    }
-
-    /**
-     * GET um alle möglichen Profile zu bekommen
-     * @returns {Promise<unknown>}
+     * Verantwortlich, um die Suchprofile eines Users anhand der ID zu bekommen.
      */
-
-    getAllProfiles() {
-        return this.#fetchAdvanced(this.#getAllProfilesURL())
-            .then((responseJSON) => {
-                console.log("Das responseJSON:");
-                console.log(responseJSON);
-                return responseJSON;
-            });
-    }
-
-    /**
-     * Gibt ein Promise zurück, welches dann ein Array mit den verschiedenen ProfilIDs für Suchprofile profile_id übergibt die accountID für welche die Profile nicht
-    */
 
     getSearchProfileIDs(profile_id){
         return this.#fetchAdvanced(this.#getSearchProfilesByIdURL(profile_id))
@@ -375,8 +335,11 @@ export default class DatingSiteAPI {
             })
     }
 
+    /**
+     * Verantwortlich, um die InfoObjekte eines erstellten Suchprofils an das Backend zu übergeben.
+     */
+
     addSearchInfoObject(infoobject) {
-        console.log("InfoObject: ", infoobject)
         return this.#fetchAdvanced(this.#addSearchInfoObject(), {
             method: "POST",
             headers: {
@@ -393,8 +356,7 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * @param {searchprofileBO} searchprofileBO object
-     * @public
+     * Verantwortlich, um ein erstelltes Suchprofil an das Backend zu übergeben.
      */
 
     addSearchProfile(searchprofile){
@@ -426,16 +388,11 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * Hier werden mehrere matchmaking BOs erwartet, jedes dieser BO soll mindestens, eine Profil_ID und ein
-     * Ähnlichkeitsmaß enthalten.
-     *
-     * @param searchprofile_id
-     * @returns {Promise<any>}
+     * Verantwortlich, um die Suchergebnisse basierend auf einem Suchprofil zu erhalten.
      */
     getSearchResults(searchprofile_id){
         return this.#fetchAdvanced(this.#getSearchResultsURL(searchprofile_id))
             .then((responseJSON) => {
-                console.log("Das responseJSON: ", responseJSON);
                 return new Promise(function (resolve){
                     resolve(responseJSON)
                 })
@@ -542,6 +499,11 @@ export default class DatingSiteAPI {
             })
         })
     }
+
+    /**
+     * Verantwortlich, um an das Backend weiterzuleiten, dass ein User von der Blockierliste eines anderen Users
+     * entfernt werden soll.
+     */
 
     removeBlocknoteProfile(profile_id, other_profile_id) {
         return this.#fetchAdvanced(this.#removeBlockProfileURL(profile_id, other_profile_id), {

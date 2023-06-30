@@ -108,9 +108,26 @@ class Administration(object):
 
     def get_message_by_chat(self, sender_profile, recipient_profile):
         """ messages zwischen zwei Personen auslesen """
+
+        messages = [] # Ausgabe der Nachrichten
+        blocked_chat_profiles = [] # Liste der Profile, die nicht angezeigt werden sollen
+
         with MessageMapper() as mapper:
-            print(mapper.find_by_chat(sender_profile, recipient_profile))
-            return mapper.find_by_chat(sender_profile, recipient_profile)
+            chat_messages = mapper.find_by_chat(sender_profile, recipient_profile)
+
+        with BlockNoteMapper() as blockmapper:
+            blocked_chat_profs = blockmapper.find_blocked_ids_for_chat(sender_profile, recipient_profile)
+
+        for obj in blocked_chat_profs:
+            blocked_chat_profiles.append(obj.get_blocked_id())
+
+        for msg in chat_messages:
+            a_msg = msg.get_sender()
+
+            if a_msg not in blocked_chat_profiles:
+                messages.append(msg)
+
+        return messages
 
 
     """ Spezifische Methoden für blockNote """
@@ -193,12 +210,28 @@ class Administration(object):
     def get_favoritenote_by_adding_user(self, adding_user):
         """ Auslesen aller Instanzen von FavoriteNote eines Users. """
 
-        profiles = []
+        profiles = [] # Ausgabe der Funktion
+        self_blocked_list = [] # Liste aller Profile, die der Nutzer blockiert hat
+        other_blocked_list = [] # Liste aller Profile, die den Nutzer blockiert haben
+
         with FavoriteNoteMapper() as mapper:
             fav_profiles = mapper.find_by_adding_user(adding_user)
 
-            for fav_profile in fav_profiles:
-                added_user = fav_profile.get_added_id()
+        with BlockNoteMapper() as blockmapper:
+            self_blocked_user = blockmapper.find_blocked_ids_by_blocking_id(adding_user)
+
+            other_blocked_user = blockmapper.find_blocked_ids_by_blocked_id(adding_user)
+
+        for obj in self_blocked_user:
+            self_blocked_list.append(obj.get_blocked_id()) # Google-Id der geblockten Profile durch den Nutzer
+
+        for obj2 in other_blocked_user:
+            other_blocked_list.append(obj2.get_blocking_id()) # Google-Id von denjenigen, die den Nutzer geblockt haben
+
+        for fav_profile in fav_profiles:
+            added_user = fav_profile.get_added_id()
+
+            if (added_user not in self_blocked_list) and (added_user not in other_blocked_list):
                 profiles.append(added_user)
 
         return profiles
@@ -289,6 +322,11 @@ class Administration(object):
     def get_char_by_key(self, key):
         with CharMapper() as mapper:
             return mapper.find_char_by_key(key)
+
+    def get_all_char_names(self):
+        with CharMapper() as mapper:
+            return mapper.find_all()
+
 
     def create_char(self, named_char_name):
         c = NamedInfoObject()
