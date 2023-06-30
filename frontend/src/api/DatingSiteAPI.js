@@ -110,8 +110,9 @@ export default class DatingSiteAPI {
     #createCharDescForProfileURL = () => `${this.#datingServerBaseURL}/namedinfoobjects`;
     #getProfileByIdURL = (profile_id) => `${this.#datingServerBaseURL}/profiles/${profile_id}`;
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
-
-    #updateNamedCharByCharValueURL = (profile_id) => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
+    #getAllCharNameURL = () => `${this.#datingServerBaseURL}/characteristics/all`;
+    #updateNamedCharByCharValueURL = () => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
+    #getAllInfoObjectsByCharIDURL = (char_id) => `${this.#datingServerBaseURL}/infoobjects/all/${char_id}`
 
 
     /**
@@ -178,6 +179,14 @@ export default class DatingSiteAPI {
         })
     }
 
+    getInfoObjectsCharID(char_id) {
+        return this.#fetchAdvanced(this.#getAllInfoObjectsByCharIDURL(char_id))
+            .then((responeJSON) => {
+                console.log("Alle InfoObjects aus dem API Call: ", responeJSON)
+                return responeJSON
+            })
+    }
+
     updateInfoObject(infoobject) {
         console.log("InfoObject: ", infoobject)
         return this.#fetchAdvanced(this.#updateProfileURL(infoobject.get_profile_fk()), {
@@ -211,6 +220,15 @@ export default class DatingSiteAPI {
             })
         })
     }
+
+    getAllCharNames() {
+        return this.#fetchAdvanced(this.#getAllCharNameURL())
+            .then((responeJSON) => {
+                console.log("getallcharnames: ", responeJSON)
+                let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
+                return namedCHAR
+            })
+    };
 
 
     createCharDescForProfile(characteristic_desc_name) {

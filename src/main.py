@@ -437,12 +437,7 @@ class InfoObjectsOperations(Resource):
         Das InfoObjekt besitzt nun das Alter (z.B. 33) und nicht mehr das Geburtsdatum (TT/MM/YYYY...) 
         """
         adjusted_infoobjs = adm.calculate_age(info_objs)
-        #print('adjusted_infoobjs:', adjusted_infoobjs)
-        #print('adjusted_infoobjs:', adjusted_infoobjs.get_value())
         info_objs.append(adjusted_infoobjs)
-        #print('get-method Infoobjects:', info_objs)
-        #print(type(info_objs))
-        #print('adjusted_infoobs:', adjusted_infoobjs)
 
         return info_objs
 
@@ -476,6 +471,18 @@ class NamedInfoObjectsOperations(Resource):
         adm = Administration()
         adm.delete_info_object_by_char_value(char_value)
         return '', 200
+@datingapp.route('/infoobjects/all/<int:char_id>')
+@datingapp.response(500, 'Serverseitiger-Fehler')
+@datingapp.param('char_id', 'CharID die alle InfoObjekte ausliest')
+class InfObjectsOperationList(Resource):
+    @datingapp.marshal_list_with(infoobject)
+    @secured
+    def get(self, char_id):
+        adm = Administration()
+        respone = adm.get_all_info_objects_by_char_id(char_id)
+        print(respone)
+        return respone, 200
+
 
 
 """Ab hier FavoriteNote"""
@@ -720,6 +727,17 @@ class NamedCharacteristicsOperations(Resource):
 
         return char_names, 200
 
+@datingapp.route('/characteristics/all')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class CharacteristicsOperations(Resource):
+    @datingapp.marshal_list_with(characteristic)
+    @secured
+    def get(self):
+        adm = Administration()
+        char_names = adm.get_all_char_names()
+
+        return char_names, 200
+
 """Ab hier Profilevisits"""
 
 @datingapp.route('/visit')
@@ -787,4 +805,4 @@ class MatchingNewProfilesOperations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8001)
+    app.run(debug=True, port=8000)
