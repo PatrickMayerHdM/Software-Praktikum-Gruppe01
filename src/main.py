@@ -480,7 +480,7 @@ class InfObjectsOperationList(Resource):
     def get(self, char_id):
         adm = Administration()
         respone = adm.get_all_info_objects_by_char_id(char_id)
-        print(respone)
+        print("Main Alle InfoObjekte: ", respone)
         return respone, 200
 
 
