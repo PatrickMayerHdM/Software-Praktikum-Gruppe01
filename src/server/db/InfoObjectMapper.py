@@ -211,6 +211,26 @@ class InfoObjectMapper(mapper):
 
         return None
 
+    def find_all_info_objects_by_char_id(self, key):
+
+        command = 'SELECT infoobject_id, char_id, char_value FROM main.InfoObject WHERE char_id = %s'
+        data = (key, )
+
+        with self._connection.cursor() as cursor:
+            cursor.execute(command, data)
+            tuples = cursor.fetchall()
+
+        if tuples and tuples[0]:
+            (infoobject_id, char_id, char_value) = tuples[0]
+            info_obj = InfoObject()
+            info_obj.set_id(infoobject_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+
+            return info_obj
+
+        return None
+
     def find_by_searchid(self, key):
         """ Auslesen von Info-Objekten anhand einer Suchprofil_id. """
         command = 'SELECT * FROM main.InfoObject WHERE searchprofile_id = %s'
