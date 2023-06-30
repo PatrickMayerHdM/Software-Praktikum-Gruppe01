@@ -108,8 +108,6 @@ class CreateProfil extends Component {
         this.handleChangeCharDelete = this.handleChangeCharDelete.bind(this)
         this.handleChangeOpenCharEdit = this.handleChangeOpenCharEdit.bind(this);
         this.handleSaveCharChange = this.handleSaveCharChange.bind(this);
-        this.handleCharValueChange = this.handleCharValueChange.bind(this);
-        this.handleCharNameChange = this.handleCharNameChange.bind(this);
         this.handleNumOptions = this.handleNumOptions.bind(this);
         this.handleSaveInputsSelections = this.handleSaveInputsSelections.bind(this);
         this.handleChangeCharName = this.handleChangeCharName.bind(this);
@@ -400,8 +398,6 @@ class CreateProfil extends Component {
 
      handleSaveCharChange = (char_id) => {
         const newchar_id = char_id;
-
-        const { updatedCharName, updatedCharValue } = this.state;
 
         const updatedNamedInfoBO = new NamedInfoObjectBO(
             this.state.id,
@@ -1100,8 +1096,8 @@ class CreateProfil extends Component {
                                                                                     label="Eigenschaftsname"
                                                                                     name="updatedCharName"
                                                                                     defaultValue={value.char_name[0]}
-                                                                                    value={updatedCharName}
-                                                                                    onChange={this.handleChangeCharName}
+                                                                                    value={this.state.char_name}
+                                                                                    onChange={(event) => this.handleInputChange(event, 'char_name')}
                                                                                     size="small"
                                                                                     fullWidth
                                                                                     sx={{ mb: 2, width: '250px', margin: '15px' }}
@@ -1110,8 +1106,8 @@ class CreateProfil extends Component {
                                                                                     label="Eigenschaftsbeschreibung"
                                                                                     name="updatedCharValue"
                                                                                     defaultValue={value.char_value}
-                                                                                    value={updatedCharValue}
-                                                                                    onChange={this.handleChangeCharValue}
+                                                                                    value={this.state.char_desc}
+                                                                                    onChange={(event) => this.handleInputChange(event, 'char_desc')}
                                                                                     size="small"
                                                                                     fullWidth
                                                                                     sx={{ mb: 2, width: '250px', margin: '15px' }}
@@ -1154,7 +1150,7 @@ class CreateProfil extends Component {
                                                         <>
                                                         <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle deine eigene Auswahleigenschaft: </FormLabel>
-                                                            <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name}/>
+                                                            <TextField label="Eigenschaftsname" fullWidth size="small" value={this.state.char_name} onChange={(event) => this.handleInputChange(event, 'char_name')}/>
                                                         </Box>
                                                         <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle hier die passenden Auswahlen: </FormLabel>
