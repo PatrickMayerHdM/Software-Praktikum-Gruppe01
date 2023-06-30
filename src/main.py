@@ -480,7 +480,7 @@ class InfObjectsOperationList(Resource):
     def get(self, char_id):
         adm = Administration()
         respone = adm.get_all_info_objects_by_char_id(char_id)
-        print(respone)
+        print("Main Alle InfoObjekte: ", respone)
         return respone, 200
 
 
@@ -674,10 +674,12 @@ class NamedInfoObjectListOperations(Resource):
         adm = Administration()
 
         proposal = NamedInfoObject.from_dict(api.payload)
+        print('Main.py NamedInfo Char_type', proposal.get_char_typ())
 
         if proposal is not None:
             charobj = adm.create_char(
-                proposal.get_named_char_name()
+                proposal.get_named_char_name(),
+                proposal.get_char_typ()
             )
 
             infoobj = adm.create_named_info_object(

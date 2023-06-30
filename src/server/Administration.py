@@ -328,9 +328,10 @@ class Administration(object):
             return mapper.find_all()
 
 
-    def create_char(self, named_char_name):
+    def create_char(self, named_char_name, char_typ):
         c = NamedInfoObject()
         c.set_named_char(named_char_name)
+        c.set_char_typ(char_typ)
         c.set_id(1)
         with CharMapper() as mapper:
             return mapper.insert_named_char(c)
@@ -409,19 +410,22 @@ class Administration(object):
     def update_named_info_object(self, profile_fk, char_id, char_name, infoobj):
         with InfoObjectMapper() as InfoMapper:
             with CharMapper() as mapper:
-                print("Updated Named Info and Char in der Admin: ", profile_fk, infoobj, char_name, char_id)
                 namedinfo = NamedInfoObject()
+
+                if char_name is None:
+                    char_name = mapper.find_char_by_key(char_id)
+
                 namedinfo.set_named_char_id(char_id)
                 namedinfo.set_named_char(char_name)
-                namedinfo.set_named_info(infoobj)
-                namedinfo.set_named_profile_fk(profile_fk)
+
+                if infoobj is not None:
+                    namedinfo.set_named_info(infoobj)
+                    namedinfo.set_named_profile_fk(profile_fk)
+                    InfoMapper.named_update(namedinfo)
+
                 mapper.update(namedinfo)
-                InfoMapper.named_update(namedinfo)
 
-        print("Admin UpdatedNamed: ", namedinfo)
         return namedinfo
-
-
 
     def update_info_object(self, profile_fk, info_dict):
         """
