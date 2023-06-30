@@ -193,14 +193,34 @@ class Administration(object):
     def get_favoritenote_by_adding_user(self, adding_user):
         """ Auslesen aller Instanzen von FavoriteNote eines Users. """
 
-        profiles = []
+        profiles = [] # Ausgabe der Funktion
+        self_blocked_list = [] # Liste aller Profile, die der Nutzer blockiert hat
+        other_blocked_list = [] # Liste aller Profile, die den Nutzer blockiert haben
+
         with FavoriteNoteMapper() as mapper:
             fav_profiles = mapper.find_by_adding_user(adding_user)
+            print("FAV_PROFILES: ", fav_profiles)
 
-            for fav_profile in fav_profiles:
-                added_user = fav_profile.get_added_id()
+        with BlockNoteMapper() as blockmapper:
+            self_blocked_user = blockmapper.find_blocked_ids_by_blocking_id(adding_user)
+
+            other_blocked_user = blockmapper.find_blocked_ids_by_blocked_id(adding_user)
+
+        for obj in self_blocked_user:
+            self_blocked_list.append(obj.get_blocked_id()) # Google-Id der geblockten Profile durch den Nutzer
+            print("SELF BLOCKED: ", self_blocked_list)
+
+        for obj2 in other_blocked_user:
+            other_blocked_list.append(obj2.get_blocking_id()) # Google-Id von denjenigen, die den Nutzer geblockt haben
+            print("OTHER BLOCKED: ", other_blocked_list)
+
+        for fav_profile in fav_profiles:
+            added_user = fav_profile.get_added_id()
+
+            if (added_user not in self_blocked_list) and (added_user not in other_blocked_list):
                 profiles.append(added_user)
 
+        print("ERGEBNIS: ", profiles)
         return profiles
 
 
