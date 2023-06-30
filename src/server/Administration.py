@@ -803,53 +803,55 @@ class Administration(object):
                 if search_value == 'small':
                     if int(userprof) < 160:
                         score += 1
-                        print('Small Match:', score)
+                        #print('Small Match:', score)
 
                 elif search_value == 'mean':
                     if int(userprof) >= 160 and int(userprof) <= 180:
                         score += 1
-                        print('mean Match:', score)
+                        #print('mean Match:', score)
 
                 elif search_value == 'large':
                     if int(userprof) > 180:
                         score += 1
-                        print('large Match:', score)
+                        #print('large Match:', score)
                 else:
                     pass
 
             #print('Admin.Py Z758 Age-filtered-list nach Körpergröße Matching', age_filtered_list)
 
             # Scorewert Berechnung des Einkommens
-            print('Income Block')
+            #print('Income Block')
             if searchprofile['Char Values'][120] is not None and 120 in prof['Char Values']:
             #if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
                 search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                print('total checked elem: Einkommen', total_checked_elem)
-                print('gesuchtes Einkommen', search_value)
+                #print('total checked elem: Einkommen', total_checked_elem)
+                #print('gesuchtes Einkommen', search_value)
 
                 if prof['Char Values'][120] is not None:
                     userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
-                    print('Einkommen des Userprofils:', userprof)
+                    #print('Einkommen des Userprofils:', userprof)
 
                     if int(userprof) >= int(search_value):
                         score += 1
-                        print('Einkommen Match +1:', score)
+                        #print('Einkommen Match +1:', score)
                     else:
                         continue
 
 
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
-            # Noch nicht getestet
             for key in prof['Char Values']:
                 #print('Prüfung ob Key über 161', key)
+                print('Total-Checked-Elem vor Iteration über Key 160', total_checked_elem)
                 if key >= 161:
                     #print('Übergebener Key zur Prüfung ab 161', key)
+                    #print('Score vor pot. Match:', score)
                     compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][key])
                     if compare_text == 1:
                         score += 1
                         total_checked_elem += 1
-                        #print('Keys ab 161 Total Checked Elem +1:', total_checked_elem)
+                        print('Keys ab 161 Total Checked Elem +1:', total_checked_elem)
+                        #print('Score nach pot. Match:', score)
                         continue
 
             # Berechnung des Match-Wertes in Prozent
