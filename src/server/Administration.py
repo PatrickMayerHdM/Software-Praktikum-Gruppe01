@@ -402,6 +402,10 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete_by_char_value(char_value)
 
+    def get_all_info_objects_by_char_id(self, char_id):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_all_info_objects_by_char_id(char_id)
+
     def update_named_info_object(self, profile_fk, char_id, char_name, infoobj):
         with InfoObjectMapper() as InfoMapper:
             with CharMapper() as mapper:
