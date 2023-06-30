@@ -34,7 +34,7 @@ class BlockProfileBoxList extends React.Component{
             });
         })
         .catch(error => {
-          console.error('Error fetching data from API:', error);
+            console.error('Error fetching data from API:', error);
         });
     }
 
