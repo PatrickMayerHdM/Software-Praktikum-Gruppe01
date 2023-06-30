@@ -483,53 +483,55 @@ class CreateProfil extends Component {
             );
     };
 
-    handleSaveInputsSelections = () => {
+    handleSaveInputsSelections = async () => {
+        try {
+            // Schleife über jedes Element der vom User erstellten Auswahlen
+            for (let index = 0; index < this.state.userSelections.length; index++) {
+                // Der value ist der Wert des aktuellen Elements der vom User erstellten Auswahlen
+                const value = this.state.userSelections[index];
 
+                // Wenn der aktuelle value der erstellten Auswahlen, der vom User explizit ausgewählte value ist.
+                if (this.state.selectedOptionIndex === index) {
 
-        this.state.userSelections.forEach((value, index) => {
-            if (this.state.selectedOptionIndex === index) {
-                console.log(value, "ist die ausgewählte Auswahl")
-                const { char_name, char_desc, char_id } = this.state;
-
-                const newInfoBO = new NamedInfoObjectBO(
-                    this.state.id,
-                    this.props.user.uid,
-                    null,
-                    value,
-                    this.state.char_name,
-                    this.state.char_id,
-                    this.state.char_typ)
-
-                DatingSiteAPI.getAPI()
-                    .createCharDescForProfile(newInfoBO)
-                    .catch((e) =>
-                        this.setState({
-                            error: e,
-                        })
+                    // Erstellen eines neuen NamedInfoObjectBO, hier mit einer GoogleID, da dieser value vom User ausgewählt wurde.
+                    const newInfoBO = new NamedInfoObjectBO(
+                        this.state.id,
+                        this.props.user.uid,
+                        null,
+                        value,
+                        this.state.char_name,
+                        this.state.char_id,
+                        this.state.char_typ
                     );
-            } else {
-                console.log(value)
-                const { char_name, char_desc, char_id } = this.state;
 
-                const newInfoBO = new NamedInfoObjectBO(
-                    this.state.id,
-                    null,
-                    null,
-                    value,
-                    this.state.char_name,
-                    this.state.char_id,
-                    this.state.char_typ)
+                    // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                    await DatingSiteAPI.getAPI()
+                        .createCharDescForProfile(newInfoBO);
 
-                DatingSiteAPI.getAPI()
-                    .createCharDescForProfile(newInfoBO)
-                    .catch((e) =>
-                        this.setState({
-                            error: e,
-                        })
+                } else {
+
+                    // Erstellen eines neuen NamedInfoObjectBO, hier ohne GoogleID, da dieser value nicht vom User ausgewählt wurde.
+                    const newInfoBO = new NamedInfoObjectBO(
+                        this.state.id,
+                        null,
+                        null,
+                        value,
+                        this.state.char_name,
+                        this.state.char_id,
+                        this.state.char_typ
                     );
+
+                    await DatingSiteAPI.getAPI()
+                        .createCharDescForProfile(newInfoBO);
+                }
             }
-        })
-    }
+
+        } catch (e) {
+            this.setState({
+                error: e,
+            });
+        }
+    };
 
     handleUpdate(event) {
         event.preventDefault();
