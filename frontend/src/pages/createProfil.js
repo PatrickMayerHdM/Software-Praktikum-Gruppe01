@@ -1174,7 +1174,6 @@ class CreateProfil extends Component {
                                                         <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle hier die passenden Auswahlen: </FormLabel>
                                                             {this.state.userSelections.map((value, index) => (
-                                                                {/** Dies ist ein Textfeld für eine vom User erstellte Auswahl, für die vom User erstellte Auswahleigenschaft */}
                                                                 <Box key={index} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%' }}>
                                                                     <TextField label="Auswahlname"  size="small"
                                                                                value={this.state.userSelections[index] || ''}
