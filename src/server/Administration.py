@@ -328,9 +328,10 @@ class Administration(object):
             return mapper.find_all()
 
 
-    def create_char(self, named_char_name):
+    def create_char(self, named_char_name, char_typ):
         c = NamedInfoObject()
         c.set_named_char(named_char_name)
+        c.set_char_typ(char_typ)
         c.set_id(1)
         with CharMapper() as mapper:
             return mapper.insert_named_char(c)

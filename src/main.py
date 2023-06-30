@@ -674,10 +674,12 @@ class NamedInfoObjectListOperations(Resource):
         adm = Administration()
 
         proposal = NamedInfoObject.from_dict(api.payload)
+        print('Main.py NamedInfo Char_type', proposal.get_char_typ())
 
         if proposal is not None:
             charobj = adm.create_char(
-                proposal.get_named_char_name()
+                proposal.get_named_char_name(),
+                proposal.get_char_typ()
             )
 
             infoobj = adm.create_named_info_object(
