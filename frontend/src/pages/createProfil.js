@@ -127,6 +127,12 @@ class CreateProfil extends Component {
         this.getSelectedPropertiesForCharValuesAndNames();
     };
 
+    /**
+     * Wenn sich der Wert der numOptions verändert, der User also eine weitere Auswahl hinzufügen will.
+     * Wird der userSelections über das const updatedUserSelections ein weiterer leerer String Übergeben.
+     * Dies erstellt ein weiteres Textfeld für den User.
+     */
+
     componentDidUpdate(prevProps, prevState) {
         if (prevState.numOptions !== this.state.numOptions) {
             this.setState(prevState => {
@@ -569,25 +575,38 @@ class CreateProfil extends Component {
 
     /** Handler für die Anzahl an erstellen Auswahlen*/
     handleNumOptions() {
-        console.log(this.state.numOptions)
+        // setzt die Anzahl an Textfeldern (Auswahlen eines Users) um ein weiteres Textfeld
         this.setState({numOptions: (this.state.numOptions + 1)})
     }
 
+    /**
+     * Handler für Änderungen an Text der Textfelder, beim erstellen einer vom User erstellten Auswahleigenschaft
+     */
     handleTextFieldChange(event, index) {
+        // setzt die const value
         const { value } = event.target;
         this.setState(prevState => {
             const updatedUserSelections = [...prevState.userSelections];
+            // setzt den Wert des Indexes des Textfelds, auf den neune value der Eingabe
             updatedUserSelections[index] = value;
+            // setzt den Wert der updatedUserSelections in userSelections
             return { userSelections: updatedUserSelections };
         });
     }
 
+    /**
+     * Handlung für, wenn ein User beim Erstellen einer Auswahleigenschaft, eine Mögliche Auswahl wieder entfernen will.
+     */
     handleDeleteSelection(index) {
         this.setState(prevState => {
+            // Erstellt einen const mit dem Wert von userSelections
             const updatedUserSelections = [...prevState.userSelections];
+            // Entfernt ein Element basierend auf dem Index.
             updatedUserSelections.splice(index, 1);
             return {
+                // setzt die vom User erstellten Auswahlen, zu dem neuen Wert (ohne den gelöschten Wert)
                 userSelections: updatedUserSelections,
+                // setzt die höhe der vom User erstellten Auswahlen auf -1 des aktuellen Werts.
                 numOptions: (this.state.numOptions - 1)
             };
         });
@@ -1121,7 +1140,8 @@ class CreateProfil extends Component {
                                                         <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Erstelle hier die passenden Auswahlen: </FormLabel>
                                                             {this.state.userSelections.map((value, index) => (
-                                                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%' }}>
+                                                                {/** Dies ist ein Textfeld für eine vom User erstellte Auswahl, für die vom User erstellte Auswahleigenschaft */}
+                                                                <Box key={index} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%' }}>
                                                                     <TextField label="Auswahlname"  size="small"
                                                                                value={this.state.userSelections[index] || ''}
                                                                                onChange={(event) => this.handleTextFieldChange(event, index)}
