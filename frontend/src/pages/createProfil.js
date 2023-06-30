@@ -1227,6 +1227,7 @@ class CreateProfil extends Component {
                                                                             key={char.char_id}
                                                                             value={char.char_id}
                                                                         >
+                                                                            {/** Patrick Aufgabe: Viel Spass :) */}
                                                                             <div onClick={() => this.handleClickMenuItem(char.char_id)}>
                                                                                 {char.char_name}
                                                                             </div>
