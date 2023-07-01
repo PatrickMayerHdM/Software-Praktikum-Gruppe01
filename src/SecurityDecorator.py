@@ -32,8 +32,8 @@ def secured(function):
                     email = claims.get("email")
                     name = claims.get("name")
 
-
-                    account = adm.get_account_by_google_id(google_user_id) # Wir müssen dies in Administration noch erstellen.
+                    # Auslesen der Account-Instanz
+                    account = adm.get_account_by_google_id(google_user_id)
 
                     if account is not None:
 

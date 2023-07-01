@@ -89,7 +89,7 @@ export default class profileBO extends BusinessObject {
 
 
     /**
-     * Gibt ein Array der ProfileBO als JSON struktur zurück
+     * Wandelt JSON Daten in ProfileBO´s um
      */
 
     static fromJSON(profile) {

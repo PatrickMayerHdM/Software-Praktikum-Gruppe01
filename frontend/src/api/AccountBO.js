@@ -116,7 +116,7 @@ export default class accountBO extends BusinessObject {
     }
 
     /**
-     * * Gibt ein Array der AccountBO als JSON Struktur zurück
+     * * Wandelt JSON Daten in AccountBO´s um
      */
 
     static fromJSON(accounts) {

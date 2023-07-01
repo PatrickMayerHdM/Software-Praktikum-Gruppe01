@@ -25,6 +25,7 @@ class Administration(object):
     """ Account-spezifische Methoden """
 
     def create_account(self, google_id, profile_id, name, email):
+        """ Erstellen einer Account-Instanz. """
         account = Account()
         account.set_google_id(google_id)
         account.set_profile_id(profile_id)
@@ -36,30 +37,37 @@ class Administration(object):
             return mapper.insert(account)
 
     def get_account_by_name(self, name):
+        """ Auslesen einer Account-Instanz anhand des User-Namens. """
         with AccountMapper() as mapper:
             return mapper.find_by_name(name)
 
     def get_account_by_id(self, number):
+        """ Auslesen einer Account-Instanz anhand der ID. """
         with AccountMapper() as mapper:
             return mapper.find_by_key(number)
 
     def get_account_by_email(self, email):
+        """ Auslesen einer Account-Instanz anhand der User-Email. """
         with AccountMapper() as mapper:
             return mapper.find_by_email(email)
 
     def get_account_by_google_id(self, id):
+        """ Auslesen einer Account-Instanz anhand der GoogleID. """
         with AccountMapper() as mapper:
             return mapper.find_by_google_id(id)
 
     def get_all_accounts(self):
+        """ Auslesen aller Account-Instanzen. """
         with AccountMapper() as mapper:
             return mapper.find_all()
 
     def save_account(self, account):
+        """ Update einer Account-Instanz. """
         with AccountMapper() as mapper:
             mapper.update(account)
 
     def delete_account(self, account):
+        """ Löschen einer Account-Instanz. """
         with AccountMapper() as mapper:
             mapper.delete(account)
 
@@ -696,7 +704,7 @@ class Administration(object):
 
                         if calculated_age is not None:
                             #print('Type min_age,', type(min_age))
-                            #print(' min_age,', min_age)
+                            #print(' min_age,', min_age)2
                             #print('Type max_age,', type(max_age))
                             #print('max age:', max_age)
                             if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
