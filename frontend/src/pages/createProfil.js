@@ -34,10 +34,11 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ArticleIcon from '@mui/icons-material/Article';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {forEach} from "react-bootstrap/ElementChildren";
-import {element} from "prop-types";
+
+/** Dies stellt das Erstellen eines Profils dar */
 
 
-
+/** Definition der CreateProfile-Komponente */
 class CreateProfil extends Component {
     constructor(props) {
         super(props);
@@ -144,13 +145,12 @@ class CreateProfil extends Component {
     };
 
     /**
-     * Wenn sich der Wert der numOptions verändert, der User also eine weitere Auswahl hinzufügen will.
-     * Wird der userSelections über das const updatedUserSelections ein weiterer leerer String Übergeben.
+     * Wenn sich der Wert der numOptions verändert, d.h. der User will eine weitere Auswahl hinzufügen.
+     * Es wird der userSelections über das const updatedUserSelections ein weiterer leerer String Übergeben.
      * Dies erstellt ein weiteres Textfeld für den User.
      */
 
     componentDidUpdate(prevProps, prevState) {
-
         if (prevState.UserSelectAvSelections !== this.state.UserSelectAvSelections) {
             console.log("Der Zustand UserSelectAvSelections hat sich geändert!", this.state.UserSelectAvSelections);
             console.log("Der prevState.UserSelectAvSelections Zustand UserSelectAvSelections hat sich geändert!", prevState.UserSelectAvSelections);
@@ -175,7 +175,15 @@ class CreateProfil extends Component {
         );
     };
 
-    /** Abfrage der InfoObjekte für das Profil */
+    /** Abfrage der InfoObjekte für das Profil
+     * Es wird ein leeres Objekt namens "selectedProperties" erstellt.
+     * Dann wird auf jede erhaltene Eigenschaft aus responseInfoObjects zugegriffen.
+     * Die const infoObject ist die Eigenschaft an dem jeweiligen Key.
+     * Die const charId entspricht der CharId der vorigen const InfoObject.
+     * Der charValue entspricht dem Eigenschaftsnamen der vorigen const InfoObject.
+     * In dem Switch-Statement wird zuerst die CharId geprüft und dann dementsprechend ein Wert zugewiesen.
+     * Für den Fall, dass die CharId 10 ist, wird bspw. "selectedProperties.firstName = charValue;" gesetzt.
+     * Somit können die Eigenschaften eines Profils beim Erstellen gesetzt werden. */
     getSelectedProperties() {
         DatingSiteAPI.getAPI()
             .getInfoObjects(this.props.user.uid)
@@ -190,44 +198,45 @@ class CreateProfil extends Component {
                             case 30:
                                 selectedProperties.apiage = charValue;
                                 break;
-                            case 10:
-                                selectedProperties.firstName = charValue;
-                                break;
-                            case 40:
-                                selectedProperties.gender = charValue;
-                                break;
-                            case 70:
-                                    selectedProperties.hair = charValue;
-                                break;
-                            case 50:
-                                    selectedProperties.height = charValue;
-                                break;
-                            case 20:
-                                selectedProperties.lastName = charValue;
-                                break;
-                            case 60:
-                                selectedProperties.religion = charValue;
-                                break;
-                            case 80:
-                                selectedProperties.smoking = charValue;
-                                break;
-                            case 90:
-                                selectedProperties.aboutme = charValue;
-                                break;
-                            case 120:
-                                selectedProperties.income = charValue;
-                                break;
-                            case 140:
-                                selectedProperties.favclub = charValue;
-                                break;
-                            case 150:
-                                selectedProperties.hobby = charValue;
-                                break;
-                            case 160:
-                                selectedProperties.politicaltendency = charValue;
-                                break;
-                                default:
-                                break;
+                                case 10:
+                                    selectedProperties.firstName = charValue;
+                                    break;
+                                    case 40:
+                                        selectedProperties.gender = charValue;
+                                        break;
+                                        case 70:
+                                                selectedProperties.hair = charValue;
+                                            break;
+                                            case 50:
+                                                    selectedProperties.height = charValue;
+                                                break;
+                                                case 20:
+                                                    selectedProperties.lastName = charValue;
+                                                    break;
+                                                    case 60:
+                                                        selectedProperties.religion = charValue;
+                                                        break;
+                                                        case 80:
+                                                            selectedProperties.smoking = charValue;
+                                                            break;
+                                                            case 90:
+                                                                selectedProperties.aboutme = charValue;
+                                                                break;
+                                                                case 120:
+                                                                    selectedProperties.income = charValue;
+                                                                    break;
+                                                                    case 140:
+                                                                        selectedProperties.favclub = charValue;
+                                                                        break;
+                                                                        case 150:
+                                                                            selectedProperties.hobby = charValue;
+                                                                            break;
+                                                                            case 160:
+                                                                                selectedProperties.politicaltendency = charValue;
+                                                                                break;
+
+                                                                                default:
+                                                                                    break;
                         }
                     }
                 }
@@ -235,6 +244,12 @@ class CreateProfil extends Component {
             });
     }
 
+    /** Diese Funktion wird als "async" markiert, da wir auf den Abschluss des API-Aufrufs für die InfoObjekte warten müssen.
+     * Die const customProperties beinhaltet die benutzerdefinierten Eigenschaften.
+     * Jedes InfoObjekt, das eine CharID größer als 160 hat, wird zu diesem leeren Objekt hinzugefügt.
+     * Die restlichen InfoObjekte werden mithilfe eines Zustands (State) gesetzt.
+     * Am Ende wird der Zustand des leeren "customProperties"-Objekts aktualisiert,
+     * um daraus die individuellen Eigenschaften und InfoObjekte auslesen zu können. */
     async getSelectedPropertiesForCharValuesAndNames() {
         const customProperties = {};
 
@@ -264,6 +279,9 @@ class CreateProfil extends Component {
         }
     }
 
+    /** Die getAllInfoObjects liest alle Chars aus,
+     * die eine CharID größer als 160 haben und fügt es zur "selectedCharNames" hinzu.
+     * Diese wird anschließend mit dem neuen state überschrieben. */
     getAllInfoObjects() {
         return DatingSiteAPI.getAPI()
             .getAllCharNames()
@@ -284,6 +302,7 @@ class CreateProfil extends Component {
             });
     }
 
+    /** Die getCharNameByID liest den CharName einer gegebenen char_id aus. */
     getCharNameByID(char_id) {
         return DatingSiteAPI.getAPI()
             .getCharName(char_id)
@@ -308,6 +327,7 @@ class CreateProfil extends Component {
         this.setState({politicaltendency: newPolitical})
     };
 
+    /** Event-Handler für die Löschung der politicaltendency */
     handleDeletePolitical = () => {
         this.setState({ politicaltendency: null });
     };
@@ -318,6 +338,7 @@ class CreateProfil extends Component {
         this.setState({hobby: newHobbys})
     };
 
+    /** Event-Handler für die Löschung der Hobbies */
     handleDeleteHobbys = () => {
         this.setState({ hobby: null });
     };
@@ -328,6 +349,7 @@ class CreateProfil extends Component {
         this.setState({favclub: newClub})
     };
 
+    /** Event-Handler für die Löschung des favClubs */
     handleDeleteClub = () => {
         this.setState({ favclub: null });
     };
@@ -339,6 +361,7 @@ class CreateProfil extends Component {
         this.setState({income: newSalary})
     };
 
+    /** Event-Handler für die Löschung des income */
     handleDeleteSalary = () => {
         this.setState({ income: null });
     };
@@ -348,16 +371,20 @@ class CreateProfil extends Component {
         const selectedGender = event.target.value;
         this.setState({ gender: selectedGender});
     };
+
     /** Event-Handler für die Änderung der Größe */
     handleChangeHeight = (event) => {
         const newHeight = event.target.value;
         this.setState({height: newHeight});
     };
+
     /** Event-Handler für die Änderung der Religion */
     handleChangeReligion = (event) => {
         const selectedReligion = event.target.value;
         this.setState({ religion: selectedReligion});
     };
+
+    /** Event-Handler für die Löschung der religion */
     handleDeleteReligion = () => {
         this.setState({ religion: null });
     };
@@ -367,6 +394,7 @@ class CreateProfil extends Component {
         this.setState({ smoking: selectedSmoker });
     };
 
+    /** Event-Handler für die Löschung des Raucher-Status */
     handleDeletesmoking = () => {
         this.setState({ smoking: null });
     };
@@ -376,6 +404,8 @@ class CreateProfil extends Component {
         const selectedHair = event.target.value;
         this.setState({ hair: selectedHair });
     };
+
+    /** Event-Handler für die Löschung der Haarfarbe */
     handleDeleteHair = () => {
         this.setState({ hair: null });
     };
@@ -385,30 +415,35 @@ class CreateProfil extends Component {
         this.setState({ age: newAge });
     };
 
+    /** Event-Handler für die Änderung des AboutMe */
     handleChangeAboutMe = (event) => {
         const newAboutMe = event.target.value;
         this.setState({ aboutme: newAboutMe})
     };
 
+    /** Event-Handler für die Löschung eines namedChars */
     handleChangeCharDelete = (value) => {
         DatingSiteAPI.getAPI()
             .removeNamedChar(value)
     }
 
+    /** Event-Handler für die Änderung des editProperty */
     handleChangeOpenCharEdit = (charID) => {
         this.setState({ editProperty: charID })
     }
 
+    /** Event-Handler für die Änderung des CharNames */
     handleChangeCharName = (event) => {
         this.setState({ updatedCharName: event.target.value });
     };
 
+    /** Event-Handler für die Änderung des CharValues */
     handleChangeCharValue = (event) => {
         this.setState({ updatedCharValue: event.target.value });
     };
 
-
-     handleSaveCharChange = (char_id) => {
+    /** Event-Handler für die Änderung des NamedInfoBO's */
+    handleSaveCharChange = (char_id) => {
         const newchar_id = char_id;
 
         const updatedNamedInfoBO = new NamedInfoObjectBO(
@@ -419,7 +454,7 @@ class CreateProfil extends Component {
             this.state.char_name,
             newchar_id,
             this.state.char_typ)
-         DatingSiteAPI.getAPI()
+        DatingSiteAPI.getAPI()
              .updateNamedCharByURL(updatedNamedInfoBO)
              .catch((e) =>
                  this.setState({
@@ -481,17 +516,22 @@ class CreateProfil extends Component {
             );
     };
 
+    /** Event-Handler für die Änderung des showTextFields */
     handleCreateChar = () => {
         this.setState({showTextFields: true});
     };
 
+    /** Event-Handler für die Änderung des Char_Typen */
     handleSelectedChar = (value) => {
         this.setState({ char_typ: value });
     };
 
+    /** Event-Handler für die Änderung des fields */
     handleInputChange = (event, field) => {
         this.setState({ [field]: event.target.value });
     };
+
+    /** Event-Handler für die Änderung der Eingaben eines NamedInfoObjectBO's */
     handleSaveInputs = () => {
 
         const { char_name, char_desc, char_id } = this.state;
@@ -514,6 +554,7 @@ class CreateProfil extends Component {
             );
     };
 
+    /** Event-Handler für die Änderung der Auswahlen eines Nutzers */
     handleSaveInputsSelections = async () => {
         try {
             // Schleife über jedes Element der vom User erstellten Auswahlen
@@ -564,6 +605,7 @@ class CreateProfil extends Component {
         }
     };
 
+    /** Event-Handler für die Änderung des openuserchars */
     handleOpenUserChar = () => {
         this.setState({ openuserchar: true })
     };
@@ -696,6 +738,7 @@ class CreateProfil extends Component {
 
     }
 
+    /** Event-Handler für die Änderung einer selectedOption */
     handleChangeSelectedProperty = (event) => {
         const { selectedCharNames } = this.state
         const selectedProperty = event.target.value;
@@ -710,6 +753,7 @@ class CreateProfil extends Component {
         });
     };
 
+    /** Auslesen von InfoObjects anhand einer Char-Id */
     getInfoObjectsByCharID(char_id) {
         return DatingSiteAPI.getAPI()
             // get der InfoObjekte einer CharID
@@ -754,6 +798,7 @@ class CreateProfil extends Component {
             });
     }
 
+    /** Event-Handler für die Änderung eines neuen infoobjectBO's */
     handleUpdate(event) {
         event.preventDefault();
 
@@ -877,8 +922,7 @@ class CreateProfil extends Component {
         });
     }
 
-
-    // Setzt den Index der vom User ausgewählten Auswahl der von einem User erstellten Eigenschaft (während des erstellens)
+    /** Setzt den Index der vom User ausgewählten Auswahl der von einem User erstellten Eigenschaft (während des erstellens) */
     handleTextFieldSelection(index) {
         this.setState({ selectedOptionIndex: index });
     }
@@ -922,14 +966,16 @@ class CreateProfil extends Component {
     );
     };
 
-    // Ist dafür verantwortlich, ob ein User gerade ein Freitextfeld sieht oder eine Auswahl.
+    /** Event-Handler für die Änderung von selectCreate */
     handleInfoSelectCreate = (event, newSelectedValue) => {
         this.setState({ SelectCreate: newSelectedValue });
     };
 
+    /** Event-Handler für die Änderung einer selectedOption */
     handleChangeSelectedOption = event => {
         this.setState({ selectedOption: event.target.value });
     };
+
     renderContent() {
         const { selectedOption } = this.state;
 
@@ -939,7 +985,7 @@ class CreateProfil extends Component {
                     <Box sx={{ width: 400, margin: '0 auto' }}>
                         <FormLabel>Welche religiöse Ansicht hast du?</FormLabel>
                         <div style={{ marginBottom: '1rem' }}>
-                            {/** Hier wird der Button gemacht, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
+                            {/** Hier wird der Button dargestellt, ob ein User ein Text eingeben kann oder die Auswahlen sieht*/}
                             <ToggleButtonGroup exclusive value={this.state.SelectCreate} onChange={this.handleInfoSelectCreate} aria-label="InfoObject Select Create">
                                 <ToggleButton value="select">
                                     <RadioButtonUncheckedIcon/>

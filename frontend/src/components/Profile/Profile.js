@@ -24,6 +24,7 @@ class Profile extends React.Component{
             customProperties: [],
         }
     }
+
     /** Beim Laden der Seite wird der folgende Code ausgeführt: */
     componentDidMount() {
         const currentPath = window.location.pathname;
@@ -35,6 +36,7 @@ class Profile extends React.Component{
              * die mithilfe der LastPartURL abgefragt werden können. */
         })
     }
+
     /** Diese Funktion wird als "async" markiert, da wir auf den Abschluss des API-Aufrufs für die InfoObjekte warten müssen.
      * Zuerst wird ein leeres Objekt namens "customProperties" erstellt.
      * Jedes InfoObjekt, das eine CharID größer als 160 hat, wird zu diesem leeren Objekt hinzugefügt.
