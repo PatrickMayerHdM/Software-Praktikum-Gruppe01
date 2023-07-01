@@ -10,6 +10,7 @@ Das Frontend baut auf JavaScript, dessen Framework "React" auf und liegt im Proj
 1. Für das Frontend wird folgendes benötigt:<br>
 Es müssen package dependencies installiert werden. Hierfür wird im Terminal "npm install" ausgeführt.<br>
 2. Node.js
+3. Diverse Komponenten aus Material-UI (MUI)
 
 Um das Frontend starten zu können muss npm start ausgeführt werden.
 
@@ -25,7 +26,13 @@ Für Backend wird folgendes benötigt:<br>
 3. flask-restx<br>
 4. flask-cors<br>
 5. google-auth<br>
-6. requests
+6. requests<br>
+
+```
+cd /src
+pip install -r requirements.txt     
+python main.py    
+```
 
 Um das Backend starten zu können muss die main.py ausgeführt werden. 
 
