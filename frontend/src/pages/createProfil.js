@@ -269,8 +269,9 @@ class CreateProfil extends Component {
                     if (responseCharNames.hasOwnProperty(key)) {
                         const char_id = responseCharNames[key].id;
                         const char_name = responseCharNames[key].char_name;
+                        const char_typ = responseCharNames[key].char_typ;
                         if (char_id > 160) {
-                            selectedCharNames.push({ char_id, char_name });
+                            selectedCharNames.push({ char_id, char_name, char_typ });
                         }
                     }
                 }
