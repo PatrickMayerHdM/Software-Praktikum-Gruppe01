@@ -271,7 +271,7 @@ class SearchInfoObjectUpdateOperations(Resource):
     @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
     @secured
     def put(self, searchprofile_id):
-        print("Main.py: PUT-Befehl: ", searchprofile_id)
+        print("PUT-Befehl: ", searchprofile_id)
         print("API.payload SUCHPROFIL", api.payload)
 
         """ Update eines bestimmten Such-Profils. """
@@ -315,6 +315,7 @@ class SearchOneProfileOperation(Resource):
     @datingapp.marshal_with(infoobject)
     @secured
     def get(self, searchprofile_id):
+        """ Auslesen eines bestimmten Suchprofils eines Profils"""
 
         adm = Administration()
         search_info_objs = adm.get_searchprofile_by_key(searchprofile_id)
@@ -326,7 +327,7 @@ class SearchOneProfileOperation(Resource):
 
     @secured
     def delete(self, searchprofile_id):
-        """ Löschen eines besimmten Suchprofil-Objekts. """
+        """ Löschen eines besimmten Suchprofils. """
 
         adm = Administration()
         info_obj = adm.get_info_object_by_searchid(searchprofile_id)
@@ -480,7 +481,7 @@ class InfObjectsOperationList(Resource):
     def get(self, char_id):
         adm = Administration()
         respone = adm.get_all_info_objects_by_char_id(char_id)
-        print(respone)
+        print("Main Alle InfoObjekte: ", respone)
         return respone, 200
 
 
@@ -637,10 +638,7 @@ class BlocknoteDeleteOperations(Resource):
     def delete(self, profile_id, other_profile_id):
         """Löschen eines BlockNote-Objekts in der Datenbank.
         Das Objekt wird durch die ID's in der URL bestimmt"""
-        print("Test vor adm = Administration()")
         adm = Administration()
-        print("profile_id im main (BlocknoteDeleteOperations): ", profile_id)
-        print("other_profile_id im main (BlocknoteDeleteOperations):  ", other_profile_id)
 
         if other_profile_id and profile_id is not None:
             adm.delete_blocknote(profile_id, other_profile_id)
@@ -750,6 +748,8 @@ class ProfileVisitsOperations(Resource):
     @secured
 
     def post(self):
+        """ Hinzufügen, dass der Nutzer ein Profil besucht hat.
+            D.h. in diesem Fall, er hat die Profilbox angeklickt und somit das ganze Profil angesehen. """
         adm = Administration()
         proposal = Profilevisits.from_dict(api.payload)
 
