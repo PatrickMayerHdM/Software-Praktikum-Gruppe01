@@ -16,10 +16,11 @@ class CharMapper(mapper):
         cursor.execute('SELECT * FROM main.Characteristic')
         tuples = cursor.fetchall()
 
-        for (char_id, char_name) in tuples:
+        for (char_id, char_name, char_typ) in tuples:
             char = Characteristics()
             char.set_id(char_id)
             char.set_characteristic(char_name)
+            char.set_characteristic_typ(char_typ)
             result.append(char)
 
         self._connection.commit()

@@ -70,7 +70,8 @@ message = api.inherit('Message', bo, {
 
 characteristic = api.inherit('Characteristics', bo, {
     'char_id': fields.Integer(attribute='_char_id', description='Eigenschafts ID '),
-    'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname')
+    'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname'),
+    'char_typ': fields.String(attribute='_char_typ', description='Eigenschaftstyp')
 })
 
 infoobject = api.inherit('InfoObject', bo, {
