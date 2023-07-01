@@ -1,10 +1,12 @@
 // SoPra 2023 - Gruppe 1
-
 import React, { Component } from "react";
 import '../components/App.css';
 
+/** Definition der AboutUs-Komponente */
 class AboutUs extends Component {
+    /** Rendern der Komponente */
     render() {
+        {/** Der Code rendert eine Seite mit dem Titel "Über uns". */}
         return (
             <div>
                 <h1>Über uns</h1>
@@ -22,5 +24,4 @@ class AboutUs extends Component {
         );
     }
 }
-
 export default AboutUs;

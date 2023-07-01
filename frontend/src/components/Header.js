@@ -9,65 +9,65 @@ import {IconButton} from "@mui/material";
 import { Link } from "react-router-dom";
 import './App.css';
 
+/** Definition der Header-Komponente */
 class Header extends Component {
+    /** alle Zustandsvariablen: */
     constructor(props) {
-    super(props);
-
-    // Init an empty state
-    this.state = {
-      tabindex: 0
+        super(props);
+        this.state = {
+            tabindex: 0
+        };
+    }
+    /** Behandelt onChange-Ereignisse der Komponente Tabs */
+    handleTabChange = (e, newIndex) => {
+        this.setState({
+            tabindex: newIndex
+        })
     };
-  }
+    /** Rendern der Komponente */
+    render() {
+        {/** Hier werden die aktuellen States gesetzt */}
+        const { user } = this.props;
 
-  /** Handles onChange events of the Tabs component */
-  handleTabChange = (e, newIndex) => {
-    // console.log(newValue)
-    this.setState({
-      tabindex: newIndex
-    })
-  };
-
-  /** Renders the component */
-  render() {
-    const { user } = this.props;
-
-    return (
-        <div className="header">
-            <Link to={`/Profil/${this.props.user.uid}`}>
-                <IconButton>
-                    <PersonIcon className="header_icon" />
-                </IconButton>
-            </Link>
-            <Link to="/Suche">
-                <IconButton>
-                    <SearchIcon className="header_icon" />
-                </IconButton>
-            </Link>
-            <Link to="/Merkliste">
-                <IconButton>
-                    <FormatListBulletedIcon className="header_icon" />
-                </IconButton>
-            </Link>
-            <Link to="/Sperrliste">
-                <IconButton>
-                    <BlockIcon className="header_icon" />
-                </IconButton>
-            </Link>
-            <Link to="/Chats">
-                <IconButton>
-                    <MailIcon className="header_icon" />
-                </IconButton>
-            </Link>
-        </div>
-
-    )
-  }
+        return (
+            <div className="header">
+                {/** Button um auf sein eigenes Profil zu kommen */}
+                <Link to={`/Profil/${this.props.user.uid}`}>
+                    <IconButton>
+                        <PersonIcon className="header_icon" />
+                    </IconButton>
+                </Link>
+                {/** Button um auf die Suche zu kommen */}
+                <Link to="/Suche">
+                    <IconButton>
+                        <SearchIcon className="header_icon" />
+                    </IconButton>
+                </Link>
+                {/** Button um auf die Merkliste zu kommen */}
+                <Link to="/Merkliste">
+                    <IconButton>
+                        <FormatListBulletedIcon className="header_icon" />
+                    </IconButton>
+                </Link>
+                {/** Button um auf die Sperrliste zu kommen */}
+                <Link to="/Sperrliste">
+                    <IconButton>
+                        <BlockIcon className="header_icon" />
+                    </IconButton>
+                </Link>
+                {/** Button um auf seine Chats zu kommen */}
+                <Link to="/Chats">
+                    <IconButton>
+                        <MailIcon className="header_icon" />
+                    </IconButton>
+                </Link>
+            </div>
+        )
+    }
 }
-
 /** PropTypes */
 Header.propTypes = {
-  /** The logged in firesbase user */
+  /** Der eingeloggte firesbase-Benutzer */
   user: PropTypes.object,
 }
-
 export default Header;

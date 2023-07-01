@@ -7,12 +7,14 @@ export default class CharacteristicBO extends BusinessObject {
      * Parameter für Characteristics BO
      * @param {*} achar_id
      * @param {*} achar_name
+     * @param {*} achar_typ
      */
 
-    constructor(achar_id, achar_name) {
+    constructor(achar_id, achar_name, achar_typ) {
         super();
         this.char_id = achar_id;
         this.char_name = achar_name;
+        this.char_typ = achar_typ;
     }
 
     /** Auslesen der Char-ID */
@@ -32,6 +34,16 @@ export default class CharacteristicBO extends BusinessObject {
     /** Setzen des Char_Names */
     set_char_name(achar_name) {
         this.char_name = achar_name;
+    }
+
+    /** Auslesen des char_typ */
+    get_char_typ() {
+        return this.char_typ;
+    }
+
+    /** Setzen des char_typ */
+    set_char_typ(achar_typ) {
+        this.char_typ = achar_typ;
     }
 
 

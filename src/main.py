@@ -33,9 +33,9 @@ def not_found(e):
 # Aufrufe mit /system/* werden ermöglicht.
 CORS(app, resources=r'/system/*')
 
-#falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
-#CORS(app, support_credentials=True,
- #    resources={r'/system/*': {'origins':'*'}})
+# Falls es hiermit probleme geben sollte könnten wir auch folgendes Probieren:
+# CORS(app, support_credentials=True,
+#    resources={r'/system/*': {'origins':'*'}})
 
 #API um Daten zwischen Clients und Server zu tauschen.
 api = Api(app, version='1.0', title='DatingApp System API',
@@ -70,7 +70,8 @@ message = api.inherit('Message', bo, {
 
 characteristic = api.inherit('Characteristics', bo, {
     'char_id': fields.Integer(attribute='_char_id', description='Eigenschafts ID '),
-    'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname')
+    'char_name': fields.String(attribute='_char_name', description='Eigenschaftsname'),
+    'char_typ': fields.String(attribute='_char_typ', description='Eigenschaftstyp')
 })
 
 infoobject = api.inherit('InfoObject', bo, {
@@ -128,7 +129,7 @@ class ProfileListOperations(Resource):
     def get(self):
         """ Auslesen aller Profil-Objekte. """
         adm = Administration()
-        profiles = adm.get_all_profiles() #Admin.py noch nicht angelegt
+        profiles = adm.get_all_profiles()
         print(profiles)
 
         if profiles is not None:
@@ -137,7 +138,6 @@ class ProfileListOperations(Resource):
             return "", 500
 
     @datingapp.marshal_with(profile, code=200)
-    # Wir erwarten ein Profile-Objekt von Client-Seite.
     @datingapp.expect(profile)
     @secured
     def post(self):
@@ -145,7 +145,6 @@ class ProfileListOperations(Resource):
         adm = Administration()
 
         proposal = Profile.from_dict(api.payload)
-        print('post-Method Profile:', api.payload)
 
         if proposal is not None:
 
@@ -154,7 +153,6 @@ class ProfileListOperations(Resource):
                 proposal.get_block_note_id(),
                 proposal.get_google_fk())
 
-            print("Main Proifle: ", p)
             return p, 200
         else:
             # Wenn etwas schief geht, geben wir einen String zurück und werfen einen Server-Fehler
@@ -170,18 +168,12 @@ class ProfileOperations(Resource):
         """ Auslesen eines bestimmten Profil-Objekts. """
         adm = Administration()
         prof = adm.get_profile_by_google_id(google_fk)
-        #print('get-Methode in Profile:', prof)
-        #print(type(prof))
         return prof
 
     @secured
     def delete(self, google_fk):
-        print('Hier :', google_fk)
         """ Löschen eines besimmten Profil-Objekts. """
-
         adm = Administration()
-        print("Google ID Main: ", google_fk)
-
         # Auslesen aller Suchprofile einer Google-Id
         sps = adm.get_searchprofiles_by_google_id(google_fk)
 
@@ -203,7 +195,8 @@ class ProfileOperations(Resource):
         adm.delete_profile(prof)
         return '', 200
 
-"""SuchProfil"""
+""" Suchprofil """
+
 @datingapp.route('/SearchProfiles')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt")
 @datingapp.param('id','searchprofile')
@@ -216,18 +209,11 @@ class SearchProfileOpterations(Resource):
         adm = Administration()
         SearchProfiles = adm.get_all_searchprofile()
         return SearchProfiles
-
-    #@datingapp.marshal_with(SearchProfile, code=200)
     @datingapp.expect(searchprofile)
     @secured
     def post(self):
         adm = Administration()
-        print("Da wir ein Suchprofil erwarten hier der print", SearchProfile)
-        print("Das ist die Payload (Suchprofil)",api.payload)
         ranvar = SearchProfile.from_dict(api.payload)
-        print("Das ist das proposal (nach form.dict): ", ranvar)
-
-
         if ranvar is not None:
 
             adm.create_searchprofile(
@@ -239,7 +225,7 @@ class SearchProfileOpterations(Resource):
             return "Der Post in SearchProfileOpterations ist fehlgeschlagen ", 500
 
 
-"""Da das Suchprofil ein eigenes InfoObjekt Handling besitzt wird dies hier definiert """
+    """Da das Suchprofil ein eigenes InfoObjekt Handling besitzt wird dies hier definiert """
 @datingapp.route('/SearchProfiles/infoobjects')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class InfoObjectListOperationsSearch(Resource):
@@ -250,7 +236,6 @@ class InfoObjectListOperationsSearch(Resource):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
         time.sleep(3)
-        print("Das ist die api.payload im main.py der InfoObjectListOperationsSearch", api.payload)
 
         proposal = InfoObject.from_dict(api.payload)
 
@@ -271,10 +256,8 @@ class SearchInfoObjectUpdateOperations(Resource):
     @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
     @secured
     def put(self, searchprofile_id):
-        print("Main.py: PUT-Befehl: ", searchprofile_id)
-        print("API.payload SUCHPROFIL", api.payload)
-
         """ Update eines bestimmten Such-Profils. """
+
         adm = Administration()
         proposal = InfoObject.from_dict(api.payload)
 
@@ -289,14 +272,14 @@ class SearchInfoObjectUpdateOperations(Resource):
             return 'Suchprofil konnte nicht aktualisiert werden.', 500
 
 
-"""Handling um alle Suchprofil ID's eines Profils zu bekommen"""
+    """ Handling um alle Suchprofil ID's eines Profils zu bekommen """
 @datingapp.route('/Search/SearchProfiles/<profile_id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('profile_id','GoogleID für welche die Suchprofile gesucht werden')
 class SearchProfilesOperations(Resource):
 
-    # @secured
     def get(self, profile_id):
+        """ Auslesen aller Suchprofile eines Profils """
 
         adm = Administration()
         SearchP = adm.get_searchprofiles_by_google_id(profile_id)
@@ -306,7 +289,7 @@ class SearchProfilesOperations(Resource):
         else:
             return "", 500
 
-"""Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
+    """Handling, um ein spezifisches Suchprofil eines Profils zu bekommen"""
 @datingapp.route('/Search/SearchProfiles/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('searchprofile_id', 'Die Searchprofile-ID des Searchprofile-Objekts')
@@ -315,6 +298,7 @@ class SearchOneProfileOperation(Resource):
     @datingapp.marshal_with(infoobject)
     @secured
     def get(self, searchprofile_id):
+        """ Auslesen eines bestimmten Suchprofils eines Profils"""
 
         adm = Administration()
         search_info_objs = adm.get_searchprofile_by_key(searchprofile_id)
@@ -326,7 +310,7 @@ class SearchOneProfileOperation(Resource):
 
     @secured
     def delete(self, searchprofile_id):
-        """ Löschen eines besimmten Suchprofil-Objekts. """
+        """ Löschen eines besimmten Suchprofils. """
 
         adm = Administration()
         info_obj = adm.get_info_object_by_searchid(searchprofile_id)
@@ -335,27 +319,23 @@ class SearchOneProfileOperation(Resource):
         return '', 200
 
 
-"""Handling im main, für den getChats() in der DaitingSiteAPI.
-Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
+    """ Handling im main, für den getChats() in der DatingSiteAPI.
+        Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
 
 @datingapp.route('/ChatProfileBoxList/<id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('id','id des Profils')
 class ChatListOperations(Resource):
 
-    #@secured
     def get(self, id):
-        # ermöglicht es, die Administration() mit der kürzeren Schreibweise adm abzurufen.
+        """ Auslesen der Profilboxen mit denen ein Chat besteht """
         adm = Administration()
         x = adm.get_profile_by_message(id)
 
-        # Holt sich das result (return) von der get_profile_by_message(id), dies ist dann eine Liste mit Chatpartnern.
         if x is not None:
             return x, 200
         else:
             return "", 500
-
-
 
 @datingapp.route('/ChatWindow')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
@@ -396,7 +376,6 @@ class MessageOperations(Resource):
         else:
             return '', 500 # Wenn es keine Messages gibt.
 
-
 @datingapp.route('/infoobjects')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class InfoObjectListOperations(Resource):
@@ -406,7 +385,6 @@ class InfoObjectListOperations(Resource):
     def post(self):
         """ Anlegen eines neuen InfoObject-Objekts. """
         adm = Administration()
-        print('Post-Method Infoobject:', api.payload)
         time.sleep(3)
 
         proposal = InfoObject.from_dict(api.payload)
@@ -445,9 +423,9 @@ class InfoObjectsOperations(Resource):
     @datingapp.expect(infoobject, validate=True) # Wir akzeptieren das Objekt, auch wenn es von der infoobject Struktur abweicht.
     @secured
     def put(self, profile_id):
-        print('Main.py: PUT Befehl: ', profile_id)
-        print('Main.py: Api Payload:', api.payload)
         """ Update eines bestimmten User-Profils. """
+        print('Main.py: PUT Befehl: ', profile_id)
+
         adm = Administration()
         proposal = InfoObject.from_dict(api.payload)
 
@@ -468,9 +446,12 @@ class InfoObjectsOperations(Resource):
 class NamedInfoObjectsOperations(Resource):
     @secured
     def delete(self, char_value):
+        """ Löschen eines besimmten InfoObjekt-Objekts """
+
         adm = Administration()
         adm.delete_info_object_by_char_value(char_value)
         return '', 200
+
 @datingapp.route('/infoobjects/all/<int:char_id>')
 @datingapp.response(500, 'Serverseitiger-Fehler')
 @datingapp.param('char_id', 'CharID die alle InfoObjekte ausliest')
@@ -478,27 +459,26 @@ class InfObjectsOperationList(Resource):
     @datingapp.marshal_list_with(infoobject)
     @secured
     def get(self, char_id):
+        """ Auslesen eines besimmten InfoObjekt-Objekts """
+
         adm = Administration()
         respone = adm.get_all_info_objects_by_char_id(char_id)
-        print(respone)
         return respone, 200
 
 
 
-"""Ab hier FavoriteNote"""
+""" FavoriteNote """
 
 @datingapp.route('/Favoritenote')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class FavoritenoteListOperations(Resource):
     @datingapp.doc('Create new FavoriteNote')
-    # @datingapp.marshal_with(favoritenote, code=200)
     @datingapp.expect(favoritenote)
     @secured
     def post(self):
-        """Erstellen einer neuen FavoriteNote"""
+        """ Erstellen einer neuen FavoriteNote """
         adm = Administration()
         proposal = FavoriteNote.from_dict(api.payload)
-
 
         if proposal is not None:
 
@@ -510,18 +490,14 @@ class FavoritenoteListOperations(Resource):
             """Falls was schiefgeht, passiert nichts und Fehlerausgabe"""
             return '', 500
 
-
 @datingapp.route('/FavoritenoteProfiles/<profile_id>/<other_profile_id>')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class FavoritenoteDeleteOperations(Resource):
     @secured
     def delete(self, profile_id, other_profile_id):
-        """Löschen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die ID in der URL bestimmt."""
+        """ Löschen eines FavoriteNote-Objekts """
 
         adm = Administration()
-        #print("profile_id im main: ", profile_id)
-        #print("other_profile_id im main:  ", other_profile_id)
 
         if profile_id and other_profile_id is not None:
             adm.delete_favoritenote(profile_id, other_profile_id)
@@ -536,30 +512,27 @@ class FavoritenoteDeleteOperations(Resource):
 class FavoriteNoteOperations(Resource):
     @secured
     def get(self, profile_id):
-        """Auslesen eines FavoriteNote-Objekts.
-        Das Objekt wird durch die ID in der URL bestimmt."""
+        """ Auslesen eines FavoriteNote-Objekts """
 
         adm = Administration()
         fnotes = adm.get_favoritenote_by_adding_user(profile_id)
 
         if fnotes is not None:
-            print(fnotes)
             return fnotes
         else:
             return '', 500
 
-
     @datingapp.marshal_with(favoritenote)
     @secured
     def put(self, id):
-        "Update eines bestimmten FavoriteNote-Objektes"
+        """ Update eines bestimmten FavoriteNote-Objektes """
 
         adm = Administration()
         fnote = FavoriteNote.from_dict(api.payload)
 
         if fnote is not None:
 
-            """Hierdurch wird die id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
+            """Hierdurch wird die Id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
             fnote.set_id(id)
             adm.save_favoritenote(fnote)
             return '', 200
@@ -567,18 +540,17 @@ class FavoriteNoteOperations(Resource):
             return '', 500
 
 
-"""Ab hier BlockNote"""
+""" BlockNote """
 
 
 @datingapp.route('/Blocknote')
 @datingapp.response(500, 'Serverseitiger Fehler')
 class BlocknoteListOperations(Resource):
     @datingapp.doc('Create new BlockNote')
-    # @datingapp.marshal_with(blocknote, code=201)
     @datingapp.expect(blocknote)
     @secured
     def post(self):
-        """Erstellen einer neuen BlockNote"""
+        """ Erstellen einer neuen BlockNote """
 
         adm = Administration()
         proposal = BlockNote.from_dict(api.payload)
@@ -600,8 +572,7 @@ class BlocknoteListOperations(Resource):
 class BlockNoteOperations(Resource):
     @secured
     def get(self, profile_id):
-        """Auslesen eines BlockNote-Objekts.
-        Das Objekt wird durch die ID in der URL bestimmt."""
+        """ Auslesen eines BlockNote-Objekts """
 
         adm = Administration()
         bnotes = adm.get_blocknote_by_blocking_user(profile_id)
@@ -612,18 +583,17 @@ class BlockNoteOperations(Resource):
         else:
             return '', 500
 
-
     @datingapp.marshal_with(blocknote)
     @secured
     def put(self, id):
-        "Update eines bestimmten BlockNote-Objektes"
+        """ Update eines bestimmten BlockNote-Objektes """
 
         adm = Administration()
         bnote = BlockNote.from_dict(api.payload)
 
         if bnote is not None:
 
-            """Hierdurch wird die id des zu überschreibenden FavoriteNote-Objekts gesetzt"""
+            """ Hierdurch wird die Id des zu überschreibenden FavoriteNote-Objekts gesetzt """
             bnote.set_id(id)
             adm.save_favoritenote(bnote)
             return '', 200
@@ -635,12 +605,9 @@ class BlockNoteOperations(Resource):
 class BlocknoteDeleteOperations(Resource):
     @secured
     def delete(self, profile_id, other_profile_id):
-        """Löschen eines BlockNote-Objekts in der Datenbank.
-        Das Objekt wird durch die ID's in der URL bestimmt"""
-        print("Test vor adm = Administration()")
+        """ Löschen eines BlockNote-Objekts in der Datenbank """
+
         adm = Administration()
-        print("profile_id im main (BlocknoteDeleteOperations): ", profile_id)
-        print("other_profile_id im main (BlocknoteDeleteOperations):  ", other_profile_id)
 
         if other_profile_id and profile_id is not None:
             adm.delete_blocknote(profile_id, other_profile_id)
@@ -648,8 +615,7 @@ class BlocknoteDeleteOperations(Resource):
         else:
             return '', 500
 
-    """ Ab hier Suchprofil """
-
+""" Suchprofil """
 
 @datingapp.route('/Suche/Suchprofil')
 @datingapp.response(500, 'Serverseitiger Fehler')
@@ -658,7 +624,7 @@ class SearchprofileListOperations(Resource):
     @datingapp.marshal_list_with(searchprofile)
     @secured
     def get(self):
-        """ Auslesen aller Suchprofil-Objekte. """
+        """ Auslesen aller Suchprofil-Objekte """
         adm = Administration()
         searchprofiles = adm.get_all_searchprofile()
         return searchprofiles
@@ -670,14 +636,16 @@ class NamedInfoObjectListOperations(Resource):
     @datingapp.expect(namedinfoobject)
     @secured
     def post(self):
-        """ Anlegen eines neuen NamedInfoObject-Objekts. """
+        """ Anlegen eines neuen NamedInfoObject-Objekts """
+
         adm = Administration()
 
         proposal = NamedInfoObject.from_dict(api.payload)
 
         if proposal is not None:
             charobj = adm.create_char(
-                proposal.get_named_char_name()
+                proposal.get_named_char_name(),
+                proposal.get_char_typ()
             )
 
             infoobj = adm.create_named_info_object(
@@ -696,7 +664,7 @@ class NamedInfoObjectListOperations(Resource):
 class NamedCharAndInfoOperations(Resource):
     @secured
     def put(self):
-        """ Update eines bestimmten NamedChars. """
+        """ Update eines bestimmten NamedChars """
         adm = Administration()
         proposal = NamedInfoObject.from_dict(api.payload)
 
@@ -713,16 +681,14 @@ class NamedCharAndInfoOperations(Resource):
         else:
             return 'NamedCharNameAndValue konnte nicht aktualisiert werden.', 500
 
-
 @datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):
     @secured
     def get(self, char_id):
-        print("Angekommen in der NamedCharacteristicsOperations", char_id)
+        """ Auslesen eines bestimmten NamedChars """
 
         adm = Administration()
-
         char_names = adm.get_char_by_key(char_id)
 
         return char_names, 200
@@ -733,12 +699,14 @@ class CharacteristicsOperations(Resource):
     @datingapp.marshal_list_with(characteristic)
     @secured
     def get(self):
+        """ Auslesen aller Chars """
+
         adm = Administration()
         char_names = adm.get_all_char_names()
 
         return char_names, 200
 
-"""Ab hier Profilevisits"""
+""" Profilevisits """
 
 @datingapp.route('/visit')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
@@ -748,6 +716,8 @@ class ProfileVisitsOperations(Resource):
     @secured
 
     def post(self):
+        """ Hinzufügen, dass der Nutzer ein Profil besucht hat.
+            D.h. in diesem Fall, er hat die Profilbox angeklickt und somit das ganze Profil angesehen. """
         adm = Administration()
         proposal = Profilevisits.from_dict(api.payload)
 
@@ -757,7 +727,7 @@ class ProfileVisitsOperations(Resource):
         else:
             return '', 500
 
-""" Handling, um das Matchmaking aufzurufen. """
+    """ Handling, um das Matchmaking aufzurufen. """
 
 @datingapp.route('/Search/Matchmaking/<int:searchprofile_id>')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
@@ -766,15 +736,12 @@ class MatchingOperations(Resource):
 
     @secured
     def get(self, searchprofile_id):
-        print('Main.Py übergebene Searchprofile_id:', searchprofile_id)
+        """ Auslesen der Matches """
 
         adm = Administration()
         searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
-        print('main.py Suchprofil:', searchprof)
 
         profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
-
-        print('Main.py profiles bevor es übergeben wird:', profiles)
 
         if profiles is not None:
             return profiles
@@ -788,15 +755,13 @@ class MatchingNewProfilesOperations(Resource):
 
     @secured
     def get(self, google_fk, searchprofile_id):
+        """ Auslesen der neuen Matches """
         print('Main.Py übergebene Searchprofile_id:', searchprofile_id, "und die übergebene Google_id: ", google_fk)
 
         adm = Administration()
         searchprof = adm.get_char_values_for_searchprofile(searchprofile_id) #Searchprof stellt ein Dictionary mit der ID und den Char-Values dar.
-        print('main.py Suchprofil:', searchprof)
 
         profiles = adm.execute_matchmaking(searchprof) #Ergebnisliste aller Matches [[id1, 80], [id2, 30], ... ]
-
-        print('Main.py profiles bevor es übergeben wird:', profiles)
 
         if profiles is not None:
             return profiles

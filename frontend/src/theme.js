@@ -1,5 +1,4 @@
-import {createTheme , styled} from '@mui/material/styles';
-import { colors } from '@mui/material';
+import {styled} from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 
 const white = '#FFFFFF';

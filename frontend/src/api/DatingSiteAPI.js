@@ -24,13 +24,17 @@ export default class DatingSiteAPI {
     // #datingServerBaseURL = '/api/system';
 
 
-    // Message related
+    // Message related URL´s
 
     #getAllMessagesURL = (profileID, otherprofileID) => `${this.#datingServerBaseURL}/ChatWindow/${profileID}/${otherprofileID}`;
     #addMessageURL = () => `${this.#datingServerBaseURL}/ChatWindow`;
     #getChatsURL = (id) => `${this.#datingServerBaseURL}/ChatProfileBoxList/${id}`;
 
-    // Singelton API
+    /**
+     * Singelton API:
+     * Gibt eine Singleton-Instanz der DatingSiteAPI zurück. Wenn keine Instanz existiert, wird eine neue gespeichert
+     * und gespeichert.
+     * */
     static getAPI() {
         if (this.#api == null) {
             this.#api = new DatingSiteAPI();
@@ -38,6 +42,13 @@ export default class DatingSiteAPI {
         return this.#api;
     }
 
+
+    /**
+     * Erweiterter Fetch-Aufruf, der eine URL und einen init Parameter verwendet.
+     * Wenn die Antwort nicht erfolgreich ist, dann wird ein Fehler geworfen. (res.ok = false)
+     * @param url = URL für den Fetch-Aufruf
+     * @param init = Parameter für den Aufruf (GET, POST, PUT, DELETE)
+     * */
     #fetchAdvanced = (url, init) => fetch(url, init)
         .then(res => {
             if (!res.ok) {
@@ -48,13 +59,13 @@ export default class DatingSiteAPI {
 
 
     /**
-     * @param {messageBO} message object
-     * @public
+     * API-Aufruf, um alle Nachrichten zwischen den angegebenen Profilen auszulesen.
+     * @param profileID = ID des eigenen Profils.
+     * @param otherprofileID = ID des anderen Profils.
      */
 
     getAllMessages(profileID, otherprofileID) {
         return this.#fetchAdvanced(this.#getAllMessagesURL(profileID, otherprofileID)).then((responseJSON) => {
-            console.log("Innerhalb der Dating API: ", responseJSON)
             let messageBOs = messageBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(messageBOs);
@@ -63,6 +74,7 @@ export default class DatingSiteAPI {
     }
 
     /**
+     * API-Aufruf um eine Nachricht zu versenden.
      * @param {messageBO} message object
      * @public
      */
@@ -116,6 +128,7 @@ export default class DatingSiteAPI {
 
 
     /**
+     * Hinzufügen eines Profils.
      * @param {profileBO} profile object
      * @public
      */
@@ -129,7 +142,6 @@ export default class DatingSiteAPI {
             },
             body: JSON.stringify(profile)
         }).then((responseJSON) => {
-            console.log("API Proifle bei der Erstellung: ", profile)
             let prfileBO = profileBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(prfileBO);
@@ -138,6 +150,7 @@ export default class DatingSiteAPI {
     }
 
     /**
+     * Löschen einer Profil-Instanz.
      * @param {profileBO} profile object
      * @public
      */
@@ -159,11 +172,11 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * @param {infoobjectBO} infoobjec object
+     * API-Aufruf zum hinzufügen von InfoObjekten.
+     * @param {infoobjectBO} infoobject object
      * @public
      */
     addInfoObject(infoobject) {
-        console.log("InfoObject: ", infoobject)
         return this.#fetchAdvanced(this.#addInfoObject(), {
             method: "POST",
             headers: {
@@ -179,16 +192,20 @@ export default class DatingSiteAPI {
         })
     }
 
+    /**
+     * API-Aufruf um InfoObjekte auszulesen.
+     * */
     getInfoObjectsCharID(char_id) {
         return this.#fetchAdvanced(this.#getAllInfoObjectsByCharIDURL(char_id))
             .then((responeJSON) => {
-                console.log("Alle InfoObjects aus dem API Call: ", responeJSON)
                 return responeJSON
             })
     }
 
+    /**
+     * API-Aufruf um InfoObjekte zu aktualisieren.
+     * */
     updateInfoObject(infoobject) {
-        console.log("InfoObject: ", infoobject)
         return this.#fetchAdvanced(this.#updateProfileURL(infoobject.get_profile_fk()), {
             method: "PUT",
             headers: {
@@ -204,8 +221,10 @@ export default class DatingSiteAPI {
         })
     }
 
+    /**
+     * Aktualisieren einer Characteristic anhand der GoogleID
+     * */
     updateNamedCharByURL(google_fk) {
-        console.log("updatedNamedChar: ", google_fk)
         return this.#fetchAdvanced(this.#updateNamedCharByCharValueURL(google_fk), {
             method: "PUT",
             headers: {
@@ -221,18 +240,22 @@ export default class DatingSiteAPI {
         })
     }
 
+    /**
+     * Ruft alle Charakternamen ab.
+     */
     getAllCharNames() {
         return this.#fetchAdvanced(this.#getAllCharNameURL())
             .then((responeJSON) => {
-                console.log("getallcharnames: ", responeJSON)
                 let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
                 return namedCHAR
             })
     };
 
 
+    /**
+     * API-Aufruf um eine Charakterbeschreibung für ein Profil zu erstellen.
+     * */
     createCharDescForProfile(characteristic_desc_name) {
-        console.log("API: ", characteristic_desc_name)
         return this.#fetchAdvanced(this.#createCharDescForProfileURL(), {
             method: "POST",
             headers: {
@@ -248,8 +271,10 @@ export default class DatingSiteAPI {
         })
     }
 
+    /**
+     * API-Aufruf aller InfoObjekte eines Profils.
+     * */
     getInfoObjects(googleID) {
-        console.log("Google ID für InfosObjeckte: ", googleID)
         return this.#fetchAdvanced(this.#getInfoObjectsURL(googleID))
             .then((responseJSON) => {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
@@ -260,13 +285,9 @@ export default class DatingSiteAPI {
     }
 
     /**
-     * @param {characteristicBO} characteristic object
-     * @public
+     * API-Aufruf um den char_name zu erhalten.
      */
-
-
     getCharName(char_id) {
-        console.log("EigenschaftsID: ", char_id);
         return this.#fetchAdvanced(this.#getCharNameURL(char_id))
             .then((responeJSON) => {
                 let namedCHAR = CharacteristicBO.fromJSON(responeJSON);
@@ -274,8 +295,10 @@ export default class DatingSiteAPI {
             })
     }
 
+    /**
+     * API-Aufruf um eine Characteristic zu löschen.
+     * */
     removeNamedChar(char_value) {
-        console.log("Namedchar in der API: ", char_value);
         return this.#fetchAdvanced(this.#removeNamedCharByValueURL(char_value), {
             method: 'DELETE',
             headers: {
@@ -286,12 +309,14 @@ export default class DatingSiteAPI {
         })
     }
 
+    /**
+     * API-Aufruf um ein Profil auszulesen
+     * @param google_fk = GoogleID eines Users.
+     */
     getProfileByID(google_fk) {
         let profile = this.#fetchAdvanced(this.#getProfileByIdURL(google_fk));
-        console.log("Profile: ", profile);
         return this.#fetchAdvanced(this.#getProfileByIdURL(google_fk))
             .then((responseJSON) => {
-            console.log("Profilid: ", responseJSON)
             let responseProfileBO = profileBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseProfileBO);
@@ -319,8 +344,6 @@ export default class DatingSiteAPI {
     getSearchProfileIDs(profile_id){
         return this.#fetchAdvanced(this.#getSearchProfilesByIdURL(profile_id))
             .then((responseJSON) => {
-                //console.log("Das responseJSON")
-                //console.log(responseJSON)
                 return new Promise(function (resolve) {
                     resolve(responseJSON);
                 })
@@ -328,6 +351,9 @@ export default class DatingSiteAPI {
             })
     }
 
+    /**
+     * API-Aufruf um ein Suchprofil zu löschen.
+     * */
     removeSearchProfile(searchprofile_id) {
         return this.#fetchAdvanced(this.#removeSearchProfile(searchprofile_id), {
             method: 'DELETE',
@@ -385,11 +411,13 @@ export default class DatingSiteAPI {
     }
 
 
+    /**
+     * API-Aufruf um ein bestimmtes Suchprofil aufzurufen.
+     * */
     getOneSearchprofile(searchprofile_id){
         return this.#fetchAdvanced(this.#getOneSearchprofileByIdURL(searchprofile_id))
             .then((responseJSON) => {
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
-                console.log("responseJSON API Infoobjects Suchprofil: ", responseJSON);
                 return new Promise(function (resolve) {
                     resolve(infoobjectBOs);
                 })
@@ -409,8 +437,10 @@ export default class DatingSiteAPI {
     }
 
 
+    /**
+     * API-Aufruf um die InfoObjekte eines Suchprofils zu aktualisieren.
+     * */
     updateSearchInfoObject(infoobject) {
-        console.log("InfoObject: ", infoobject)
         return this.#fetchAdvanced(this.#updateSearchProfileURL(infoobject.get_searchprofile_id()), {
             method: "PUT",
             headers: {
@@ -435,10 +465,12 @@ export default class DatingSiteAPI {
     #removeFavoriteProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/FavoritenoteProfiles/${profile_id}/${other_profile_id}`;
 
 
+    /**
+     * API-Aufruf zum Auslesen der Merkliste.
+     * */
     getFavoritenoteProfileURL(profile_id){
         return this.#fetchAdvanced(this.#getFavoritenoteProfileURL(profile_id))
             .then((responseJSON) => {
-                console.log("Das responseJSON: ", responseJSON);
                 return new Promise(function (resolve) {
                     resolve(responseJSON);
                 });
@@ -447,6 +479,9 @@ export default class DatingSiteAPI {
 
 
 
+    /**
+     * Hinzufügen eines Merklisten-Eintrags
+     * */
    addFavoritenoteProfileURL(profile_id) {
         return this.#fetchAdvanced(this.#addFavoriteProfile(profile_id), {
             method: "POST",
@@ -463,6 +498,9 @@ export default class DatingSiteAPI {
         })
     }
 
+    /**
+     * Entfernen eines Merklisten-Eintrags.
+     * */
    removeFavoritenoteProfileURL(profile_id, other_profile_id) {
         return this.#fetchAdvanced(this.#removeFavoriteProfileURL(profile_id, other_profile_id), {
             method: 'DELETE'
@@ -483,16 +521,21 @@ export default class DatingSiteAPI {
     #removeBlockProfileURL = (profile_id, other_profile_id) => `${this.#datingServerBaseURL}/BlocknoteProfiles/${profile_id}/${other_profile_id}`;
 
 
+    /**
+     * Sperrlisteneinträge eines Profils abrufen.
+     * */
     getBlocknoteProfileURL(profile_id){
         return this.#fetchAdvanced(this.#getBlocknoteProfileURL(profile_id))
             .then((responseJSON) => {
-                console.log("Das responseJSON: ", responseJSON);
                 return new Promise(function (resolve) {
                     resolve(responseJSON);
                 });
             });
     }
 
+    /**
+     * Hinzufügen eines Profils in die Sperrliste
+     * */
     addBlocknoteProfileURL(profile_id) {
         return this.#fetchAdvanced(this.#addBlockProfile(profile_id), {
             method: "POST",
@@ -526,8 +569,15 @@ export default class DatingSiteAPI {
             })
 
     }
+
+    /**
+     * Profilvisits related Api-Aufrufe
+     * */
     #addprofilevisitsURL = () => `${this.#datingServerBaseURL}/visit`
 
+    /**
+     * Hinzufügen einer Profil-Besichtigung
+     * */
     addprofilevisits(profilevisits) {
         return this.#fetchAdvanced(this.#addprofilevisitsURL(), {
             method: "POST",
