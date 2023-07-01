@@ -145,6 +145,7 @@ export default class infoobjectBO extends BusinessObject {
     }
 
     /** Hinzugefügt für Suchprofil*/
+
     /** Setzen des minAge*/
     set_minAge(aminAge) {
         this.minAge = aminAge;
@@ -180,49 +181,62 @@ export default class infoobjectBO extends BusinessObject {
      * Relevanz darstellen
      */
 
+    /** Setzen der searchprofile_id*/
     set_searchprofile_id(asearchprofile_id) {
         this.searchprofile_id = asearchprofile_id;
     }
 
+    /** Auslesen der searchprofile_id*/
     get_searchprofile_id() {
         return this.searchprofile_id;
     }
 
+    /** Setzen des income*/
     set_income(aincome) {
         this.income = aincome;
     }
 
+    /** Auslesen des income*/
     get_income() {
         return this.income;
     }
+
+    /** Setzen des favclubs*/
     set_favclub(afavclub) {
         this.favclub = afavclub;
     }
 
+    /** Auslesen des favclubs*/
     get_favclub() {
         return this.favclub;
     }
 
+    /** Setzen des Hobbies*/
     set_hobby(ahobby) {
         this.hobby = ahobby;
     }
 
+    /** Auslesen des Hobbies*/
     get_hobby() {
         return this.hobby;
     }
 
+    /** Setzen der politicaltendency*/
     set_politicaltendency(apoliticaltendency) {
         this.politicaltendency = apoliticaltendency ;
     }
 
+    /** Auslesen der politicaltendency*/
     get_politicaltendency() {
         return this.politicaltendency;
     }
 
+    /** Setzen der aboutme*/
     set_aboutme(aaboutme) {
         this.aboutme = aaboutme
     }
 
+    /** Auslesen der aboutme*/
     get_aboutme() {
         return this.aboutme;
     }
