@@ -6,6 +6,7 @@ class Characteristics(bo):
         super().__init__()
         self._char_id = None
         self._char_name = ""
+        self._char_typ = ""
 
 
     def set_char_id(self, value):
@@ -24,10 +25,19 @@ class Characteristics(bo):
         """Setzen des Eigenschaftsnamen."""
         self._char_name = value
 
+    def get_characteristic_typ(self):
+        """Auslesen des Eigenschaftstyp."""
+        return self._char_typ
+
+    def set_characteristic_typ(self, value):
+        """Setzen des Eigenscahftstyp."""
+        self._char_typ = value
+
     @staticmethod
     def from_dict(dictionary=dict()):
         obj = Characteristics()
         obj.set_id(dictionary['char_id'])
         obj.set_characteristic(dictionary['char_name'])
+        obj.set_characteristic_typ(dictionary['char_typ'])
         return obj
 

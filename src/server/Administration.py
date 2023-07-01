@@ -349,17 +349,27 @@ class Administration(object):
             return mapper.find_all()
 
     def get_char_by_key(self, key):
-        """ Auslesen einer bestimmten Eigenschaft. """
+        """
+        Mit dieser Methode kann man eine Eigenschaft durch eine ID auslesen.
+        :param key: Eigenschafts-ID
+        :return: Es wird der Eigenschaftsname zurückgegeben.
+        """
         with CharMapper() as mapper:
             return mapper.find_char_by_key(key)
 
     def get_all_char_names(self):
-        """ Auslesen aller Eigenschaften. """
+        """
+        Mit dieser Methode werden alle Eigenschaftsnamen ausgelesen.
+        :return: Es werden alle Eigenschaftsnamen ausgegeben.
+        """
         with CharMapper() as mapper:
             return mapper.find_all()
 
     def create_char(self, named_char_name, char_typ):
-        """ Erstellen einer Named-Eigenschaft. """
+        """
+        Mit dieser Methode wird ein NamedInfoObjekt erstellt.
+        :param named_char_name: der Value des NamedInfoObjekts.
+        """
         c = NamedInfoObject()
         c.set_named_char(named_char_name)
         c.set_char_typ(char_typ)
@@ -385,7 +395,11 @@ class Administration(object):
             return mapper.find_all()
 
     def get_info_object_by_id(self, key):
-        """ Auslesen von Infoobjekten anhand der Profile-ID """
+        """
+        Mit dieser Methode werden InfoObjekte basierend auf dem Key ausgelesen.
+        :param key: InfoObjekt-ID
+        :return: Das entsprechende InfoObjekt wird zurückgegeben.
+        """
         with InfoObjectMapper() as mapper:
             return mapper.find_by_id(key)
 
@@ -420,11 +434,10 @@ class Administration(object):
 
     def create_named_info_object(self, profile_fk, infoobj, char_name):
         """
-         Erstellen von Named-Infoobjekten.
-        :param profile_fk: GoogleID des Users
-        :param infoobj: Ausprägung des Eigenschaftsnamens
-        :param char_name: Eigenschaftsname
-        :return: angepasstes InfoObjekt
+        Erstellt ein NamedInfoObjekt basierend auf den angegebenen Attributen.
+        :param profile_fk: Die GoogleID eines Users.
+        :param infoobj: individuell erstelltes InfoObjekt eines Users.
+        :param char_name: individuell erstellte Eigenschaft eines Users.
         """
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
@@ -439,28 +452,41 @@ class Administration(object):
 
     def delete_info_object_by_char_value(self, char_value):
         """
-         Infoobjekt anhand des char_values löschen.
-        :param char_value: Ausprägung der Eigenschaft eines Profils.
+        Löscht InfoObjekte basierend auf dem Char_Value.
+        :param char_value: der Value eines InfoObjekts.
         """
         with InfoObjectMapper() as mapper:
             return mapper.delete_by_char_value(char_value)
 
     def get_all_info_objects_by_char_id(self, char_id):
         """
-        Alle Infoobjekte anhand der char_id auslesen.
-        :param char_id: Eigenschafts-Fremdschlüssel
-        :return: Alle Infoobjekte vom gegebenen Key (char_id)
+        Durch diesen Aufruf werden alle InfoObjekte ausgelesen,
+        die diese individuelle Eigenschafts-ID haben.
+        :param char_id: individuelle Eigenschafts-ID
+        :return: Es wird eine Liste zurückgegeben, die diese InfoObjekte enthält.
+        Darüber hinaus werden nur einzigartige InfoObjekte zurückgegeben, d.h., jeder char_value,
+        der mehrfach vorkommt, wird nicht zur Liste hinzugefügt.
         """
         with InfoObjectMapper() as mapper:
-            return mapper.find_all_info_objects_by_char_id(char_id)
+            info_objects = mapper.find_all_info_objects_by_char_id(char_id)
+
+        to_send_info_objects = {}
+
+        for info_obj in info_objects:
+            char_value = info_obj.get_value()
+            if char_value not in to_send_info_objects:
+                to_send_info_objects[char_value] = info_obj
+
+        return list(to_send_info_objects.values())
 
     def update_named_info_object(self, profile_fk, char_id, char_name, infoobj):
         """
-        Aktualisieren von Infoobjekten.
-        :param profile_fk: GoogleID des Nutzers.
-        :param char_id: Fremdschlüssel der Eigenschaft
+        In dieser Methode werden bereits vorhandene NamedInfoObjekte aktualisiert.
+        :param profile_fk: Google-ID eines Users
+        :param char_id: individuelle Eigenschafts-ID
         :param char_name: Eigenschaftsname
-        :param infoobj: Nutzereingabe des Infoobjekts.
+        :param infoobj: der Value des Users
+        :return: Das aktualisierte InfoObjekt wird zurückgegeben.
         """
         with InfoObjectMapper() as InfoMapper:
             with CharMapper() as mapper:
@@ -507,7 +533,12 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
-        """ Auslesen der Infoobjekte anhand der GoogleID eines Nutzers. """
+        """
+        Mit dieser Funktion werden InfoObjekte basierend auf einer individuellen InfoObjekt-ID
+        und der passenden Profil-ID ausgelesen.
+        :param infoobject_id: individuelle InfoObjekt-ID
+        :param profile_id: Google-ID eines Users
+        """
         with InfoObjectMapper() as mapper:
             return mapper.find_by_id(infoobject_id, profile_id)
 
