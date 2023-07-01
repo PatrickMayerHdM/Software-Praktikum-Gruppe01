@@ -7,8 +7,6 @@ import Stack from "@mui/material/Stack";
 import DatingSiteAPI from "../../api/DatingSiteAPI";
 import OptionsOtherProfile from "./OptionsOtherProfile";
 
-
-
 {/** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
  sich ein User anschaut. Hierbei werden nur die Profildaten dargestellt und keine weiteren Daten, welche ein User
  zum Bearbeiten oder zur Interaktion mit anderen Usern eventuell benötigt. Diese Funktionen sind bereits in
@@ -16,11 +14,8 @@ import OptionsOtherProfile from "./OptionsOtherProfile";
  ,dies sollte einem User später angezeigt werden, wenn er ein anderes */}
 
 /** Definition der Profile-Komponente */
-
 class Profile extends React.Component{
-
     /** alle Zustandsvariablen: */
-
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +24,6 @@ class Profile extends React.Component{
             customProperties: [],
         }
     }
-
     /** Beim Laden der Seite wird der folgende Code ausgeführt: */
     componentDidMount() {
         const currentPath = window.location.pathname;
@@ -41,7 +35,6 @@ class Profile extends React.Component{
              * die mithilfe der LastPartURL abgefragt werden können. */
         })
     }
-
     /** Diese Funktion wird als "async" markiert, da wir auf den Abschluss des API-Aufrufs für die InfoObjekte warten müssen.
      * Zuerst wird ein leeres Objekt namens "customProperties" erstellt.
      * Jedes InfoObjekt, das eine CharID größer als 160 hat, wird zu diesem leeren Objekt hinzugefügt.
@@ -52,78 +45,74 @@ class Profile extends React.Component{
      * Am Ende wird der Zustand des leeren "customProperties"-Objekts aktualisiert,
      * um daraus die individuellen Eigenschaften und InfoObjekte auslesen zu können. */
     async getSelectedProperties() {
-      const customProperties = {};
-
-      try {
-        const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.state.lastPartURL);
-
+        const customProperties = {};
+        try {
+            const responseInfoObjects = await DatingSiteAPI.getAPI().getInfoObjects(this.state.lastPartURL);
             for (const key in responseInfoObjects) {
                 if (responseInfoObjects.hasOwnProperty(key)) {
                     const infoObject = responseInfoObjects[key];
                     const char_id = infoObject.char_id;
                     const charValue = infoObject.char_value;
+                    if (char_id > 160) {
+                        const char_name = await this.getCharNameByID(char_id);
+                        customProperties[char_id] = {
+                            char_id: char_id,
+                            char_value: charValue,
+                            char_name: char_name,
+                        };
+                    } else {
+                        switch (char_id) {
+                            case 30:
+                                customProperties.age = charValue;
+                                break;
+                                case 10:
+                                    customProperties.firstName = charValue;
+                                    break;
+                                    case 40:
+                                        customProperties.gender = charValue;
+                                        break;
+                                        case 70:
+                                            customProperties.hair = charValue;
+                                            break;
+                                            case 50:
+                                                customProperties.height = charValue;
+                                                break;
+                                                case 20:
+                                                    customProperties.lastName = charValue;
+                                                    break;
+                                                    case 60:
+                                                        customProperties.religion = charValue;
+                                                        break;
+                                                        case 80:
+                                                            customProperties.smoking = charValue;
+                                                            break;
+                                                            case 90:
+                                                                customProperties.aboutme = charValue;
+                                                                break;
+                                                                case 120:
+                                                                    customProperties.income = charValue;
+                                                                    break;
+                                                                    case 140:
+                                                                        customProperties.favclub = charValue;
+                                                                        break;
+                                                                        case 150:
+                                                                            customProperties.hobby = charValue;
+                                                                            break;
+                                                                            case 160:
+                                                                                customProperties.politicaltendency = charValue;
+                                                                                break;
 
-                if (char_id > 160) {
-                    const char_name = await this.getCharNameByID(char_id);
-                    customProperties[char_id] = {
-                        char_id: char_id,
-                        char_value: charValue,
-                        char_name: char_name,
-                    };
-                } else {
-                    switch (char_id) {
-                        case 30:
-                            customProperties.age = charValue;
-                            break;
-                        case 10:
-                            customProperties.firstName = charValue;
-                            break;
-                        case 40:
-                            customProperties.gender = charValue;
-                            break;
-                        case 70:
-                            customProperties.hair = charValue;
-                            break;
-                        case 50:
-                            customProperties.height = charValue;
-                            break;
-                        case 20:
-                            customProperties.lastName = charValue;
-                            break;
-                        case 60:
-                            customProperties.religion = charValue;
-                            break;
-                        case 80:
-                            customProperties.smoking = charValue;
-                            break;
-                        case 90:
-                            customProperties.aboutme = charValue;
-                            break;
-                        case 120:
-                            customProperties.income = charValue;
-                            break;
-                        case 140:
-                            customProperties.favclub = charValue;
-                            break;
-                        case 150:
-                            customProperties.hobby = charValue;
-                            break;
-                        case 160:
-                            customProperties.politicaltendency = charValue;
-                            break;
-
-                            default:
-                            break;
+                                                                                default:
+                                                                                    break;
+                        }
                     }
-                }
                 }
             }
             this.setState({ customProperties });
-      } catch (error) {
-          console.error("Fehler beim auslesen der InfoObjekte: ", error);
-      }
+        } catch (error) {
+            console.error("Fehler beim auslesen der InfoObjekte: ", error);
+        }
     }
-
     /** Die Funktion "getCharNameByID" ruft den Namen einer Eigenschaft basierend auf der char_id ab.
      * Dabei wird die entsprechende API-Methode aufgerufen und der Name als Ergebnis zurückgegeben. */
     getCharNameByID(char_id) {
@@ -133,10 +122,8 @@ class Profile extends React.Component{
                 return responseCharName;
             })
     }
-      /** render() sorgt für das Anzeigen im Webbrowser */
-
+    /** render() sorgt für das Anzeigen im Webbrowser */
     render() {
-
         {/** Hier werden die States der InfoObjekte gesetzt */}
         const {
             age,
@@ -157,12 +144,13 @@ class Profile extends React.Component{
 
         } = this.state;
 
-        {/** Hier wird eine const erstellt, die den LastPartURL mit seiner eigenen UID vergleicht */}
+        {/** Es wird eine Konstante erstellt, die den LastPartURL mit der eigenen UID vergleicht.
+         Wenn es sich dabei um das eigene Profil handelt, werden die Buttons unten nicht angezeigt.*/}
         const isOwnProfile = this.state.lastPartURL === this.props.user.uid;
 
         return (
             <div>
-             <p></p>
+            <p></p>
                 <Box sx={{ width: {md: '50%', sm: '60%'} , margin: '0 auto'}}>
                     <Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{ alignItems: 'stretch' }}>
                         {/** Item zum Anzeigen des Vornamens */}
@@ -361,7 +349,4 @@ class Profile extends React.Component{
         )
     }
 }
-
-
-
 export default Profile

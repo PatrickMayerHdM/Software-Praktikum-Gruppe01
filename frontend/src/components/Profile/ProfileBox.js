@@ -13,9 +13,7 @@ import profilevisitsBO from "../../api/ProfilevisitsBO";
  */
 
 /** Definition der ProfileBox-Komponente */
-
 class ProfileBox extends React.Component {
-
     /** alle Zustandsvariablen: */
     constructor(props) {
         super(props);
@@ -25,7 +23,6 @@ class ProfileBox extends React.Component {
         }
         this.onProfileClick = this.onProfileClick.bind(this)
     }
-
     /** Diese Funktion wird aufgerufen, wenn auf ein Profil geklickt wird.
      * Sie fügt einen neuen Profilbesuch hinzu, indem sie die entsprechende API-Methode aufruft.
      * Wenn dabei ein Fehler auftritt, wird dieser im Zustand der Komponente gespeichert.*/
@@ -39,7 +36,6 @@ class ProfileBox extends React.Component {
                 })
             )
     }
-
     /** Wenn diese Box geladen wird, werden mithilfe eines API-Aufrufs die InfoObjekte des jeweiligen Profils abgerufen.
      * Dabei sind nur der vollständige Name, das Alter, die Größe und das Geschlecht erforderlich.
      * Es wird ein leeres Objekt namens "selectedProperties" erstellt. Anschließend wird mithilfe einer for-Schleife durch die "responseInfoObjects"
@@ -59,40 +55,38 @@ class ProfileBox extends React.Component {
                             case 30:
                                 selectedProperties.age = charValue;
                                 break;
-                            case 10:
-                                selectedProperties.firstName = charValue;
-                                break;
-                            case 40:
-                                selectedProperties.gender = charValue;
-                                break;
-                            case 70:
-                                selectedProperties.hair = charValue;
-                                break;
-                            case 50:
-                                selectedProperties.height = charValue;
-                                break;
-                            case 20:
-                                selectedProperties.lastName = charValue;
-                                break;
-                            case 60:
-                                selectedProperties.religion = charValue;
-                                break;
-                            case 80:
-                                selectedProperties.smoking = charValue;
-                                break;
+                                case 10:
+                                    selectedProperties.firstName = charValue;
+                                    break;
+                                    case 40:
+                                        selectedProperties.gender = charValue;
+                                        break;
+                                        case 70:
+                                            selectedProperties.hair = charValue;
+                                            break;
+                                            case 50:
+                                                selectedProperties.height = charValue;
+                                                break;
+                                                case 20:
+                                                    selectedProperties.lastName = charValue;
+                                                    break;
+                                                    case 60:
+                                                        selectedProperties.religion = charValue;
+                                                        break;
+                                                        case 80:
+                                                            selectedProperties.smoking = charValue;
+                                                            break;
 
-                                default:
-                                break;
+                                                            default:
+                                                                break;
                         }
                     }
                 }
                 this.setState(selectedProperties);
             });
     }
-
     /** render() sorgt für das Anzeigen im Webbrowser */
     render() {
-
         {/** Hier werden die States der InfoObjekte gesetzt */}
         const {
             age,
@@ -146,5 +140,4 @@ class ProfileBox extends React.Component {
         )
     }
 }
-
 export default ProfileBox

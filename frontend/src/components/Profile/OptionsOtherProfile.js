@@ -11,7 +11,6 @@ import "../App.css";
 /** Da sich die Gestaltung der Profilkomponente nicht unterscheidet, ob es das eigene Profil oder ein Profil einer
  * anderen Person ist, werden die spezifischen Funktionen in einer extra Komponente behandelt.
  * Hier werden jetzt die Optionen dargestellt, welche ein User beim Anschauen eines anderen Profils hat.*/
-
 class OptionsOtherProfile extends React.Component{
 
     constructor(props) {
@@ -26,7 +25,6 @@ class OptionsOtherProfile extends React.Component{
         this.PersonSaved = this.PersonSaved.bind(this);
         this.PersonBlocked = this.PersonBlocked.bind(this);
     }
-
     componentDidMount() {
         const currentPath = window.location.pathname;
         const lastPartURL = currentPath.split('/').pop();
@@ -34,17 +32,11 @@ class OptionsOtherProfile extends React.Component{
         this.setState({added_id: lastPartURL})
         this.setState({blocked_id: lastPartURL})
     }
-
     /** Die Funktionen die Ausgeführt werden, wenn auf einen Button gedrückt wird. */
-
     /** Funktion welche einen anderen User zu seinem eigenen Merkzettel hinzufügt. */
     PersonSaved(){
-
         const { adding_id, added_id } = this.state
-
         const newFavnote = new favoriteNoteBO(adding_id, added_id)
-        console.log("die FavNote: ", newFavnote)
-        console.log("IDs: ", added_id, adding_id)
         DatingSiteAPI.getAPI()
             // Hinzufügen des neuen FavoriteNote-Eintrags
             .addFavoritenoteProfileURL(newFavnote)
@@ -54,16 +46,11 @@ class OptionsOtherProfile extends React.Component{
                 })
             );
     }
-
-
     /** Funktion welche einen anderen User mit einer Kontaktsperre belegt.
      * Zu Testzwecken noch nicht weiter ausgeführt, sondern nur mit einem console.log */
     PersonBlocked(){
-
         const { blocking_id, blocked_id } = this.state
-
         const newBlocknote = new blockNoteBO(blocking_id, blocked_id)
-        console.log("die BlockNote: ", newBlocknote)
         DatingSiteAPI.getAPI()
             // Hinzufügen des neuen FavoriteNote-Eintrags
             .addBlocknoteProfileURL(newBlocknote)
@@ -73,7 +60,6 @@ class OptionsOtherProfile extends React.Component{
                 })
             );
     }
-
     render() {
 
         return(
@@ -81,11 +67,13 @@ class OptionsOtherProfile extends React.Component{
           <Grid container
             direction="row" justifyContent="center" alignItems="strech" >
             <Grid item md={4} xs={6} spacing={2} >
+                {/** Button für das Hinzufügen einer Person */}
                 <button className="button_container" onClick={this.PersonSaved} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#6A7285", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BookmarkAddedIcon/>
                 </button>
             </Grid>
             <Grid item md={4} xs={6} spacing={2}>
+               {/** Button für das Blockieren einer Person */}
                <button className="button_container" onClick={this.PersonBlocked} style={{ height: "100%", width: "100%" ,display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#EE6457", color:"#fff", cursor: "pointer", border: "solid", borderColor: '#BDC2BF'}}>
                     <BlockIcon/>
                </button>
@@ -95,5 +83,4 @@ class OptionsOtherProfile extends React.Component{
         </Box >
     )}
 }
-
 export default OptionsOtherProfile
