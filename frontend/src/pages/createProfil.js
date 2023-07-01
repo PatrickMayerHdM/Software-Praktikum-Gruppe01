@@ -85,6 +85,7 @@ class CreateProfil extends Component {
             UserSelectAvSelections: [],
             UserSelectSelectedOptionIndex: null,
             UserEdit: false,
+            selectedCharTyp: null,
         };
 
         /** Bindung der Handler an die Komponente */
@@ -603,10 +604,16 @@ class CreateProfil extends Component {
         this.setState({ openuserchar: true })
     };
 
+    handleUserSelectSaveInputsSelections() {
+
+    }
+
     /** Event-Handler für die Änderung einer selectedOption */
     handleChangeSelectedProperty = (event) => {
+        const { selectedCharNames } = this.state
         const selectedProperty = event.target.value;
-        this.setState({ selectedOption: event.target.value }, () => {
+        const selectedChar = selectedCharNames.find((char) => char.char_id === selectedProperty);
+        this.setState({ selectedOption: selectedProperty, selectedCharTyp: selectedChar?.char_typ }, () => {
             this.getInfoObjectsByCharID(selectedProperty);
         });
     };
@@ -1070,6 +1077,7 @@ class CreateProfil extends Component {
                 char_typ,
                 openuserchar,
                 selectedCharNames,
+                selectedCharTyp,
             } = this.state;
 
             const defaultValue = selectedOption || '';
@@ -1380,7 +1388,6 @@ class CreateProfil extends Component {
                                                                             key={char.char_id}
                                                                             value={char.char_id}
                                                                         >
-                                                                            {/** Patrick Aufgabe: Viel Spass :) */}
                                                                             <div>
                                                                                 {char.char_name}
                                                                             </div>
@@ -1388,30 +1395,44 @@ class CreateProfil extends Component {
                                                                     ))}
                                                             </Select>
                                                         </FormControl>
-                                                            <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
-                                                                <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Hier sind deine Auswahlmöglichkeiten: </FormLabel>
-                                                                {this.state.UserSelectAvSelections.map((value, index) => (
-                                                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%' }}>
-                                                                        <TextField label="Auswahlname"  size="small"
-                                                                                   value={this.state.UserSelectAvSelections[index] || ''}
-                                                                                   onChange={(event) => this.handleUserSelectTextFieldChange(event, index)}
-                                                                                   onClick={() => this.handleUserSelectFieldSelection(index)}
-                                                                                   style={this.state.UserSelectSelectedOptionIndex === index ? { backgroundColor: '#c1ff7a' } : null}
-                                                                        ></TextField>
-                                                                        <Fab color="error" aria-label="delete" size="small" onClick={() => this.handleDeleteUserSelection(index)}>
-                                                                            <DeleteIcon></DeleteIcon>
-                                                                        </Fab>
-                                                                    </Box>
-                                                                ))}
-                                                                <Box sx={{ marginBottom: '10px' }}>
-                                                                     <Fab onClick={this.handleUserSelectNumOptions} color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
-                                                                         <AddIcon />
-                                                                     </Fab>
+                                                        {this.state.selectedCharTyp === 'select' && (
+                                                        <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                          <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                            Hier sind deine Auswahlmöglichkeiten:
+                                                          </FormLabel>
+                                                          {this.state.UserSelectAvSelections.map((value, index) => (
+                                                                <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
+                                                                    <TextField label="Auswahlname" size="small" value={this.state.UserSelectAvSelections[index] || ''} onChange={(event) => this.handleUserSelectTextFieldChange(event, index)} onClick={() => this.handleUserSelectFieldSelection(index)} style={this.state.UserSelectSelectedOptionIndex === index ? { backgroundColor: '#c1ff7a' } : null}></TextField>
+                                                                    <Fab color="error" aria-label="delete" size="small" onClick={() => this.handleDeleteUserSelection(index)}>
+                                                                        <DeleteIcon></DeleteIcon>
+                                                                    </Fab>
                                                                 </Box>
-                                                                <Box sx={{ marginBottom: '10px' }}>
-                                                                    <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}> Speichern </Button>
-                                                                </Box>
+                                                          ))}
+                                                            <Box sx={{ marginBottom: '10px' }}>
+                                                                <Fab onClick={this.handleUserSelectNumOptions} color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
+                                                                    <AddIcon />
+                                                                </Fab>
                                                             </Box>
+                                                            <Box sx={{ marginBottom: '10px' }}>
+                                                                <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}>
+                                                                    Speichern
+                                                                </Button>
+                                                            </Box>
+                                                        </Box>
+                                                        )}
+                                                        {this.state.selectedCharTyp === 'text' && (
+                                                            <>
+                                                                <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                                    <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Gebe hier deine passende Beschreibung an: </FormLabel>
+                                                                </Box>
+                                                                <Box sx={{ marginBottom: '10px' }}>
+                                                                    <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.handleInputChange(event, 'char_desc')} />
+                                                                </Box>
+                                                                <Box sx={{ marginBottom: '10px', marginLeft: '10px' }}>
+                                                                    <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
+                                                                </Box>
+                                                            </>
+                                                        )}
                                                     </FormGroup>
                                                 </Box>
                                             )}
