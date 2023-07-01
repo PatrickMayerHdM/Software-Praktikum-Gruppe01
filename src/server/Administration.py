@@ -86,6 +86,7 @@ class Administration(object):
             return mapper.insert(m)
 
     def save_message(self, msg):
+        """ Aktualisieren einer Nachricht. """
         with MessageMapper() as mapper:
             mapper.update(msg)
 
@@ -115,7 +116,11 @@ class Administration(object):
             return mapper.find_by_key(key)
 
     def get_message_by_chat(self, sender_profile, recipient_profile):
-        """ messages zwischen zwei Personen auslesen """
+        """
+        Nachrichten zwischen zwei Personen auslesen.
+        Es werden alle Nachrichten ausgelesen. Anschließend wird gefiltert, ob eine der Nachrichten von einer
+        blockierten GoogleID stammt.
+        """
 
         messages = [] # Ausgabe der Nachrichten
         blocked_chat_profiles = [] # Liste der Profile, die nicht angezeigt werden sollen
@@ -216,9 +221,13 @@ class Administration(object):
             return mapper.find_by_key(key)
 
     def get_favoritenote_by_adding_user(self, adding_user):
-        """ Auslesen aller Instanzen von FavoriteNote eines Users. """
+        """
+        Auslesen aller Instanzen von FavoriteNote eines Users.
+        In dieser Methode wird die Merkliste eines Nutzers erstellt. Dabei werden anhand der GoogleID eines Nutzers
+        alle Datensätze der DB geladen. Anschließend wird geprüft, ob eine der GoogleIDs in der blockiert wurde.
+        """
 
-        profiles = [] # Ausgabe der Funktion
+        profiles = [] # Ergebnisliste der Methode
         self_blocked_list = [] # Liste aller Profile, die der Nutzer blockiert hat
         other_blocked_list = [] # Liste aller Profile, die den Nutzer blockiert haben
 
@@ -248,26 +257,40 @@ class Administration(object):
 
     # Hier wird die Logik für das Profil auf Basis der Mapper realisiert
     def create_profile(self, favoritenote_id, blocknote_id, google_fk):
+        """
+        Erstellen eines Profils.
+        :param favoritenote_id: ID der Merkliste
+        :param blocknote_id: ID der Blockierliste
+        :param google_fk: GoogleID des Nutzers
+
+        Bevor ein Profil erstellt wird, werden die "Standard" Eigenschaften die jedes Profil haben muss in die DB
+        gespeichert. Anschließend wird eine Profil-Instanz erstellt.
+        """
         self.create_char_list()
         prof = Profile()
         prof.set_favorite_note_id(favoritenote_id)
         prof.set_block_note_id(blocknote_id)
         prof.set_google_fk(google_fk)
-        # prof.set_account_id(account_id)
         prof.set_id(1)
         with ProfileMapper() as mapper:
             mapper.insert(prof)
 
     def save_profile(self, profile):
+        """ Aktualisieren einer Profil-Instanz. """
         with ProfileMapper() as mapper:
             mapper.update(profile)
 
     def delete_profile(self, profile):
+        """ Löschen einer Profil-Instanz. """
         with ProfileMapper() as mapper:
-            print("Admin: ", profile)
             mapper.delete(profile)
 
     def get_all_profiles(self):
+        """
+        Auslesen aller Profile.
+        In dieser Methode werden alle Profile aus der DB geladen. Anschließend wird nach der GoogleID der jeweiligen
+        Objekte gesucht und in eine Liste gespeichert. Diese Liste wird ist der Return.
+        """
         profiles = []
         with ProfileMapper() as mapper:
             found_profiles = mapper.find_all()
@@ -276,23 +299,20 @@ class Administration(object):
                 found_user = found_profile.get_google_fk()
                 profiles.append(found_user)
 
-        print(profiles)
         return profiles
 
     def get_profile_by_google_id(self, key):
+        """ Auslesen einer Profil-Instanz anhand der GoogleID. """
         with ProfileMapper() as mapper:
-            #print("Admin FinByKey Profil: ", key)
             return mapper.find_by_key(key)
-
-    def get_all_profiles_by_blocknote_id(self):
-        pass
-
-    # def get_profile_by_account_id(self, account_id):
-    #     with ProfileMapper() as mapper:
-    #         return mapper.find_by_account_id(account_id)
 
     # Hier wird die Logik für das Characteristic auf Basis der Mapper realisiert
     def create_char_list(self):
+        """
+        Erstellen der Basis-Eigenschaften der Applikation. Diese stellen die Eigenschaften dar, die mindestens
+        vorgegeben werden sollen. Sie stellen soz. default-Werte dar, die jedem Nutzer von Beginn an vorgeschlagen werden.
+        """
+
         with CharMapper() as mapper:
             chars = mapper.find_all()
             if chars:
@@ -324,19 +344,22 @@ class Administration(object):
                 with CharMapper() as mapper:
                     mapper.insert(char)
     def get_all_char(self):
+        """ Auslesen aller Eigenschaften. """
         with CharMapper() as mapper:
             return mapper.find_all()
 
     def get_char_by_key(self, key):
+        """ Auslesen einer bestimmten Eigenschaft. """
         with CharMapper() as mapper:
             return mapper.find_char_by_key(key)
 
     def get_all_char_names(self):
+        """ Auslesen aller Eigenschaften. """
         with CharMapper() as mapper:
             return mapper.find_all()
 
-
     def create_char(self, named_char_name, char_typ):
+        """ Erstellen einer Named-Eigenschaft. """
         c = NamedInfoObject()
         c.set_named_char(named_char_name)
         c.set_char_typ(char_typ)
@@ -345,30 +368,34 @@ class Administration(object):
             return mapper.insert_named_char(c)
 
     def save_char(self, char):
+        """ Aktualisieren einer Eigenschaft. """
         with CharMapper() as mapper:
             mapper.update(char)
 
     def delete_char(self, char):
+        """ Löschen einer Eigenschaft. """
         with CharMapper() as mapper:
             mapper.delete(char)
 
     # Hier wird die Logik für das InfoObjekt auf Basis der Mapper realisiert
 
     def get_all_info_objects(self):
+        """ Auslesen aller Infoobjekte. """
         with InfoObjectMapper() as mapper:
             return mapper.find_all()
 
     def get_info_object_by_id(self, key):
+        """ Auslesen von Infoobjekten anhand der Profile-ID """
         with InfoObjectMapper() as mapper:
-            print("Admin Info Findbykey: ", key)
             return mapper.find_by_id(key)
 
     def get_info_object_by_searchid(self, key):
+        """ Auslesen von Infoobjekten anhand der Suchprofil-ID"""
         with InfoObjectMapper() as mapper:
-            print("Admin Info Findbykey: ", key)
             return mapper.find_by_searchid(key)
 
     def get_info_object(self, key):
+        """ Auslesen von Infoobjekten anhand der Profile-ID """
         with InfoObjectMapper() as mapper:
             return mapper.find_by_key(key)
 
@@ -378,7 +405,6 @@ class Administration(object):
         :param profile_fk: Die GoogleID eines Users.
         :param info_dict: Ein Dictionary, dass alle Informationen enthält.
         """
-        print("InfoDict: ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():
@@ -393,29 +419,49 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def create_named_info_object(self, profile_fk, infoobj, char_name):
+        """
+         Erstellen von Named-Infoobjekten.
+        :param profile_fk: GoogleID des Users
+        :param infoobj: Ausprägung des Eigenschaftsnamens
+        :param char_name: Eigenschaftsname
+        :return: angepasstes InfoObjekt
+        """
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
-                print("Create Named Info Object: ", profile_fk, infoobj, char_name)
                 info_obj = NamedInfoObject()
                 info_obj.set_id(1)
                 info_obj.set_named_char_id(char_mapper.find_key_by_char_name(char_name))
                 info_obj.set_named_info(infoobj)
                 info_obj.set_named_profile_fk(profile_fk)
-                print("Vor Insert Admin: ", info_obj)
                 mapper.insert_named_info(info_obj)
 
-        print("Named Info Object aus Admin: ", info_obj)
         return info_obj
 
     def delete_info_object_by_char_value(self, char_value):
+        """
+         Infoobjekt anhand des char_values löschen.
+        :param char_value: Ausprägung der Eigenschaft eines Profils.
+        """
         with InfoObjectMapper() as mapper:
             return mapper.delete_by_char_value(char_value)
 
     def get_all_info_objects_by_char_id(self, char_id):
+        """
+        Alle Infoobjekte anhand der char_id auslesen.
+        :param char_id: Eigenschafts-Fremdschlüssel
+        :return: Alle Infoobjekte vom gegebenen Key (char_id)
+        """
         with InfoObjectMapper() as mapper:
             return mapper.find_all_info_objects_by_char_id(char_id)
 
     def update_named_info_object(self, profile_fk, char_id, char_name, infoobj):
+        """
+        Aktualisieren von Infoobjekten.
+        :param profile_fk: GoogleID des Nutzers.
+        :param char_id: Fremdschlüssel der Eigenschaft
+        :param char_name: Eigenschaftsname
+        :param infoobj: Nutzereingabe des Infoobjekts.
+        """
         with InfoObjectMapper() as InfoMapper:
             with CharMapper() as mapper:
                 namedinfo = NamedInfoObject()
@@ -441,7 +487,6 @@ class Administration(object):
         :param profile_fk: google-ID des Users.
         :param info_dict: Dictionary mit Key-Value paaren. Ein Key repräsentiert eine Eigenschaft.
         """
-        print("Admin.py InfoDict: ", info_dict)
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
                 for key, value in info_dict.items():
@@ -462,15 +507,17 @@ class Administration(object):
                         print(f'Ungültiger Key: {key}')
 
     def find_info_object_by_id(self, infoobject_id, profile_id):
+        """ Auslesen der Infoobjekte anhand der GoogleID eines Nutzers. """
         with InfoObjectMapper() as mapper:
             return mapper.find_by_id(infoobject_id, profile_id)
 
-
     def delete_info_object(self, infoobject):
+        """ Löschen eines Infoobjekts. """
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
     def delete_info_object_search(self, infoobject):
+        """ Löschen von Infoobjekten anhand der Suchprofil-ID """
         with InfoObjectMapper() as mapper:
             return mapper.delete_searchprofile(infoobject)
 
@@ -498,23 +545,31 @@ class Administration(object):
 
     """ Suchprofil-spezifische Methoden """
 
-    """Erstellt ein Suchprofil in der Datenbank, erwartet ein Suchprofil BO"""
+
     def create_searchprofile(self, searchprofile):
+        """Erstellt ein Suchprofil in der Datenbank, erwartet ein Suchprofil BO"""
         searchprofile.set_id(1)
         with SearchProfileMapper() as mapper:
             mapper.insert(searchprofile)
 
     def get_new_searchprofile(self):
+        """ Auslesen des neusten Suchprofils. """
         with SearchProfileMapper() as mapper:
             return mapper.find_new()
 
     # Hier wird die Logik für das InfoObjekt (Suchprofil) auf Basis der Mapper realisiert
 
     def create_Search_info_object(self, profile_fk, info_dict):
-        print("InfoDict (aus Administration.py - create_Search_info_object): ", info_dict)
+        """
+        Erstellen von Info-Objekten für ein Suchprofil.
+        :param profile_fk: GoogleID eines Nutzers
+        :param info_dict: Dictionary mit Key-Value paaren
+
+        Damit die Info-Objekte einem Suchprofil zugewiesen werden, rufen wir die Methode "get_new_searchprofile" auf und
+        speichern das Ergebnis in "searchp". Das ist unsere Suchprofil-ID.
+        """
 
         searchp = self.get_new_searchprofile()
-        print("Die ID des suchprofils, für das die Daten erstellt werden ist: ",searchp)
 
         with InfoObjectMapper() as mapper:
             with CharMapper() as char_mapper:
@@ -532,28 +587,32 @@ class Administration(object):
                         print(f'Ungültiger Key im Search Insert: {key}')
 
     def save_searchprofile(self, searchprofile):
+        """ Aktualisieren eines Suchprofils. """
         with SearchProfileMapper() as mapper:
             mapper.update(searchprofile)
 
     def delete_searchprofile(self, searchprofile_id):
+        """ Löschen eines Suchprofils. """
         with SearchProfileMapper() as mapper:
             mapper.delete(searchprofile_id)
 
     def get_all_searchprofile(self):
+        """ Auslesen aller Suchprofile. """
         with SearchProfileMapper() as mapper:
             return mapper.find_all()
 
-    """Gibt alle suchprofile_id's eines Profils zurück, dies wird mithilfe der google_id gemacht"""
+
     def get_searchprofiles_by_google_id(self, key):
+        """ Gibt alle suchprofile_id's eines Profils zurück, dies wird mithilfe der google_id gemacht. """
         with SearchProfileMapper() as mapper:
             return mapper.find_by_key(key)
 
     def get_searchprofile_by_key(self, searchprofile):
+        """ Auslesen aller Suchprofile anhand der Suchprofil-ID. """
         with SearchProfileMapper() as mapper:
             return mapper.find_by_searchprofile(searchprofile)
 
     def update_search_info_object(self, searchprofile_id, info_dict):
-
         """
         In dieser Methode ist die Logik beschrieben, damit ein bestehendes Suchprofil aktualisiert wird.
         :param searchprofile_id: searchprofile_id des Users.
@@ -578,7 +637,7 @@ class Administration(object):
 
     def calculate_age(self, info_objects):
         """
-        Diese Methode bildet die Applikationslogik ab, um ein Alter anhand des Geburtstages zu berechnen.
+        Diese Methode stellt die Applikationslogik dar, um ein Alter anhand des Geburtstages zu berechnen.
         Die Methode empfängt "info_objects". Dabei handelt es sich um eine Liste, die aus InfoObjects-Objekten besteht.
         Nachdem das Objekt mit der char_id "30" gefunden wurde, wird das Alter berechnet und anschließend alle Werte
         des Tupels (processed_infoobj) der processed_tuples Liste übergeben. Aus dieser Liste wird anschließend ein neues
@@ -591,7 +650,6 @@ class Administration(object):
             if age is not None:
                 processed_infoobj = (infoobj._id, infoobj.char_id, age, infoobj.profile_fk, infoobj.searchprofile_id)
                 processed_tuples.append(processed_infoobj)
-                #print('calculate_age Methode in Admin.py:', processed_tuples)
                 new_infoobj = InfoObject()
                 new_infoobj.set_id(processed_tuples[0][0])
                 new_infoobj.set_char_fk(processed_tuples[0][1])
@@ -618,24 +676,41 @@ class Administration(object):
     """ Matching Methode """
 
     def execute_matchmaking(self, searchprof):
-        """ Diese Methode stellt die Ausführung des Algorithmus dar, um potenzielle Partner auf der Plattform zu finden. """
+        """
+        Diese Methode stellt die Ausführung des Algorithmus dar, um potenzielle Partner auf der Plattform zu finden.
+        Das Matchmaking durchläuft verschiedene Etappen. Zuerst werden alle Profile geladen. Die zweite Etappe filtert
+        nach dem gesuchten Geschlecht. In der dritten Etappe wird nach dem gesuchten Alter gefiltert. Die Liste mit den
+        Profilen, für die das Matchmaking kalkuliert werden soll ist die "age_filtered_list". Es wird auch überprüft,
+        ob eines der Profile bereits vom Suchenden blockiert wurde. Über die "age_filtered_list" wird iteriert
+        und der Inhalt der Infoobjekte abgeglichen. Für jedes abgleichende Infoobjekt wird "total_checked_elem" hochgezählt
+        und bei Übereinstimmung der "score" +1 addiert. Das Ergebnis wird für jedes Profil berechnet und der "Result-Liste"
+        hinzugefügt. Am Schluss wird noch geprüft, ob das Profil bereits besucht wurde. Wenn der Suchende das Profil
+        bereits angesehen hatte wird ein "True" in den Listeneintrag aufgenommen, anderenfalls ein "False".
+         """
 
         searchprofile = searchprof  # Searchprofile ist das Dict mit ID und Char-Values
         print('Admin.py: Dieses Suchprofil wurde an Algo übergeben: ', searchprofile)
         result = []  # Ergebnisliste, die später übergeben werden soll. Ähnlichkeit: [['zQokAwj2tchqk4dkovLVvqCmzWp2', 11]]
-        gid_list = []  # Alle Google IDs der Plattform
+        gid_list = []  # Alle Google IDs des Systems
         gender_filtered_list = [] # Alle Profile, die dem gesuchten Geschlecht entsprechen
         age_filtered_list = [] # Alle Profile, die in der gesuchten Altersrange liegen
 
+        """ 
+        Zuerst werden alle Profil-Objekte aus der DB geladen und die jeweilige GoogleID ausgelesen. Die GoogleIDs
+        werden dann in die gid_list hinzugefügt. 
+        """
         with ProfileMapper() as prof_mapper:
-            profiles = prof_mapper.find_all()  # Hole alle Profile aus der Datenbank
+            profiles = prof_mapper.find_all()
             for gid in profiles:
                 # print('GID:', gid)
                 # print('GID GoogleID:', gid.get_google_fk())
                 gid_list.append(gid.get_google_fk())  # Füge der gid_list alle google_fk´s zu.
-                print('Admin.py Z565: GID List:', gid_list)
+                #print('Admin.py Z565: GID List:', gid_list)
 
-        # Überprüfung, ob sich eine gefundene Google-ID in der Blockierliste befindet.
+        """ 
+        Überprüfung, ob sich eine gefundene Google-ID in der Blockierliste befindet. Wenn eine GoogleID aus der gid_list
+        vom Suchenden blockiert wurde, wird sie aus der gid_list entfernt. 
+        """
         with SearchProfileMapper() as searchprof_mapper:
             search_google_id = searchprof_mapper.find_gid_by_searchid(searchprofile['Searchprofile ID'])
             #print('Admin.py Zeile 551 - Hier war der Bug')
@@ -651,10 +726,11 @@ class Administration(object):
                         gid_list.remove(blocked_id) # entferne alle blockierten profile
                         print('Admin: Das ist die GID List nachdem die Blockierten Profile weg fallen:', gid_list)
 
-        # Entfernen der eigenen Google ID um nicht selbst in der Liste gefunden zu werden.
+        """ Entfernen der eigenen Google ID um nicht selbst in der Liste gefunden zu werden. """
         gid_list.remove(search_google_id)
         print('Admin.py: Z585: GID List nachdem das eigene Profil entfernt wurde', gid_list)
 
+        """ Für jedes Profil werden nun die Info-Objekte geladen. """
         for elem in gid_list:
             with InfoObjectMapper() as info_mapper:
                 info_obj = info_mapper.find_by_key(elem)  # Findet alle Infoobjekte eines Profils
@@ -670,7 +746,7 @@ class Administration(object):
                 char_values[char_id] = char_value  # fügt dem char_values Dict das Element hinzu. (z.B. 20:'Wunderlich')
                 # print('Das Dict:', char_values)
 
-            # Gender Filter: Überprüft ob das Geschlecht dem gesuchten Geschlecht entspricht
+            """ Gender Filter: Überprüft ob das Geschlecht dem gesuchten Geschlecht entspricht """
             if 40 in char_values:
                 search_gender = searchprofile['Char Values'].get(40)  # Gesuchte Geschlecht des Suchprofils
                 # print('searchgender:', search_gender)
@@ -686,7 +762,7 @@ class Administration(object):
                     # print('Profil hinzugefügt', char_values)
         print('Admin.py Z616: Gender_Filtered list:', gender_filtered_list)
 
-        # Age Filter: Soll das gewünschte Alter der gesuchten Person ermitteln und nur Kandidaten in dieser Spanne zur Suche hinzufügen
+        """ Age Filter: Soll das gewünschte Alter der gesuchten Person ermitteln und nur Kandidaten in dieser Spanne zur Suche hinzufügen """
         if 100 in searchprofile['Char Values'] and 110 in searchprofile['Char Values']:
             min_age = searchprofile['Char Values'][100]
             # print('searchprofile min_age',min_age)
@@ -707,7 +783,7 @@ class Administration(object):
 
                         if calculated_age is not None:
                             #print('Type min_age,', type(min_age))
-                            #print(' min_age,', min_age)2
+                            #print(' min_age,', min_age)
                             #print('Type max_age,', type(max_age))
                             #print('max age:', max_age)
                             if int(min_age) <= calculated_age <= int(max_age):  # Abfrage ob das berechnete Alter in der Suchrange liegt
@@ -802,7 +878,7 @@ class Administration(object):
                 #print('Compared Text: Politik', compare_text)
                 #print('Gesamtscore:', score)
 
-            # Hier fehlt noch der Scorewert vergleich von der Körpergörße
+            # Scorewert-Vergleich der Körpergröße
             if 50 in searchprofile['Char Values'] and 50 in prof['Char Values']:
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
                 #print('Check Height')
@@ -866,14 +942,14 @@ class Administration(object):
                         #print('Score nach pot. Match:', score)
                         continue
 
-            # Berechnung des Match-Wertes in Prozent
+            """ Berechnung des Match-Wertes in Prozent """
             #print('Total_checked_elem:', total_checked_elem)
             matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
             #print('Matching Instanz:', matching_value)
             print('Vor dem Result Append beim Matching', prof['Profile ID'])
             result.append([prof['Profile ID'], matching_value])
 
-            # True oder False Statement in Liste hinzufügen, damit "nur neue" Profile ausgelesen werden können
+            """ True oder False Statement in Liste hinzufügen, damit nur neue Profile ausgelesen werden können """
             # Zuerst laden wir uns alle Profile die bereits besucht wurden in unsere Liste.
             print('Admin.py: Beginn des Profilesvisited')
             with ProfilevisitsMapper() as visited_mapper:
@@ -907,8 +983,7 @@ class Administration(object):
         return result
 
     def get_char_values(self, profile_id):
-        # Methode sollte gelöscht werden können
-        """Diese Methode holt sich die char_values je profil und speichert diese in einem Dictionary"""
+        """ Diese Methode holt sich die char_values je profil und speichert diese in einem Dictionary. """
 
         with MatchmakingMapper() as mapper:
             info_objects = mapper.find_info_by_profile(profile_id)
@@ -922,7 +997,7 @@ class Administration(object):
         return char_values
 
     def get_char_values_for_profiles(self, profile_id):
-        """Diese Methode gibt ein Dictionary mit einer gegebenen Profile ID und deren Char Values zurück"""
+        """ Diese Methode gibt ein Dictionary mit einer gegebenen Profile ID und deren Char Values zurück. """
         char_values = self.get_char_values(profile_id)
 
         profile = {
@@ -954,7 +1029,7 @@ class Administration(object):
     def compare_text(self, text1, text2):
         """Diese Methode vergleicht den Freitext zweier InfoObjects miteinander."""
 
-        # Um zu verhindern, dass das Programm abstürzt wenn bei der Prüfung ein "None"-Wet übergeben wird.
+        # Um zu verhindern, dass das Programm abstürzt wenn bei der Prüfung ein "None"-Wert übergeben wird.
         if text1 is None or text2 is None:
             return 0  # Dann wird kein "Score" vergeben
 
