@@ -410,8 +410,8 @@ class CreateProfil extends Component {
             this.state.id,
             this.props.user.uid,
             this.state.searchprofile_id,
-            this.state.updatedCharValue,
-            this.state.updatedCharName,
+            this.state.char_desc,
+            this.state.char_name,
             newchar_id,
             this.state.char_typ)
          DatingSiteAPI.getAPI()
@@ -1210,7 +1210,7 @@ class CreateProfil extends Component {
                                                                                 <FormLabel> Ändere hier den Eigenschaftsnamen und die Eigenschaftsbeschreibung: </FormLabel>
                                                                                 <TextField
                                                                                     label="Eigenschaftsname"
-                                                                                    name="updatedCharName"
+                                                                                    name="char_name"
                                                                                     defaultValue={value.char_name[0]}
                                                                                     value={this.state.char_name}
                                                                                     onChange={(event) => this.handleInputChange(event, 'char_name')}
@@ -1220,7 +1220,7 @@ class CreateProfil extends Component {
                                                                                 />
                                                                                 <TextField
                                                                                     label="Eigenschaftsbeschreibung"
-                                                                                    name="updatedCharValue"
+                                                                                    name="char_desc"
                                                                                     defaultValue={value.char_value}
                                                                                     value={this.state.char_desc}
                                                                                     onChange={(event) => this.handleInputChange(event, 'char_desc')}
