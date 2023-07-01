@@ -54,7 +54,7 @@ class CharMapper(mapper):
     def find_key_by_char_name(self, key):
         """ Auslesen eines Keys anhand Eigenschaftsnamen."""
         cursor = self._connection.cursor()
-        command = f"SELECT char_id, char_name FROM main.Characteristic WHERE char_name='{key}'"
+        command = f"SELECT char_id, char_name, char_typ FROM main.Characteristic WHERE char_name='{key}'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -62,6 +62,7 @@ class CharMapper(mapper):
             (char_id) = tuples[0]
             char = NamedInfoObject()
             char.set_named_char_id(char_id[0])
+            char.set_char_typ(char_id[0]) # hier evtl 1 statt 0
             result = char
         else:
             raise ValueError(f"Schlüssel {key} nicht gefunden.")
@@ -115,7 +116,7 @@ class CharMapper(mapper):
         """ Hinzufügen eines named_char."""
         cursor = self._connection.cursor()
 
-        select_query = 'SELECT char_id FROM main.Characteristic WHERE char_name = %s'
+        select_query = 'SELECT char_id, char_typ FROM main.Characteristic WHERE char_name = %s'
         cursor.execute(select_query, (key.get_named_char_name(),))
         result = cursor.fetchone()
 
@@ -129,10 +130,11 @@ class CharMapper(mapper):
         for (maxid,) in tuples:
             key.set_id(maxid + 1)
 
-        command = 'INSERT INTO main.Characteristic (char_id, char_name) VALUES (%s, %s)'
+        command = 'INSERT INTO main.Characteristic (char_id, char_name, char_typ) VALUES (%s, %s, %s)'
 
         data = (key.get_id(),
-                key.get_named_char_name())
+                key.get_named_char_name(),
+                key.get_char_typ())
 
         cursor.execute(command, data)
 
