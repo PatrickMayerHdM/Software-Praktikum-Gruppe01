@@ -954,8 +954,6 @@ class Administration(object):
                     if int(userprof) >= int(search_value):
                         score += 1
                         #print('Einkommen Match +1:', score)
-                    else:
-                        continue
 
 
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
