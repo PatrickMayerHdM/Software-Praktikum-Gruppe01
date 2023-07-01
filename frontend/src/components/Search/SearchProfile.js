@@ -298,53 +298,53 @@ class SearchProfile extends React.Component{
 
                     for (const key in responseInfoObjects) {
                         if (responseInfoObjects.hasOwnProperty(key)) {
-                          const infoObject = responseInfoObjects[key];
-                          const charId = infoObject.char_id;
-                          const charValue = infoObject.char_value;
+                            const infoObject = responseInfoObjects[key];
+                            const charId = infoObject.char_id;
+                            const charValue = infoObject.char_value;
 
-                          switch (charId) {
-                            case 40:
-                              selectedProperties.gender = charValue;
-                              break;
-                            case 70:
-                              selectedProperties.hair = charValue;
-                              break;
-                            case 50:
-                              selectedProperties.height = charValue;
-                              break;
-                            case 60:
-                              selectedProperties.religion = charValue;
-                              break;
-                            case 80:
-                              selectedProperties.smoking = charValue;
-                              break;
-                            case 100:
-                              selectedProperties.minAge = charValue;
-                              break;
-                            case 110:
-                              selectedProperties.maxAge = charValue;
-                              break;
-                            case 90:
-                              selectedProperties.aboutme = charValue;
-                              break;
-                            case 120:
-                              selectedProperties.income = charValue;
-                              break;
-                            case 130:
-                              selectedProperties.educationalstatuts = charValue;
-                              break;
-                            case 140:
-                              selectedProperties.favclub = charValue;
-                              break;
-                            case 150:
-                              selectedProperties.hobby = charValue;
-                              break;
-                            case 160:
-                              selectedProperties.politicaltendency = charValue;
-                              break;
+                            switch (charId) {
+                                case 40:
+                                    selectedProperties.gender = charValue;
+                                    break;
+                                case 70:
+                                    selectedProperties.hair = charValue;
+                                    break;
+                                case 50:
+                                    selectedProperties.height = charValue;
+                                    break;
+                                case 60:
+                                    selectedProperties.religion = charValue;
+                                    break;
+                                case 80:
+                                    selectedProperties.smoking = charValue;
+                                    break;
+                                case 100:
+                                    selectedProperties.minAge = charValue;
+                                    break;
+                                case 110:
+                                    selectedProperties.maxAge = charValue;
+                                    break;
+                                case 90:
+                                    selectedProperties.aboutme = charValue;
+                                    break;
+                                case 120:
+                                    selectedProperties.income = charValue;
+                                    break;
+                                case 130:
+                                    selectedProperties.educationalstatuts = charValue;
+                                    break;
+                                case 140:
+                                    selectedProperties.favclub = charValue;
+                                    break;
+                                case 150:
+                                    selectedProperties.hobby = charValue;
+                                    break;
+                                case 160:
+                                    selectedProperties.politicaltendency = charValue;
+                                    break;
 
-                            default:
-                              break;
+                                default:
+                                    break;
                           }
                         }
                       }
@@ -728,88 +728,88 @@ class SearchProfile extends React.Component{
                         <Item>
                             {/** Das sind die Tag-Felder der bereits ausgewählten Eigenschaften eines Suchprofils. */}
 
-                           <div>
-                               {this.state.aboutme && (
-                               <span
-                                   className="tag">{this.state.aboutme}
-                                   <button onClick={this.handleDeleteInterests} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
+                            <div>
+                                {this.state.aboutme && (
+                                <span
+                                    className="tag">{this.state.aboutme}
+                                    <button onClick={this.handleDeleteInterests} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.religion && (
+                                <span
+                                    className={"tag"}>{this.state.religion}
+                                    <button onClick={this.handleDeleteReligion} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.smoking && (
+                                <span
+                                    className={"tag"}>{this.state.smoking}
+                                    <button onClick={this.handleDeletesmoking} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.hair && (
+                                <span
+                                    className={"tag"}>{this.state.hair}
+                                    <button onClick={this.handleDeleteHair} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.height && (
+                                <span
+                                    className={"tag"}>{this.state.height}
+                                    <button onClick={this.handleDeleteHeight} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.income && (
+                                <span
+                                    className={"tag"}>{this.state.income}
+                                    <button onClick={this.handleDeleteSalary} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.favclub && (
+                                <span
+                                    className={"tag"}>{this.state.favclub}
+                                    <button onClick={this.handleDeleteClub} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+
+                                {this.state.hobby && (
+                                <span
+                                    className={"tag"}>{this.state.hobby}
+                                    <button onClick={this.handleDeleteHobbys} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
                                    )}
 
-                               {this.state.religion && (
-                               <span
-                                   className={"tag"}>{this.state.religion}
-                                   <button onClick={this.handleDeleteReligion} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.smoking && (
-                               <span
-                                   className={"tag"}>{this.state.smoking}
-                                   <button onClick={this.handleDeletesmoking} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.hair && (
-                               <span
-                                   className={"tag"}>{this.state.hair}
-                                   <button onClick={this.handleDeleteHair} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.height && (
-                               <span
-                                   className={"tag"}>{this.state.height}
-                                   <button onClick={this.handleDeleteHeight} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.income && (
-                               <span
-                                   className={"tag"}>{this.state.income}
-                                   <button onClick={this.handleDeleteSalary} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.favclub && (
-                               <span
-                                   className={"tag"}>{this.state.favclub}
-                                   <button onClick={this.handleDeleteClub} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.hobby && (
-                               <span
-                                   className={"tag"}>{this.state.hobby}
-                                   <button onClick={this.handleDeleteHobbys} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-
-                               {this.state.politicaltendency && (
-                               <span
-                                   className={"tag"}>{this.state.politicaltendency}
-                                   <button onClick={this.handleDeletePolitical} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
-                                       <DeleteIcon style={{ fontSize: 'inherit' }} />
-                                   </button>
-                               </span>
-                                   )}
-                           </div>
+                                {this.state.politicaltendency && (
+                                <span
+                                    className={"tag"}>{this.state.politicaltendency}
+                                    <button onClick={this.handleDeletePolitical} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                    </button>
+                                </span>
+                                    )}
+                            </div>
 
                         </Item>
 
