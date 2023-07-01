@@ -10,7 +10,7 @@ import OptionsOtherProfile from "./OptionsOtherProfile";
 {/** Dies soll ein Profil darstellen. Einerseits das eigene und andererseits ein anderes mögliches Profil, welches
  sich ein User anschaut. Hierbei werden nur die Profildaten dargestellt und keine weiteren Daten, welche ein User
  zum Bearbeiten oder zur Interaktion mit anderen Usern eventuell benötigt. Diese Funktionen sind bereits in
- anderen Komponenten integriert (OptionsOtherProfile.js bzw. OptionsOwnProfile.js).
+ anderen Komponenten integriert (OptionsOtherProfile.js).
  ,dies sollte einem User später angezeigt werden, wenn er ein anderes */}
 
 /** Definition der Profile-Komponente */
