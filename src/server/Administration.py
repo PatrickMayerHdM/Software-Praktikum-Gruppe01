@@ -406,6 +406,7 @@ class Administration(object):
     def get_info_object_by_searchid(self, key):
         """ Auslesen von Infoobjekten anhand der Suchprofil-ID"""
         with InfoObjectMapper() as mapper:
+            print("Admin Key: ", key)
             return mapper.find_by_searchid(key)
 
     def get_info_object(self, key):
@@ -548,10 +549,10 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.delete(infoobject)
 
-    def delete_info_object_search(self, infoobject):
+    def delete_info_object_search(self, key):
         """ Löschen von Infoobjekten anhand der Suchprofil-ID """
         with InfoObjectMapper() as mapper:
-            return mapper.delete_searchprofile(infoobject)
+            return mapper.delete_searchprofile(key)
 
 
     def get_profile_by_message(self, profile_id):

@@ -298,7 +298,7 @@ class CreateProfil extends Component {
                     }
                 }
                 this.setState({ selectedCharNames });
-            });
+                });
     }
 
     /** Die getCharNameByID liest den CharName einer gegebenen char_id aus. */

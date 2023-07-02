@@ -313,8 +313,7 @@ class SearchOneProfileOperation(Resource):
         """ Löschen eines besimmten Suchprofils. """
 
         adm = Administration()
-        info_obj = adm.get_info_object_by_searchid(searchprofile_id)
-        adm.delete_info_object_search(info_obj)
+        adm.delete_info_object_search(searchprofile_id)
         adm.delete_searchprofile(searchprofile_id)
         return '', 200
 
