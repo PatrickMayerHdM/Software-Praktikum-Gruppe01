@@ -334,7 +334,17 @@ class SearchprofileInfoobjListOperationsCustom(Resource):
         adm = Administration()
         info_objs = adm.get_infoobj_by_searchid(searchprofile_id)
 
-        print('Info-Objs in main', info_objs[16].get_value())
+        return info_objs
+
+@datingapp.route('/infoobjects/delete/tag/<string:value>/<int:searchid>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'ID des Suchprofils')
+class SearchProfilOperationDeleteTagCustom(Resource):
+    @secured
+    def delete(self, value, searchid):
+        """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
+        adm = Administration()
+        info_objs = adm.delete_info_object_by_char_value_and_search_id(value, searchid)
 
         return info_objs
 

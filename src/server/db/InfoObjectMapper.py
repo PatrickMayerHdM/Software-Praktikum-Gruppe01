@@ -276,8 +276,15 @@ class InfoObjectMapper(mapper):
 
         return result
 
+    def find_info_obj_by_value_and_search_id(self, value, searchid):
+        """ Löschen von einem Info-Obj-Tag aus dem Suchprofil """
+        cursor = self._connection.cursor()
 
+        command = f"DELETE FROM main.InfoObject WHERE char_value='{value}' AND searchprofile_id='{searchid}'"
+        cursor.execute(command)
 
+        self._connection.commit()
+        cursor.close()
 
     def delete(self, info_obj):
         """ Löschen von Info-Objekten anhand einer Profil_id. """

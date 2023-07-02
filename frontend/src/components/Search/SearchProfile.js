@@ -163,9 +163,14 @@ class SearchProfile extends React.Component{
         const newPolitical = event.target.value;
         this.setState({politicaltendency: newPolitical})
     };
-
     handleDeletePolitical = () => {
         this.setState({ politicaltendency: null });
+    };
+
+    /** Event-Handler für das Löschen eines Tags */
+    handleChangeCharValueDeleteTag = (value, searchid) => {
+        DatingSiteAPI.getAPI()
+            .removeNamedCharTag(value, searchid)
     };
 
     /** Event-Handler für die Änderung des Hobbys der gesuchten Person */
@@ -710,8 +715,7 @@ class SearchProfile extends React.Component{
             }
 
         }
-
-
+        await this.getSelectedPropertiesForCharValuesAndNameTwo(this.state.lastPartURL);
     }
 
      /** Diese Funktion wird als "async" markiert, da wir auf den Abschluss des API-Aufrufs für die InfoObjekte warten müssen.
@@ -1280,7 +1284,30 @@ class SearchProfile extends React.Component{
                             </div>
 
                         </Item>
-
+                        {/** Dynamische Tag Erstellung */}
+                        <Item>
+                            {
+                                customProperties &&
+                                Object.entries(customProperties).map(([key, value], ) => {
+                                    if (
+                                        typeof value === 'object' &&
+                                        value.hasOwnProperty('char_id') &&
+                                        value.hasOwnProperty('char_name')
+                                    ) {
+                                        return (
+                                            <div>
+                                                <span
+                                                    className={"tag"}>{value.char_value}
+                                                    <button onClick={() => this.handleChangeCharValueDeleteTag(value.char_value, this.state.lastPartURL)} style={{ marginLeft: '5px', border: 'none', backgroundColor: '#e0e0e0'}}>
+                                                        <DeleteIcon style={{ fontSize: 'inherit' }} />
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        )
+                                    }
+                                })
+                            }
+                        </Item>
                         <Item>
                             {/** Dies ist der submit button, dieser macht entweder ein Update oder ein Post, basierend
                              ob eine Person die Seite aufruft, um ein neues Profil zu erstellen oder um ein bereits

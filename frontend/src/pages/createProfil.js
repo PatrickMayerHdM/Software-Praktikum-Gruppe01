@@ -298,7 +298,6 @@ class CreateProfil extends Component {
                     }
                 }
                 this.setState({ selectedCharNames });
-                console.log("Liste: ", selectedCharNames);
             });
     }
 
@@ -615,7 +614,7 @@ class CreateProfil extends Component {
         this.setState({ openuserchar: true })
     };
 
-    handleUserSelectSaveInputsSelections= async () => {
+        handleUserSelectSaveInputsSelections= async () => {
 
         if (this.state.UserUpdate === false ){
             try {
