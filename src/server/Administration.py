@@ -864,8 +864,9 @@ class Administration(object):
                 total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
                 #print('total checked elem: Interessen', total_checked_elem)
                 compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][90])
-                if compare_text == 1:
-                    score += 1
+                #print('Algorithmus compare text value von 90', compare_text)
+                if compare_text > 0:
+                    score += compare_text
                 #print('Compared Text: Interessen', compare_text)
                 #print('Gesamtscore:', score)
 
@@ -954,8 +955,6 @@ class Administration(object):
                     if int(userprof) >= int(search_value):
                         score += 1
                         #print('Einkommen Match +1:', score)
-                    else:
-                        continue
 
 
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
