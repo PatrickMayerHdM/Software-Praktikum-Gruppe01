@@ -285,6 +285,20 @@ export default class DatingSiteAPI {
     }
 
     /**
+     * API-Aufruf aller InfoObjekte eines Suchprofils.
+     * */
+    getSearchInfoObjects(searchID) {
+        return this.#fetchAdvanced(this.#getSearchInfoObjectsURL(searchID))
+            .then((responseJSON) => {
+                console.log('API Aufruf', responseJSON)
+                let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(infoobjectBOs);
+                });
+            });
+    }
+
+    /**
      * API-Aufruf um den char_name zu erhalten.
      */
     getCharName(char_id) {
@@ -335,6 +349,7 @@ export default class DatingSiteAPI {
     #getOneSearchprofileByIdURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/SearchProfiles/${searchprofile_id}`;
     #updateSearchProfileURL = (searchprofile_id) => `${this.#datingServerBaseURL}/SearchProfiles/infoobjects/${searchprofile_id}`;
     #getSearchResultsURL = (searchprofile_id) => `${this.#datingServerBaseURL}/Search/Matchmaking/${searchprofile_id}`;
+    #getSearchInfoObjectsURL = (searchprofile_id) => `${this.#datingServerBaseURL}/infoobjects/search/${searchprofile_id}`;
 
 
     /**

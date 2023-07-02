@@ -25,6 +25,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import NamedInfoObjectBO from "../../api/NamedInfoObjectBO";
 
 /**
  * Damit dem User beim Suchen passende Personen angezeigt werden, kann dieser Suchprofile erstellen, diese in Verbindung
@@ -65,8 +66,8 @@ class SearchProfile extends React.Component{
             selectedCharName: null, // Char_Name der ausgewählten Eigenschaft
             UserSelectStartingSelections: [], // Bereits erstellte Auswahlen
 
-            customProperties: null, // muss noch überarbeitet werden --> Liste der ausgewählten Infoobj zu jeder Eigenschaft
-            UserSelectSelectedOption:null, // Die vom User ausgewählte Auswahl
+            customProperties: [], // Liste der eigenen Eigenschaften
+            UserSelectSelectedOption: null, // Die vom User ausgewählte Auswahl
             UserUpdate: false, // True wenn es ein Update ist, False wenn es erstmalig angelegt wird.
             UserSelectNumOptions: null, // Anzahl der ausgewählten Infoobjekte
             UserSelectAvSelections: [], // Vom User zusätzlich erstellte Auswahlen
@@ -97,6 +98,8 @@ class SearchProfile extends React.Component{
         this.handleDeleteInterests = this.handleDeleteInterests.bind(this);
         this.handleDeleteHeight = this.handleDeleteHeight.bind(this);
         this.handleUserSelectNumOptions = this.handleUserSelectNumOptions.bind(this);
+        this.handleUserSelectSaveInputsSelections = this.handleUserSelectSaveInputsSelections.bind(this);
+        this.getSelectedPropertiesForCharValuesAndNameTwo = this.getSelectedPropertiesForCharValuesAndNameTwo.bind(this);
     }
 
     /**
@@ -345,7 +348,7 @@ class SearchProfile extends React.Component{
                 console.log("responseCharName zu Beginn", responseCharName)
                 let updatedUserSelectNumOptions = 0;
                 const updatedUserSelectStartingSelections = [ ]; // erstellt ein leeres Array, um es zu ersetzen
-                // const UserData = this.state.customProperties[char_id]?.char_value; // Wenn ein User bereits etwas zu dieser Eigenschaft ausgewählt hat, wird es hier gesetzt
+                const UserData = this.state.customProperties[char_id]?.char_value; // Wenn ein User bereits etwas zu dieser Eigenschaft ausgewählt hat, wird es hier gesetzt
 
                 // hier wird die Länge der Antwort geprüft.
                 if (responseCharName.length > 1){
@@ -364,7 +367,8 @@ class SearchProfile extends React.Component{
                  * Setzt die aktuelle Auswahl des Users, direkt auf die tatsächliche Auswahl des Users.
                  * Setzt den Wert, dass ein User hier ein Update macht auf True
                  */
-                // if (UserData != undefined) { this.setState({ UserSelectSelectedOption:UserData, UserUpdate: true,})}
+                console.log('UserData', UserData)
+                if (UserData != undefined) { this.setState({ UserSelectSelectedOption:UserData, UserUpdate: true,})}
                 /**
                  *  Setzt den State.
                  */
@@ -442,6 +446,8 @@ class SearchProfile extends React.Component{
         const currentPath = window.location.pathname;
         // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
         const lastPartURL = currentPath.split('/').pop();
+        this.getSelectedPropertiesForCharValuesAndNameTwo(lastPartURL);
+        console.log('LastPartURL in DidMount', this.state.lastPartURL)
         this.setState({lastPartURL: lastPartURL})
 
         if (lastPartURL === "new") {
@@ -502,15 +508,17 @@ class SearchProfile extends React.Component{
 
                                 default:
                                     break;
-                          }
+                            }
                         }
-                      }
+                    }
 
-                      this.setState(selectedProperties);
+                    this.setState(selectedProperties);
                 });
-        };
+        }
+        ;
         this.getAllInfoObjects();
-    };
+
+    }
 
 
     /**
@@ -533,6 +541,225 @@ class SearchProfile extends React.Component{
     handleInfoSelectCreate = (event, newSelectedValue) => {
         this.setState({ SelectCreate: newSelectedValue });
     };
+
+    /** Submit von User erstellten Eigenschaften */
+     handleUserSelectSaveInputsSelections= async () => {
+        if (this.state.UserUpdate === false ){
+            try {
+                // Schleife über jedes Element der vom User erstellten Auswahlen
+                for (let index = 0; index < this.state.UserSelectAvSelections.length; index++) {
+                    // Der value ist der Wert des aktuellen Elements der vom User erstellten Auswahlen
+                    const value = this.state.UserSelectAvSelections[index];
+
+
+                    // Wenn der aktuelle value der erstellten Auswahlen, der vom User explizit ausgewählte value ist.
+                    if (this.state.UserSelectSelectedOption === value) {
+
+                        // Erstellen eines neuen NamedInfoObjectBO, hier mit einer GoogleID, da dieser value vom User ausgewählt wurde.
+                        const newInfoBO = new NamedInfoObjectBO(
+                            this.state.id,
+                            null,
+                            this.state.lastPartURL,
+                            value,
+                            this.state.selectedCharName,
+                            this.state.selectedCharId,
+                            "select",
+                        );
+
+                        // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                        await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
+
+                    } else {
+
+                        // Erstellen eines neuen NamedInfoObjectBO, hier ohne GoogleID, da dieser value nicht vom User ausgewählt wurde.
+                        const newInfoBO = new NamedInfoObjectBO(
+                            this.state.id,
+                            null,
+                            null,
+                            value,
+                            this.state.selectedCharName,
+                            this.state.selectedCharId,
+                            "select",
+                        );
+
+                        await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
+                    }
+                }
+
+                // Wenn ein User ein nicht selbst erstellten Value ausgewählt hat
+                if (this.state.UserSelectStartingSelections.includes(this.state.UserSelectSelectedOption)){
+
+                    // Erstellen eines neuen NamedInfoObjectBO, hier mit einer GoogleID, da dieser value vom User ausgewählt wurde.
+                    const newInfoBO = new NamedInfoObjectBO(
+                        this.state.id,
+                        null,
+                        this.state.lastPartURL,
+                        this.state.UserSelectSelectedOption,
+                        this.state.selectedCharName,
+                        this.state.selectedCharId,
+                        "select",
+                    );
+
+                        // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                    await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
+
+                } if (this.state.selectedCharTyp === "text"){
+
+                    // Erstellen eines neuen NamedInfoObjectBO, hier mit einer GoogleID, da dieser value vom User ausgewählt wurde.
+                    const newInfoBO = new NamedInfoObjectBO(
+                        this.state.id,
+                        null,
+                        this.state.lastPartURL,
+                        this.state.char_desc,
+                        this.state.selectedCharName,
+                        this.state.selectedCharId,
+                        "text",
+                    );
+
+                        // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                    await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
+                }
+
+            } catch (e) {
+                this.setState({
+                    error: e,
+                });
+            }
+        } else {
+            {/** Hier handelt es sich dann um ein Update eines Users */}
+            if (this.state.selectedCharTyp === "text"){
+                const updatedNamedInfoBO = new NamedInfoObjectBO(
+                    this.state.id,
+                    null,
+                    this.state.lastPartURL,
+                    this.state.char_desc,
+                    this.state.selectedCharName,
+                    this.state.selectedCharId,
+                    "text")
+
+                DatingSiteAPI.getAPI()
+                    .updateNamedCharByURL(updatedNamedInfoBO)
+                    .catch((e) =>
+                        this.setState({
+                            error: e,
+                        })
+                    );
+            } else {
+
+                // Schleife über jedes Element der vom User erstellten Auswahlen
+                for (let index = 0; index < this.state.UserSelectAvSelections.length; index++) {
+                    // Der value ist der Wert des aktuellen Elements der vom User erstellten Auswahlen
+                    const value = this.state.UserSelectAvSelections[index];
+
+
+                    // Wenn der aktuelle value der erstellten Auswahlen, der vom User explizit ausgewählte value ist.
+                    if (this.state.UserSelectSelectedOption === value) {
+
+                        // Erstellen eines neuen NamedInfoObjectBO, hier mit einer GoogleID, da dieser value vom User ausgewählt wurde.
+                        const newInfoBO = new NamedInfoObjectBO(
+                            this.state.id,
+                            null,
+                            this.state.lastPartURL,
+                            value,
+                            this.state.selectedCharName,
+                            this.state.selectedCharId,
+                            "select",
+                        );
+
+                        // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                        await DatingSiteAPI.getAPI().updateNamedCharByURL(newInfoBO);
+
+                    } else {
+
+                        // Erstellen eines neuen NamedInfoObjectBO, hier ohne GoogleID, da dieser value nicht vom User ausgewählt wurde.
+                        const newInfoBO = new NamedInfoObjectBO(
+                            this.state.id,
+                            null,
+                            null,
+                            value,
+                            this.state.selectedCharName,
+                            this.state.selectedCharId,
+                            "select",
+                        );
+
+                        await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
+                    }
+                }
+
+                if (!this.state.UserSelectAvSelections.includes(this.state.UserSelectSelectedOption)) {
+                    console.log("hi")
+                    const updatedNamedInfoBO = new NamedInfoObjectBO(
+                        this.state.id,
+                        null,
+                        this.state.lastPartURL,
+                        this.state.UserSelectSelectedOption,
+                        this.state.selectedCharName,
+                        this.state.selectedCharId,
+                        "select")
+
+                    console.log('UpdatedNamedInfoBO Z. 695 Searprofile', updatedNamedInfoBO)
+
+                    DatingSiteAPI.getAPI()
+                        .updateNamedCharByURL(updatedNamedInfoBO)
+                        .catch((e) =>
+                            this.setState({
+                                error: e,
+                            })
+                        );
+                }
+            }
+
+        }
+
+
+    }
+
+     /** Diese Funktion wird als "async" markiert, da wir auf den Abschluss des API-Aufrufs für die InfoObjekte warten müssen.
+     * Die const customProperties beinhaltet die benutzerdefinierten Eigenschaften.
+     * Jedes InfoObjekt, das eine CharID größer als 160 hat, wird zu diesem leeren Objekt hinzugefügt.
+     * Die restlichen InfoObjekte werden mithilfe eines Zustands (State) gesetzt.
+     * Am Ende wird der Zustand des leeren "customProperties"-Objekts aktualisiert,
+     * um daraus die individuellen Eigenschaften und InfoObjekte auslesen zu können. */
+    async getSelectedPropertiesForCharValuesAndNameTwo(lastPartURL) {
+        const customProperties = {};
+
+        try {
+
+            const responseInfoObjects = await DatingSiteAPI.getAPI().getSearchInfoObjects(lastPartURL);
+            console.log('LastPartURL', lastPartURL)
+
+            for (const key in responseInfoObjects) {
+                if (responseInfoObjects.hasOwnProperty(key)) {
+                    const infoObject = responseInfoObjects[key];
+                    const char_id = infoObject.char_id;
+                    const charValue = infoObject.char_value;
+
+                    if (char_id > 160) {
+                        const char_name = await this.getCharNameByID(char_id);
+                        customProperties[char_id] = {
+                            char_id: char_id,
+                            char_value: charValue,
+                            char_name: char_name,
+                        };
+                    }
+                }
+            }
+            this.setState({ customProperties });
+            console.log(this.state)
+        } catch (error) {
+            console.error("Fehler beim Auslesen der InfoObjekte: ", error);
+        }
+    }
+
+     /** Die getCharNameByID liest den CharName einer gegebenen char_id aus. */
+    getCharNameByID(char_id) {
+        return DatingSiteAPI.getAPI()
+            .getCharName(char_id)
+            .then((responseCharName) => {
+                console.log('GetCharNameByID in Search:', responseCharName)
+                return responseCharName;
+            })
+    }
 
     /**
      * Diese Funktion besitzt die Darstellungen zu den ausgewählten Optionen eines Users in dem drop-down menu.
@@ -808,8 +1035,9 @@ class SearchProfile extends React.Component{
     }
     render() {
         const {
-          minAge,
-          maxAge,
+            minAge,
+            maxAge,
+            customProperties,
         } = this.state;
 
         const defaultValue = this.state.selectedOption || '';

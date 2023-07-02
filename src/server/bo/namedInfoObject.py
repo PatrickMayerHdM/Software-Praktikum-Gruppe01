@@ -71,4 +71,5 @@ class NamedInfoObject(bo):
         obj.set_named_char(dictionary['char_name'])
         obj.set_named_info(dictionary['char_desc'])
         obj.set_char_typ(dictionary['char_typ'])
+        obj.set_searchprofile_id(dictionary['searchprofile_id'])
         return obj
