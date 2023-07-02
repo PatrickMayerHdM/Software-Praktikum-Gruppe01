@@ -124,7 +124,8 @@ export default class DatingSiteAPI {
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
     #getAllCharNameURL = () => `${this.#datingServerBaseURL}/characteristics/all`;
     #updateNamedCharByCharValueURL = () => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
-    #getAllInfoObjectsByCharIDURL = (char_id) => `${this.#datingServerBaseURL}/infoobjects/all/${char_id}`
+    #getAllInfoObjectsByCharIDURL = (char_id) => `${this.#datingServerBaseURL}/infoobjects/all/${char_id}`;
+    #removeNamedCharByValueTagURL = (value, searchid) => `${this.#datingServerBaseURL}/infoobjects/delete/tag/${value}/${searchid}`;
 
 
     /**
@@ -290,7 +291,6 @@ export default class DatingSiteAPI {
     getSearchInfoObjects(searchID) {
         return this.#fetchAdvanced(this.#getSearchInfoObjectsURL(searchID))
             .then((responseJSON) => {
-                console.log('API Aufruf', responseJSON)
                 let infoobjectBOs = infoobjectBO.fromJSON(responseJSON);
                 return new Promise(function (resolve) {
                     resolve(infoobjectBOs);
@@ -320,6 +320,19 @@ export default class DatingSiteAPI {
                 'Content-type': "application/json",
             },
             body: JSON.stringify(char_value)
+        })
+    }
+    /**
+     * API-Aufruf um einen Tag einer Eigenschaft zu löschen im Suchprofil.
+     * */
+    removeNamedCharTag(value, searchid) {
+        return this.#fetchAdvanced(this.#removeNamedCharByValueTagURL(value, searchid), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(value, searchid)
         })
     }
 
