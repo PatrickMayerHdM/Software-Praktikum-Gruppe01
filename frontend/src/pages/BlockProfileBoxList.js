@@ -28,9 +28,7 @@ class BlockProfileBoxList extends React.Component{
                 profiles: profilesvar,
             }, () => {
                 const lengthProfiles = profilesvar.length;
-                console.log("Dies ist lengthProfiles: ", lengthProfiles)
-                this.setState({ numProfiles: lengthProfiles },
-                    () => {console.log("Dies ist numProfiles: ", this.state.numProfiles)});
+                this.setState({ numProfiles: lengthProfiles })
             });
         })
         .catch(error => {
@@ -53,8 +51,6 @@ class BlockProfileBoxList extends React.Component{
         this.setState({
             profiles: updatedProfiles,
             numProfiles: lengthupdatedProfiles
-        }, () => {
-            console.log('handleRemoveProfile und profiles nach der Aktualisierung:', this.state.profiles);
         });
     };
 
