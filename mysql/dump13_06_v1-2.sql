@@ -1126,7 +1126,10 @@ DROP TABLE IF EXISTS `Characteristic`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Characteristic` (
   `char_id` int NOT NULL,
-  `char_name` varchar(128) NOT NULL
+  `char_name` varchar(128) NOT NULL,
+  `char_typ` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`char_id`),
+  key `Characteristic_char_id_index`(`char_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
