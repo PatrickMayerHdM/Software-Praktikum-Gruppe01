@@ -667,7 +667,6 @@ class NamedInfoObjectListOperations(Resource):
         adm = Administration()
 
         proposal = NamedInfoObject.from_dict(api.payload)
-        print('Proposal der main:',proposal.get_searchprofile_id())
 
         if proposal is not None:
             charobj = adm.create_char(
@@ -686,6 +685,37 @@ class NamedInfoObjectListOperations(Resource):
             return respone, 200
         else:
             return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
+@datingapp.route('/namedinfoobjects/profile')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class NamedProfileInfoObjectListOperations(Resource):
+    @datingapp.marshal_with(namedinfoobject, code=200)
+    @datingapp.expect(namedinfoobject)
+    @secured
+    def post(self):
+        """ Anlegen eines neuen NamedInfoObject-Objekts """
+
+        adm = Administration()
+
+        proposal = NamedInfoObject.from_dict(api.payload)
+
+        if proposal is not None:
+            charobj = adm.create_char(
+                proposal.get_named_char_name(),
+                proposal.get_char_typ()
+            )
+
+            infoobj = adm.create_named_info_object_profile(
+                proposal.get_named_profile_fk(),
+                proposal.get_named_info_name(),
+                proposal.get_named_char_name(),
+            )
+
+            respone = {charobj, infoobj}
+            return respone, 200
+        else:
+            return 'InfoObjectOperations "POST" fehlgeschlagen', 500
+
 
 @datingapp.route('/updateNamedCharNamesAndValues')
 @datingapp.response(500, 'Serverseitiger Fehler')

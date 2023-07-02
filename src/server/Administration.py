@@ -452,6 +452,25 @@ class Administration(object):
 
         return info_obj
 
+    def create_named_info_object_profile(self, profile_fk, infoobj, char_name):
+        """
+        Erstellt ein NamedInfoObjekt basierend auf den angegebenen Attributen.
+        :param profile_fk: Die GoogleID eines Users.
+        :param infoobj: individuell erstelltes InfoObjekt eines Users.
+        :param char_name: individuell erstellte Eigenschaft eines Users.
+        """
+        with InfoObjectMapper() as mapper:
+            with CharMapper() as char_mapper:
+                info_obj = NamedInfoObject()
+                info_obj.set_id(1)
+                info_obj.set_named_char_id(char_mapper.find_key_by_char_name(char_name))
+                info_obj.set_named_info(infoobj)
+                info_obj.set_named_profile_fk(profile_fk)
+                mapper.insert_named_info(info_obj)
+
+            return info_obj
+
+
     def delete_info_object_by_char_value(self, char_value):
         """
         Löscht InfoObjekte basierend auf dem Char_Value.

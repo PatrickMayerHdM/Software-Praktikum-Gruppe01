@@ -532,7 +532,7 @@ class CreateProfil extends Component {
             this.state.char_typ)
 
         DatingSiteAPI.getAPI()
-            .createCharDescForProfile(newInfoBO)
+            .createCharDescForProfileNamedURL(newInfoBO)
             .catch((e) =>
                 this.setState({
                     error: e,

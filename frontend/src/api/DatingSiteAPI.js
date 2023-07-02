@@ -127,6 +127,7 @@ export default class DatingSiteAPI {
     #updateSearchNamedCharNamesAndValuesURL = () => `${this.#datingServerBaseURL}/updateSearchNamedCharNamesAndValues`;
     #getAllInfoObjectsByCharIDURL = (char_id) => `${this.#datingServerBaseURL}/infoobjects/all/${char_id}`;
     #removeNamedCharByValueTagURL = (value, searchid) => `${this.#datingServerBaseURL}/infoobjects/delete/tag/${value}/${searchid}`;
+    #createCharDescForProfileNamedURL = () => `${this.#datingServerBaseURL}/namedinfoobjects/profile`;
 
 
     /**
@@ -284,6 +285,22 @@ export default class DatingSiteAPI {
                 'Content-type': "application/json",
             },
             body: JSON.stringify(characteristic_desc_name)
+        }).then((responseJSON) => {
+            let createdCharDescForProfile = NamedInfoObjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(createdCharDescForProfile);
+            })
+        })
+    }
+
+    createCharDescForProfileNamedURL(char_desc_name) {
+        return this.#fetchAdvanced(this.#createCharDescForProfileNamedURL(), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(char_desc_name)
         }).then((responseJSON) => {
             let createdCharDescForProfile = NamedInfoObjectBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
