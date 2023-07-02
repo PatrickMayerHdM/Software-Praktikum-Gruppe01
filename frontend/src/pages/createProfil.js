@@ -298,7 +298,6 @@ class CreateProfil extends Component {
                     }
                 }
                 this.setState({ selectedCharNames });
-                console.log("Liste: ", selectedCharNames);
             });
     }
 
@@ -411,8 +410,13 @@ class CreateProfil extends Component {
     };
     /** Event-Handler für die Änderung des Alters */
     handleChangeAge = (date) => {
-        const newAge = date.toISOString();
-        this.setState({ age: newAge });
+        this.setState({ age: date }, () => {
+            let newAge = '';
+            if (this.state.age instanceof Date) {
+                newAge = this.state.age.toISOString();
+            }
+            this.setState({ age: newAge });
+        });
     };
 
     /** Event-Handler für die Änderung des AboutMe */
@@ -610,7 +614,7 @@ class CreateProfil extends Component {
         this.setState({ openuserchar: true })
     };
 
-    handleUserSelectSaveInputsSelections= async () => {
+        handleUserSelectSaveInputsSelections= async () => {
 
         if (this.state.UserUpdate === false ){
             try {
@@ -1324,6 +1328,11 @@ class CreateProfil extends Component {
                                                     value={age}
                                                     onChange={this.handleChangeAge}
                                                     label="Datum"
+                                                    inputProps={{
+                                                        inputMode: 'text',
+                                                        pattern: '[0-9]*',
+                                                        maxLength: 9,
+                                                    }}
                                                 />
                                             </LocalizationProvider>
                                         </Box>

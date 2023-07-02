@@ -671,6 +671,10 @@ class Administration(object):
         with InfoObjectMapper() as mapper:
             return mapper.find_all_by_searchid(searchid)
 
+    def delete_info_object_by_char_value_and_search_id(self, value, searchid):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_info_obj_by_value_and_search_id(value, searchid)
+
     def calculate_age(self, info_objects):
         """
         Diese Methode stellt die Applikationslogik dar, um ein Alter anhand des Geburtstages zu berechnen.
