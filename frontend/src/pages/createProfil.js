@@ -713,24 +713,46 @@ class CreateProfil extends Component {
                         })
                     );
             } else {
-                const updatedNamedInfoBO = new NamedInfoObjectBO(
-                    this.state.id,
-                    this.props.user.uid,
-                    null,
-                    this.state.UserSelectSelectedOption,
-                    this.state.selectedCharName,
-                    this.state.selectedCharId,
-                    "select")
 
-                console.log("So sieht das BO aus: ", updatedNamedInfoBO)
+                // Schleife über jedes Element der vom User erstellten Auswahlen
+                for (let index = 0; index < this.state.UserSelectAvSelections.length; index++) {
+                    // Der value ist der Wert des aktuellen Elements der vom User erstellten Auswahlen
+                    const value = this.state.UserSelectAvSelections[index];
 
-                DatingSiteAPI.getAPI()
-                    .updateNamedCharByURL(updatedNamedInfoBO)
-                    .catch((e) =>
-                        this.setState({
-                            error: e,
-                        })
-                    );
+
+                    // Wenn der aktuelle value der erstellten Auswahlen, der vom User explizit ausgewählte value ist.
+                    if (this.state.UserSelectSelectedOption === value) {
+
+                        // Erstellen eines neuen NamedInfoObjectBO, hier mit einer GoogleID, da dieser value vom User ausgewählt wurde.
+                        const newInfoBO = new NamedInfoObjectBO(
+                            this.state.id,
+                            this.props.user.uid,
+                            null,
+                            value,
+                            this.state.selectedCharName,
+                            this.state.selectedCharId,
+                            "select",
+                        );
+
+                        // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                        await DatingSiteAPI.getAPI().updateNamedCharByURL(newInfoBO);
+
+                    } else {
+
+                        // Erstellen eines neuen NamedInfoObjectBO, hier ohne GoogleID, da dieser value nicht vom User ausgewählt wurde.
+                        const newInfoBO = new NamedInfoObjectBO(
+                            this.state.id,
+                            null,
+                            null,
+                            value,
+                            this.state.selectedCharName,
+                            this.state.selectedCharId,
+                            "select",
+                        );
+
+                        await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
+                    }
+                }
             }
 
         }
