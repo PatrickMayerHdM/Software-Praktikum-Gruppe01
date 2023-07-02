@@ -5,7 +5,7 @@ import Item from "../../theme";
 import FormLabel from "@mui/material/FormLabel";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Slider from "@mui/material/Slider";
-import {Button, TextField} from "@mui/material";
+import {Button, Fab, TextField} from "@mui/material";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import "../Profile/Profile.css";
@@ -24,6 +24,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 /**
  * Damit dem User beim Suchen passende Personen angezeigt werden, kann dieser Suchprofile erstellen, diese in Verbindung
@@ -56,6 +57,19 @@ class SearchProfile extends React.Component{
             error: null,
 
             selectedOption: null, // Dies ist die vom User ausgewählte Option im Dropdown
+
+            openuserchar: false, // Wird für die Eigenschaftsvorschläge genutzt.
+            selectedCharNames: [], // Leeres Array, das mit den Auswahlvorschlägen (für Eigenschaften) gefüllt wird.
+            selectedCharTyp: null, // Char_Typ einer Eigenschaft ("text" oder "selected")
+            selectedCharId: null, // Char_ID der ausgewählten Eigenschaft
+            selectedCharName: null, // Char_Name der ausgewählten Eigenschaft
+            UserSelectStartingSelections: [], // Bereits erstellte Auswahlen
+
+            customProperties: null, // muss noch überarbeitet werden --> Liste der ausgewählten Infoobj zu jeder Eigenschaft
+            UserSelectSelectedOption:null, // Die vom User ausgewählte Auswahl
+            UserUpdate: false, // True wenn es ein Update ist, False wenn es erstmalig angelegt wird.
+            UserSelectNumOptions: null, // Anzahl der ausgewählten Infoobjekte
+            UserSelectAvSelections: [], // Vom User zusätzlich erstellte Auswahlen
         };
 
         // Binding der Funktionen
@@ -82,6 +96,7 @@ class SearchProfile extends React.Component{
         this.handleDeletePolitical = this.handleDeletePolitical.bind(this);
         this.handleDeleteInterests = this.handleDeleteInterests.bind(this);
         this.handleDeleteHeight = this.handleDeleteHeight.bind(this);
+        this.handleUserSelectNumOptions = this.handleUserSelectNumOptions.bind(this);
     }
 
     /**
@@ -276,6 +291,147 @@ class SearchProfile extends React.Component{
          }
     };
 
+    /** Event-Handler für die Änderung des openuserchars. Der openuserchars wird für das auslesen und hinzufügen von
+     * Eigenschaten genutzt, die nicht vom System vorgegeben sind.
+     * */
+    handleOpenUserChar = () => {
+        this.setState({ openuserchar: true })
+    };
+
+        /** Die getAllInfoObjects liest alle Chars aus,
+     * die eine CharID größer als 160 haben und fügt es zur "selectedCharNames" hinzu.
+     * Diese wird anschließend mit dem neuen state überschrieben. */
+    getAllInfoObjects() {
+        return DatingSiteAPI.getAPI()
+            .getAllCharNames()
+            .then((responseCharNames) => {
+                const selectedCharNames = [];
+                for (const key in responseCharNames) {
+                    if (responseCharNames.hasOwnProperty(key)) {
+                        const char_id = responseCharNames[key].id;
+                        const char_name = responseCharNames[key].char_name;
+                        const char_typ = responseCharNames[key].char_typ;
+                        if (char_id > 160) {
+                            selectedCharNames.push({ char_id, char_name, char_typ });
+                        }
+                    }
+                }
+                this.setState({ selectedCharNames });
+                console.log("Liste: ", selectedCharNames);
+            });
+    }
+
+       /** Event-Handler für die Änderung einer selectedOption */
+    handleChangeSelectedProperty = (event) => {
+        const { selectedCharNames } = this.state
+        const selectedProperty = event.target.value;
+        const selectedChar = selectedCharNames.find((char)=> char.char_id === selectedProperty);
+        this.setState({
+            selectedOption: selectedProperty,
+            selectedCharTyp: selectedChar?.char_typ,
+            selectedCharId: selectedChar?.char_id,
+            selectedCharName: selectedChar?.char_name
+        }, () => {
+            this.getInfoObjectsByCharID(selectedProperty);
+        });
+    };
+
+    /** Auslesen von InfoObjects anhand einer Char-Id */
+    getInfoObjectsByCharID(char_id) {
+        return DatingSiteAPI.getAPI()
+            // get der InfoObjekte einer CharID
+            .getInfoObjectsCharID(char_id)
+            .then((responseCharName) => {
+                console.log("responseCharName zu Beginn", responseCharName)
+                let updatedUserSelectNumOptions = 0;
+                const updatedUserSelectStartingSelections = [ ]; // erstellt ein leeres Array, um es zu ersetzen
+                // const UserData = this.state.customProperties[char_id]?.char_value; // Wenn ein User bereits etwas zu dieser Eigenschaft ausgewählt hat, wird es hier gesetzt
+
+                // hier wird die Länge der Antwort geprüft.
+                if (responseCharName.length > 1){
+                    responseCharName.forEach(element => {
+                        // Jedes Element wird der Liste hinzugeüft.
+                        updatedUserSelectStartingSelections.push(element.char_value)
+                    });
+                    // setzt die Länge der Antwort.
+                    updatedUserSelectNumOptions = responseCharName.length;
+                } else {
+                    updatedUserSelectStartingSelections.push(responseCharName[0].char_value);
+                    // Wenn es nicht länger als 1 ist, ist es automatisch eine Auswahl lang.
+                    updatedUserSelectNumOptions = 1;
+                }
+                /**
+                 * Setzt die aktuelle Auswahl des Users, direkt auf die tatsächliche Auswahl des Users.
+                 * Setzt den Wert, dass ein User hier ein Update macht auf True
+                 */
+                // if (UserData != undefined) { this.setState({ UserSelectSelectedOption:UserData, UserUpdate: true,})}
+                /**
+                 *  Setzt den State.
+                 */
+                this.setState((prevState) => {
+                    return {
+                        UserSelectStartingSelections: updatedUserSelectStartingSelections,
+                        UserSelectNumOptions: updatedUserSelectNumOptions,
+                    };
+                },() => {
+                    console.log("this.state.UserSelectAvSelections",this.state.UserSelectAvSelections)
+                });
+                return responseCharName;
+            });
+    }
+
+    // Setzt die Auswahl des Users, bei den vom User erstellten InfoObjekten
+    handleUserSelectSelection = (event) => {
+        this.setState({
+            UserSelectSelectedOption: event.target.value,
+        });
+    }
+
+     /**
+     * Handler für Änderungen an Text der InfoObjekte, bei einer von einem anderen User erstellten Auswahleigenschaft.
+     */
+    handleUserSelectTextFieldChange(event, index) {
+        // setzt die const value
+        const {value} = event.target;
+        this.setState(prevState => {
+            const updatedUserSelectAvSelections = [...prevState.UserSelectAvSelections];
+            updatedUserSelectAvSelections[index] = value;
+            // setzt den Wert der updatedUserSelections in userSelections
+            return {UserSelectAvSelections: updatedUserSelectAvSelections};
+        });
+    }
+
+
+    /**
+     * Handling für, wenn ein User bei einer bereits erstellten Auswahleigenschaft, eine mögliche Auswahl wieder entfernen will.
+     */
+    handleDeleteUserSelection(index) {
+        this.setState(prevState => {
+            // Erstellt einen const mit dem Wert von userSelections
+            const updatedUserSelectAvSelections = [...prevState.UserSelectAvSelections];
+            // Entfernt ein Element basierend auf dem Index.
+            updatedUserSelectAvSelections.splice(index, 1);
+            return {
+                // setzt die vom User erstellten Auswahlen, zu dem neuen Wert (ohne den gelöschten Wert)
+                UserSelectAvSelections: updatedUserSelectAvSelections,
+                // setzt die höhe der vom User erstellten Auswahlen auf -1 des aktuellen Werts.
+                UserSelectNumOptions: (this.state.UserSelectNumOptions - 1)
+            };
+        });
+    }
+
+    /** Handler für die Anzahl an erstellen Auswahlen, bei einer bereits von einem User erstellten Auswahleigenschaft */
+    handleUserSelectNumOptions() {
+        this.setState((prevState) => {
+            const updatedUserSelectAvSelections = [...prevState.UserSelectAvSelections, ''];
+            return {
+                UserEdit: true,
+                UserSelectNumOptions: prevState.UserSelectNumOptions + 1,
+                UserSelectAvSelections: updatedUserSelectAvSelections,
+            };
+        });
+    }
+
     /**
      * Diese Funktion wird bei dem Laden einer der SearchProfile.js ausgeführt.
      * Hier wird einerseits der letzte Teil der URL erfasst, welcher bestimmt, ob es sich entweder um das Anlegen eines
@@ -289,7 +445,8 @@ class SearchProfile extends React.Component{
         this.setState({lastPartURL: lastPartURL})
 
         if (lastPartURL === "new") {
-            } else {
+
+        } else {
             // Der Fall, wenn ein bereits existierendes Suchprofil bearbeitet wird
             DatingSiteAPI.getAPI()
                 .getOneSearchprofile(lastPartURL)
@@ -351,7 +508,9 @@ class SearchProfile extends React.Component{
 
                       this.setState(selectedProperties);
                 });
-        }};
+        };
+        this.getAllInfoObjects();
+    };
 
 
     /**
@@ -724,6 +883,87 @@ class SearchProfile extends React.Component{
                                     {this.rederSelectedContent()}
                                 </Box>
                             </FormGroup>
+                        </Item>
+                        {/** Compente für nicht vom system vorgefertigte Eigenschaften*/}
+                        <Item>
+                            <Box sx={{ width: 400, margin: '0 auto' }}>
+                                <FormGroup row style={{ justifyContent: 'center' }}>
+                                    <Button onClick={this.handleOpenUserChar} variant="contained"  startIcon={<AddIcon />}> Eigenschaftsvorschläge </Button>
+                                    {this.state.openuserchar && (
+                                        <Box sx={{ width: 400, margin: '0 auto', marginTop: '5%' }}>
+                                            <FormGroup row style={{ justifyContent: 'center' }}>
+                                                <FormControl fullWidth>
+                                                    <InputLabel> Bereits erstellte Eigenschaften </InputLabel>
+                                                    <Select
+                                                        value={defaultValue}
+                                                        lable="Vorschläge"
+                                                        onChange={this.handleChangeSelectedProperty}
+                                                    >
+                                                        {this.state.selectedCharNames &&
+                                                            this.state.selectedCharNames.map((char, index) => (
+                                                                <MenuItem
+                                                                    key={char.char_id}
+                                                                    value={char.char_id}
+                                                                >
+                                                                    <div>
+                                                                        {char.char_name}
+                                                                    </div>
+                                                                </MenuItem>
+                                                            ))}
+                                                    </Select>
+                                                </FormControl>
+                                                {this.state.selectedCharTyp === 'select' && (
+                                                <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                    <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                        Hier sind deine Auswahlmöglichkeiten
+                                                    </FormLabel>
+                                                    <RadioGroup row style={{ justifyContent: 'center' }} value={this.state.UserSelectSelectedOption} onChange={this.handleUserSelectSelection}>
+                                                        {this.state.UserSelectStartingSelections.map((value, index) => (
+                                                            <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
+                                                                <FormControlLabel sx={{ width: '35%' }} value={value} control={<Radio />} label={value} labelPlacement="right" />
+                                                            </Box>
+                                                        ))}
+                                                        {this.state.UserSelectAvSelections.map((value, index) => (
+                                                            <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
+                                                                <FormControlLabel sx={{ width: '35%' }} value={value} control={<Radio />} label={value} labelPlacement="right"/>
+                                                                <TextField label="Auswahlname" size="small" value={this.state.UserSelectAvSelections[index] || ''} onChange={(event) => this.handleUserSelectTextFieldChange(event, index)} ></TextField>
+                                                                <Fab color="error" aria-label="delete" size="small" onClick={() => this.handleDeleteUserSelection(index)}>
+                                                                    <DeleteIcon></DeleteIcon>
+                                                                </Fab>
+                                                            </Box>
+                                                        ))}
+                                                    </RadioGroup>
+
+                                                    <Box sx={{ marginBottom: '10px' }}>
+                                                        <Fab onClick={this.handleUserSelectNumOptions} color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
+                                                            <AddIcon />
+                                                        </Fab>
+                                                    </Box>
+                                                    <Box sx={{ marginBottom: '10px' }}>
+                                                        <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}>
+                                                            Speichern
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
+                                                )}
+                                                {this.state.selectedCharTyp === 'text' && (
+                                                    <>
+                                                        <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                            <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Gebe hier deine passende Beschreibung an: </FormLabel>
+                                                        </Box>
+                                                        <Box sx={{ marginBottom: '10px' }}>
+                                                            <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.handleInputChange(event, 'char_desc')} />
+                                                        </Box>
+                                                        <Box sx={{ marginBottom: '10px', marginLeft: '10px' }}>
+                                                            <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
+                                                        </Box>
+                                                    </>
+                                                )}
+                                            </FormGroup>
+                                        </Box>
+                                    )}
+                                </FormGroup>
+                            </Box>
                         </Item>
                         <Item>
                             {/** Das sind die Tag-Felder der bereits ausgewählten Eigenschaften eines Suchprofils. */}
