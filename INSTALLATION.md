@@ -33,6 +33,7 @@ Für Backend wird folgendes benötigt:<br>
 4. flask-cors<br>
 5. google-auth<br>
 6. requests<br>
+7. mysql-connector-python
 
 ```
 cd /src
