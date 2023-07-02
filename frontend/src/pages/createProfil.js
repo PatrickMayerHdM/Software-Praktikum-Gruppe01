@@ -795,7 +795,7 @@ class CreateProfil extends Component {
                     // setzt die Länge der Antwort.
                     updatedUserSelectNumOptions = responseCharName.length;
                 } else {
-                    updatedUserSelectStartingSelections.push(responseCharName.char_value);
+                    updatedUserSelectStartingSelections.push(responseCharName[0].char_value);
                     // Wenn es nicht länger als 1 ist, ist es automatisch eine Auswahl lang.
                     updatedUserSelectNumOptions = 1;
                 }
