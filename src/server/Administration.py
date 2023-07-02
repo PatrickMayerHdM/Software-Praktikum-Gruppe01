@@ -963,30 +963,33 @@ class Administration(object):
 
 
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
-            for key in prof['Char Values']:
+            for key in searchprofile['Char Values']:
                 #print('Prüfung ob Key über 161', key)
                 print('Total-Checked-Elem vor Iteration über Key 160', total_checked_elem)
                 if key >= 161:
                     #print('Übergebener Key zur Prüfung ab 161', key)
                     #print('Score vor pot. Match:', score)
-                    compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][key])
-                    if compare_text == 1:
-                        score += 1
+                    #print('prof[Char Values][key]:', prof['Char Values'][key])
+                    if key in prof['Char Values'] and prof['Char Values'][key] is not None:
+                        print('Dieser Key wird geprüft:', key)
+                        compare_text = self.compare_text(searchprofile['Char Values'][key], prof['Char Values'][key])
                         total_checked_elem += 1
-                        print('Keys ab 161 Total Checked Elem +1:', total_checked_elem)
-                        #print('Score nach pot. Match:', score)
-                        continue
+                        if compare_text == 1:
+                            score += 1
+                            print('Keys ab 161 Total Checked Elem +1:', total_checked_elem)
+                            #print('Score nach pot. Match:', score)
+                            continue
 
             """ Berechnung des Match-Wertes in Prozent """
             #print('Total_checked_elem:', total_checked_elem)
             matching_value = score / total_checked_elem * 100  # Prozentberechnung des Match-Wertes
             #print('Matching Instanz:', matching_value)
-            print('Vor dem Result Append beim Matching', prof['Profile ID'])
+            #print('Vor dem Result Append beim Matching', prof['Profile ID'])
             result.append([prof['Profile ID'], matching_value])
 
             """ True oder False Statement in Liste hinzufügen, damit nur neue Profile ausgelesen werden können """
             # Zuerst laden wir uns alle Profile die bereits besucht wurden in unsere Liste.
-            print('Admin.py: Beginn des Profilesvisited')
+            #print('Admin.py: Beginn des Profilesvisited')
             with ProfilevisitsMapper() as visited_mapper:
                 #print('Übergebene GoogleID an Mapper:', search_google_id)
                 visited_profiles_list = visited_mapper.find_by_key(search_google_id)
@@ -994,17 +997,17 @@ class Administration(object):
 
             # jetzt iterieren wir über die Result Liste, und setzen den State auf True wenn ein Profil bereits besucht wurde
             # oder auf false, wenn das Profil bisher noch nicht gesehen wurde.
-        print('Initial Result-List:', result)
-        print('Initial Age-Filtered-list', age_filtered_list)
+        #print('Initial Result-List:', result)
+        #print('Initial Age-Filtered-list', age_filtered_list)
         for profile in result:
             if profile[0] in visited_profiles_list:  # Prüfe den Listeneintrag an der Stelle 0 (googleID)
-                print('Profile an der Stelle [0]', profile[0])
+                #print('Profile an der Stelle [0]', profile[0])
                 profile.append(True) # Wenn das aktuell fokussierte Profil nicht in visited-profiles ist dann erweiter es um True
 
             else:
                 profile.append(False) # Sonst false
 
-        print('updated (True/False) result-list:', result)
+        #print('updated (True/False) result-list:', result)
 
         """  
         Result-Liste sortieren, damit das Matching als erstes ausgelesen wird. 
@@ -1014,7 +1017,7 @@ class Administration(object):
 
         result.sort(key=lambda x: x[1], reverse=True)
 
-        print('Ergebnisliste (Result):', result)
+        #print('Ergebnisliste (Result):', result)
         return result
 
     def get_char_values(self, profile_id):
