@@ -32,8 +32,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ArticleIcon from '@mui/icons-material/Article';
-import RemoveIcon from '@mui/icons-material/Remove';
-import {forEach} from "react-bootstrap/ElementChildren";
+
 
 /** Dies stellt das Erstellen eines Profils dar */
 
@@ -65,7 +64,7 @@ class CreateProfil extends Component {
             selectedOption: null,
             minAge: null,
             maxAge: null,
-            searchprofile_id: null,
+            searchprofile_id: 0,
             income: null,
             favclub: null,
             hobby: null,
@@ -139,9 +138,6 @@ class CreateProfil extends Component {
     /** Abfrage ob ein Profil bereits vorhanden ist oder nicht*/
     componentDidMount() {
         this.checkProfilExc();
-        this.getSelectedProperties();
-        this.getSelectedPropertiesForCharValuesAndNames();
-        this.getAllInfoObjects();
     };
 
 
@@ -155,6 +151,9 @@ class CreateProfil extends Component {
                     this.setState({ profileExists: false });
                 } else {
                     this.setState({ profileExists: true });
+                    this.getSelectedProperties();
+                    this.getSelectedPropertiesForCharValuesAndNames();
+                    this.getAllInfoObjects();
                 }
             }).catch((e) =>
                 this.setState({
@@ -398,13 +397,8 @@ class CreateProfil extends Component {
     };
     /** Event-Handler für die Änderung des Alters */
     handleChangeAge = (date) => {
-        this.setState({ age: date }, () => {
-            let newAge = '';
-            if (this.state.age instanceof Date) {
-                newAge = this.state.age.toISOString();
-            }
-            this.setState({ age: newAge });
-        });
+        const newAge = date.toISOString();
+        this.setState({ age: newAge })
     };
 
     /** Event-Handler für die Änderung des AboutMe */
@@ -1346,11 +1340,6 @@ class CreateProfil extends Component {
                                                     value={age}
                                                     onChange={this.handleChangeAge}
                                                     label="Datum"
-                                                    inputProps={{
-                                                        inputMode: 'text',
-                                                        pattern: '[0-9]*',
-                                                        maxLength: 9,
-                                                    }}
                                                 />
                                             </LocalizationProvider>
                                         </Box>
