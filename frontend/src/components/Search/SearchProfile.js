@@ -448,12 +448,14 @@ class SearchProfile extends React.Component{
         const currentPath = window.location.pathname;
         // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
         const lastPartURL = currentPath.split('/').pop();
-        this.getSelectedPropertiesForCharValuesAndNameTwo(lastPartURL);
         this.setState({lastPartURL: lastPartURL})
 
         if (lastPartURL === "new") {
 
         } else {
+            this.getSelectedPropertiesForCharValuesAndNameTwo(lastPartURL);
+            this.getAllInfoObjects();
+
             // Der Fall, wenn ein bereits existierendes Suchprofil bearbeitet wird
             DatingSiteAPI.getAPI()
                 .getOneSearchprofile(lastPartURL)
@@ -470,45 +472,45 @@ class SearchProfile extends React.Component{
                                 case 40:
                                     selectedProperties.gender = charValue;
                                     break;
-                                case 70:
-                                    selectedProperties.hair = charValue;
-                                    break;
-                                case 50:
-                                    selectedProperties.height = charValue;
-                                    break;
-                                case 60:
-                                    selectedProperties.religion = charValue;
-                                    break;
-                                case 80:
-                                    selectedProperties.smoking = charValue;
-                                    break;
-                                case 100:
-                                    selectedProperties.minAge = charValue;
-                                    break;
-                                case 110:
-                                    selectedProperties.maxAge = charValue;
-                                    break;
-                                case 90:
-                                    selectedProperties.aboutme = charValue;
-                                    break;
-                                case 120:
-                                    selectedProperties.income = charValue;
-                                    break;
-                                case 130:
-                                    selectedProperties.educationalstatuts = charValue;
-                                    break;
-                                case 140:
-                                    selectedProperties.favclub = charValue;
-                                    break;
-                                case 150:
-                                    selectedProperties.hobby = charValue;
-                                    break;
-                                case 160:
-                                    selectedProperties.politicaltendency = charValue;
-                                    break;
+                                    case 70:
+                                        selectedProperties.hair = charValue;
+                                        break;
+                                        case 50:
+                                            selectedProperties.height = charValue;
+                                            break;
+                                            case 60:
+                                                selectedProperties.religion = charValue;
+                                                break;
+                                                case 80:
+                                                    selectedProperties.smoking = charValue;
+                                                    break;
+                                                    case 100:
+                                                        selectedProperties.minAge = charValue;
+                                                        break;
+                                                        case 110:
+                                                            selectedProperties.maxAge = charValue;
+                                                            break;
+                                                            case 90:
+                                                                selectedProperties.aboutme = charValue;
+                                                                break;
+                                                                case 120:
+                                                                    selectedProperties.income = charValue;
+                                                                    break;
+                                                                    case 130:
+                                                                        selectedProperties.educationalstatuts = charValue;
+                                                                        break;
+                                                                        case 140:
+                                                                            selectedProperties.favclub = charValue;
+                                                                            break;
+                                                                            case 150:
+                                                                                selectedProperties.hobby = charValue;
+                                                                                break;
+                                                                                case 160:
+                                                                                    selectedProperties.politicaltendency = charValue;
+                                                                                    break;
 
-                                default:
-                                    break;
+                                                                                    default:
+                                                                                        break;
                             }
                         }
                     }
@@ -517,8 +519,6 @@ class SearchProfile extends React.Component{
                 });
         }
         ;
-        this.getAllInfoObjects();
-
     }
 
 
@@ -1112,88 +1112,90 @@ class SearchProfile extends React.Component{
                                 </Box>
                             </FormGroup>
                         </Item>
-                        {/** Compente für nicht vom system vorgefertigte Eigenschaften*/}
-                        <Item>
-                            <Box sx={{ width: 400, margin: '0 auto' }}>
-                                <FormGroup row style={{ justifyContent: 'center' }}>
-                                    <Button onClick={this.handleOpenUserChar} variant="contained"  startIcon={<AddIcon />}> Eigenschaftsvorschläge </Button>
-                                    {this.state.openuserchar && (
-                                        <Box sx={{ width: 400, margin: '0 auto', marginTop: '5%' }}>
-                                            <FormGroup row style={{ justifyContent: 'center' }}>
-                                                <FormControl fullWidth>
-                                                    <InputLabel> Bereits erstellte Eigenschaften </InputLabel>
-                                                    <Select
-                                                        value={defaultValue}
-                                                        lable="Vorschläge"
-                                                        onChange={this.handleChangeSelectedProperty}
-                                                    >
-                                                        {this.state.selectedCharNames &&
-                                                            this.state.selectedCharNames.map((char, index) => (
-                                                                <MenuItem
-                                                                    key={char.char_id}
-                                                                    value={char.char_id}
-                                                                >
-                                                                    <div>
-                                                                        {char.char_name}
-                                                                    </div>
-                                                                </MenuItem>
+                        {/** Komponente für nicht vom system vorgefertigte Eigenschaften*/}
+                        {this.state.lastPartURL !== 'new' ? (
+                            <Item>
+                                <Box sx={{ width: 400, margin: '0 auto' }}>
+                                    <FormGroup row style={{ justifyContent: 'center' }}>
+                                        <Button onClick={this.handleOpenUserChar} variant="contained"  startIcon={<AddIcon />}> Eigenschaftsvorschläge </Button>
+                                        {this.state.openuserchar && (
+                                            <Box sx={{ width: 400, margin: '0 auto', marginTop: '5%' }}>
+                                                <FormGroup row style={{ justifyContent: 'center' }}>
+                                                    <FormControl fullWidth>
+                                                        <InputLabel> Bereits erstellte Eigenschaften </InputLabel>
+                                                        <Select
+                                                            value={defaultValue}
+                                                            lable="Vorschläge"
+                                                            onChange={this.handleChangeSelectedProperty}
+                                                        >
+                                                            {this.state.selectedCharNames &&
+                                                                this.state.selectedCharNames.map((char, index) => (
+                                                                    <MenuItem
+                                                                        key={char.char_id}
+                                                                        value={char.char_id}
+                                                                    >
+                                                                        <div>
+                                                                            {char.char_name}
+                                                                        </div>
+                                                                    </MenuItem>
+                                                                ))}
+                                                        </Select>
+                                                    </FormControl>
+                                                    {this.state.selectedCharTyp === 'select' && (
+                                                    <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                        <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                            Hier sind deine Auswahlmöglichkeiten
+                                                        </FormLabel>
+                                                        <RadioGroup row style={{ justifyContent: 'center' }} value={this.state.UserSelectSelectedOption} onChange={this.handleUserSelectSelection}>
+                                                            {this.state.UserSelectStartingSelections.map((value, index) => (
+                                                                <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
+                                                                    <FormControlLabel sx={{ width: '35%' }} value={value} control={<Radio />} label={value} labelPlacement="right" />
+                                                                </Box>
                                                             ))}
-                                                    </Select>
-                                                </FormControl>
-                                                {this.state.selectedCharTyp === 'select' && (
-                                                <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
-                                                    <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}>
-                                                        Hier sind deine Auswahlmöglichkeiten
-                                                    </FormLabel>
-                                                    <RadioGroup row style={{ justifyContent: 'center' }} value={this.state.UserSelectSelectedOption} onChange={this.handleUserSelectSelection}>
-                                                        {this.state.UserSelectStartingSelections.map((value, index) => (
-                                                            <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
-                                                                <FormControlLabel sx={{ width: '35%' }} value={value} control={<Radio />} label={value} labelPlacement="right" />
-                                                            </Box>
-                                                        ))}
-                                                        {this.state.UserSelectAvSelections.map((value, index) => (
-                                                            <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
-                                                                <FormControlLabel sx={{ width: '35%' }} value={value} control={<Radio />} label={value} labelPlacement="right"/>
-                                                                <TextField label="Auswahlname" size="small" value={this.state.UserSelectAvSelections[index] || ''} onChange={(event) => this.handleUserSelectTextFieldChange(event, index)} ></TextField>
-                                                                <Fab color="error" aria-label="delete" size="small" onClick={() => this.handleDeleteUserSelection(index)}>
-                                                                    <DeleteIcon></DeleteIcon>
-                                                                </Fab>
-                                                            </Box>
-                                                        ))}
-                                                    </RadioGroup>
+                                                            {this.state.UserSelectAvSelections.map((value, index) => (
+                                                                <Box key={index} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', marginTop: '5%',}}>
+                                                                    <FormControlLabel sx={{ width: '35%' }} value={value} control={<Radio />} label={value} labelPlacement="right"/>
+                                                                    <TextField label="Auswahlname" size="small" value={this.state.UserSelectAvSelections[index] || ''} onChange={(event) => this.handleUserSelectTextFieldChange(event, index)} ></TextField>
+                                                                    <Fab color="error" aria-label="delete" size="small" onClick={() => this.handleDeleteUserSelection(index)}>
+                                                                        <DeleteIcon></DeleteIcon>
+                                                                    </Fab>
+                                                                </Box>
+                                                            ))}
+                                                        </RadioGroup>
 
-                                                    <Box sx={{ marginBottom: '10px' }}>
-                                                        <Fab onClick={this.handleUserSelectNumOptions} color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
-                                                            <AddIcon />
-                                                        </Fab>
-                                                    </Box>
-                                                    <Box sx={{ marginBottom: '10px' }}>
-                                                        <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}>
-                                                            Speichern
-                                                        </Button>
-                                                    </Box>
-                                                </Box>
-                                                )}
-                                                {this.state.selectedCharTyp === 'text' && (
-                                                    <>
-                                                        <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
-                                                            <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Gebe hier deine passende Beschreibung an: </FormLabel>
+                                                        <Box sx={{ marginBottom: '10px' }}>
+                                                            <Fab onClick={this.handleUserSelectNumOptions} color="primary" aria-label="add" sx={{ marginLeft: '5px' }}>
+                                                                <AddIcon />
+                                                            </Fab>
                                                         </Box>
                                                         <Box sx={{ marginBottom: '10px' }}>
-                                                            <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.
+                                                            <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}>
+                                                                Speichern
+                                                            </Button>
+                                                        </Box>
+                                                    </Box>
+                                                    )}
+                                                    {this.state.selectedCharTyp === 'text' && (
+                                                        <>
+                                                            <Box sx={{ marginBottom: '10px', marginTop: '5%' }}>
+                                                                <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Gebe hier deine passende Beschreibung an: </FormLabel>
+                                                            </Box>
+                                                            <Box sx={{ marginBottom: '10px' }}>
+                                                                <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.
                                                             handleInputChange(event, 'char_desc')} />
-                                                        </Box>
-                                                        <Box sx={{ marginBottom: '10px', marginLeft: '10px' }}>
-                                                            <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
-                                                        </Box>
-                                                    </>
-                                                )}
-                                            </FormGroup>
-                                        </Box>
-                                    )}
-                                </FormGroup>
-                            </Box>
-                        </Item>
+                                                            </Box>
+                                                            <Box sx={{ marginBottom: '10px', marginLeft: '10px' }}>
+                                                                <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
+                                                            </Box>
+                                                        </>
+                                                    )}
+                                                </FormGroup>
+                                            </Box>
+                                        )}
+                                    </FormGroup>
+                                </Box>
+                            </Item>
+                        ) : null}
                         <Item>
                             {/** Das sind die Tag-Felder der bereits ausgewählten Eigenschaften eines Suchprofils. */}
 
