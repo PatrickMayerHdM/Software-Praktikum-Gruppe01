@@ -124,6 +124,7 @@ export default class DatingSiteAPI {
     #removeNamedCharByValueURL = (char_value) => `${this.#datingServerBaseURL}/infoobjects/${char_value}`;
     #getAllCharNameURL = () => `${this.#datingServerBaseURL}/characteristics/all`;
     #updateNamedCharByCharValueURL = () => `${this.#datingServerBaseURL}/updateNamedCharNamesAndValues`;
+    #updateSearchNamedCharNamesAndValuesURL = () => `${this.#datingServerBaseURL}/updateSearchNamedCharNamesAndValues`;
     #getAllInfoObjectsByCharIDURL = (char_id) => `${this.#datingServerBaseURL}/infoobjects/all/${char_id}`;
     #removeNamedCharByValueTagURL = (value, searchid) => `${this.#datingServerBaseURL}/infoobjects/delete/tag/${value}/${searchid}`;
 
@@ -233,6 +234,25 @@ export default class DatingSiteAPI {
                 'Content-type': "application/json",
             },
             body: JSON.stringify(google_fk)
+        }).then((responseJSON) => {
+            let newnamedcharvalue = NamedInfoObjectBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(newnamedcharvalue);
+            })
+        })
+    }
+
+    /**
+     * Aktualisieren einer Characteristic anhand der SuchProfile-ID
+     * */
+    updateSearchNamedCharBy(searchprofile_id) {
+        return this.#fetchAdvanced(this.#updateSearchNamedCharNamesAndValuesURL(searchprofile_id), {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': "application/json",
+            },
+            body: JSON.stringify(searchprofile_id)
         }).then((responseJSON) => {
             let newnamedcharvalue = NamedInfoObjectBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {

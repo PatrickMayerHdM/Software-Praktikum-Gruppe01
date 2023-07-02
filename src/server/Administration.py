@@ -508,6 +508,35 @@ class Administration(object):
 
         return namedinfo
 
+    def update_Search_named_info_object(self, profile_fk, char_id, char_name, infoobj, searchprofile_id):
+        """
+        In dieser Methode werden bereits vorhandene NamedInfoObjekte aktualisiert.
+        :param profile_fk: Google-ID eines Users
+        :param char_id: individuelle Eigenschafts-ID
+        :param char_name: Eigenschaftsname
+        :param infoobj: der Value des Users
+        :param searchprofile_id: SuchProfil-ID des SuchProfils
+        :return: Das aktualisierte InfoObjekt wird zurückgegeben.
+        """
+        with InfoObjectMapper() as InfoMapper:
+            with CharMapper() as mapper:
+                namedinfo = NamedInfoObject()
+
+                if char_name is None:
+                    char_name = mapper.find_char_by_key(char_id)
+
+                namedinfo.set_named_char_id(char_id)
+                namedinfo.set_named_char(char_name)
+
+                if infoobj is not None:
+                    namedinfo.set_named_info(infoobj)
+                    namedinfo.set_searchprofile_id(searchprofile_id)
+                    InfoMapper.Search_named_update(namedinfo)
+
+                mapper.update(namedinfo)
+
+        return namedinfo
+
     def update_info_object(self, profile_fk, info_dict):
         """
         In dieser Methode ist die Logik beschrieben, damit ein bestehendes Profil aktualisiert wird.
