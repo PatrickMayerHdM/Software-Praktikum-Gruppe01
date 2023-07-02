@@ -65,7 +65,7 @@ class CreateProfil extends Component {
             selectedOption: null,
             minAge: null,
             maxAge: null,
-            searchprofile_fk: null,
+            searchprofile_id: null,
             income: null,
             favclub: null,
             hobby: null,
@@ -686,7 +686,7 @@ class CreateProfil extends Component {
                         this.state.selectedCharId,
                         "text",
                     );
-
+                    console.log("Create Profile newInfoBO: ", newInfoBO)
                         // API-Aufruf zum Erstellen des NamedInfoObjectBO
                     await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
                 }

@@ -51,6 +51,7 @@ class SearchProfile extends React.Component{
             hobby: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
             politicaltendency: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
             aboutme: null, // Wert welcher bei dem Submit des Suchprofils übergeben wird.
+            char_desc: null,
 
             lastPartURL: null, // Letzer Teil der URL, dies wird benötigt, um herauszufinden, ob es sich um ein neues Suchprofil oder das Bearbeiten eines Suchprofils handelt.
             char_fk: 0,
@@ -97,6 +98,7 @@ class SearchProfile extends React.Component{
         this.handleDeletePolitical = this.handleDeletePolitical.bind(this);
         this.handleDeleteInterests = this.handleDeleteInterests.bind(this);
         this.handleDeleteHeight = this.handleDeleteHeight.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleUserSelectNumOptions = this.handleUserSelectNumOptions.bind(this);
         this.handleUserSelectSaveInputsSelections = this.handleUserSelectSaveInputsSelections.bind(this);
         this.getSelectedPropertiesForCharValuesAndNameTwo = this.getSelectedPropertiesForCharValuesAndNameTwo.bind(this);
@@ -539,6 +541,11 @@ class SearchProfile extends React.Component{
 
     handleInfoSelectCreate = (event, newSelectedValue) => {
         this.setState({ SelectCreate: newSelectedValue });
+    };
+
+    /** Event-Handler für die Änderung des fields */
+    handleInputChange = (event, field) => {
+        this.setState({ [field]: event.target.value });
     };
 
     /** Submit von User erstellten Eigenschaften */
@@ -1030,6 +1037,7 @@ class SearchProfile extends React.Component{
             minAge,
             maxAge,
             customProperties,
+            char_desc,
         } = this.state;
 
         const defaultValue = this.state.selectedOption || '';
@@ -1172,7 +1180,8 @@ class SearchProfile extends React.Component{
                                                             <FormLabel sx={{ marginBottom: '10px', marginTop: '5%' }}> Gebe hier deine passende Beschreibung an: </FormLabel>
                                                         </Box>
                                                         <Box sx={{ marginBottom: '10px' }}>
-                                                            <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.handleInputChange(event, 'char_desc')} />
+                                                            <TextField label="Beschreibung" value={this.state.char_desc} fullWidth size="small" onChange={(event) => this.
+                                                            handleInputChange(event, 'char_desc')} />
                                                         </Box>
                                                         <Box sx={{ marginBottom: '10px', marginLeft: '10px' }}>
                                                             <Button onClick={this.handleUserSelectSaveInputsSelections} variant="contained" startIcon={<SaveIcon />}> Erstellen </Button>
