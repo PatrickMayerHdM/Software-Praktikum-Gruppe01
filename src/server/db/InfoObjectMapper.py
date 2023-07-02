@@ -104,11 +104,12 @@ class InfoObjectMapper(mapper):
 
 
 
-        command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id) VALUES (%s, %s, %s, %s)"
+        command = "INSERT INTO main.InfoObject (infoobject_id, char_id, char_value, profile_id, searchprofile_id) VALUES (%s, %s, %s, %s, %s)"
         data = (named_info_obj.get_id(),
                 named_info_obj.get_named_char_id(),
                 named_info_obj.get_named_info_name(),
-                named_info_obj.get_named_profile_fk())
+                named_info_obj.get_named_profile_fk(),
+                named_info_obj.get_searchprofile_id())
 
         cursor.execute(command, data)
 
@@ -252,6 +253,30 @@ class InfoObjectMapper(mapper):
             return info_obj
 
         return None
+
+    def find_all_by_searchid(self, searchid):
+        """ Auslesen aller Info-Objekte anhand der Suchprofil-ID. """
+        result = []
+        cursor = self._connection.cursor()
+        cursor.execute(f"SELECT * FROM main.InfoObject WHERE searchprofile_id='{searchid}'")
+        tuples = cursor.fetchall()
+
+        for (info_object_id, char_id, char_value, profile_id, searchprofile_id) in tuples:
+            info_obj = InfoObject()
+            info_obj.set_id(info_object_id)
+            info_obj.set_char_fk(char_id)
+            info_obj.set_value(char_value)
+            info_obj.set_profile_fk(profile_id)
+            info_obj.set_searchprofile_id(searchprofile_id)
+
+            result.append(info_obj)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
 
 
     def delete(self, info_obj):
