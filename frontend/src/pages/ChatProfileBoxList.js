@@ -28,13 +28,10 @@ class ChatProfileBoxList extends React.Component{
             .getChats(this.props.user.uid)
             .then(profilesvar => {
                 const lengthProfiles = profilesvar.length;
-                console.log("Dies ist lengthProfiles: ", lengthProfiles);
                 this.setState(prevState => ({
                     profiles: profilesvar,
                     numProfiles: lengthProfiles
-                }), () => {
-                    console.log("Dies ist numProfiles der Chats: ", this.state.numProfiles);
-                });
+                }));
             })
             .catch(error => {
                 console.error('Error fetching data from API:', error);
