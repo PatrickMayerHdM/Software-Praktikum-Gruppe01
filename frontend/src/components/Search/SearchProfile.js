@@ -325,7 +325,6 @@ class SearchProfile extends React.Component{
                     }
                 }
                 this.setState({ selectedCharNames });
-                console.log("Liste: ", selectedCharNames);
             });
     }
 
@@ -350,7 +349,6 @@ class SearchProfile extends React.Component{
             // get der InfoObjekte einer CharID
             .getInfoObjectsCharID(char_id)
             .then((responseCharName) => {
-                console.log("responseCharName zu Beginn", responseCharName)
                 let updatedUserSelectNumOptions = 0;
                 const updatedUserSelectStartingSelections = [ ]; // erstellt ein leeres Array, um es zu ersetzen
                 const UserData = this.state.customProperties[char_id]?.char_value; // Wenn ein User bereits etwas zu dieser Eigenschaft ausgewählt hat, wird es hier gesetzt
@@ -372,7 +370,6 @@ class SearchProfile extends React.Component{
                  * Setzt die aktuelle Auswahl des Users, direkt auf die tatsächliche Auswahl des Users.
                  * Setzt den Wert, dass ein User hier ein Update macht auf True
                  */
-                console.log('UserData', UserData)
                 if (UserData != undefined) { this.setState({ UserSelectSelectedOption:UserData, UserUpdate: true,})}
                 /**
                  *  Setzt den State.
@@ -382,9 +379,7 @@ class SearchProfile extends React.Component{
                         UserSelectStartingSelections: updatedUserSelectStartingSelections,
                         UserSelectNumOptions: updatedUserSelectNumOptions,
                     };
-                },() => {
-                    console.log("this.state.UserSelectAvSelections",this.state.UserSelectAvSelections)
-                });
+                },);
                 return responseCharName;
             });
     }
@@ -452,7 +447,6 @@ class SearchProfile extends React.Component{
         // Letzte Teil der URL wird gepoppt, un in const lastPartURL gespeichert
         const lastPartURL = currentPath.split('/').pop();
         this.getSelectedPropertiesForCharValuesAndNameTwo(lastPartURL);
-        console.log('LastPartURL in DidMount', this.state.lastPartURL)
         this.setState({lastPartURL: lastPartURL})
 
         if (lastPartURL === "new") {
@@ -643,7 +637,7 @@ class SearchProfile extends React.Component{
                     "text")
 
                 DatingSiteAPI.getAPI()
-                    .updateNamedCharByURL(updatedNamedInfoBO)
+                    .updateSearchNamedCharBy(updatedNamedInfoBO)
                     .catch((e) =>
                         this.setState({
                             error: e,
@@ -672,7 +666,7 @@ class SearchProfile extends React.Component{
                         );
 
                         // API-Aufruf zum Erstellen des NamedInfoObjectBO
-                        await DatingSiteAPI.getAPI().updateNamedCharByURL(newInfoBO);
+                        await DatingSiteAPI.getAPI().updateSearchNamedCharBy(newInfoBO);
 
                     } else {
 
@@ -692,7 +686,6 @@ class SearchProfile extends React.Component{
                 }
 
                 if (!this.state.UserSelectAvSelections.includes(this.state.UserSelectSelectedOption)) {
-                    console.log("hi")
                     const updatedNamedInfoBO = new NamedInfoObjectBO(
                         this.state.id,
                         null,
@@ -702,10 +695,8 @@ class SearchProfile extends React.Component{
                         this.state.selectedCharId,
                         "select")
 
-                    console.log('UpdatedNamedInfoBO Z. 695 Searprofile', updatedNamedInfoBO)
-
                     DatingSiteAPI.getAPI()
-                        .updateNamedCharByURL(updatedNamedInfoBO)
+                        .updateSearchNamedCharBy(updatedNamedInfoBO)
                         .catch((e) =>
                             this.setState({
                                 error: e,
@@ -730,7 +721,6 @@ class SearchProfile extends React.Component{
         try {
 
             const responseInfoObjects = await DatingSiteAPI.getAPI().getSearchInfoObjects(lastPartURL);
-            console.log('LastPartURL', lastPartURL)
 
             for (const key in responseInfoObjects) {
                 if (responseInfoObjects.hasOwnProperty(key)) {
@@ -749,7 +739,6 @@ class SearchProfile extends React.Component{
                 }
             }
             this.setState({ customProperties });
-            console.log(this.state)
         } catch (error) {
             console.error("Fehler beim Auslesen der InfoObjekte: ", error);
         }
@@ -760,7 +749,6 @@ class SearchProfile extends React.Component{
         return DatingSiteAPI.getAPI()
             .getCharName(char_id)
             .then((responseCharName) => {
-                console.log('GetCharNameByID in Search:', responseCharName)
                 return responseCharName;
             })
     }

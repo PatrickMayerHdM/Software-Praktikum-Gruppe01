@@ -709,6 +709,30 @@ class NamedCharAndInfoOperations(Resource):
         else:
             return 'NamedCharNameAndValue konnte nicht aktualisiert werden.', 500
 
+@datingapp.route('/updateSearchNamedCharNamesAndValues')
+@datingapp.response(500, 'Serverseitiger Fehler')
+class SearchNamedCharAndInfoOperations(Resource):
+    @secured
+    def put(self):
+        """ Update eines bestimmten NamedChars """
+        adm = Administration()
+        proposal = NamedInfoObject.from_dict(api.payload)
+        print("Das proposal",proposal.get_searchprofile_id())
+
+        if proposal is not None:
+            namedcharnameandvalue = adm.update_Search_named_info_object(
+                proposal.get_named_profile_fk(),
+                proposal.get_named_char_id(),
+                proposal.get_named_char_name(),
+                proposal.get_named_info_name(),
+                proposal.get_searchprofile_id(),
+            )
+
+            print("Main Namedchar: ", namedcharnameandvalue.get_named_char_id())
+            return "", 200
+        else:
+            return 'NamedCharNameAndValue konnte nicht aktualisiert werden.', 500
+
 @datingapp.route('/Profile/characteristics/<int:char_id>', methods=['GET'])
 @datingapp.response(500, 'Serverseitiger Fehler')
 class NamedCharacteristicsOperations(Resource):

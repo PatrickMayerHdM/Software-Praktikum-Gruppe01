@@ -144,18 +144,6 @@ class CreateProfil extends Component {
         this.getAllInfoObjects();
     };
 
-    /**
-     * Wenn sich der Wert der numOptions verändert, d.h. der User will eine weitere Auswahl hinzufügen.
-     * Es wird der userSelections über das const updatedUserSelections ein weiterer leerer String Übergeben.
-     * Dies erstellt ein weiteres Textfeld für den User.
-     */
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.UserSelectAvSelections !== this.state.UserSelectAvSelections) {
-            console.log("Der Zustand UserSelectAvSelections hat sich geändert!", this.state.UserSelectAvSelections);
-            console.log("Der prevState.UserSelectAvSelections Zustand UserSelectAvSelections hat sich geändert!", prevState.UserSelectAvSelections);
-        }
-    }
 
 
     /** Handler und API für "checkProfilExc" */
@@ -558,7 +546,11 @@ class CreateProfil extends Component {
             );
     };
 
-    /** Event-Handler für die Änderung der Auswahlen eines Nutzers */
+    /**
+     * Wenn ein User bei einer von einem User erstellten Eigenschaft auf den Speichern Button drückt, wird diese
+     * Funktion aufgerufen.
+     * Diese führt dann entweder einen passenden POST oder PUT aus.
+     * */
     handleSaveInputsSelections = async () => {
         try {
             // Schleife über jedes Element der vom User erstellten Auswahlen
@@ -614,8 +606,15 @@ class CreateProfil extends Component {
         this.setState({ openuserchar: true })
     };
 
-        handleUserSelectSaveInputsSelections= async () => {
+    /**
+     * Dies ist das handling für das Speichern der Auswahl eines Users in der Datenbank.
+     */
+    handleUserSelectSaveInputsSelections= async () => {
 
+        /**
+         * Prüfung ob ein User ein Update einer Eigenschaft auswählt (true) oder zum ersten mal ein InfoObejekt für
+         * diese Eigenschaft angibt (false).
+         * */
         if (this.state.UserUpdate === false ){
             try {
                 // Schleife über jedes Element der vom User erstellten Auswahlen
@@ -698,7 +697,9 @@ class CreateProfil extends Component {
                 });
             }
         } else {
-            {/** Hier handelt es sich dann um ein Update eines Users */}
+            /** Hier handelt es sich dann um ein Update eines Users */
+
+            // Prüfung, ob es sich um ein eine text oder selection Eigenschaft handelt
             if (this.state.selectedCharTyp === "text"){
                 const updatedNamedInfoBO = new NamedInfoObjectBO(
                     this.state.id,
@@ -709,6 +710,7 @@ class CreateProfil extends Component {
                     this.state.selectedCharId,
                     "text")
 
+                // API-Aufruf zum Update des NamedInfoObjectBO
                 DatingSiteAPI.getAPI()
                     .updateNamedCharByURL(updatedNamedInfoBO)
                     .catch((e) =>
@@ -738,7 +740,7 @@ class CreateProfil extends Component {
                             "select",
                         );
 
-                        // API-Aufruf zum Erstellen des NamedInfoObjectBO
+                        // API-Aufruf zum Update des NamedInfoObjectBO
                         await DatingSiteAPI.getAPI().updateNamedCharByURL(newInfoBO);
 
                     } else {
@@ -754,12 +756,16 @@ class CreateProfil extends Component {
                             "select",
                         );
 
+                        // API-Aufruf zum Update des NamedInfoObjectBO
                         await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
                     }
                 }
 
+                /**
+                 *  Prüfung, ob das ausgewählte InfoObjekt nicht in den UserSelectSelectedOption's enthalten ist.
+                 *  Denn dann ist ist das Ausgewählte InforObjekt unter den neu erstellten InfoObjekten.
+                 */
                 if (!this.state.UserSelectAvSelections.includes(this.state.UserSelectSelectedOption)) {
-                    console.log("hi")
                     const updatedNamedInfoBO = new NamedInfoObjectBO(
                         this.state.id,
                         this.props.user.uid,
@@ -769,8 +775,7 @@ class CreateProfil extends Component {
                         this.state.selectedCharId,
                         "select")
 
-                    console.log(updatedNamedInfoBO)
-
+                    // API-Aufruf zum Update des NamedInfoObjectBO
                     DatingSiteAPI.getAPI()
                         .updateNamedCharByURL(updatedNamedInfoBO)
                         .catch((e) =>
@@ -801,13 +806,17 @@ class CreateProfil extends Component {
         });
     };
 
-    /** Auslesen von InfoObjects anhand einer Char-Id */
+    /** Auslesen von InfoObjects anhand einer Char-Id und setzten dieser in UserSelectStartingSelections, dazu ermitteln
+     * der Anzahl der Antworten.
+     * Zudem wird geprüft, ob bereits ein Wert von einem User ausgewählt wurde und dann dieser Wert als
+     * UserSelectSelectedOption gesetzt, hierbei wird noch der State, dass es sich um das Bearbeiten handelt true
+     * gesetzt.
+     * */
     getInfoObjectsByCharID(char_id) {
         return DatingSiteAPI.getAPI()
             // get der InfoObjekte einer CharID
             .getInfoObjectsCharID(char_id)
             .then((responseCharName) => {
-                console.log("responseCharName zu Beginn", responseCharName)
                 let updatedUserSelectNumOptions = 0;
                 const updatedUserSelectStartingSelections = [ ]; // erstellt ein leeres Array, um es zu ersetzen
                 const UserData = this.state.customProperties[char_id]?.char_value; // Wenn ein User bereits etwas zu dieser Eigenschaft ausgewählt hat, wird es hier gesetzt
@@ -839,8 +848,6 @@ class CreateProfil extends Component {
                         UserSelectNumOptions: updatedUserSelectNumOptions,
                         UserEdit: false,
                     };
-                },() => {
-                    console.log("this.state.UserSelectAvSelections",this.state.UserSelectAvSelections)
                 });
                 return responseCharName;
             });
@@ -881,25 +888,35 @@ class CreateProfil extends Component {
             );
     };
 
-    /** Handler für die Anzahl an erstellen Auswahlen */
+    /**
+     * Wenn ein User beim Erstellen einer Auswahleigenschaft eine weitere Auswahl hinzufügen will, wird durch einen
+     * Button diese Funktion ausgewählt.
+     * Diese Funktion erhöht dann den Wert der Anzahl der Optionen und fügt dem Array "userSelections" einen leeren
+     * Sting für das neu zu erstellende Textfeld hinzu.
+     * */
     handleNumOptions() {
         this.setState((prevState) => {
-            const updatedUserSelections = [...prevState.userSelections, ''];
+            const updatedUserSelections = [...prevState.userSelections, '']; // fügt einen weiteren leeren String hinzu
             return {
-                numOptions: (this.state.numOptions + 1),
-                userSelections: updatedUserSelections,
+                numOptions: (this.state.numOptions + 1), // erhöht die Anzahl um +1
+                userSelections: updatedUserSelections, // setzt die userSelections zu updatedUserSelections
             };
         })
     }
 
-    /** Handler für die Anzahl an erstellen Auswahlen, bei einer bereits von einem User erstellten Auswahleigenschaft */
+    /**
+     * Wenn ein User bei einer von einem anderen User erstellten Auswahleigenschaft eine weitere Auswahl hinzufügen
+     * will, wird durch einen Button diese Funktion ausgewählt.
+     * Diese Funktion erhöht dann den Wert der Anzahl der Optionen und fügt dem Array "UserSelectAvSelections" einen
+     * leeren Sting für das neu zu erstellende Textfeld hinzu.
+     * */
     handleUserSelectNumOptions() {
         this.setState((prevState) => {
-            const updatedUserSelectAvSelections = [...prevState.UserSelectAvSelections, ''];
+            const updatedUserSelectAvSelections = [...prevState.UserSelectAvSelections, ''];  // fügt einen weiteren leeren String hinzu
             return {
                 UserEdit: true,
-                UserSelectNumOptions: prevState.UserSelectNumOptions + 1,
-                UserSelectAvSelections: updatedUserSelectAvSelections,
+                UserSelectNumOptions: prevState.UserSelectNumOptions + 1, // erhöht die Anzahl um +1
+                UserSelectAvSelections: updatedUserSelectAvSelections, // setzt die UserSelectAvSelections zu updatedUserSelectAvSelections
             };
         });
     }
@@ -920,7 +937,8 @@ class CreateProfil extends Component {
     }
 
     /**
-     * Handler für Änderungen an Text der InfoObjekte, bei einer von einem anderen User erstellten Auswahleigenschaft.
+     * Ein User kann bei einer von einem User erstellen Auswahleigenschaft noch weitere Auswahlen hinzufügen.
+     * In diesem handling wird dann das Ändern eines Wertes dieser neu erstellten Auswahlen bearbeitet.
      */
     handleUserSelectTextFieldChange(event, index) {
         // setzt die const value
@@ -953,7 +971,7 @@ class CreateProfil extends Component {
     }
 
     /**
-     * Handling für, wenn ein User bei einer bereits erstellten Auswahleigenschaft, eine mögliche Auswahl wieder entfernen will.
+     * Handling für, wenn ein User bei einer bereits erstellten Auswahleigenschaft, eine mögliche neu hizugefügte Auswahl wieder entfernen will.
      */
     handleDeleteUserSelection(index) {
         this.setState(prevState => {
