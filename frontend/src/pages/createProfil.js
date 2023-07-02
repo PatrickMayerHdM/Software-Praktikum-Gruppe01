@@ -753,6 +753,28 @@ class CreateProfil extends Component {
                         await DatingSiteAPI.getAPI().createCharDescForProfile(newInfoBO);
                     }
                 }
+
+                if (!this.state.UserSelectAvSelections.includes(this.state.UserSelectSelectedOption)) {
+                    console.log("hi")
+                    const updatedNamedInfoBO = new NamedInfoObjectBO(
+                        this.state.id,
+                        this.props.user.uid,
+                        null,
+                        this.state.UserSelectSelectedOption,
+                        this.state.selectedCharName,
+                        this.state.selectedCharId,
+                        "select")
+
+                    console.log(updatedNamedInfoBO)
+
+                    DatingSiteAPI.getAPI()
+                        .updateNamedCharByURL(updatedNamedInfoBO)
+                        .catch((e) =>
+                            this.setState({
+                                error: e,
+                            })
+                        );
+                }
             }
 
         }
@@ -1534,6 +1556,7 @@ class CreateProfil extends Component {
                                 </Item>
                             )}
                             {profileExists && (
+                                {/** Hier kann ein User von User erstellte Eigenschaften sehen */ },
                                 <Item>
                                     <Box sx={{ width: 400, margin: '0 auto' }}>
                                         <FormGroup row style={{ justifyContent: 'center' }}>
