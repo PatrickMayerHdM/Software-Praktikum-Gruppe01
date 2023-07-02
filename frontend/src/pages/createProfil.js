@@ -65,7 +65,7 @@ class CreateProfil extends Component {
             selectedOption: null,
             minAge: null,
             maxAge: null,
-            searchprofile_id: null,
+            searchprofile_id: 0,
             income: null,
             favclub: null,
             hobby: null,
