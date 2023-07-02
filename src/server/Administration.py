@@ -432,7 +432,7 @@ class Administration(object):
                     else:
                         print(f'Ungültiger Key: {key}')
 
-    def create_named_info_object(self, profile_fk, infoobj, char_name):
+    def create_named_info_object(self, profile_fk, infoobj, char_name, searchprofile_id):
         """
         Erstellt ein NamedInfoObjekt basierend auf den angegebenen Attributen.
         :param profile_fk: Die GoogleID eines Users.
@@ -446,6 +446,7 @@ class Administration(object):
                 info_obj.set_named_char_id(char_mapper.find_key_by_char_name(char_name))
                 info_obj.set_named_info(infoobj)
                 info_obj.set_named_profile_fk(profile_fk)
+                info_obj.set_searchprofile_id(searchprofile_id)
                 mapper.insert_named_info(info_obj)
 
         return info_obj
@@ -665,6 +666,10 @@ class Administration(object):
                         mapper.update_search(info_obj)
                     else:
                         print(f'Ungültiger Key: {key}')
+
+    def get_infoobj_by_searchid(self, searchid):
+        with InfoObjectMapper() as mapper:
+            return mapper.find_all_by_searchid(searchid)
 
     def calculate_age(self, info_objects):
         """

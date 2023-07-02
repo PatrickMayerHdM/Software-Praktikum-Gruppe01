@@ -322,6 +322,23 @@ class SearchOneProfileOperation(Resource):
     """ Handling im main, für den getChats() in der DatingSiteAPI.
         Dies übergibt ein Objekt mit allen ProfileIDs, mit den ein User geschieben hat. """
 
+@datingapp.route('/infoobjects/search/<int:searchprofile_id>')
+@datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
+@datingapp.param('id', 'ID des Suchprofils')
+class SearchprofileInfoobjListOperationsCustom(Resource):
+    @datingapp.marshal_with(infoobject)
+    @secured
+    def get(self, searchprofile_id):
+        print('GET im Main', searchprofile_id)
+        """ Auslesen eines bestimmten InfoObjekt-Objekts anhand der GoogleID. """
+        adm = Administration()
+        info_objs = adm.get_infoobj_by_searchid(searchprofile_id)
+
+        print('Info-Objs in main', info_objs[16].get_value())
+
+        return info_objs
+
+
 @datingapp.route('/ChatProfileBoxList/<id>/')
 @datingapp.response(500, "Falls es zu einem Serverseitigen Fehler kommt.")
 @datingapp.param('id','id des Profils')
@@ -641,6 +658,7 @@ class NamedInfoObjectListOperations(Resource):
         adm = Administration()
 
         proposal = NamedInfoObject.from_dict(api.payload)
+        print('Proposal der main:',proposal.get_searchprofile_id())
 
         if proposal is not None:
             charobj = adm.create_char(
@@ -651,7 +669,8 @@ class NamedInfoObjectListOperations(Resource):
             infoobj = adm.create_named_info_object(
                 proposal.get_named_profile_fk(),
                 proposal.get_named_info_name(),
-                proposal.get_named_char_name()
+                proposal.get_named_char_name(),
+                proposal.get_searchprofile_id()
             )
 
             respone = {charobj, infoobj}
