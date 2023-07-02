@@ -835,143 +835,160 @@ class Administration(object):
             score = 0  # Anfangswert des Scores. Der Score wird bei Compare Text genutzt
             total_checked_elem = 0
             # Vergleich der Religion zwischen Such- und Userprofil
-            if 60 in searchprofile['Char Values'] and 60 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Religion', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][60], prof['Char Values'][60])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Religion', compare_text)
-                #print('Gesamtscore', score)
+            if searchprofile['Char Values'][60] is not None:
+                if 60 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Religion', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][60], prof['Char Values'][60])
+                    if compare_text == 1:
+                        score += 1
+                    #print('Compared Text: Religion', compare_text)
+                    #print('Gesamtscore', score)
+            else:
+                pass
 
             # Vergleich der Haarfarbe
-            if 70 in searchprofile['Char Values'] and 70 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Haarfarbe', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][70], prof['Char Values'][70])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Haarfarbe', compare_text)
-                #print('Gesamtscore nach Durchlauf 2:', score)
+            if searchprofile['Char Values'][70] is not None:
+                if 70 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Haarfarbe', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][70], prof['Char Values'][70])
+                    if compare_text == 1:
+                        score += 1
+                    #print('Compared Text: Haarfarbe', compare_text)
+                    #print('Gesamtscore nach Durchlauf 2:', score)
+            else:
+                pass
 
             # Vergleich des Raucherstatus zwischen Such- und Userprofil
-            if 80 in searchprofile['Char Values'] and 80 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Raucherstatus', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][80], prof['Char Values'][80])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Raucherstatus', compare_text)
-                #print('Gesamtscore:', score)
+            if searchprofile['Char Values'][80] is not None:
+                if 80 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Raucherstatus', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][80], prof['Char Values'][80])
+                    if compare_text == 1:
+                        score += 1
+                    #print('Compared Text: Raucherstatus', compare_text)
+                    #print('Gesamtscore:', score)
+            else:
+                pass
 
             # Vergleich der Interessen zwischen Such- und Userprofil
-            if 90 in searchprofile['Char Values'] and 90 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Interessen', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][90])
-                #print('Algorithmus compare text value von 90', compare_text)
-                if compare_text > 0:
-                    score += compare_text
-                #print('Compared Text: Interessen', compare_text)
-                #print('Gesamtscore:', score)
-
-            # Vergleich des höchsten Bildungsabschlusses zwischen Such- und Userprofil
-            if 130 in searchprofile['Char Values'] and 130 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Bildung', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][130], prof['Char Values'][130])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Bildung', compare_text)
-                #print('Gesamtscore:', score)
+            if searchprofile['Char Values'][90] is not None:
+                if 90 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Interessen', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][90], prof['Char Values'][90])
+                    #print('Algorithmus compare text value von 90', compare_text)
+                    if compare_text > 0:
+                        score += compare_text
+                    #print('Compared Text: Interessen', compare_text)
+                    #print('Gesamtscore:', score)
+            else:
+                pass
 
             # Vergleich des lieblings Sportvereins zwischen Such- und Userprofil
-            if 140 in searchprofile['Char Values'] and 140 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Sportverein', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][140], prof['Char Values'][140])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Sportverein', compare_text)
-                #print('Gesamtscore:', score)
+            if searchprofile['Char Values'][140] is not None:
+                if 140 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Sportverein', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][140], prof['Char Values'][140])
+                    if compare_text == 1:
+                        score += 1
+                    #print('Compared Text: Sportverein', compare_text)
+                    #print('Gesamtscore:', score)
+            else:
+                pass
 
             # Vergleich des Hobby´s zwischen Such- und Userprofil
-            if 150 in searchprofile['Char Values'] and 150 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Hobbys', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][150], prof['Char Values'][150])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Hobby', compare_text)
-                #print('Gesamtscore:', score)
+            if searchprofile['Char Values'][150] is not None:
+                if 150 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Hobbys', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][150], prof['Char Values'][150])
+                    if compare_text == 1:
+                        score += 1
+                    #print('Compared Text: Hobby', compare_text)
+                    #print('Gesamtscore:', score)
+            else:
+                pass
 
             # Vergleich der politischen Einstellung zwischen Such- und Userprofil
-            if 160 in searchprofile['Char Values'] and 160 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Politik', total_checked_elem)
-                compare_text = self.compare_text(searchprofile['Char Values'][160], prof['Char Values'][160])
-                if compare_text == 1:
-                    score += 1
-                #print('Compared Text: Politik', compare_text)
-                #print('Gesamtscore:', score)
+            if searchprofile['Char Values'][160] is not None:
+                if 160 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Politik', total_checked_elem)
+                    compare_text = self.compare_text(searchprofile['Char Values'][160], prof['Char Values'][160])
+                    if compare_text == 1:
+                        score += 1
+                    #print('Compared Text: Politik', compare_text)
+                    #print('Gesamtscore:', score)
+            else:
+                pass
 
             # Scorewert-Vergleich der Körpergröße
-            if 50 in searchprofile['Char Values'] and 50 in prof['Char Values']:
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('Check Height')
-                #print('total checked elem: Körpergröße', total_checked_elem)
-                search_value = searchprofile['Char Values'][50]  # small, mean, large
-                #print('gesuchte größe', search_value)
-                userprof = int(prof['Char Values'][50])  # integer 190 für 190cm
-                #print('Userprofil height', userprof)
+            if searchprofile['Char Values'][50] is not None:
+                if 50 in prof['Char Values']:
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('Check Height')
+                    #print('total checked elem: Körpergröße', total_checked_elem)
+                    search_value = searchprofile['Char Values'][50]  # small, mean, large
+                    #print('gesuchte größe', search_value)
+                    userprof = int(prof['Char Values'][50])  # integer 190 für 190cm
+                    #print('Userprofil height', userprof)
 
-                if search_value == 'small':
-                    if int(userprof) < 160:
-                        score += 1
-                        #print('Small Match:', score)
+                    if search_value == 'small':
+                        if int(userprof) < 160:
+                            score += 1
+                            #print('Small Match:', score)
 
-                elif search_value == 'mean':
-                    if int(userprof) >= 160 and int(userprof) <= 180:
-                        score += 1
-                        #print('mean Match:', score)
+                    elif search_value == 'mean':
+                        if int(userprof) >= 160 and int(userprof) <= 180:
+                            score += 1
+                            #print('mean Match:', score)
 
-                elif search_value == 'large':
-                    if int(userprof) > 180:
-                        score += 1
-                        #print('large Match:', score)
-                else:
-                    pass
+                    elif search_value == 'large':
+                        if int(userprof) > 180:
+                            score += 1
+                            #print('large Match:', score)
+                    else:
+                        pass
+            else:
+                pass
 
             #print('Admin.Py Z758 Age-filtered-list nach Körpergröße Matching', age_filtered_list)
 
             # Scorewert Berechnung des Einkommens
             #print('Income Block')
-            if searchprofile['Char Values'][120] is not None and 120 in prof['Char Values']:
-            #if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
-                search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
-                total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
-                #print('total checked elem: Einkommen', total_checked_elem)
-                #print('gesuchtes Einkommen', search_value)
+            if searchprofile['Char Values'][120] is not None:
+                if 120 in prof['Char Values']:
+                #if 120 in searchprofile['Char Values'] and 120 in prof['Char Values']:
+                    search_value = searchprofile['Char Values'][120]  # gewünschtes Einkommen des Suchenden
+                    total_checked_elem += 1  # Addiert das überprüfte Element für die finale Berechnung
+                    #print('total checked elem: Einkommen', total_checked_elem)
+                    #print('gesuchtes Einkommen', search_value)
 
-                if prof['Char Values'][120] is not None:
-                    userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
-                    #print('Einkommen des Userprofils:', userprof)
+                    if prof['Char Values'][120] is not None:
+                        userprof = int(prof['Char Values'][120])  # angegebene Einkommen des User Profils
+                        #print('Einkommen des Userprofils:', userprof)
 
-                    if int(userprof) >= int(search_value):
-                        score += 1
-                        #print('Einkommen Match +1:', score)
+                        if int(userprof) >= int(search_value):
+                            score += 1
+                            #print('Einkommen Match +1:', score)
+            else:
+                pass
 
 
             # Vergleich der individuellen Infoobjekte der Eigenschaften (Keys ab 160)
             for key in searchprofile['Char Values']:
                 #print('Prüfung ob Key über 161', key)
-                print('Total-Checked-Elem vor Iteration über Key 160', total_checked_elem)
+                #print('Total-Checked-Elem vor Iteration über Key 160', total_checked_elem)
                 if key >= 161:
                     #print('Übergebener Key zur Prüfung ab 161', key)
                     #print('Score vor pot. Match:', score)
                     #print('prof[Char Values][key]:', prof['Char Values'][key])
                     if key in prof['Char Values'] and prof['Char Values'][key] is not None:
-                        print('Dieser Key wird geprüft:', key)
+                        #print('Dieser Key wird geprüft:', key)
                         compare_text = self.compare_text(searchprofile['Char Values'][key], prof['Char Values'][key])
                         total_checked_elem += 1
                         if compare_text == 1:
