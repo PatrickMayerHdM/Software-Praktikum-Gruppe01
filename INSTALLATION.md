@@ -83,6 +83,9 @@ in die Cloud transferiert werden sollen.<br>
 #### Deployment Frontend
 Um auch das Frontend deployen zu können, muss im Projektverzeichnis "Frontend" mit dem Befehl npm run build
 ein Build-Ordner erstellt werden, welcher anschließend in das Projektverzeichnis "src" kopiert werden muss.
+```
+npm run build  
+```
 
 ### SDK
 Um auf dem lokalen Terminal (z.b: PyCharm Terminal) mit dem Programm gcloud arbeiten zu können muss das Google Cloud SDK installiert werden.<br>
@@ -90,5 +93,10 @@ Die SDK Shell und die Google Cloud Shell können ebenfalls verwendet werden.
 
 ## Finales Deployment der App
 Um die App mit all ihren Komponenten starten zu können, navigiert man in das Projekt-Verzeichnis "src". <br>
-Hier führt man im lokalen Terminal die Befehle "gcloud init" und "gcloud config" set (Projekt-ID) aus und folgt den Anweisungen. <br>
+Hier führt man im lokalen Terminal die Befehle "gcloud components install app-engine-python" und "gcloud init" aus und folgt den Anweisungen. <br>
 Anschließend führt man den Befehl "gcloud app deploy" aus, um die App in der Cloud verfügbar zu machen.
+```
+gcloud init
+gcloud components install app-engine-python
+gcloud app deploy  
+```
